@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+// *** Smart Protocols ***
+
+message Protocol {
+  bytes protocol_id = 1;
+  bytes path = 2;
+  repeated bytes file_names = 3;
+  repeated bytes files = 4;
+}
+
+message ProtocolIDsList {
+  repeated bytes protocol_ids = 1;
+}
+
+message ProtocolsList {
+  repeated Protocol protocols = 1;
+}
+
+// *** node ***
+
+message Node {
+  bytes id = 1;
+  bytes protocol_id = 2;
+  bytes address = 3;
+}
+
+message NodeID {
+  bytes node_id = 1;
+}
+
+message NodeIdsList {
+  repeated bytes node_ids = 1;
+}
+
+message NodesList {
+  repeated Node nodes = 1;
+}
+
+message NodeCmdRequest {
+  bytes node_id = 1;
+  bytes cmd = 2;
+  bytes params = 3;
+}
+
+message NodeCmdResponse {
+  bytes response = 1;
+}
+
+message PeerIdsList {
+  bytes node_id = 1;
+  repeated uint32 peer_ids = 2;
+}
+
+message PeerAddressesList {
+  bytes node_id = 1;
+  repeated bytes peer_addresses = 2;
+}
+
+message PeersList {
+  bytes node_id = 1;
+  repeated Peer peers = 2;
+}
+
+message Peer {
+  uint32 id = 1;
+  bytes address = 2;
+}
+
+// *** testnet ***
+
+message TestNetNodeConnections {
+  // The index of the client node within the testnet, starting at 1.
+  uint32 from_node = 1;
+
+  // The index of the listener node within the testnet, starting at 1.
+  repeated uint32 to_node = 2;
+}
+
+message TestNetCreate {
+  // Test network ID. Only one testnet can be created with the same ID.
+  bytes testnet_id = 1;
+
+  // The ID of the registered smart protocol we want to launch a testnet with.
+  bytes protocol_id = 2;
+
+  // Currently supported: "localhost" or "simulation".
+  bytes network_type = 3;
+
+  // Number of peer nodes to instantiate.
+  uint32 number_nodes = 4;
+
+  // Initial network topology using node index, starting at 0.
+  repeated TestNetNodeConnections topology = 5;
+}
+
+message TestNetGetNodeID {
+  bytes testnet_id = 1;
+  uint32 node_index = 2;  // starting at 1
+}
+
+message TestNetID {
+  bytes testnet_id = 1;
+}
+
+// -- network messages --
+
+message Network {
+  bytes protocol_id = 1;
+  uint32 number_nodes = 2;
+  uint32 number_peers_per_node = 3;
+  bool is_localhost = 4;  // true -> tcp, false -> sim
+  bytes logging_path = 5;
+}

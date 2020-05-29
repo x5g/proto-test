@@ -1,0 +1,192 @@
+syntax = "proto3";
+package question;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+option (gogoproto.populate_all) = true;
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+
+
+service Question {
+    rpc Index (IndexRequest) returns (IndexResponse) {}
+    rpc GetQuestionList (GetQuestionRequest) returns (GetQuestionResponse) {}
+    rpc GetUserShare (GetUserShareRequest) returns (GetUserShareResponse) {}
+    rpc UploadResult (UploadResultRequest) returns (UploadResultResponse) {}
+    rpc GetAwardRecord (AwardRecordRequest) returns (AwardRecordResponse) {}
+    rpc GetGift (GetGiftRequest) returns (GetGiftResponse) {}
+}
+
+message RspStatus {
+    int64 code = 1 [(gogoproto.jsontag) = "code"];
+    string msg = 2;
+}
+
+message GetGiftRequest {
+    int64 userId = 1 [(gogoproto.jsontag) = "userId"];
+    int64 giftId = 2 [(gogoproto.jsontag) = "giftId"];
+    string gift_name = 3 [(gogoproto.jsontag) = "gift_name"];
+    string gift_img_url = 4 [(gogoproto.jsontag) = "gift_img_url"];
+    string real_name = 5 [(gogoproto.jsontag) = "real_name"];
+    string phone = 6;
+    string address = 7;
+}
+
+message GetGiftResponse {
+    RspStatus status = 1 [(gogoproto.jsontag) = "status"];
+}
+
+message AwardRecordRequest {
+    int64 userId = 1 [(gogoproto.jsontag) = "userId"];
+}
+
+message AwardRecordResponse {
+    RspStatus status = 1 [(gogoproto.jsontag) = "status"];
+    repeated Award AwardRecord = 2;
+    string real_name = 3;
+    string address = 4;
+    string phone = 5;
+}
+
+message Award {
+    string img = 1;
+    string name = 2;
+    string intime = 3;
+}
+
+// upload result req
+message UploadResultRequest {
+    int64 userId = 1 [(gogoproto.jsontag) = "userId"];
+    int64 right_nums = 2 [(gogoproto.jsontag) = "right_nums"];
+    string game_status_sign = 3 [(gogoproto.jsontag) = "game_status_sign"];
+    string sign = 4 [(gogoproto.jsontag) = "sign"];
+}
+
+message UploadResultResponse {
+    RspStatus status = 1;
+}
+// index request
+message IndexRequest {
+    int64 userId = 1;
+    string name = 2;
+}
+// index response
+message IndexResponse {
+    RspStatus status = 1;
+    int64 chance = 2 [(gogoproto.jsontag) = "chance"];
+    int64 score = 3 [(gogoproto.jsontag) = "score"];
+    int64 today_shares = 4 [(gogoproto.jsontag) = "today_shares"];
+    int64 goods = 5 [(gogoproto.jsontag) = "goods"];
+    string sign = 6 [(gogoproto.jsontag) = "sign"];
+    repeated GiftInfo gift_info = 7 [(gogoproto.jsontag) = "gift_info"];
+    IndexConfig config = 8 [(gogoproto.jsontag) = "config"];
+    int64 play_time = 9 [(gogoproto.jsontag) = "play_time"];
+    int64 ss = 10 [(gogoproto.jsontag) = "ss"];
+    Rank rank = 11;
+    int64 challenge_times = 12 [(gogoproto.jsontag) = "challenge_times"];
+
+}
+
+message Rank {
+    repeated RankList rank_list = 1;
+    repeated RankInfo rank_info = 2;
+}
+
+message RankInfo {
+    int64 play_times = 1 [(gogoproto.jsontag) = "play_times"];
+    string avatar_url = 2;
+    string nick_name = 3;
+}
+
+message RankList {
+    int64 goods = 1;
+    string avatar_url = 2;
+    string nick_name = 3;
+}
+
+message GiftInfo {
+    int64 id = 1 [(gogoproto.jsontag) = "id"];
+    string name = 2 [(gogoproto.jsontag) = "name"];
+    string img = 3 [(gogoproto.jsontag) = "img"];
+}
+
+// index config
+message IndexConfig {
+    int64 gift_show = 1 [(gogoproto.jsontag) = "gift_show"];
+    string index_title = 2 [(gogoproto.jsontag) = "index_title"];
+    string index_share_title = 3 [(gogoproto.jsontag) = "index_share_title"];
+    string new_share_txt = 4 [(gogoproto.jsontag) = "new_share_txt"];
+    string index_share_img = 5 [(gogoproto.jsontag) = "index_share_img"];
+    string index_html_title1 = 6 [(gogoproto.jsontag) = "index_html_title1"];
+    string game_rule1 = 7 [(gogoproto.jsontag) = "game_rule1"];
+    string game_rule2 = 8 [(gogoproto.jsontag) = "game_rule2"];
+    string game_rule3 = 9 [(gogoproto.jsontag) = "game_rule3"];
+    string game_rule4 = 10 [(gogoproto.jsontag) = "game_rule4"];
+    string game_rule5 = 11 [(gogoproto.jsontag) = "game_rule5"];
+    int64 max_share = 12 [(gogoproto.jsontag) = "max_share"];
+    string index_bar_title = 13 [(gogoproto.jsontag) = "index_bar_title"];
+    string success_share_text5 = 14;
+    string user_html_title1 = 15;
+    string index_person_share_title = 16;
+    string game_person_share_title = 17;
+    string user_person_share_title = 18;
+    string game_failed_share_title = 19;
+    string game_success_share_title = 20;
+    string game_failed_share_img = 21;
+    string game_success_share_img = 22;
+    string failed_share_text1 = 23;
+    string failed_share_text2 = 24;
+    string failed_share_text3 = 25;
+    string failed_share_text4 = 26;
+    string success_share_text1 = 27;
+    string success_share_text2 = 28;
+    string success_share_text3 = 29;
+    string success_share_text4 = 30;
+    string game_bar_title = 31;
+    string user_share_title = 32;
+    string user_share_img = 33;
+    string user_bar_title = 34;
+    string gift_bar_title = 35;
+    string wz_if = 36;
+    string tz_type = 37;
+    string failed_click = 38;
+    string index_share_txt = 39;
+    string kefu_title = 40;
+}
+
+// user_share request
+message GetUserShareRequest {
+    string encryptedData = 1;
+    string iv = 2;
+    int64 userId = 3;
+}
+// user_share response
+message GetUserShareResponse {
+    RspStatus status = 1;
+    int64 chance = 2 [(gogoproto.jsontag) = "chance"];
+    int64 repeat = 3 [(gogoproto.jsontag) = "repeat"];
+    int64 today_shares = 4 [(gogoproto.jsontag) = "today_shares"];
+    int64 error_code = 5 [(gogoproto.jsontag) = "error_code"];
+}
+//  question request
+message GetQuestionRequest {
+    string sign = 1;
+    int64 userId = 2;
+}
+//  question response
+message GetQuestionResponse {
+    RspStatus status = 1;
+    string game_status_sign = 2;
+    repeated QuestionList data = 3;
+}
+
+message QuestionList {
+    int64 num1 = 1 [(gogoproto.jsontag) = "num1"];
+    string operator = 2;
+    int64 num2 = 3 [(gogoproto.jsontag) = "num2"];
+    int64 result = 4 [(gogoproto.jsontag) = "result"];
+    int64 success = 5 [(gogoproto.jsontag) = "success"];
+    float seconds = 6 [(gogoproto.jsontag) = "seconds"];
+}

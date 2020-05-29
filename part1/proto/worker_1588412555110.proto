@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package protobuff;
+
+import "entity.proto";
+import "deviceinfo.proto";
+import "persontypeenum.proto";
+import "names.proto";
+import "genericref.proto";
+import "contactdetails.proto";
+import "image.proto";
+import "time.proto";
+import "gender.proto";
+import "address.proto";
+import "workertype.proto";
+
+message WorkerPb {
+    EntityPb dbInfo = 1;
+    NamesPb name = 2;
+    ContactDetailsPb contactDetails = 3;
+    TimePb dob = 4;
+    GenderPb gender = 5;
+    AddressPb address = 6;
+    WorkerTypeConfigPb workerTypeConfig = 7;
+    PersonTypePb type = 8;
+    DeviceInfoPb device = 9;
+    ImagePb profilePics = 10;
+    GenericRefPb pushNotificationRef = 11;
+}
+
+message WorkerTypeConfigPb {
+    WorkerTypeEnum workerType = 1;
+    repeated NamesPb categories = 2;
+}
+
+message WorkerPbRef {
+    EntityPb dbInfo = 1;
+    NamesPb name = 2;
+}

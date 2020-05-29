@@ -1,0 +1,246 @@
+syntax = "proto2";
+
+import "Game.proto";
+
+package Mahjong.Protocols;
+
+enum GameMessageId {
+    // 游戏开始 server->all clients ( OGID_REQ | MessageId_GameStart )
+    // 客户端开牌动画、补花执行完毕 client->server （OGID_ACK | MessageId_GameStart）
+    MessageId_GameStart			     = 0x00005D01;
+
+    // 请求玩家执行操作 server->all clients ( OGID_REQ | MessageId_PlayerActive )
+    MessageId_PlayerActive	         = 0x00005D02;
+
+    // 玩家执行某个操作 client->server->all clients ( OGID_REQ | MessageId_PlayerAction )
+    MessageId_PlayerAction		     = 0x00005D03;
+
+	// 服务端要玩家放弃某些操作 server->all clients ( OGID_REQ | MessageId_PlayerActionReport )
+	MessageId_PlayerActionReport     = 0x00005D04;
+	
+	// 玩家金币改变的通知（用于血战等玩家杠牌后金币变化等情况） server->all clients ( OGID_REQ | MessageId_CoinChangeNotifiation )
+	MessageId_CoinChangeNotification = 0x00005D05;
+
+    // 游戏结果消息 server->all clients ( OGID_REQ | MessageId_GameResult )
+    MessageId_GameResult		     = 0x00005D06;
+
+    // 玩家断线续玩回来，收到的当前游戏快照数据 server->client ( OGID_REQ | MessageId_ReEnterGameData )
+    MessageId_ReEnterGameData		 = 0x00005D07;
+    
+	// 客户端针对Action消息的动画执行完毕，通知服务端可以下发下一个Active消息 client->server ( OGID_REQ | MessageId_AnimationFinish )
+	MessageId_AnimationFinish        = 0x00005D08;
+}
+
+// 玩家个性数据，在UserInfo的custom_data中，记录的是这个结构的信息
+message UserCustomData
+{
+	required int32 maxFan   = 1 ;	// 最大番数
+	required int32 totalFan = 2 ;	// 总番数
+}
+
+// 场馆玩法
+enum RoomType {
+  UNKNOWN  = 0;      // 无所谓
+  ORIGINAL = 1;      // 经典场（大众麻将玩法）
+  SICHUAN  = 2;      // 四川麻将血战场
+  SINGLE   = 11;     // 单机场（单机玩法）
+  MATCH    = 12;	 // 比赛场
+  MARKET   = 13;	 // 商城
+  ACTIVITY = 14;     // 活动
+}
+
+enum PlayerActionType {
+	PlayerActionType_Nop          = 1 ; 	// 放弃操作，只有在没有请求出牌的时候可以发出这个动作
+	PlayerActionType_Chi          = 2 ; 	// （请求）吃牌
+	PlayerActionType_Peng         = 4 ; 	// （请求）碰牌
+	PlayerActionType_Gang         = 8 ; 	// （请求）杠牌
+	PlayerActionType_Call         = 16 ;	// （请求）听牌
+	PlayerActionType_Win          = 32 ; 	// （请求）和牌
+	PlayerActionType_DiscardTile  = 64 ; 	// （请求）出牌
+	PlayerActionType_TakeTile     = 128 ;	// 抓牌
+	PlayerActionType_ChangeFlower = 256 ;	// 补花
+}
+
+enum GroupActionType {
+	GroupActionType_None        = 0 ;	// 空
+	GroupActionType_Chi         = 1 ;	// 吃牌
+	GroupActionType_Peng        = 2 ;	// 碰牌
+	GroupActionType_AnGang      = 3 ;	// 暗杠（直接杠自己手中四张牌）
+	GroupActionType_MingGangZhi = 4 ;	// 明杠，直杠（直接杠别人打出的一张牌）
+	GroupActionType_MingGangBu  = 5 ;	// 明杠，补杠（先碰，然后再杠这个碰的牌）
+}
+
+message TileGroup {
+	required GroupActionType type = 1;
+	required int32 tileId = 2 ;			// 不管是什么类型的牌组，这里只包括最小的那个牌值
+}
+
+message GameWinTileInfo {
+	
+	required int32 tile = 1 ;	// 胡哪张牌……
+	required int32 fan = 2 ;	// ……多少番，这是总番数
+}
+
+message GameCountData {
+	required int32 roundCount  = 1 ;		// 这是第几圈游戏（从0开始计数）
+	required int32 gameCount   = 2 ;		// 这是这一圈的第几局游戏（从0开始计数）
+	required int32 bankerCount = 3 ;		// 这是这一圈第几个坐庄的玩家（从0开始计数，如果庄家为-1，这个值无效）
+	required int32 bankerWin   = 4 ;		// 庄家连庄次数
+}
+
+message OpenDoorData {
+	repeated int32 frustaOfSeat   = 1 ;	// 每个玩家砌牌的墩数
+	required int32 diceCount      = 2 ;	// 骰子的个数
+	repeated int32 diceValue      = 3 ;	// 各骰子的点数。注意：可能会掷多次骰子，这里是所有的点数。比如diceCount可能为2，而这里的diceValue的大小可能是4个，表示掷了2次骰子。
+	required int32 openDoorSeat   = 4 ;	// 开牌玩家座位号
+	required int32 openDoorFrusta = 5 ;	// 从开牌玩家手中从右开始的这墩牌开始开牌（从0开始计数）
+}
+
+message GameRuleData {
+	required int32 roomtype             = 1 ;	// 场馆类型（取值为RoomType）
+	required int32 winNeedMinFan        = 2 ;	// 和牌所需的最小番数
+	// 其他规则（待完善）：
+}
+
+message OpenDoorTilesData
+{
+	repeated int32 handTiles      = 1 ;			// 玩家手中的牌，如果没有花牌则长度为13，否则，假设有n张花牌，则长度为13 ＋ n
+	repeated int32 flowersInOthersHand = 2 ;	// 其他玩家发牌时手中的花牌张数
+	
+	optional int32 showHunTile    = 3 ;			// 翻混时，翻开的那张牌（这张牌也就是抓牌结束之后接下来的那张牌）
+	repeated int32 hunTiles       = 4 ;			// 混牌
+}
+
+// server->client
+message GameStartMessage {
+	required int32 bankerSeat     = 1 ;		// 庄家座位号
+		
+	required GameRuleData gameRuleData  = 2 ;	// 游戏规则信息
+	required GameCountData countData    = 3 ;	// 各种盘数信息
+	required OpenDoorData openDoorData  = 4 ;	// 用于开牌时，显示各种动画的信息
+	required OpenDoorTilesData tileData = 5 ;	// 开牌时，若干牌的信息
+}
+
+// 服务器通过这个消息告诉客户端需要检查什么操作
+// server->client
+message PlayerActiveMessage {
+	required int32 seat       = 1 ;	// 请求玩家的座位号
+	required int32 actionType = 2 ;	// 该玩家可以进行的动作类型，取值为 PlayerActionType 中若干类型的并
+	required int32 timeOut    = 3 ;	// 超时，如果时间过了，玩家还没有做出选择，那么发送玩家托管消息给服务器
+	required int32 requestid  = 4 ;	// 请求的id号
+}
+
+// client->server->all client
+message PlayerActionMessage {
+	required int32 seat                  = 1 ;	// 玩家座位号
+	required PlayerActionType actionType = 2 ;	// 玩家选择的动作（玩家回复时，只能选择一种动作）
+	required int32 requestid             = 3 ;	// 之前PlayerActiveMessage中的请求id号
+
+	message TileActionData {
+		// 当动作是PlayerActionType_DiscardTile时，为出牌的id。
+		// 当动作时PlayerActionType_TakeTile时，为抓到的牌的id，但是如果有花牌，则这个数组长度不为1，例如，A抓到了梅花，补花是三筒，则数组是[[梅花]，[三筒]]，别人看到是[[-1]，[-1]]
+		// 当动作是PlayerActionType_Win时，这里是要胡的那张牌的id
+		repeated int32 id = 1 ;
+		optional int32 takefromheader = 2 ;	// 如果是 PlayerActionType_TakeTile，这里表示是在牌墙头（1）还是牌墙尾（0）抓牌。需要注意的是，如果遇到有补花，补花的牌永远都是从牌墙尾部抓
+	}
+
+	message GroupActionData {
+		required GroupActionType type = 1 ;
+		required TileGroup group      = 2 ;
+	}
+	
+	// PlayerActionType_Chi: 			GroupActionData
+	// PlayerActionType_Peng: 			GroupActionData
+	// PlayerActionType_Gang: 			GroupActionData
+	// PlayerActionType_Call: 			客户端上传：如果不是天听，TileActionData，否则为null；服务器下发：不含TileActionData，然后紧跟一个PlayerActionType_DiscardTile的消息
+	// PlayerActionType_Win: 			TileActionData，如果是国标模式，则游戏结束，下发结算信息，如果是血战模式，则正常进行游戏消息循环，只不过不再发该用户消息
+	// PlayerActionType_DiscardTile: 	TileActionData
+	// PlayerActionType_TakeTile:		TileActionData，如果不是本地玩家则为null
+	optional bytes additionalData = 4 ;
+}
+
+// 当有人出牌后，请求其他几家执行操作时，如果有一家回复了某个动作，那么服务端会下发这个消息给其他未回复的玩家，告诉他们要放弃
+// 什么动作。这个消息的目的在于缩短一些游戏的等待时间。比如，A玩家可以吃，B玩家可以碰。当B玩家选择碰牌后，服务端就会告诉A玩家
+// 要放弃吃牌，这时，A玩家的程序就会立刻发送一个放弃操作给服务端了（这个例子中，A玩家只能选择“吃”，如果“吃”也不能选，那么
+// 就只能选择放弃了；对于其他情况，如果玩家还能执行其他操作，那么其他操作的那些按钮还是依然在。）
+// server->client
+message PlayerActionReportMessage
+{
+	required int32 seat              = 1 ;	// 玩家座位号
+	required int32 abandonActionType = 2 ;	// 该玩家需要放弃的动作类型，取值为 PlayerActionType 中若干类型的并
+	required int32 requestid         = 3 ;	// 之前PlayerActiveMessage中的请求id号，可以通过这个id来区分是否是玩家当前应该操作的情况
+}
+
+// server->client
+message CoinChangeNotification {
+	repeated int64 coinsDelta = 1 ;	// 各玩家金币的变化量（用于血战麻将中刮风/下雨等规则）
+}
+
+// server->client
+message GameResultMessage {
+	message GameResultData {
+		required int32 seat              = 1 ;	// 座位号
+		optional GameWinTileInfo winInfo = 2 ;	// 基本胡牌信息，如果这家没胡牌则这个值是null
+		repeated int32 fanList           = 3 ;	// 番种列表，winInfo中的番数是总番数，这里是一个列表，取值是番数表中的索引，可以重复
+		
+		repeated int32 handTiles         = 4 ;	// 玩家手中牌信息
+		required int64 coinsDelta        = 5 ;	// 这一局金币的变化量
+		required int64 coinsTotal        = 6 ;	// 这一局后金币的总量
+		required int32 maxFan            = 7 ;	// 这一局后胡的最大番数
+		required int32 totalFan          = 8 ;	// 这一局后胡的总番数
+		optional int32 paoseat           = 9 ;	// 放炮玩家的座位号（如果paoseat和seat相同，那么表示这个玩家是自摸。这个字段在winInfo有效时才有效）
+		repeated TileGroup groups        = 10 ;	// 玩家吃碰杠牌的信息
+	}
+
+	// 各个玩家得分信息，包括本地玩家。
+	// 对于国标麻将，只有一家的winInfo有值，对于川麻则可以有三家有值。
+	repeated GameResultData results = 1 ;
+	required int32 wait_second      = 2 ;	// 等待的时间（单位：秒），时间到了后就自动开始游戏
+	required int32 outoftile        = 3 ;	// 是否所有牌都抓完了（对于非血战规则，值为1就表明流局了；对于血战规则，值为1表示要查叫了）
+	required bool banker_win_double = 4 ;	// 是否庄家赢双倍（如果为true，那么要在结算框中提示“庄胡双倍”）
+}
+
+// server->client
+message ReEnterGameData {
+	message PlayerGameData {
+		repeated int32 tiles                     = 1 ; // 玩家手中牌（如果是其他玩家，那么这个字段为全－1的数组，长度是该玩家手牌数量）
+		repeated TileGroup groups                = 2 ; // 玩家吃碰杠牌分组
+		optional GameWinTileInfo winTiles        = 3 ; // 如果玩家胡牌，这里是胡牌信息
+		repeated int32 flowers                   = 4 ; // 玩家补花的牌
+		repeated int32 discardTiles              = 5 ; // 玩家出的牌
+		optional bool isTing                     = 6 ; // 玩家是否已经听牌
+		optional int32 lastTakenTile             = 7 ; // 玩家最后抓的牌
+		optional TileGroup lastTakeDownGroup     = 8 ; // 玩家最后吃碰杠的分组
+		optional bool isAfk                      = 9 ; // 玩家是否托管
+		optional bool isJustGang                 = 10; // 玩家是否刚杠了牌
+		optional PlayerActionType lastActionType = 11; // 玩家的最后一个动作
+	}
+
+	message SeatData {
+		required PlayerInfo player   = 1 ;	// 玩家个人信息
+		required PlayerGameData data = 2 ;	// 玩家的游戏数据
+	}
+
+	message TileWallData {
+		required int32 openDoorSeat        = 1 ;	// 开牌玩家座位号（同开始消息中的相关内容的值）
+		required int32 openDoorFrusta      = 2 ;	// 从开牌玩家手中从右开始的这墩牌开始开牌（从0开始计数），同开始消息中的相关内容的值
+		required int32 drawHeaderTileCount = 3 ;	// 从牌墙头抓了多少张牌
+		required int32 drawTailTileCount   = 4 ;	// 从牌墙尾抓了多少张牌
+	}
+
+	required GameStartMessage msgGameStart  = 1 ;	// 游戏开始消息
+	repeated SeatData seats                 = 2 ;	// 各座位玩家信息
+	required TileWallData tileWallData      = 3 ;	// 牌墙数据
+	required int32 activePlayerSeat         = 4 ;   // 当前激活玩家座位号
+	required int32 lastTakeTilePlayerSeat   = 5 ;	// 最后一个抓牌玩家座位号
+	required int32 lastThrownTilePlayerSeat = 6 ;	// 最后一个出牌玩家座位号
+}
+
+// 客户端针对Action消息的动画执行完毕，通知服务端可以下发下一个Active消息
+// client->server
+message AnimationFinish
+{
+	required int32 seat      = 1 ;	// 玩家座位号
+	required int32 requestid = 2 ;	// PlayerActionMessage中对应的那个requestid
+}
+

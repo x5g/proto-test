@@ -1,0 +1,31 @@
+package NVocal;
+
+enum EFriendType {
+    FT_Friend = 1;
+    FT_Conference = 2;
+}
+
+message TFriendInfoData {
+    required string Login = 1;
+    required bytes EncryptedKey = 2;
+    required EFriendType Type = 3;
+    required uint32 AuthStatus = 4;
+    required bytes PublicKey = 5;
+    required bytes ServerPublicKey = 6;
+    optional bytes OfflineKey = 7;          // offline key, encrypted asymetrically by our public key
+    optional bytes OfflineKeySignature = 8; // and signed by friend
+}
+
+message TClientInfoData {
+    required string Login = 1;
+    repeated TFriendInfoData Friends = 2;
+    required bytes PublicKey = 3;
+    required bytes EncryptedPrivateKey = 4;
+    required bytes LoginPasswordHash = 5;
+}
+
+message TMessageData {
+    required string Login = 1;
+    required uint64 Date = 2;
+    required bytes EncryptedMessage = 3;
+}

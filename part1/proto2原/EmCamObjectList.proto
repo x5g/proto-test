@@ -1,0 +1,52 @@
+syntax = "proto2";
+package pb.ObjectLists;
+
+import "header.proto";
+import "SignalHeader_t.proto";
+
+message EmCamObjectData
+{  
+  //Attributes
+  optional  uint32  status_brake_light                     =  1  [default = 0];
+  optional  uint32  status_flash_light                     =  2  [default = 0];
+  optional  uint32  associated_lane                        =  3  [default = 0];
+  optional  uint32  percentage_own_driving_lane            =  4  [default = 0];
+  optional  uint32  percentage_side_driving_lane_left      =  5  [default = 0];
+  optional  uint32  percentage_side_driving_lane_right     =  6  [default = 0];
+  optional  uint32  traffic_light_color                    =  7  [default = 0];
+  optional  uint32  traffic_light_mode                     =  8  [default = 0];
+  
+  //kinematic
+  optional float  dist_z                                   =  9  [default = 0.0];
+  optional float  dist_z_std                               =  10 [default = 0.0];
+  optional float  yaw                                      =  11 [default = 0.0];
+  optional float  yaw_std                                  =  12 [default = 0.0];
+  optional float  yaw_rate                                 =  13 [default = 0.0];
+  optional float  yaw_rate_std                             =  14 [default = 0.0];
+  optional float  height                                   =  15 [default = 0.0];
+  optional float  height_std                               =  16 [default = 0.0];
+  optional float  offset_to_ground                         =  17 [default = 0.0];
+  optional float  offset_to_ground_std                     =  18 [default = 0.0];
+
+  //classification
+  optional sint32  probability_pedestrian                  =  19 [default = 0];
+  optional sint32  probability_cyclist                     =  20 [default = 0];
+  optional sint32  probability_motorbike                   =  21 [default = 0];
+  optional sint32  probability_car                         =  22 [default = 0];
+  optional sint32  probability_truck                       =  23 [default = 0];
+  optional sint32  probability_other_vehicle               =  24 [default = 0];
+  optional sint32  probability_road_boundry                =  25 [default = 0];
+  optional sint32  probability_unknown                     =  26 [default = 0];
+  optional sint32  active_flags                            =  27 [default = 0];
+}
+
+message EmCamObjectList
+{
+  optional  pb.Header         header               =  1;  //  common message header
+  repeated  EmCamObjectData   data                 =  2;  //  NUM_OF_OBJECTS = 40
+  optional  SignalHeader_t    sigheader            =  3;  //  signal message header
+  optional  uint32            version_number       =  4 [default = 0];
+  optional  uint32            visibility_range     =  5 [default = 0];
+  optional  uint32            service_degradation  =  6 [default = 0];
+  optional  uint32            quality_flags        =  7 [default = 0];
+}

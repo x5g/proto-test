@@ -1,0 +1,807 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "api.proto";
+import "profile.proto";
+import "profile_userinfo.proto";
+import "optional.proto";
+import "prefs.proto";
+import "wrappers.proto";
+import "hub_base.proto";
+import "hub.proto";
+import "contacts.proto";
+
+// RPC
+
+message RPCGenericResponse {
+    bool success = 1;
+}
+
+// RPC - User
+
+service UserService {
+    rpc Login (RPCAuthLoginRequest) returns (RPCAuthLoginResponse);
+    rpc LoginOAuth (RPCAuthLoginOAuthRequest) returns (RPCAuthLoginResponse);
+    rpc LoginEmail (RPCAuthLoginEmailRequest) returns (RPCAuthLoginResponse);
+    rpc Register (RPCAuthRegisterRequest) returns (AuthRegisterResponse);
+    rpc ConvertEphemeralUser (RPCUserConvertEphemeralUserRequest) returns (RPCUserConvertEphemeralUserResponse);
+    rpc TransferOwnership (RPCUserTransferOwnershipRequest) returns (RPCUserTransferOwnershipResponse);
+    rpc CheckBanStatus (RPCUserCheckBanStatusRequest) returns (RPCUserCheckBanStatusResponse);
+
+    rpc GetUser (RPCUserGetUserRequest) returns (RPCUserGetUserResponse);
+    rpc DeleteUser (RPCUserDeleteUserRequest) returns (RPCUserDeleteUserResponse);
+    rpc RemoveUserFromHubs (RPCUserRemoveUserFromHubsRequest) returns (RPCUserRemoveUserFromHubsResponse);
+    rpc ValidateUsername (RPCUserValidateUsernameRequest) returns (RPCUserValidateUsernameResponse);
+    rpc ValidateEmailAddress (RPCUserValidateEmailAddressRequest) returns (RPCUserValidateEmailAddressResponse);
+    rpc GetUserAgent (RPCUserGetUserAgentRequest) returns (RPCUserGetUserAgentResponse);
+    rpc GetOwnProfile (RPCUserGetOwnProfileRequest) returns (RPCUserGetOwnProfileResponse);
+    rpc GetOtherProfile (RPCUserGetOtherProfileRequest) returns (RPCUserGetOtherProfileResponse);
+    rpc UpdateUser (RPCUserUpdateRequest) returns (RPCUserUpdateResponse);
+    rpc RequestFriendship(RPCUserFriendshipRequest) returns (RPCUserFriendshipRequestResponse);
+    rpc Unfriend(RPCUserFriendshipRequest) returns (RPCGenericResponse);
+    rpc GetFriends(RPCUserGetFriendsRequest) returns (RPCUserGetFriendsResponse);
+    rpc RequestActivationEmail(RPCUserActivationEmailRequest) returns (RPCUserActivationEmailResponse);
+    rpc ExecuteActivation(RPCUserExecuteActivationRequest) returns (RPCUserExecuteActivationResponse);
+
+    rpc RequestPasswordReset(RPCUserPasswordResetEmailRequest) returns (RPCUserPasswordResetEmailResponse);
+    rpc GetPasswordResetInfo(RPCUserGetPasswordResetInfoRequest) returns (RPCUserGetPasswordResetInfoResponse);
+    rpc ExecutePasswordReset(RPCUserExecutePasswordResetRequest) returns (RPCUserExecutePasswordResetResponse);
+    rpc UpdatePassword(RPCUserUpdatePasswordRequest) returns (RPCUserUpdatePasswordResponse);
+
+    rpc GetUserProfile (RPCProfileGetRequest) returns (UserProfile);
+    rpc UpdateGameEntry (UserGame) returns (UserProfile);
+    rpc DeleteGameEntry (UserGame) returns (UserProfile);
+    rpc UpdateUserAccount (UserAccount) returns (UserProfile);
+    rpc DeleteUserAccount (UserAccount) returns (UserProfile);
+    rpc SetChannelRole (RPCUserSetChannelRoleRequest) returns (RPCUserSetChannelRoleResponse);
+    rpc SetGroupRole (RPCUserSetGroupRoleRequest) returns (RPCUserSetGroupRoleResponse);
+    rpc CreateProprietaryGroupMembership (RPCCreateRelationRequest) returns (RPCCreateRelationResponse);
+    rpc UpdateVoiceStatus (RPCUserUpdateVoiceStatusRequest) returns (RPCUserUpdateVoiceStatusResponse);
+
+    rpc AddContact (RPCUserAddContactRequest) returns (RPCUserAddContactResponse);
+    rpc RemoveContact (RPCUserRemoveContactRequest) returns (RPCUserRemoveContactResponse);
+    rpc GetContacts (RPCUserGetContactsRequest) returns (RPCUserGetContactsResponse);
+    rpc AddMutualContacts(RPCUserAddMutualContactsRequest) returns (RPCUserAddMutualContactsResponse);
+
+    rpc EditBlockedUser(RPCUserEditBlockedUserRequest) returns (RPCUserEditBlockedUserResponse);
+    rpc GetBlockedUsers(RPCUserGetBlockedUsersRequest) returns (RPCUserGetBlockedUsersResponse);
+}
+
+message RPCCreateRelationRequest {
+    string user_id = 1;
+    ProprietaryUserGroupRecord.Type type = 2;
+}
+
+message RPCCreateRelationResponse {
+    // VOID
+}
+
+message RPCAuthLoginRequest {
+    string username = 1;
+    string password = 2;
+    string agent_id = 3;
+    string agent_name = 4;
+    UserAgent.UserAgentType agent_type = 5;
+    string client_ip = 6;
+    string current_user_id = 7;
+}
+
+message RPCAuthLoginOAuthRequest {
+    string current_user_id = 1;
+    string oauth_token = 2;
+    AuthLoginOAuthRequest.OAuthProvider oauth_provider = 3;
+    string requested_username = 4;
+    string email_address = 5;
+    string agent_id = 6;
+    string agent_name = 7;
+    UserAgent.UserAgentType agent_type = 8;
+    string client_ip = 9;
+    string oauth_code = 10;
+    string oauth_redirect_uri = 11;
+}
+
+message RPCAuthLoginEmailRequest {
+    string current_user_id = 1;
+    string email = 2;
+    string source_url = 3;
+    string code = 4;
+    string requested_username = 5;
+    string agent_id = 6;
+    string agent_name = 7;
+    UserAgent.UserAgentType agent_type = 8;
+    string client_ip = 9;
+    bool reset_password = 10;
+    string new_password = 11;
+}
+
+message RPCAuthLoginResponse {
+    bool success = 1;
+    string token = 2;
+    User user = 3;
+    AuthLoginResponse.ErrorType error = 4;
+    bool new_user = 5;
+}
+
+message RPCAuthRegisterRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string invite_code = 4;
+    bool newsletter = 5;
+    bool terms_of_service = 6;
+    string gosu_invite_code = 7;
+    string agent_id = 8;
+    string agent_name = 9;
+    UserAgent.UserAgentType agent_type = 10;
+    string client_ip = 11;
+    string languages = 12;
+    bool ephemeral = 13;
+    repeated string join_communities = 14;
+    bool auto_generate_name_suffix = 15;
+    string avatar_image = 16;
+}
+
+message RPCUserConvertEphemeralUserRequest {
+    string user_id = 1;
+    string agent_id = 2;
+    string username = 3;
+    string email_address = 4;
+    string password = 5;
+    bool newsletter = 6;
+    bool terms_of_service = 7;
+    string avatar_image = 8;
+}
+
+message RPCUserConvertEphemeralUserResponse {
+    UserConvertEphemeralUserResponse.ErrorType error = 1;
+    string token = 2;
+    User user = 3;
+}
+
+message RPCProfileGetRequest {
+    string user_id = 1;
+}
+
+message RPCUserUpdateRequest {
+    string user_id = 1;
+    OptionalString email = 2;
+    OptionalString display_name = 3;
+    OptionalString avatar_image = 4;
+    User.UserStatus status = 5;
+    OptionalBool newsletter = 6;
+    OptionalGames games = 7;
+    OptionalString background_image = 8;
+    OptionalString title_image = 9;
+    OptionalBool terms_of_service = 10;
+
+    BiographyUpdateData biography = 16;
+}
+
+message RPCUserUpdateResponse {
+    AuthRegisterResponse.ErrorType error = 1;
+    User user = 2;
+}
+
+message RPCUserGetFriendsRequest {
+    string user_id = 1;
+}
+
+message RPCUserGetFriendsResponse {
+    repeated ChatUser friends = 1;
+    repeated FriendRequest sentFriendRequests = 2;
+    repeated FriendRequest receivedFriendRequests = 3;
+}
+
+message RPCUserFriendshipRequest {
+    string source_user = 1;
+    string target_user = 2;
+    string message = 3;
+}
+
+message RPCUserFriendshipRequestResponse {
+    bool success = 1;
+    ProfileRequestFriendshipResponse.FriendshipStatus status = 2;
+}
+
+message RPCUserGetUserRequest {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    bool ignore_children = 4;
+    string normalized_username = 5;
+}
+
+message RPCUserValidateUsernameRequest {
+    string username = 1;
+}
+
+message RPCUserValidateUsernameResponse {
+    AuthRegisterResponse.ErrorType error = 1;
+}
+
+message RPCUserValidateEmailAddressRequest {
+    string email_address = 1;
+}
+
+message RPCUserValidateEmailAddressResponse {
+    UserValidateEmailAddressResponse.ErrorType error = 1;
+}
+
+message RPCUserGetUserResponse {
+    bool user_exists = 1;
+    User user = 2;
+}
+
+message RPCUserGetUserAgentRequest {
+    string agent_id = 1;
+    bool populate_user = 2;
+    string user_id = 3;
+}
+
+message RPCUserGetUserAgentResponse {
+    bool agent_exists = 1;
+    UserAgent agent = 2;
+}
+
+message RPCUserGetOwnProfileRequest {
+    string user_id = 1;
+    //string username = 2; // deprecated
+    //string email = 3; // deprecated
+    bool include_hubs = 4; // this is temporary. once all clients are updates to handle hubs this can be removed.
+}
+
+message RPCUserGetOwnProfileResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+        NOT_FOUND = 3;
+    }
+    UserInfo user_info = 1;
+    ErrorType error = 2;
+}
+
+message RPCUserGetOtherProfileRequest {
+    string user_id = 1;
+}
+
+message RPCUserGetOtherProfileResponse {
+    ChatUserInfo user_info = 1;
+}
+
+message RPCUserActivationEmailRequest {
+    string user_id = 1;
+}
+
+message RPCUserActivationEmailResponse {
+    bool success = 1;
+}
+
+message RPCUserExecuteActivationRequest {
+    string secret = 2;
+}
+
+message RPCUserExecuteActivationResponse {
+    bool success = 1;
+}
+
+message RPCUserPasswordResetEmailRequest {
+    string email = 1;
+    string source_url = 2;
+}
+
+message RPCUserPasswordResetEmailResponse {
+    bool success = 1;
+}
+
+message RPCUserGetPasswordResetInfoRequest {
+    string secret = 1;
+}
+
+message RPCUserGetPasswordResetInfoResponse {
+    AuthGetPasswordResetInfoResponse.ErrorType error = 1;
+    ChatUser user = 2;
+    string source_url = 3;
+}
+
+message RPCUserExecutePasswordResetRequest {
+    string secret = 2;
+    string new_password = 3;
+}
+
+message RPCUserExecutePasswordResetResponse {
+    bool success = 1;
+    string token = 2;
+}
+
+message RPCUserUpdatePasswordRequest {
+    string user_id = 1;
+    string old_password = 2;
+    string new_password = 3;
+}
+
+message RPCUserUpdatePasswordResponse {
+    ProfileUpdatePasswordResponse.ErrorType error = 1;
+}
+
+message RPCUserSetChannelRoleRequest {
+    string user_id = 1;
+    string channel_id = 2;
+    ChannelMembershipRecord.MembershipType membership_type = 3;
+}
+
+message RPCUserSetChannelRoleResponse {
+     UserSetChannelRoleResponse.ErrorType error = 1;
+}
+
+message RPCUserSetGroupRoleRequest {
+    string user_id = 1;
+    string group_id = 2;
+    GroupMembershipRecord.MembershipType membership_type = 3;
+}
+
+message RPCUserSetGroupRoleResponse {
+     UserSetGroupRoleResponse.ErrorType error = 1;
+}
+
+message RPCUserUpdateVoiceStatusRequest {
+    string user_id = 1;
+    string channel_id = 2;
+    ChannelMembershipRecord.VoiceStatus voice_status = 3;
+}
+
+message RPCUserUpdateVoiceStatusResponse {
+}
+
+message RPCUserDeleteUserRequest {
+    string user_id = 1;
+}
+
+message RPCUserDeleteUserResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+    }
+    ErrorType error = 1;
+}
+
+message RPCUserRemoveUserFromHubsRequest {
+    string user_id = 1;
+}
+
+message RPCUserRemoveUserFromHubsResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+    }
+    ErrorType error = 1;
+}
+
+message RPCUserTransferOwnershipRequest {
+    string user_id = 1;
+    string target_user_auth_token = 2;
+}
+
+message RPCUserTransferOwnershipResponse {
+    UserTransferOwnershipResponse.ErrorType error = 1;
+}
+
+message RPCUserCheckBanStatusRequest {
+    string client_ip = 1;
+}
+
+message RPCUserCheckBanStatusResponse {
+    UserCheckBanStatusResponse.ErrorType error = 1;
+    bool is_banned = 2;
+}
+
+message RPCUserAddMutualContactsRequest {
+    repeated AddMutualContactsRequestEntry contacts = 1;
+}
+
+message AddMutualContactsRequestEntry {
+    string first_user_id = 1;
+    string second_user_id = 2;
+    bool mutual = 3;
+}
+
+message RPCUserAddMutualContactsResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+    }
+    ErrorType error = 1;
+}
+
+// RPC - Groups
+
+service GroupService {
+    rpc CreateGroup (RPCGroupCreateGroupRequest) returns (RPCGroupCreateGroupResponse);
+    rpc EditGroup (RPCGroupEditGroupRequest) returns (RPCGroupEditGroupResponse);
+    rpc GetGroup (RPCGroupGetGroupRequest) returns (RPCGroupGetGroupResponse);
+    rpc GetGroups (RPCGroupGetGroupsRequest) returns (RPCGroupGetGroupsResponse);
+    rpc GetGroupsForUser (RPCGroupGetGroupsForUserRequest) returns (RPCGroupGetGroupsForUserResponse);
+    rpc AddGroupMember (RPCGroupAddGroupMemberRequest) returns (RPCGroupAddGroupMemberResponse);
+    rpc AddGroupMembers (RPCGroupAddGroupMembersRequest) returns (RPCGroupAddGroupMembersResponse);
+    rpc RemoveGroupMember (RPCGroupRemoveGroupMemberRequest) returns (RPCGroupRemoveGroupMemberResponse);
+    rpc CheckGroupMembership (RPCGroupCheckGroupMembershipRequest) returns (RPCGroupCheckGroupMembershipResponse);
+    rpc CreateInviteCode (RPCGroupCreateInviteCodeRequest) returns (RPCGroupCreateInviteCodeResponse);
+    rpc GetInviteCodeInfo (RPCGroupGetInviteCodeInfoRequest) returns (RPCGroupGetInviteCodeInfoResponse);
+    rpc AcceptInvite (RPCGroupAcceptInviteRequest) returns (RPCGroupAcceptInviteResponse);
+
+    rpc GetGroupToken (RPCGroupGetGroupTokenRequest) returns (RPCGroupGetGroupTokenResponse);
+
+    // Load all users that are associated to a group
+    // 1. All owners or members of that Group
+    // 2. All users that currently subscribing atleast one group channel
+    rpc GetAssociatedGroupUsers (google.protobuf.StringValue) returns (RPCAssociatedGroupUsersResponse);
+
+    rpc RemoveUserFromGroup (RPCGroupRemoveUserRequest) returns (RPCGroupRemoveUserResponse);
+
+    rpc AddMember (RPCGroupAddMemberRequest) returns (RPCGroupAddMemberResponse);
+    rpc GetMembers (RPCGroupGetMembersRequest) returns (RPCGroupGetMembersResponse);
+    rpc EditMember (RPCGroupEditMemberRequest) returns (RPCGroupEditMemberResponse);
+    rpc SendInvite (RPCGroupSendInviteRequest) returns (RPCGroupSendInviteResponse);
+    rpc JoinGroup (RPCGroupJoinGroupRequest) returns (RPCGroupJoinGroupResponse);
+    rpc LeaveGroup (RPCGroupLeaveGroupRequest) returns (RPCGroupLeaveGroupResponse);
+}
+
+message RPCGroupRemoveUserRequest {
+    string user_id = 1;
+    string group_id = 2;
+    ProprietaryUserGroupRecord.Type type = 3;
+}
+
+message RPCGroupRemoveUserResponse {
+    // VOID
+}
+
+message RPCAssociatedGroupUsersResponse {
+    repeated User users = 1;
+}
+
+message RPCGroupCreateGroupRequest {
+    string owner = 1;
+    string name = 2;
+    string description = 3;
+    string title_image = 4;
+    string background_image = 5;
+    bool skip_channel_creation = 6;
+}
+
+message RPCGroupCreateGroupResponse {
+    CreateGroupErrorType error = 1;
+    Group group = 2;
+}
+
+message RPCGroupEditGroupRequest {
+    string id = 1;
+    OptionalString owner = 2;
+    OptionalString name = 3;
+    OptionalString description = 4;
+    OptionalString title_image = 5;
+    OptionalString background_image = 6;
+}
+
+message RPCGroupEditGroupResponse {
+    CreateGroupErrorType error = 1;
+    Group group = 2;
+}
+
+message RPCGroupGetGroupRequest {
+    string group_id = 1;
+    bool fetch_linked_hubs = 2;
+}
+
+message RPCGroupGetGroupResponse {
+    Group group = 1;
+    repeated Hub linked_hubs = 2;
+}
+
+message RPCGroupGetGroupsRequest {
+}
+
+message RPCGroupGetGroupsResponse {
+    repeated Group groups = 1;
+}
+
+message RPCGroupGetGroupsForUserRequest {
+    string user_id = 1;
+}
+
+message RPCGroupGetGroupsForUserResponse {
+    repeated GroupMembership groupMemberships = 1;
+}
+
+message RPCGroupAddGroupMemberRequest {
+    string group_id = 1;
+    string user_id = 2;
+    GroupMembershipRecord.MembershipType type = 3;
+}
+
+message RPCGroupAddGroupMemberResponse {
+}
+
+message RPCGroupAddGroupMembersRequest {
+    string group_id = 1;
+    string inviter_id = 2;
+    repeated PotentialGroupMember invitees = 3;
+}
+
+message RPCGroupAddGroupMembersResponse {
+}
+
+message RPCGroupRemoveGroupMemberRequest {
+    string group_id = 1;
+    string user_id = 2;
+}
+
+message RPCGroupRemoveGroupMemberResponse {
+}
+
+message RPCGroupCheckGroupMembershipRequest {
+    string group_id = 1;
+    string user_id = 2;
+}
+
+message RPCGroupCheckGroupMembershipResponse {
+    bool is_member = 1;
+}
+
+message RPCGroupCreateInviteCodeRequest {
+    string group_id = 1;
+    string inviter_id = 2;
+}
+
+message RPCGroupCreateInviteCodeResponse {
+    string invite_code = 1;
+}
+
+message RPCGroupGetInviteCodeInfoRequest {
+    string invite_code = 1;
+}
+
+message RPCGroupGetInviteCodeInfoResponse {
+    Group group = 1;
+}
+
+message RPCGroupAcceptInviteRequest {
+    string invite_code = 1;
+    string user_id = 2;
+}
+
+message RPCGroupAcceptInviteResponse {
+    bool success = 1;
+    Group group = 2;
+}
+
+message RPCGroupGetGroupTokenRequest {
+    string user_id = 1;
+    string group_id = 2;
+}
+
+message RPCGroupGetGroupTokenResponse {
+    GroupGetGroupTokenResponse.ErrorType error = 1;
+    string token = 2;
+}
+
+// used to add (invite) a member to a group
+message RPCGroupAddMemberRequest {
+    string group_id = 1;
+    string inviter_id = 2;
+    oneof identifier {
+        string user_id = 3;
+        string email = 4;
+    }
+    MembershipEntry.MembershipType type = 5;
+    bool fetch_existing = 6;
+    bool fetch_pending = 7;
+}
+
+message RPCGroupAddMemberResponse {
+    RPCHubAddMemberResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+}
+
+// used to fetch all members for a group
+message RPCGroupGetMembersRequest {
+    string group_id = 1;
+    string user_id = 2;
+    bool fetch_existing = 3;
+    bool fetch_pending = 4;
+}
+
+message RPCGroupGetMembersResponse {
+    RPCHubGetMembersResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+}
+
+// used to resend an invitation email for an invited member that has not joined the group yet
+message RPCGroupSendInviteRequest {
+    string group_id = 1;
+    string sender_id = 2;
+    string user_id = 3;
+    string email = 4;
+}
+
+message RPCGroupSendInviteResponse {
+    RPCHubSendInviteResponse.ErrorType error = 1;
+}
+
+// used to edit an existing group membership
+// a membership/invite can be revoked/deleted by setting type to NONE
+// either user id or email have to be supplied to identify the user to be edited
+message RPCGroupEditMemberRequest {
+    string group_id = 1;
+    string editer_id = 2;
+    string user_id = 3;
+    string email = 4;
+    MembershipEntry.MembershipType type = 5;
+    bool fetch_existing = 6;
+    bool fetch_pending = 7;
+}
+
+message RPCGroupEditMemberResponse {
+    RPCHubEditMemberResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+}
+
+// used to join a group
+// code is optional (can be used to redeem an invite via email)
+message RPCGroupJoinGroupRequest {
+    string group_id = 1;
+    string user_id = 2;
+    string code = 3;
+}
+
+message RPCGroupJoinGroupResponse {
+    GroupJoinResponse.ErrorType error = 1;
+}
+
+// used to leave a group
+message RPCGroupLeaveGroupRequest {
+    string group_id = 1;
+    string user_id = 2;
+}
+
+message RPCGroupLeaveGroupResponse {
+    GroupLeaveResponse.ErrorType error = 1;
+}
+
+// RPC - Prefs
+
+service PrefsService {
+    rpc GetPref (RPCPrefsGetPrefRequest) returns (RPCPrefsGetPrefResponse);
+    rpc GetPrefs (RPCPrefsGetPrefsRequest) returns (RPCPrefsGetPrefsResponse);
+    rpc SetPrefs (RPCPrefsSetPrefsRequest) returns (RPCPrefsSetPrefsResponse);
+    rpc DeletePrefs (RPCPrefsDeletePrefsRequest) returns (RPCPrefsDeletePrefsResponse);
+}
+
+message RPCPrefsGetPrefRequest {
+    string user_id = 1;
+    string domain = 2;
+    string keypath = 3;
+}
+
+message RPCPrefsGetPrefResponse {
+    Pref pref = 1;
+}
+
+message RPCPrefsGetPrefsRequest {
+    string user_id = 1;
+    string domain = 2;
+    string keypath_prefix = 3;
+}
+
+message RPCPrefsGetPrefsResponse {
+    repeated Pref prefs = 1;
+}
+
+message RPCPrefsSetPrefsRequest {
+    string user_id = 1;
+    repeated Pref prefs = 2;
+}
+
+message RPCPrefsSetPrefsResponse {
+}
+
+message RPCPrefsDeletePrefsRequest {
+    string user_id = 1;
+    string domain = 2;
+    string keypath_prefix = 3;
+}
+
+message RPCPrefsDeletePrefsResponse {
+}
+
+// RPC - Search
+
+service LegacySearchService {
+    rpc Search (RPCSearchSearchRequest) returns (RPCSearchSearchResponse);
+}
+
+message RPCSearchSearchRequest {
+    string search_term = 1;
+    int32 limit = 2;
+    bool search_users = 3;
+    bool search_channels = 4;
+    bool search_groups = 5;
+    bool search_games = 6;
+    bool search_tags = 7;
+}
+
+message RPCSearchSearchResponse {
+    repeated ChatUser users = 1;
+    repeated Channel channels = 2;
+    repeated Group groups = 3;
+    repeated Game games = 4;
+    repeated string tags = 5;
+}
+
+/*
+// RPC - Mailchimp sync
+
+service MailchimpService {
+    rpc AddSubscriber (RPCMailchimpAddSubscriberRequest) returns (RPCMailchimpAddSubscriberResponse);
+    rpc RemoveSubscriber (RPCMailchimpRemoveSubscriberRequest) returns (RPCMailchimpRemoveSubscriberResponse);
+    rpc Unsubscribe (RPCMailchimpUnsubscribeRequest) returns (RPCMailchimpUnsubscribeResponse);
+}
+
+message RPCMailchimpAddSubscriberRequest {
+    string user_id = 1;
+    string email_address = 2;
+    string username = 3;
+}
+
+message RPCMailchimpAddSubscriberResponse {
+}
+
+message RPCMailchimpRemoveSubscriberRequest {
+    string user_id = 1;
+    string email_address = 2;
+    string username = 3;
+}
+
+message RPCMailchimpRemoveSubscriberResponse {
+}
+
+message RPCMailchimpUnsubscribeRequest {
+    string user_id = 1;
+    string email_address = 2;
+    string username = 3;
+}
+
+message RPCMailchimpUnsubscribeResponse {
+}
+*/
+
+// blocked users
+
+message RPCUserEditBlockedUserRequest {
+    string user_id = 1;
+    string blocked_user_id = 2;
+    bool remove = 3;
+}
+
+message RPCUserEditBlockedUserResponse {
+    UserEditBlockedUserResponse.ErrorType error = 1;
+}
+
+message RPCUserGetBlockedUsersRequest {
+    string user_id = 1;
+}
+
+message RPCUserGetBlockedUsersResponse {
+    UserGetBlockedUsersResponse.ErrorType error = 1;
+    repeated ChatUser users = 2;
+}

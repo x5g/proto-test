@@ -1,0 +1,3 @@
+
+
+oneKind.value

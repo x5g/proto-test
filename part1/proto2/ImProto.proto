@@ -1,0 +1,122 @@
+﻿//protoc --csharp_out=. ImProto.proto
+//protoc --java_out=. ImProto.proto
+//protoc --objc_out=. ImProto.proto
+syntax = "proto3";
+package IM.Protocol;
+enum PackageCategory{
+	Ping = 0;
+	Login = 1;
+	Logout = 2;
+	SendToUser = 3;
+	SendToChannel = 4;
+	ReceivedUserMsg = 5;
+	ReceivedChannelMsg = 6;
+	BindToChannel = 7;
+	UnbindToChannel = 8;
+	BindToGroup = 9;
+	UnbindToGroup = 10;
+	SendToGroup = 11;
+	ReceivedGroupMsg = 12;	
+	Result = 99;
+	PushMsg = 198;
+	AdminSend = 199;
+	SubUserLogin = 200;
+	UnsubUserLogin = 201;
+	PubUserLogin = 202;
+}
+message SocketPackage{
+	int32 Seq = 1;
+	PackageCategory Category = 2;
+	bytes Content = 3;
+}
+enum ResultCode{
+	Success = 0;
+	NeedLogin = 1;
+	AuthFailed = 2;
+	NeedAdmin = 3;
+}
+message SocketResult{
+	PackageCategory Category = 1;
+	ResultCode Code = 2;
+	string Message = 3;
+	map<string,bytes> UserTags = 4;
+}
+message LoginToken{
+	string UserID = 1;
+	string Token = 2;
+	int32 VersionCode = 3;
+	string Appkey = 4;
+	bool IsAdmin = 5;
+	string VersionName = 6;
+}
+message SendUserMessage{
+	string Receiver = 1;
+	int32 Type = 2;
+	string Content = 3;
+	map<string,bytes> UserTags = 4;
+	//string Sender = 5; //  used for admin
+	string MsgID = 6;
+	int32 SendTime = 7;
+}
+message ReceivedUserMessage{
+	string MsgID = 1;
+	string Sender = 2;
+	int32 Type = 3;
+	string Content = 4;
+	map<string,bytes> UserTags = 5;
+	int32 SendTime = 6;
+}
+message SendChannelMessage{
+	string ChannelID = 1;
+	int32 Type = 2;
+	string Content = 3;
+	map<string,bytes> UserTags = 4;
+	//string Sender = 5; //  used for admin
+	string MsgID = 6;
+	int32 SendTime = 7;
+}
+message ReceivedChannelMessage{
+	string MsgID = 1;
+	string Sender = 2;
+	string ChannelID = 3;
+	int32 Type = 4;
+	string Content = 5;
+	map<string,bytes> UserTags = 6;
+	int32 SendTime = 7;
+}
+message Channel{
+	string ChannelID = 1;
+}
+message UserGroup{
+	string UserID = 1;
+	repeated string GroupIDs = 2;
+}
+message SendGroupMessage{
+	string GroupID = 1;
+	int32 Type = 2;
+	string Content = 3;
+	map<string,bytes> UserTags = 4;
+	//string Sender = 5; //  used for admin	
+	string MsgID = 6;
+	int32 SendTime = 7;
+}
+message ReceivedGroupMessage{
+	string MsgID = 1;
+	string Sender = 2;
+	string GroupID = 3;
+	int32 Type = 4;
+	string Content = 5;
+	map<string,bytes> UserTags = 6;
+	int32 SendTime = 7;
+}
+message AdminMessage{
+	string Receiver = 1;
+	PackageCategory Category = 2;
+	bytes MessageContent = 3;
+}
+message PushMessage{
+	string Receiver = 1;
+	string Sender = 2;
+	PackageCategory Category = 3;
+	bytes MessageContent = 4;
+}

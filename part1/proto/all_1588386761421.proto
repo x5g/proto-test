@@ -1,0 +1,34 @@
+syntax = "proto3";
+package gossipmessages;
+option go_package = "github.com/orbs-network/orbs-spec/types/go/protocol/gossipmessages";
+
+import "../primitives/crypto.proto";
+import "../primitives/protocol.proto";
+import "../protocol/gossipmessages/transaction_relay.proto";
+import "../protocol/gossipmessages/block_sync.proto";
+import "../protocol/consensus/lean_helix.proto";
+import "../protocol/consensus/benchmark_consensus.proto";
+
+message Header {
+    primitives.protocol_version protocol_version = 1;
+    primitives.virtual_chain_id virtual_chain_id = 2;
+    repeated primitives.node_address recipient_node_addresses = 3;
+    RecipientsListMode recipient_mode = 4;
+    oneof topic {
+        gossipmessages.TransactionsRelayMessageType transaction_relay = 5;
+        gossipmessages.BlockSyncMessageType block_sync = 6;
+        consensus.LeanHelixMessageType lean_helix = 7;
+        consensus.BenchmarkConsensusMessageType benchmark_consensus = 8;
+    }
+}
+
+message SenderSignature {
+    primitives.node_address sender_node_address = 1;
+    primitives.ecdsa_secp256k1_sig signature = 2;
+}
+
+enum RecipientsListMode {
+    RECIPIENT_LIST_MODE_BROADCAST = 0;
+    RECIPIENT_LIST_MODE_LIST = 1;
+    RECIPIENT_LIST_MODE_ALL_BUT_LIST = 2;
+}

@@ -1,0 +1,87 @@
+// Execute the following commands to compile this file:
+// protoc --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` node.proto
+// protoc --cpp_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` node.proto
+
+// See proto3 syntax here:
+// https://developers.google.com/protocol-buffers/docs/proto3
+
+syntax = "proto3";
+
+package onevote;
+
+// Defines the requests that can be made by the miner.
+service Miner {
+
+	// Broadcasts a block to your set of peers.
+	rpc BroadcastBlock (BlockMsg) returns (Empty) {}
+
+	// Broadcasts a transaction to your set of peers.
+	rpc BroadcastTransaction (TransactionMsg) returns (Empty) {}
+
+	// Gets some specified number of peers.
+	rpc GetAddr (AddrRequest) returns (AddrResponse) {}
+
+	// Gets the vote associated with a particular public key.
+	rpc GetTransaction (TransactionRequest) returns (TransactionMsg) {}
+
+	// Gets a block from another node by block number.
+	// Gets the latest block if no number specified.
+	rpc GetBlock (BlockRequest) returns (BlockMsg) {}
+
+	// Pings to verify the connection is still alive.
+	rpc GetHeartbeat (Empty) returns (Empty) {}
+}
+
+// As a general note, all assigned numbers should be distinct per message
+// object. This determines the order in which things are packed. Using
+// numbers from 1-16 is more efficient (especially for repeated elements),
+// so these should be preferred.
+
+// Empty request.
+message Empty {
+}
+
+// Block object. All parameters are required.
+message BlockMsg {
+	uint32 block_number = 8;
+	bytes prev_block_SHA1 = 1;
+	int64 magic = 2;
+	bytes merkle_root = 3;
+	repeated TransactionMsg transaction_msg = 4;
+	uint32 num_transactions = 5;
+	bytes verifier_public_key = 6;
+	bytes final_hash = 7;
+}
+
+// Transaction object. All parameters are required.
+message TransactionMsg {
+	string sender_public_key = 2;
+	string vote = 3;
+	double timestamp = 4;
+}
+
+
+// Requests some number of peers. If not provided, will
+// return some fixed number of peers (typically 8 to 10).
+message AddrRequest {
+	uint32 num_requested = 1;
+}
+
+// Responds with a list of peers.
+message AddrResponse {
+	repeated string peer = 1;
+}
+
+// Requests the transaction associated with a public key.
+// The public key is a required parameter.
+message TransactionRequest {
+	string publickey = 1;
+}
+
+// Requests a block with a particular number. If this
+// number is unspecified, the latest block is returned.
+message BlockRequest {
+	uint32 block_number = 1;
+	bytes block_hash = 2;
+}
+

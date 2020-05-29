@@ -1,0 +1,18 @@
+{
+  "id": 2020,
+  "len": 1010,
+  "request": {
+    "type": "ITEM",
+    "item": {
+      "command": "command"
+    },
+    "login": {
+      "username": "username",
+      "password": "password"
+    }
+  },
+  "response": {
+    "status": 2010,
+    "message": "1020"
+  }
+}

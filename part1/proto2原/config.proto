@@ -1,0 +1,389 @@
+syntax = "proto3";
+
+import "Server/proto/common/common.proto";
+
+package config;
+
+service Config{
+    rpc GetPortalMenu(common.CommRequest) returns (PortalMenuReply) {}
+    rpc FetchPortalMenu(common.CommRequest) returns (MenuReply) {}
+    rpc ModPortalMenu(MenuRequest) returns (common.CommReply) {}
+    rpc AddPortalMenu(MenuRequest) returns (common.CommReply) {}
+    rpc GetDiscovery(common.CommRequest) returns (DiscoveryReply) {}
+    rpc GetPortalConf(common.CommRequest) returns (PortalConfReply) {}
+    rpc GetEducationVideo(common.CommRequest) returns (EducationVideoReply) {}
+    rpc GetHospitalDepartment(common.CommRequest) returns (HospitalDepartmentReply){}
+    rpc GetPortalDir(PortalDirRequest) returns (PortalDirReply) {}
+    rpc GetTestPortalDir(PortalDirRequest) returns (PortalDirReply) {}
+    rpc GetPortalContent(common.CommRequest) returns (PortalContentReply) {}
+    rpc GetMpwxInfo(common.CommRequest) returns (MpwxInfoReply) {}
+    rpc GetMpwxArticle(common.CommRequest) returns (MpwxArticleReply) {}
+    rpc Redirect(common.CommRequest) returns (RedirectReply) {}
+    rpc RedirectShop(common.CommRequest) returns (RedirectReply) {}
+    rpc SubmitReserveInfo(ReserveRequest) returns (ReserveReply) {}
+    rpc GetReserveInfo(GetReserveRequest) returns (ReserveInfoReply) {}
+    rpc SubmitDonateInfo(DonateRequest) returns (common.CommReply) {}
+    rpc GetTravelAd(common.CommRequest) returns (TravelAdReply) {}
+    rpc GetAdClick(common.CommRequest) returns (AdClickReply) {}
+    rpc GetLoginImg(common.CommRequest) returns (LoginImgReply) {}
+    rpc AddLoginImg(LoginImgRequest) returns (common.CommReply) {}
+    rpc ModLoginImg(LoginImgRequest) returns (common.CommReply) {}
+    rpc GetApInfo(common.CommRequest) returns (ApInfoReply) {}
+    rpc AddApInfo(ApInfoRequest) returns (common.CommReply) {}
+    rpc ModApInfo(ApInfoRequest) returns (common.CommReply) {}
+    rpc GetAdBanner(common.CommRequest) returns (AdBannerReply) {}
+    rpc AddAdBanner(AdBannerRequest) returns (common.CommReply) {}
+    rpc ModAdBanner(AdBannerRequest) returns (common.CommReply) {}
+    rpc FetchTravelAd(common.CommRequest) returns (TravelAdReply) {}
+    rpc AddTravelAd(TravelAdRequest) returns (common.CommReply) {}
+    rpc ModTravelAd(TravelAdRequest) returns (common.CommReply) {}
+    rpc GetOnlineLoginImg(common.CommRequest) returns (LoginImgReply) {}
+    rpc AckLoginImg(common.CommRequest) returns (common.CommReply) {}
+    rpc SubmitUnitInfo(UnitRequest) returns (common.CommReply) {}
+    rpc GetWxMpInfo(common.CommRequest) returns (WxMpReply) {}
+    rpc AddWxMpInfo(WxMpRequest) returns (common.CommReply) {}
+    rpc GetAcConf(common.CommRequest) returns (AcConfReply) {}
+    rpc ModAcConf(AcConfRequest) returns (common.CommReply) {}
+}
+
+message TaobaoInfo {
+    string cover = 1;
+    string dst = 2;
+}
+
+message AppInfo {
+    string dst = 1;
+}
+
+message AcConf {
+    int64 id = 1;
+    string acname = 2;
+    int64 actype = 3;
+    int64 logintype = 4;
+    WxMpInfo wxinfo = 5;
+    TaobaoInfo tbinfo = 6;
+    AppInfo appinfo = 7;
+}
+
+message AcConfRequest {
+    common.Head head = 1;
+    AcConf info = 2;
+}
+
+message AcConfReply {
+    common.Head head = 1;
+    repeated AcConf infos = 2;
+}
+
+message WxMpInfo {
+    int64 id = 1;
+    string appid = 2;
+    string shopid = 3;
+    string secret = 4;
+    string title = 5;
+}
+
+message WxMpRequest {
+    common.Head head = 1;
+    WxMpInfo info = 2;
+}
+
+message WxMpReply {
+    common.Head head = 1;
+    repeated WxMpInfo infos = 2;
+}
+
+message UnitRequest {
+    common.Head head = 1;
+    int64 wifi = 2;
+    string address = 3;
+    string phone = 4;
+}
+
+message AdBannerInfo {
+    int64 id = 1;
+    int64 type = 2;
+    int64 stype = 3;
+    string img = 4;
+    string dst = 5;
+    int64 online = 6;
+    int64 deleted = 7;
+}
+
+message AdBannerReply {
+    common.Head head = 1;
+    repeated AdBannerInfo infos = 2;
+    int64 total = 3;
+}
+
+message AdBannerRequest {
+    common.Head head = 1;
+    AdBannerInfo info = 2;
+}
+
+message ApInfo {
+    int64 id = 1;
+    double longitude = 2;
+    double latitude = 3;
+    int64 unid = 4;
+    string name = 5;
+    int64 deleted = 6;
+    string mac = 7;
+}
+
+message ApInfoReply {
+    common.Head head = 1;
+    repeated ApInfo infos = 2;
+    int64 total = 3;
+}
+
+message ApInfoRequest {
+    common.Head head = 1;
+    ApInfo info = 2;
+}
+
+message PortalMenuInfo {
+    string icon = 1;
+    string text = 2;
+    string name = 3;
+    string routername = 4;
+    string url = 5;
+    int64 id = 6;
+    int64 priority = 7;
+    int64 dbg = 8;
+    int64 deleted = 9;
+    int64 type = 10;
+}
+
+message PortalMenuReply {
+    common.Head head = 1;
+    repeated PortalMenuInfo menulist = 2;
+    repeated PortalMenuInfo tablist = 3;
+}
+
+message MenuReply {
+    common.Head head = 1;
+    repeated PortalMenuInfo infos = 2;
+}
+
+message MenuRequest {
+    common.Head head = 1;
+    PortalMenuInfo info = 2;
+}
+
+message MediaInfo {
+    string img = 1;
+    string dst = 2;
+    string title = 3;
+    int64 id = 4;
+    int64 type = 5;
+    string routername = 6;
+    int64 click = 7;
+    string source = 8;
+}
+
+message PortalService {
+    string name = 1;
+    repeated MediaInfo items = 2;
+}
+
+message ServiceInfo {
+    string title = 1;
+    string dst = 2;
+    int64 sid = 3;
+    string icon = 4;
+}
+
+message ServiceCategory {
+    string title = 1;
+    string icon = 2;
+    repeated ServiceInfo items = 3;
+}
+
+message DiscoveryReply {
+    common.Head head = 1;
+    repeated MediaInfo banners = 2;
+    repeated MediaInfo urbanservices = 3;
+    repeated MediaInfo recommends = 4;
+    repeated ServiceCategory services = 5;
+}
+
+message PortalConfReply {
+    common.Head head = 1;
+    repeated MediaInfo banners = 2;
+    repeated MediaInfo urbanservices = 3;
+    repeated MediaInfo hospitalintros = 4;
+    repeated PortalService services = 5;
+    string unit = 6;
+}
+
+message EducationVideoReply {
+    common.Head head = 1;
+    repeated MediaInfo infos = 2;
+}
+
+message DepartmentInfo {
+    int64 id = 1;
+    string name = 2;
+    string stime = 3;
+    int64 click = 4;
+    string detail = 5;
+}
+
+message DepartmentCategoryInfo {
+    string name = 1;
+    repeated DepartmentInfo infos = 2;
+}
+
+message HospitalDepartmentReply {
+    common.Head head = 1;
+    repeated DepartmentCategoryInfo infos = 2;
+}
+
+message PortalDirRequest {
+    common.Head head = 1;
+    int64 type = 2;
+    string acname = 3;
+    string apmac = 4;
+    string ssid = 5;
+}
+
+message PortalDirReply {
+    common.Head head = 1;
+    string dir = 2;
+}
+
+message PortalContentReply {
+    common.Head head = 1;
+    repeated MediaInfo banners = 2;
+    repeated PortalMenuInfo menulist = 3;
+    repeated PortalMenuInfo tablist = 4;
+    repeated MediaInfo ads = 5;
+}
+
+message Article {
+    string title = 1;
+    string img = 2;
+    string ctime = 3;
+    string dst = 4;
+    int64 id = 5;
+    int64 seq = 6;
+}
+
+message MpwxInfo {
+    int64 id = 1;
+    string name = 2;
+    string abstract = 3;
+    string dst = 4;
+    string icon = 5;
+    Article article = 6;
+}
+
+message MpwxInfoReply {
+    common.Head head = 1;
+    repeated MpwxInfo local = 2;
+    repeated MpwxInfo hot = 3;
+}
+
+message MpwxArticleReply {
+    common.Head head = 1;
+    repeated Article infos = 2;
+    int64 hasmore = 3;
+}
+
+message RedirectReply {
+    common.Head head = 1;
+    string dst = 2;
+}
+
+message ReserveRequest {
+    common.Head head = 1;
+    string name = 2;
+    string phone = 3;
+    int64 sid = 4;
+    string date = 5;
+    int64 btype = 6;
+    int64 pillow = 7;
+}
+
+message ReserveReply {
+    common.Head head = 1;
+    int64 code = 2;
+}
+
+message GetReserveRequest {
+    common.Head head = 1;
+    int64 code = 2;
+}
+
+message ReserveInfoReply {
+    common.Head head = 1;
+    string name = 2;
+    string phone = 3;
+}
+
+message DonateRequest {
+    common.Head head = 1;
+    int64 reservecode = 2;
+    int64 donatecode = 3;
+}
+
+message TravelAdInfo {
+    int64 id = 1;
+    string title = 2;
+    string img = 3;
+    string dst = 4;
+    int64 stime = 5;
+    int64 etime = 6;
+    int64 online = 7;
+    int64 deleted = 8;
+    int64 type = 9;
+}
+
+message TravelAdReply {
+    common.Head head = 1;
+    repeated TravelAdInfo infos = 2;
+    int64 total = 3;
+    int64 hasmore = 4;
+}
+
+message TravelAdRequest {
+    common.Head head = 1;
+    TravelAdInfo info = 2;
+}
+
+message AdClickInfo {
+    int64 type = 1;
+    int64 total = 2;
+    string title = 3;
+}
+
+message AdClickReply {
+    common.Head head = 1;
+    int64 total = 2;
+    repeated AdClickInfo infos = 3;
+    string downurl = 4;
+}
+
+message LoginImgInfo {
+    int64 id = 1;
+    string img = 2;
+    int64 stime = 3;
+    int64 etime = 4;
+    int64 online = 5;
+    int64 type = 6;
+    int64 deleted = 7;
+    int64 pos = 8;
+}
+
+message LoginImgReply {
+    common.Head head = 1;
+    repeated LoginImgInfo infos = 2;
+    int64 hasmore = 3;
+    int64 total = 4;
+}
+
+message LoginImgRequest {
+    common.Head head = 1;
+    LoginImgInfo info = 2;
+}

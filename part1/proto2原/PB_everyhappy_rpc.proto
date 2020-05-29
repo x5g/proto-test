@@ -1,0 +1,97 @@
+
+package everyhappy;
+
+import "PB_everyhappy_data.proto";
+import "PB_everyhappy.proto";
+import "PB_error_code.proto";
+
+// 创建
+message PBS_CreateTask
+{
+	required int32 xiazhu_dur_time = 1;
+	required int32 award_dur_time = 2;
+}
+
+message PBS_CreateTaskReturn
+{	
+	message	ContinueInfo {
+		required int64 playerid = 1;
+		required int32 count = 2; 		// 剩余次数
+	}
+	required RedisProto.RPB_EveryHappyData  task = 1;
+	repeated XiazhuData datas = 2;			// 下注信息
+	repeated XiazhuData last_datas = 3; 	// 上轮下注信息
+	repeated ContinueInfo continues = 4; 	// 当前续压玩家	
+}
+
+// 开奖
+message PBS_Award
+{
+	message Award {
+		required int64 playerid = 1;
+		required int32 type = 2;
+		required int64 gold = 3;
+		optional float percent = 4;
+	}
+	required int64 taskid = 1;
+	repeated Award awards = 2;
+	optional PB_BigAwardNotify big_award = 3;
+   	optional PB_MaxAwardNotify max_award = 4;
+	repeated RedisProto.RPB_EveryHappyRecordData records = 5;
+	required bool is_baocai	= 6;	// 是否爆彩
+	required CardType award_type = 7;	// 开奖牌型 
+}
+
+message PBS_AwardReturn
+{
+	required PB_ErrorCode code = 1;
+}
+
+// 获取上轮大奖得主信息
+message PBS_LastMaxAward
+{
+}
+
+message PBS_LastMaxAwardReturn
+{
+	optional LastMaxAwardInfo info = 1;
+	optional string	last_baocai_time = 2;
+}
+
+// 任务完成
+message PBS_TaskFinish
+{
+	required int64 taskid = 1;
+}
+
+message PBS_TaskFinishReturn 
+{
+}
+
+// 创建续压任务
+message PBS_CreateContinueTask
+{
+	required int64 playerid = 1;
+	required int32 count = 2;
+	required int64 gold = 3;	// 金币总数
+	repeated XiazhuData last_xiazhus = 4;
+}
+
+message PBS_CreateContinueTaskReturn
+{
+	required PB_ErrorCode code = 1;
+}
+
+// 跟注
+message PBS_Genzhu
+{
+	required int64 playerid = 1;
+	required int64 gold = 2;	// 金币总数
+	repeated XiazhuData last_xiazhus = 3;
+}
+
+message PBS_GenzhuReturn
+{
+	required PB_ErrorCode code = 1;
+}
+

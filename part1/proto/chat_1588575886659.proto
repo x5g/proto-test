@@ -1,0 +1,501 @@
+
+
+//用户资料
+message TechwolfUser {
+	//用户uid
+	required int64 uid = 1;
+	//用户姓名,服务端自动补全,上行可不填写,下行消息必有
+	optional string name = 2;
+	//用户头像,如果之前聊过下行没有，没聊过必有
+	optional string avatar = 3;
+	//公司
+	optional string company = 4;
+	//默认头像id
+	optional int32 headImg = 5;
+	//boss认证状态
+	optional int32 certification = 6;
+}
+
+//语音
+message TechwolfSound {
+	//扩展ID 暂时无用
+	optional int64 sid = 1;
+	//语音文件url
+	optional string url = 2;
+	//播放时长
+	optional int32 duration = 3;
+}
+
+//语音
+message TechwolfVideo {
+    // 1:语音 2:视频
+    required int32 type = 1;
+
+    // 聊天状态 1:正常通话 2:通话取消 3:对方拒绝 4:通话超时
+    required int32 status = 2;
+
+    //通话时长
+    optional int32 duration = 3;
+}
+
+//状态
+message TechwolfInterview {
+
+    //1:发起面试请求 2:收回面试请求 3:接受面试请求 4:拒绝面试请求 5:取消面试 6:约面试提示
+    required int32 condition = 1;
+
+    required string text = 2;
+
+    optional string url = 3;
+
+    optional string extend = 4;
+}
+
+//图片信息
+message TechwolfImageInfo {
+	//图片url
+	required string url = 1;
+	//宽
+	required int32 width = 2;
+	//高
+	required int32 height = 3;
+}
+
+//图片消息
+message TechwolfImage {
+	//扩展id,暂时无用
+	optional int64 iid = 1;
+	//缩略图
+	optional TechwolfImageInfo tinyImage = 2;
+	//原始图片
+	optional TechwolfImageInfo originImage = 3;
+}
+
+//动作
+message TechwolfAction {
+	//动作id  0、预留 1、提醒回复2、很感兴趣3、残忍拒绝  4、请求面试5、接受面试6、拒绝面试7、交换联系方式8、接受交换9、拒绝交换 -- 这一行3.0开始废弃
+	//10、单点登录被踢很感兴趣3
+	//11 取消打破沉默 12 电话图标置灰 13 电话通知 扩展属性为{"phone":"13811111111"}
+	//14 电话面试通知
+	//15 牛人答题完成 {"text":"完成答题，正在等待回复", "request_id":123,  "job_id":123, "create_time":123456789, "server_time":123456789}
+	//16 boss看过后 {"text":"boss已经看了您的回答", "request_id":123, "create_time":123456789, "server_time":123456789}
+	//17 boss通过了回答 {"text":"boss通过了你的回答，可以开始聊天了"}
+	//18 boss拒绝了回答 {"text":"很遗憾，boss拒绝了你的回答"}
+	//19 boss直接与牛人开始聊天
+	//20 对话框操作action {"msg_id":1234, "action":1} action为操作的第几个按钮
+	//21 请求简历 22 同意简历请求 23 拒绝简历请求
+	//24、请求面试 25、接受面试26、拒绝面试27、交换联系方式28、接受交换29、拒绝交换
+	//30、有人看过你 {"count":10} 31、有人对你感兴趣 {"count":10} 35、有新人或新职位{"count":10}
+	//32、请求交换微信 {"weixin":"leonlau"}
+	//33、同意交换微信 {"weixin":"leonlau"}
+	//34、拒绝交换微信
+	//35、见上面
+	//36、做选择题，选择选项动作
+	//37 请求获取简历　38获取简历同意 39获取简历拒绝　{"resumeEmail":"gy13zyl@163.com"}
+	//40　请求发送简历 41　发送简历同意 42　发送简历拒绝
+	//43 有同事推荐牛人{"newCount":"10","totalCount":"15"}
+	//44 冻结身份action
+	//45 新完善弹窗
+	//46 弹出评价的窗口
+	//47 牛人同意面试邀请
+	//48 牛人拒绝面试邀请
+	//49 面试邀请的提示
+	//50 待面试个数提示
+	//51 添加好友时发送给牛人期望id {"expectId": 12345}
+    //53 下发视频聊天的token到c端 {"accessToken":"xxxxxxx"}
+    //54 下发好友关系来源 {"sourceTitle":"xxxxxxx"}
+    //55 Link的推送消息 {"appLink":"bosszp://xxxx"}
+    //56 简历直通车
+    //57 APP确定Web登陆
+	//61 boss对牛人发起面试邀请
+	//62 boss收回面试邀请
+	//63 boss的面试邀请超时了
+	//64 牛人/boss取消面试
+	//65 即将面试
+	//66 面试时间到
+	//67 面试达成
+	//68 牛人/boss失约
+	//69 面试邀请的房卡
+	required int32 aid = 1;
+	//扩展数据
+	optional string extend = 2;
+}
+
+//图文消息
+message TechwolfArticle {
+	//标题
+	required string title = 1;
+	//描述
+	required string description = 2;
+	//图片地址
+	required string picUrl = 3;
+	//直聘协议url
+	required string url = 4;
+	//样式 0、大图模式 1、小图模式、2、全屏模式
+	optional int32 templateId = 5;
+	//底部按钮文字
+	optional string bottomText = 6;
+	//超时时间 ms
+	optional int64 timeout = 7;
+	//统计参数 {"p2":"", "p3":""...,"p8":""}
+	optional string statisticParameters = 8;
+}
+
+//通知
+message TechwolfNotify {
+	//文本
+	required string text = 1;
+	//直聘协议url
+	optional string url = 2;
+}
+
+//按钮
+message TechwolfButton {
+	//按钮文本
+	required string text = 1;
+	//直聘协议url
+	optional string url = 2;
+	//按钮模板
+	optional int32 templateId = 3;
+}
+
+//对话框
+message TechwolfDialog {
+	//提示文案
+	required string text = 1;
+	//按钮
+	repeated TechwolfButton buttons = 2;
+	//是否已经被操作
+	required bool operated = 3;
+	//是否只能点多次
+	optional bool clickMore = 4;
+	//对话框类型 0 为通用类型 1、微信对话框 2、简历对话框 3、全屏阻断 4、约面试 5、全局新手引导 6、上线订阅快捷回复 7、期望薪资对话框 8、牛人炸弹感兴趣和不感兴趣 9、面试alert弹窗 10、面试被投诉无定位权限弹框
+	optional int32 type = 5;
+	//对话框背景图
+	optional string backgroundUrl = 6;
+	//超时时间 ms
+    optional int64 timeout = 7;
+	//统计参数 {"p2":"", "p3":""...,"p8":""}
+	optional string statisticParameters = 8;
+	//title  type=4约面试用 5,全局新手引导
+	optional string title = 9;
+	//对话框　type=4
+	optional string url = 10;
+}
+
+message TechwolfJobDesc {
+	//标题
+	required string title = 1;
+	//公司
+	required string company = 2;
+	//薪水
+	required string salary = 3;
+	//直聘协议
+	required string url = 4;
+	//职位id
+	required int64 jobId = 5;
+	//职位类别
+	optional string positionCategory = 6;
+	//经验要求
+	optional string experience = 7;
+	//学历要求
+	optional string education = 8;
+	//城市
+	optional string city = 9;
+	//boss职位
+	optional string bossTitle = 10;
+	//boss个人信息
+	optional TechwolfUser boss = 11;
+	//统计lid
+	optional string lid = 12;
+	//融资阶段
+	optional string stage = 13;
+}
+
+message TechwolfResume {
+	//牛人个人信息
+	required TechwolfUser user = 1;
+	//描述
+	optional string description = 2;
+	//期望城市
+	optional string city = 3;
+	//期望职位
+	optional string position = 4;
+	//亮点
+	repeated string keywords = 5;
+	//期望id
+	optional int64 expectId = 6;
+	//统计lid
+	optional string lid = 7;
+	//性别
+	optional int32 gender = 8;
+	//期望薪资
+	optional string salary = 9;
+	//工作年限
+	optional string workYear = 10;
+	//第一行内容
+	optional string content1 = 11;
+	//第二行内容
+	optional string content2 = 12;
+	//学历要求
+    optional string education = 13;
+}
+
+message TechwolfHyperLink {
+	required string text = 1;
+	required string url = 2;
+	//1,预览简历 2, 接受面试邀请，3，取消面试, 4、新手引导黄条, 5、面试反馈
+	required int32 hyperLinkType = 3;
+    //扩展字段，添加其他KV结构
+    //简历消息包括 fileSizeDesc:文件大小描述 mailTip:邮件发送提醒
+    optional string extraJson=4;
+}
+
+//消息内容
+message TechwolfMessageBody {
+	//消息类型 1.文本 2.语音 3.图片 4.动作 5.图文 6.通知 7.对话框 8.职位 9.简历, 10.红包, 11.订单详情，12 超链接 13 视频消息 14 状态消息
+	required int32 type = 1;
+	//消息模板id 1.正常 2.居中 3.居中灰色 4.直聘技巧样式 5.解析标签 6.红包灰色居中, 7.问候 , 8.设置上线订阅
+	required int32 templateId = 2;
+	//头部文字
+	optional string headTitle = 11;
+	//文本内容 当type为1是,必须设置
+	optional string text = 3;
+	//语音内容 当type为2时，必须设置
+	optional TechwolfSound sound = 4;
+	//图片消息 当type为3时，必须设置
+	optional TechwolfImage image = 5;
+	//动作消息 当type为4时，必须设置
+	optional TechwolfAction action = 6;
+	//图文消息 当type为5时，必须设置
+	repeated TechwolfArticle articles = 7;
+	//通知 当type为6时，必须设置
+	optional TechwolfNotify notify = 8;
+	//对话框 当type为7时，必须设置
+	optional TechwolfDialog dialog = 9;
+	//职位框
+	optional TechwolfJobDesc jobDesc = 10;
+	//简历框
+	optional TechwolfResume resume = 12;
+	//红包框
+	optional TechwolfRedEnvelope redEnvelope = 13;
+	//订单列表详情
+	optional TechwolfOrderDetail orderDetail = 14;
+	//超链接
+	optional TechwolfHyperLink hyperLink = 15;
+    //视频聊天
+    optional TechwolfVideo video = 16;
+    //状态消息
+    optional TechwolfInterview interview = 17;
+}
+
+//消息
+message TechwolfMessage {
+	//消息发送者
+	required TechwolfUser from = 1;
+	//消息接受者
+	required TechwolfUser to = 2;
+	//消息类型，1.单聊 2。群聊 3.系统 4.系统消息f2没有预览
+	required int32 type = 3;
+	//消息id, 上行时没有，下行时必有
+	optional int64 mid = 4;
+	//消息创建时间 上行时可传，下行时为服务器收到时间
+	optional int64 time = 5;
+	//消息主体
+	required TechwolfMessageBody body = 6;
+	//是否为离线消息
+	optional bool offline = 7;
+	//是否被客户端接收过
+	optional bool received = 8;
+	//推送文案
+	optional string pushText = 9;
+
+	//任务id
+	optional int64 taskId = 10;
+	//客户端msgid
+	optional int64 cmid = 11;
+	//消息状态 0 新消息 1 已收走 2 已读
+	optional int32 status = 12;
+
+    //消息计数状态 0 默认，1不计数
+    optional int32 uncount = 13;
+
+    //推送的声音 //1 默认声音，2是钱包声音
+    optional int32 pushSound = 14;
+}
+
+//客户端信息
+message TechwolfClientInfo {
+	//客户端版本
+	optional string version = 1;
+	//手机操作系统
+	optional string system = 2;
+	//手机操作系统版本
+	optional string systemVersion = 3;
+	//机型
+	optional string model = 4;
+	//设备号
+	optional string uniqid = 5;
+	//网络
+	optional string network = 6;
+	//appid
+	optional int32 appid = 7;
+	//platform
+	optional string platform = 8;
+	//渠道id
+	optional string channel = 9;
+	//ssid
+	optional string ssid = 10;
+	//mac
+	optional string bssid = 11;
+	//用户的经度
+    optional double longitude = 12;
+    //用户的纬度
+    optional double latitude = 13;
+}
+
+
+//客户端时间信息
+message TechwolfClientTime {
+	//启动时间
+	optional int64 startTime = 1;
+	//唤醒
+	optional int64 resumeTime = 2;
+}
+
+//出席消息
+message TechwolfPresence {
+	//出席类型, 1.上线, 2.隐身（上行）3.下线 4. 后台（Android） 5. 恢复前台（Android）
+	required int32 type = 1;
+	//出席人
+	required int32 uid = 2;
+	//客户端信息，第一次上线时需要
+	optional TechwolfClientInfo clientInfo = 3;
+	//客户端信息，上线，后台，恢复前台时需要
+	optional TechwolfClientTime clientTime = 4;
+	//上线时传上lastMessageId；
+	optional int64 lastMessageId = 5;
+}
+
+//iq消息
+message TechwolfKVEntry {
+	required string key = 1;
+	required string value = 2;
+}
+
+//iq消息，
+message TechwolfIq {
+	//唯一id
+	required int64 qid = 1;
+	//请求路径
+	required string query = 2;
+	//参数
+	repeated TechwolfKVEntry params = 3;
+}
+
+//消息结果
+message TechwolfIqResponse {
+	//唯一id
+	required int64 qid = 1;
+	//请求路径
+	required string query = 2;
+	//返回结果
+	repeated TechwolfKVEntry results = 3;
+}
+
+//消息id同步协议  
+message TechwolfMessageSync {
+	required int64 clientMid = 1;
+	required int64 serverMid = 2;
+}
+
+//消息已读
+message TechwolfMessageRead {
+	required int64 userId = 1;
+	required int64 messageId = 2;
+	required int64 readTime = 3;
+	optional bool sync = 4 [default = false];
+}
+
+//聊天协议
+message TechwolfChatProtocol {
+	//协议type 1:message 2: presence 3: iq 4: iqResponse 5:sync 6:read 7:datasync
+	required int32 type = 1;
+	//协议版本，默认为1.0 可不传
+	optional string version = 2;
+	//type为1时，必须设置
+	repeated TechwolfMessage messages = 3;
+	//type为2时必须设置
+	optional TechwolfPresence presence = 4;
+	//type为3时，必须设置
+	optional TechwolfIq iq = 5;
+	//type为4时，必须设置
+	optional TechwolfIqResponse iqResponse = 6;
+	//type为5时，必须设置
+	repeated TechwolfMessageSync messageSync = 7;
+	//type为6时，必须设置
+	repeated TechwolfMessageRead messageRead = 8;
+
+    //type为7时，必须设置数据同步
+    optional TechwolfDataSync dataSync = 9;
+}
+
+message TechwolfRedEnvelope {
+	//红包id
+	required int64 redId = 1;
+	//红包留言
+	required string redText = 2;
+	//红包标题
+	required string redTitle = 3;
+	//点击地址
+	required string clickUrl = 4;
+
+}
+
+//订单
+message TechwolfOrderDetail {
+	//订单名称
+	required string title = 1;
+	//子标题
+	required string subTitle = 2;
+	//点击的链接
+	optional string url = 3;
+	//显示的列表
+	repeated TechwolfOrderDetailEntry orderDetailEntryList =  4;
+}
+
+//订单显示项
+message TechwolfOrderDetailItem {
+	//显示名
+	required string name = 1;//分割线key:___line___ 遇到此key忽略value
+	//模板类型
+	required int32 templateId = 2;
+}
+
+//订单的entry
+message TechwolfOrderDetailEntry {
+	//key
+	required TechwolfOrderDetailItem key = 1;
+	//value
+	required TechwolfOrderDetailItem value = 2;
+}
+
+//用户信息数据同步
+message TechwolfUserSync {
+
+    // 用户id
+    required int64 uid = 1;
+    // 当前用户uid的身份
+    required int32 identity = 2;
+}
+
+
+// 数据同步
+message TechwolfDataSync {
+
+    //数据同步类型 1:更新个人信息,2:更新关系信息
+    required int32 type = 1;
+
+    //用户信息,type: 1
+    optional TechwolfUserSync userSync = 2;
+}

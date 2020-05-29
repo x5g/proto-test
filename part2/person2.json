@@ -1,0 +1,10 @@
+{
+  "name": "userInfo",
+  "age": 2,
+  "game": [
+    {
+      "name": "1",
+      "type": "2"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+message base {
+    optional uint64 timestamp = 1;
+    repeated string owner = 2;
+    extensions 100 to 10000;
+}
+
+extend base {
+    optional string name = 100;
+    repeated string res = 101;
+}

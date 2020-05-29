@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message PushRegisterRequest {
+    string  user_id     = 1;
+    string  agent_id    = 2;
+    string  token       = 3;
+    string  provider    = 4;
+    string  language    = 5;
+}
+
+message PushRegisterResponse {
+    string  user_id         = 1;
+    string  agent_id        = 2;
+    string  token           = 3;
+    string  provider        = 4;
+    string  subscriber_id   = 5;
+}
+
+message PushMessageRequest {
+    string event                    = 1;
+    string message                  = 2;
+    string title                    = 3;
+    map<string, string> localized   = 4;
+    map<string, string> data        = 5;
+    bool increment                  = 6;
+    string category                 = 7;
+    string sound                    = 8;
+}
+
+message PushMessageResponse {
+    // VOID
+}
+
+// RPC - Push
+
+service PushService {
+    rpc Register (PushRegisterRequest) returns (PushRegisterResponse);
+    rpc SendMessage (PushMessageRequest) returns (PushMessageResponse);
+}

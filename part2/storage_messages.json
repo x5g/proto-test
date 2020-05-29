@@ -1,0 +1,7 @@
+{
+  "storeChunkMsg": {
+    "fileName": "my_file.txt",
+    "chunkId": 3,
+    "data": "SGVsbG8gV29ybGQh"
+  }
+}

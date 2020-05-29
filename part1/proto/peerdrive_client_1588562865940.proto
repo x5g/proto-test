@@ -1,0 +1,579 @@
+
+package PeerDrive;
+option optimize_for = LITE_RUNTIME;
+
+enum ErrorCode {
+	ERR_ECONFLICT = 0;
+	ERR_E2BIG = 1;
+	ERR_EACCES = 2;
+	ERR_EADDRINUSE = 3;
+	ERR_EADDRNOTAVAIL = 4;
+	ERR_EADV = 5;
+	ERR_EAFNOSUPPORT = 6;
+	ERR_EAGAIN = 7;
+	ERR_EALIGN = 8;
+	ERR_EALREADY = 9;
+	ERR_EBADE = 10;
+	ERR_EBADF = 11;
+	ERR_EBADFD = 12;
+	ERR_EBADMSG = 13;
+	ERR_EBADR = 14;
+	ERR_EBADRPC = 15;
+	ERR_EBADRQC = 16;
+	ERR_EBADSLT = 17;
+	ERR_EBFONT = 18;
+	ERR_EBUSY = 19;
+	ERR_ECHILD = 20;
+	ERR_ECHRNG = 21;
+	ERR_ECOMM = 22;
+	ERR_ECONNABORTED = 23;
+	ERR_ECONNREFUSED = 24;
+	ERR_ECONNRESET = 25;
+	ERR_EDEADLK = 26;
+	ERR_EDEADLOCK = 27;
+	ERR_EDESTADDRREQ = 28;
+	ERR_EDIRTY = 29;
+	ERR_EDOM = 30;
+	ERR_EDOTDOT = 31;
+	ERR_EDQUOT = 32;
+	ERR_EDUPPKG = 33;
+	ERR_EEXIST = 34;
+	ERR_EFAULT = 35;
+	ERR_EFBIG = 36;
+	ERR_EHOSTDOWN = 37;
+	ERR_EHOSTUNREACH = 38;
+	ERR_EIDRM = 39;
+	ERR_EINIT = 40;
+	ERR_EINPROGRESS = 41;
+	ERR_EINTR = 42;
+	ERR_EINVAL = 43;
+	ERR_EIO = 44;
+	ERR_EISCONN = 45;
+	ERR_EISDIR = 46;
+	ERR_EISNAM = 47;
+	ERR_ELBIN = 48;
+	ERR_EL2HLT = 49;
+	ERR_EL2NSYNC = 50;
+	ERR_EL3HLT = 51;
+	ERR_EL3RST = 52;
+	ERR_ELIBACC = 53;
+	ERR_ELIBBAD = 54;
+	ERR_ELIBEXEC = 55;
+	ERR_ELIBMAX = 56;
+	ERR_ELIBSCN = 57;
+	ERR_ELNRNG = 58;
+	ERR_ELOOP = 59;
+	ERR_EMFILE = 60;
+	ERR_EMLINK = 61;
+	ERR_EMSGSIZE = 62;
+	ERR_EMULTIHOP = 63;
+	ERR_ENAMETOOLONG = 64;
+	ERR_ENAVAIL = 65;
+	ERR_ENET = 66;
+	ERR_ENETDOWN = 67;
+	ERR_ENETRESET = 68;
+	ERR_ENETUNREACH = 69;
+	ERR_ENFILE = 70;
+	ERR_ENOANO = 71;
+	ERR_ENOBUFS = 72;
+	ERR_ENOCSI = 73;
+	ERR_ENODATA = 74;
+	ERR_ENODEV = 75;
+	ERR_ENOENT = 76;
+	ERR_ENOEXEC = 77;
+	ERR_ENOLCK = 78;
+	ERR_ENOLINK = 79;
+	ERR_ENOMEM = 80;
+	ERR_ENOMSG = 81;
+	ERR_ENONET = 82;
+	ERR_ENOPKG = 83;
+	ERR_ENOPROTOOPT = 84;
+	ERR_ENOSPC = 85;
+	ERR_ENOSR = 86;
+	ERR_ENOSYM = 87;
+	ERR_ENOSYS = 88;
+	ERR_ENOTBLK = 89;
+	ERR_ENOTCONN = 90;
+	ERR_ENOTDIR = 91;
+	ERR_ENOTEMPTY = 92;
+	ERR_ENOTNAM = 93;
+	ERR_ENOTSOCK = 94;
+	ERR_ENOTSUP = 95;
+	ERR_ENOTTY = 96;
+	ERR_ENOTUNIQ = 97;
+	ERR_ENXIO = 98;
+	ERR_EOPNOTSUPP = 99;
+	ERR_EPERM = 100;
+	ERR_EPFNOSUPPORT = 101;
+	ERR_EPIPE = 102;
+	ERR_EPROCLIM = 103;
+	ERR_EPROCUNAVAIL = 104;
+	ERR_EPROGMISMATCH = 105;
+	ERR_EPROGUNAVAIL = 106;
+	ERR_EPROTO = 107;
+	ERR_EPROTONOSUPPORT = 108;
+	ERR_EPROTOTYPE = 109;
+	ERR_ERANGE = 110;
+	ERR_EREFUSED = 111;
+	ERR_EREMCHG = 112;
+	ERR_EREMDEV = 113;
+	ERR_EREMOTE = 114;
+	ERR_EREMOTEIO = 115;
+	ERR_EREMOTERELEASE = 116;
+	ERR_EROFS = 117;
+	ERR_ERPCMISMATCH = 118;
+	ERR_ERREMOTE = 119;
+	ERR_ESHUTDOWN = 120;
+	ERR_ESOCKTNOSUPPORT = 121;
+	ERR_ESPIPE = 122;
+	ERR_ESRCH = 123;
+	ERR_ESRMNT = 124;
+	ERR_ESTALE = 125;
+	ERR_ESUCCESS = 126;
+	ERR_ETIME = 127;
+	ERR_ETIMEDOUT = 128;
+	ERR_ETOOMANYREFS = 129;
+	ERR_ETXTBSY = 130;
+	ERR_EUCLEAN = 131;
+	ERR_EUNATCH = 132;
+	ERR_EUSERS = 133;
+	ERR_EVERSION = 134;
+	ERR_EWOULDBLOCK = 135;
+	ERR_EXDEV = 136;
+	ERR_EXFULL = 137;
+	ERR_NXDOMAIN = 138;
+}
+
+message ErrorCnf {
+	required ErrorCode error = 1;
+}
+
+message InitReq {
+	required uint32 major = 1;
+	required uint32 minor = 2;
+	optional bytes cookie = 3 [default = ""];
+}
+
+message InitCnf {
+	required uint32 major = 1;
+	required uint32 minor = 2;
+	optional uint32 max_packet_size = 3 [default = 4096];
+}
+
+message EnumCnf {
+	message Store {
+		required bytes sid = 1;
+		required string src = 2;
+		required string type = 3;
+		required string label = 4;
+		optional string options = 5 [default = ""];
+	}
+
+	required Store sys_store = 1;
+	repeated Store stores = 2;
+}
+
+message LookupDocReq {
+	required bytes doc = 1;
+	repeated bytes stores = 2;
+}
+
+message LookupDocCnf {
+	message RevMap {
+		required bytes rid = 1;
+		repeated bytes stores = 2;
+	}
+
+	repeated RevMap revs = 1;
+	repeated RevMap pre_revs = 2;
+}
+
+message LookupRevReq {
+	required bytes rev = 1;
+	repeated bytes stores = 2;
+}
+
+message LookupRevCnf {
+	repeated bytes stores = 1;
+}
+
+message StatReq {
+	required bytes rev = 1;
+	repeated bytes stores = 2;
+}
+
+message StatCnf {
+	message Data {
+		required uint64 size = 1;
+		required bytes hash = 2;
+	}
+
+	message Attachment {
+		required bytes name = 1;
+		required uint64 size = 2;
+		required bytes hash = 3;
+		required uint64 crtime = 4;
+		required uint64 mtime = 5;
+	}
+
+	required uint32 flags = 1;
+	required Data data = 2;
+	repeated Attachment attachments = 3;
+	repeated bytes parents = 4;
+	required uint64 crtime = 5;
+	required uint64 mtime = 6;
+	required string type_code = 7;
+	required string creator_code = 8;
+	optional string comment = 9 [default = ""];
+}
+
+message GetLinksReq {
+	required bytes rev = 1;
+	repeated bytes stores = 2;
+}
+
+message GetLinksCnf {
+	repeated bytes doc_links = 1;
+	repeated bytes rev_links = 2;
+}
+
+message PeekReq {
+	required bytes store = 1;
+	required bytes rev = 2;
+}
+
+message PeekCnf {
+	required uint32 handle = 1;
+}
+
+message CreateReq {
+	required bytes store = 1;
+	required string type_code = 2;
+	required string creator_code = 3;
+}
+
+message CreateCnf {
+	required uint32 handle = 1;
+	required bytes doc = 2;
+}
+
+message ForkReq {
+	required bytes store = 1;
+	required bytes rev = 2;
+	required string creator_code = 3;
+}
+
+message ForkCnf {
+	required uint32 handle = 1;
+	required bytes doc = 2;
+}
+
+message UpdateReq {
+	required bytes store = 1;
+	required bytes doc = 2;
+	required bytes rev = 3;
+	optional string creator_code = 4;
+}
+
+message UpdateCnf {
+	required uint32 handle = 1;
+}
+
+message ResumeReq {
+	required bytes store = 1;
+	required bytes doc = 2;
+	required bytes rev = 3;
+	optional string creator_code = 4;
+}
+
+message ResumeCnf {
+	required uint32 handle = 1;
+}
+
+message GetDataReq {
+	required uint32 handle = 1;
+	optional string selector = 2 [ default = "" ];
+}
+
+message GetDataCnf {
+	required bytes data = 1;
+}
+
+message SetDataReq {
+	required uint32 handle = 1;
+	optional string selector = 2 [ default = "" ];
+	required bytes data = 3;
+}
+
+message ReadReq {
+	required uint32 handle = 1;
+	required bytes part = 2;
+	required uint64 offset = 3;
+	required uint32 length = 4;
+}
+
+message ReadCnf {
+	required bytes data = 1;
+}
+
+message TruncReq {
+	required uint32 handle = 1;
+	required bytes part = 2;
+	required uint64 offset = 3;
+}
+
+message WriteBufferReq {
+	required uint32 handle = 1;
+	required bytes part = 2;
+	required bytes data = 3;
+}
+
+message WriteCommitReq {
+	required uint32 handle = 1;
+	required bytes part = 2;
+	required uint64 offset = 3;
+	required bytes data = 4;
+}
+
+message FStatReq {
+	required uint32 handle = 1;
+}
+
+message SetFlagsReq {
+	required uint32 handle = 1;
+	required uint32 flags = 2;
+}
+
+message SetTypeReq {
+	required uint32 handle = 1;
+	required string type_code = 2;
+}
+
+message SetMTimeReq {
+	required uint32 handle = 1;
+	required bytes attachment = 2;
+	required uint64 mtime = 3;
+}
+
+message MergeReq {
+	required uint32 handle = 1;
+	required bytes store = 2;
+	required bytes rev = 3;
+	optional uint64 depth = 4;
+	optional bool verbose = 5 [default = false];
+}
+
+message RebaseReq {
+	required uint32 handle = 1;
+	required bytes rev = 2;
+}
+
+message CommitReq {
+	required uint32 handle = 1;
+	optional string comment = 2;
+}
+
+message CommitCnf {
+	required bytes rev = 1;
+}
+
+message SuspendReq {
+	required uint32 handle = 1;
+	optional string comment = 2;
+}
+
+message SuspendCnf {
+	required bytes rev = 1;
+}
+
+message CloseReq {
+	required uint32 handle = 1;
+}
+
+message WatchAddReq {
+	enum Type {
+		DOC = 0;
+		REV = 1;
+	}
+
+	required Type type = 1;
+	required bytes element = 2;
+}
+
+message WatchRemReq {
+	enum Type {
+		DOC = 0;
+		REV = 1;
+	}
+
+	required Type type = 1;
+	required bytes element = 2;
+}
+
+message WatchProgressReq {
+	required bool enable = 1;
+}
+
+message ForgetReq {
+	required bytes store = 1;
+	required bytes doc = 2;
+	required bytes rev = 3;
+}
+
+message DeleteDocReq {
+	required bytes store = 1;
+	required bytes doc = 2;
+	required bytes rev = 3;
+}
+
+message DeleteRevReq {
+	required bytes store = 1;
+	required bytes rev = 2;
+}
+
+message ForwardDocReq {
+	required bytes store = 1;
+	required bytes doc = 2;
+	required bytes from_rev = 3;
+	required bytes to_rev = 4;
+	required bytes src_store = 5;
+	optional uint64 depth = 6;
+	optional bool verbose = 7 [default = false];
+}
+
+message ReplicateDocReq {
+	required bytes src_store = 1;
+	required bytes doc = 2;
+	required bytes dst_store = 3;
+	optional uint64 depth = 4;
+	optional bool verbose = 5 [default = false];
+}
+
+message ReplicateDocCnf {
+	required uint32 handle = 1;
+}
+
+message ReplicateRevReq {
+	required bytes src_store = 1;
+	required bytes rev = 2;
+	required bytes dst_store = 3;
+	optional uint64 depth = 4;
+	optional bool verbose = 5 [default = false];
+}
+
+message ReplicateRevCnf {
+	required uint32 handle = 1;
+}
+
+message MountReq {
+	required string src = 1;
+	required string type = 2;
+	required string label = 3;
+	optional string options = 4 [default = ""];
+	optional string credentials = 5 [default = ""];
+}
+
+message MountCnf {
+	required bytes sid = 1;
+}
+
+message UnmountReq {
+	required bytes sid = 1;
+}
+
+message GetPathReq {
+	required bytes store = 1;
+	required bytes object = 2;
+	required bool is_rev = 3;
+}
+
+message GetPathCnf {
+	required string path = 1;
+}
+
+message WatchInd {
+	enum Event {
+		MODIFIED = 0;
+		APPEARED = 1;
+		REPLICATED = 2;
+		DIMINISHED = 3;
+		DISAPPEARED = 4;
+	}
+
+	enum Type {
+		DOC = 0;
+		REV = 1;
+	}
+
+	required Event event = 1;
+	required Type type = 2;
+	required bytes store = 3;
+	required bytes element = 4;
+}
+
+message ProgressStartInd {
+	enum Type {
+		SYNC = 0;
+		REP_DOC = 1;
+		REP_REV = 2;
+	}
+
+	required uint32 tag = 1;
+	required Type type = 2;
+	required bytes source = 3;
+	required bytes dest = 4;
+	optional bytes item = 5;
+}
+
+message ProgressStartReq {
+	required uint32 tag = 1;
+	optional bool skip = 2 [default = false];
+}
+
+message ProgressInd {
+	enum State {
+		RUNNING = 0;
+		PAUSED = 1;
+		ERROR = 2;
+	}
+
+	required uint32 tag = 1;
+	required uint32 progress = 2;
+	required State state = 3;
+	optional ErrorCode err_code = 4;
+	optional bytes err_doc = 5;
+	optional bytes err_rev = 6;
+}
+
+message ProgressEndInd {
+	required uint32 tag = 1;
+}
+
+message ProgressEndReq {
+	required uint32 tag = 1;
+	required bool pause = 2;
+}
+
+message ProgressQueryCnf {
+	message Item {
+		required ProgressStartInd item = 1;
+		required ProgressInd state = 2;
+	}
+
+	repeated Item items = 1;
+}
+
+message WalkPathReq {
+	required string path = 1;
+	optional uint32 maxResults = 2;
+}
+
+message WalkPathCnf {
+	message Item {
+		required bytes store = 1;
+		optional bytes doc = 2;
+		optional bytes rev = 3;
+	}
+
+	repeated Item items = 1;
+}

@@ -1,0 +1,97 @@
+syntax = "proto3";
+package proto;
+
+message NamespaceMessage {
+	repeated NamespaceEntryMessage entries = 1;
+}
+
+message NamespaceEntryMessage {
+	string table = 1;
+	string row = 2;
+	string entry = 3;
+	PointMessage point = 4;
+}
+
+message PointMessage {
+	string text = 1;
+	string signature = 2;
+}
+
+message IndexMessage {
+	repeated IndexEntryMessage entries = 1;
+}
+
+message IndexEntryMessage {
+	string table = 1;
+	string link = 2;
+	string signature = 3;
+}
+
+message LinkMessage {
+	string link = 1;
+	repeated string signatures = 2;
+}
+
+message APIRequestMessage {
+	uint32 type = 1;
+	uint32 reflection = 2;
+	QueryMessage query = 3;
+	ReplicateMessage replicate = 4;
+}
+
+message ReplicateMessage {
+	repeated LinkMessage links = 1;
+}
+
+message APIResponseMessage {
+	string message = 1;
+	string error = 2;
+	uint32 type = 3;
+	string path = 4;
+	NamespaceMessage namespace = 5;
+	IndexMessage index = 6;
+}
+
+message QueryMessage {
+	uint32 opCode = 1;
+	string table = 2;
+	QueryJoinMessage join = 3;
+	QuerySelectMessage select = 4;
+	repeated string keyHashes = 5;
+}
+
+message QueryJoinMessage {
+	repeated QueryRowJoinMessage rows = 1;
+}
+
+message QueryRowJoinMessage {
+	string row = 1;
+	repeated QueryRowJoinEntryMessage entries = 2;
+}
+
+message QueryRowJoinEntryMessage {
+	string entry = 1;
+	string point = 2;
+}
+
+message QuerySelectMessage {
+	uint32 limit = 1;
+	QueryWhereMessage where = 2;
+}
+
+message QueryWhereMessage {
+	uint32 opCode = 1;
+	QueryPredicateMessage predicate = 2;
+	repeated QueryWhereMessage clauses = 3;
+}
+
+message QueryPredicateMessage {
+	string functionName = 1;
+	repeated PredicateValue values = 2;
+	bool userow = 3;
+}
+
+message PredicateValue {
+	bool isKey = 1;
+	string text = 2;
+}

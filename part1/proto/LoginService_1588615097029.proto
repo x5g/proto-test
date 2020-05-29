@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option java_multiple_files = true;
+option java_package = "org.fabri1983.javagrpc.service.contract.protobuf";
+option java_outer_classname = "LoginServiceProto";
+
+package LoginService;
+
+service LoginService {
+	rpc getRes (GetResProtoIn) returns (GetResProtoOut) {};
+	rpc login (LoginProtoIn) returns (LoginProtoOut) {};
+	rpc loginVoid (google.protobuf.Empty) returns (google.protobuf.Empty) {};
+}
+
+message GetResProtoIn {
+	RequestProto req = 1;
+	Request2Proto req2 = 2;
+}
+message GetResProtoOut {
+	ResponseProto response = 1;
+}
+message LoginProtoIn {
+	RequestProto req = 1;
+}
+message LoginProtoOut {
+	sint32 int = 1;
+}
+message Request2InnerMapObjProto {
+	sint32 request2InnerMapObjId = 1;
+	string request2InnerMapObjName = 2;
+}
+message ResponseProto {
+	string corpus = 1;
+	sint32 id = 2;
+	string name = 3;
+}
+message Req2innerListObjProto {
+	sint32 req2innerListObjId = 1;
+	string req2innerListObjName = 2;
+}
+message TestMapProto {
+	sint32 mapId = 1;
+	string mapName = 2;
+}
+message RequestProto {
+	string corpus = 1;
+	sint32 i1 = 2;
+	sint32 i2 = 3;
+	sint64 l1 = 4;
+	sint64 l2 = 5;
+	string s = 6;
+	double d1 = 7;
+	double d2 = 8;
+	float f1 = 9;
+	float f2 = 10;
+	bool b1 = 11;
+	bool b2 = 12;
+	Request2Proto req2 = 13;
+	repeated string list1 = 14;
+	repeated TestListProto list2 = 15;
+	map<string, TestMapProto> map = 16;
+	repeated sint32 intArray = 17;
+}
+message Req2InnerListProto {
+	sint32 req2InnerListId = 1;
+	string req2InnerListName = 2;
+	Req2innerListObjProto req2innerListObj = 3;
+}
+message TestListProto {
+	sint32 listId = 1;
+	string listName = 2;
+}
+message Request2Proto {
+	sint32 id = 1;
+	string name = 2;
+	Request2InnerProto req2Inner = 3;
+	RequestProto req = 4;
+	repeated sint32 integer = 5;
+	repeated ResponseProto resps = 6;
+}
+message Request2InnerProto {
+	sint32 req2InnerId = 1;
+	string req2InnerName = 2;
+	repeated string req2InnerString = 3;
+	repeated Req2InnerListProto req2InnerList = 4;
+	map<string, Request2InnerMapProto> request2InnerMap = 5;
+}
+message Request2InnerMapProto {
+	sint32 request2InnerMapId = 1;
+	string request2InnerMapName = 2;
+	Request2InnerMapObjProto request2InnerMapObj = 3;
+}

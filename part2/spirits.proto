@@ -1,0 +1,75 @@
+syntax = "proto3";
+package gogrpc;
+option go_package = "gogrpc";
+
+/*import "google/protobuf/timestamp.proto";*/
+
+// SpiritService is the basic CRUD service for spirits
+service SpiritService {
+    // CreateSpirit creates a spirit and returns the created spirit
+    rpc CreateSpirit (SpiritCreationRequest) returns (SpiritCreationResponse) {}
+    // UpdateSpirit updates an existing spirit and returns the updated spirit
+    rpc UpdateSpirit (SpiritUpdateRequest) returns (SpiritUpdateResponse) {}
+    // DeleteSpirit deletes an existing spirit and returns true if deleted
+    rpc DeleteSpirit (SpiritDeleteRequest) returns (SpiritDeleteResponse) {}
+    // SearchSpirit searches for spirits matching the requests and streams the found spirits
+    rpc SearchSpirit (SpiritSearchRequest) returns (stream SpiritSearchResponse) {}
+}
+
+// Spirit is the basic spirit representation
+message Spirit {
+    enum SpiritType {
+        TypeUnspecified = 0;
+        TypeRhum = 1;
+        TypeWine = 2;
+        TypeWhisky = 3;
+        TypeChampagne = 4;
+        TypeGin = 5;
+        TypeBeer = 6;
+    }
+    string Id = 1;
+    string Name = 2;
+    string Distiller = 3;
+    string Bottler = 4;
+    string Country = 5;
+    string Region = 6;
+    string Composition = 7;
+    SpiritType type = 8;
+    int32 Age = 9;
+    /*google.protobuf.Timestamp BottlingDate = 10;*/
+    int64 BottlingDate = 10;
+    float Score = 11;
+    string Comment = 12;
+}
+
+message SpiritCreationRequest {
+    Spirit spirit = 1;
+}
+
+message SpiritUpdateRequest {
+    Spirit spirit = 1;
+}
+
+message SpiritDeleteRequest {
+    Spirit spirit = 1;
+}
+
+message SpiritSearchRequest {
+    Spirit spirit = 1;
+}
+
+message SpiritCreationResponse {
+    Spirit spirit = 1;
+}
+
+message SpiritUpdateResponse {
+    Spirit spirit = 1;
+}
+
+message SpiritDeleteResponse {
+    bool deleted = 1;
+}
+
+message SpiritSearchResponse {
+    repeated Spirit spirit = 1;
+}

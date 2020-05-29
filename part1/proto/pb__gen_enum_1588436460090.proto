@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+
+enum RPC_Auth_Enum {
+    EMPTY = 0;
+    SendConfirmCode = 2104;
+    ConfirmCode = 1228;
+    SingUp = 2532;
+    SingIn = 4399;
+    LogOut = 6941;
+}
+enum RPC_Chat_Enum {
+    EMPTY = 0;
+    AddNewMessage = 7534;
+    SetRoomActionDoing = 7576;
+    GetChatList = 2677;
+    GetChatHistory = 4793;
+    AddRoomsChange = 1632;
+    GetRoomsChange = 4724;
+}
+enum RPC_General_Enum {
+    EMPTY = 0;
+    Echo = 7265;
+    CheckUserName = 4;
+}
+enum RPC_Page_Enum {
+    EMPTY = 0;
+    GetCommentsPage = 8629;
+    GetHomePage = 1525;
+    GetProfileAbout = 7280;
+    GetProfileAllShared = 9695;
+    GetProfileByCategoryPage = 3258;
+    GetLikesPage = 350;
+    GetFollowersPage = 7780;
+    GetFollowingsPage = 4175;
+    GetNotifiesPage = 2286;
+    GetUserActionsPage = 2670;
+    GetPromotedPostsPage = 9681;
+    GetSuggestedUsersPage = 6523;
+    GetSuggestedTagsPage = 8958;
+    GetLastPostsPage = 6093;
+    GetLastTagPage = 2640;
+    SearchTagsPage = 7085;
+    SearchUsersPage = 4143;
+}
+enum RPC_Social_Enum {
+    EMPTY = 0;
+    AddComment = 9155;
+    DeleteComment = 6918;
+    EditComment = 9736;
+    LikeComment = 3818;
+    AddPost = 7124;
+    EditPost = 5977;
+    DeletePost = 5039;
+    ArchivePost = 5257;
+    PromotePost = 7803;
+    LikePost = 9730;
+    UnLikePost = 8919;
+    FollowUser = 9755;
+    UnFollowUser = 3190;
+    BlockUser = 6486;
+    UnBlockUser = 9764;
+    AddSeenPosts = 5884;
+}
+enum RPC_User_Enum {
+    EMPTY = 0;
+    UpdateAbout = 2139;
+    UpdateUserName = 2469;
+    ChangePrivacy = 7847;
+    ChangeAvatar = 5921;
+}

@@ -1,0 +1,279 @@
+syntax = "proto3";
+import "db2.proto";
+import "message_common.proto";
+package d5.db2;
+
+message CMessageProductCountRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    string id = 3;
+    bool idValid = 4;
+    int32 companyId = 5;
+    bool companyIdValid = 6;
+    int32 brandId = 7;
+    bool brandIdValid = 8;
+    int32 styleId = 9;
+    bool styleIdValid = 10;
+    string title = 11;
+    bool titleValid = 12;
+    int32 mainMaterialId = 13;
+    bool mainMaterialIdValid = 14;
+    int32 colorId = 15;
+    bool colorIdValid = 16;
+    double priceMin = 17;
+    bool priceMinValid = 18;
+    double priceMax = 19;
+    bool priceMaxValid = 20;
+    int32 categoryId = 21;
+    bool categoryIdValid = 22;
+    int32 categoryLevel = 23;
+    bool categoryLevelValid = 24;
+}
+
+message CMessageProductCountResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 state = 3;
+    int32 number = 4;
+}
+
+message CMessageProductRequest
+{
+  int32 type = 1;
+  string uuid = 2;
+  string id = 3;
+  bool idValid = 4;
+  int32 companyId = 5;
+  bool companyIdValid = 6;
+  int32 brandId = 7;
+  bool brandIdValid = 8;
+  int32 styleId = 9;
+  bool styleIdValid = 10;
+  string title = 11;
+  bool titleValid = 12;
+  int32 mainMaterialId = 13;
+  bool mainMaterialIdValid = 14;
+  int32 colorId = 15;
+  bool colorIdValid = 16;
+  double priceMin = 17;
+  bool priceMinValid = 18;
+  double priceMax = 19;
+  bool priceMaxValid = 20;
+  int32 categoryId = 21;
+  bool categoryIdValid = 22;
+  int32 categoryLevel = 23;
+  bool categoryLevelValid = 24;
+  enum Order
+  {
+    NORMAL = 0;
+    ASC = 1;
+    DESC = 2;
+  }
+  Order titleOrder = 25;
+  Order updateTimeOrder = 26;
+  int32 pageNum = 27;
+  int32 pageSize = 28;
+  Order priceOrder = 29;
+  bool isForCompany = 30;
+  enum ProductType
+  {
+    ALL = 0;
+    FURNITURE = 1;
+    MATERIAL = 2;
+  }
+  ProductType productType = 31;
+  int32 userId = 32;
+  bool userIdValid = 33;
+  enum EScope
+  {
+    ESOPE_ALL = 0;
+    ESOPE_PUBLIC = 1;
+    ESOPE_COMPANY = 2;
+  }
+  EScope scope = 34;
+  bool scopeValid = 35;
+  Order createTimeOrder = 36;
+}
+
+message CMessageProductResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+  repeated product list = 4;
+  int32 pageNum = 5;
+  int32 pageTotal = 6;
+}
+
+message CProductDetailUnit
+{
+  product_detail_virtual publicData = 1;
+  repeated product_image imageData = 2;
+  repeated int32 furnitureColorIdList = 3;
+  string brandName = 4;
+  d5.CMessageDependentPakList fileList = 5;
+}
+
+message CMessageProductDetailResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+  repeated CProductDetailUnit list = 4;
+  int32 pageNum = 5;
+  int32 pageTotal = 6;
+}
+
+message CMessageCreateProductRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    product data = 3;
+    asset_building_material materialData = 4;
+    asset_furniture furnitureData = 5;
+    repeated furniture_color_map furnitureColorMapData = 6;
+    string productBrandTemp = 7;
+    bool productBrandTempValid = 8;
+    repeated product_image imageList = 9;
+    d5.CMessageDependentPakList fileList = 10;
+}
+
+message CMessageCreateProductResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 state = 3;
+}
+
+message CMessageAddProductRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    product data = 3;
+    d5.CMessageDependentPakList fileList = 4;
+}
+
+message CMessageAddProductResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+}
+
+message CMessageDelProductRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    string id = 3;
+}
+
+message CMessageDelProductResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+}
+
+message CMessageProductByIdRequest
+{
+  int32 type = 1;
+  string uuid = 2;
+  repeated string id = 3;
+  bool isForCompany = 4;
+}
+
+message CMessageProductByIdResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+  repeated product list = 4;
+}
+
+message CMessageAddBuildingMaterialRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    asset_building_material data = 3;
+}
+
+message CMessageAddBuildingMaterialResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+}
+
+message CMessageAddFurnitureRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    asset_furniture data = 3;
+}
+
+message CMessageAddFurnitureResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 state = 3;
+}
+
+message CMessageProductDownloadRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    string id = 3;
+}
+
+message CMessageProductDownloadResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 state = 3;
+    d5.CMessageDependentPakList fileList = 4;
+}
+
+message CMessageProductDownloadProcessResponse
+{
+  int32 type = 1;
+  string uuid = 2;
+  int32 percent = 3;
+}
+
+message CMessageProductSaveRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    string id = 3;
+}
+
+message CMessageProductSaveResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 state = 3;
+}
+
+message CMessageProductSaveProcessResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 percent = 3;
+}
+
+message CMessageDefaultProductRequest
+{
+    int32 type = 1;
+    string uuid = 2;
+    string uePath = 3;
+}
+
+message CMessageDefaultProductResponse
+{
+    int32 type = 1;
+    string uuid = 2;
+    int32 state = 3;
+    CProductDetailUnit data = 4;
+}

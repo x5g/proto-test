@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package header;
+
+message Configuration {
+	string version = 2;
+	int32 term = 3;
+	string cluster = 4; // ID of the cluster
+
+	int32 total_partitions = 5;
+	int32 next_term = 6;
+
+	map<string, WorkerInfo> workers = 7; // map worker id to partition
+}
+
+message WorkerInfo {
+	string id = 5;
+	repeated int32 partitions = 7;
+	string host = 8;
+	string notify_host = 9;
+}
+
+message GetConfigRequest {
+	string version = 2;
+	int32 term = 3;
+	string cluster = 4;
+}
+
+message LeaveRequest {
+	string version = 2;
+	int32 term = 3;
+	string cluster = 4;
+	string id = 5;
+}
+
+message JoinRequest {
+	string version = 2;
+	int32 term = 3;
+	string cluster = 4;
+	string id = 5;
+	string host = 6;
+	string notify_host = 7;
+}
+
+message Empty {}
+
+service Coordinator {
+	rpc GetConfig(GetConfigRequest) returns (Configuration) {}
+	rpc Leave(LeaveRequest) returns (Empty) {}
+	rpc Join(JoinRequest) returns (Configuration) {}
+}
+
+service Worker {
+	rpc Notify(Configuration) returns (Empty) {}
+	rpc GetConfig(GetConfigRequest) returns (Configuration) {}
+}
+
+service Hello {
+	rpc Hello(GetConfigRequest) returns (WorkerInfo) {}
+}

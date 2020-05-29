@@ -1,0 +1,679 @@
+package prt;
+
+// Every message sent is prefixed with:
+//       msg seperator: 2 bytes, signed -32123
+//       msg type: 2 bytes, signed
+//       msg ID: 4 bytes, signed
+//       msg sim_time: 4 bytes, signed
+//       msg size: 4 bytes, signed
+// The message seperator is always -32123
+// The msg type is one of the values found in CtrlMsgType or SimMsgType
+// The msg size is the length (in bytes) of the serialized message.
+// These values are transmitted in network byte order (Big Endian).
+
+//service PRTService {
+//    rpc GetVehicleStatus (VehicleStatusRequest) returns (TestResponse);
+//}
+
+enum Misc {
+    MSG_SEP = -32123;
+    MSG_HEADER_SIZE = 16;
+    NONE_ID = -1;   // For those cases when a real ID isn't applicable.
+    STORAGE_ID = -2;   // Used in place of a track segment ID for a vehicle's location when it's in storage.
+}
+
+// Protocol Buffers messages do not specify their message type within the
+// message body. A value from this enum is included in the message header
+// to indicate the message type.
+enum CtrlMsgType {
+    CTRL_CMD_VEHICLE_TRAJECTORY = 1;
+    CTRL_CMD_VEHICLE_ITINERARY = 2;
+    CTRL_CMD_SWITCH = 3;
+    CTRL_CMD_PASSENGERS_EMBARK = 4;
+    CTRL_CMD_PASSENGERS_DISEMBARK = 5;
+    CTRL_CMD_PASSENGER_WALK = 6;
+    CTRL_CMD_STORAGE_ENTER = 7;
+    CTRL_CMD_STORAGE_EXIT = 8;
+
+    CTRL_REQUEST_VEHICLE_STATUS = 10;
+    CTRL_REQUEST_STATION_STATUS = 11;
+    CTRL_REQUEST_PASSENGER_STATUS = 12;
+    CTRL_REQUEST_SWITCH_STATUS = 13;
+    CTRL_REQUEST_TRACKSEGMENT_STATUS = 14;
+    CTRL_REQUEST_TOTAL_STATUS = 15;
+
+    CTRL_SETNOTIFY_VEHICLE_POSITION = 20;
+    CTRL_SETNOTIFY_TIME = 21;
+
+    CTRL_RESUME = 30;
+
+    CTRL_SCENARIO_ERROR = 50;
+}
+
+enum LocationType {
+    TRACK_SEGMENT = 0;
+    SWITCH = 10;
+    STATION = 20;
+    PLATFORM = 30;
+    BERTH = 40;
+    VEHICLE = 50;
+    PASSENGER = 60;
+    WALKING = 70;
+    NONE = 80;
+}
+
+// What passenger loading policy the Station is using.
+enum StationPolicy {
+    LOBBY = 1;
+    QUEUE = 2;
+}
+
+// Polynomial coefficients. The highest degree coefficent is first. If fewer
+// than 4 coefficients are supplied, the ommitted high order coefficients are
+// assumed to be 0. See comment on CtrlCmdVehicleTrajectory.
+message PolyCoeffs {
+    repeated double           coeffs = 1 [packed=true];
+}
+
+// A C2 cubic spline (or lower order).
+message Spline {
+    repeated PolyCoeffs       polys = 1;
+
+    // Spline knot times in seconds (where the sim start time is 0).
+    // Length of 'times' must be one greater than the length of 'polys'.
+    // The times must be in non-decreasing order.
+    repeated double           times = 2 [packed=true];
+}
+
+// Instruct a vehicle to use the specified spline as its planned trajectory.
+// The spline is spliced together with the preexisting trajectory as follows:
+//   1. The preexisting trajectory is truncated at spline.times[0]
+//   2. The jerk values in spline.polys.coeffs are used to extend the vehicle's
+//      trajectory.
+//
+// Note that the lower order coefficients rely upon the controller having
+// accurate knowledge of the vehicle's state, and thus are not used by the
+// simulator. Although the controller may pass ONLY the jerk coefficients,
+// It is recommended that the controller pass the full coefficients
+// so that the simulator may log any discrepencies. If the controller
+// wishes to ommit lower order coefficients, send NaN in their place.
+//
+// Note also the that spline does not need to take into account the fact that
+// each TrackSegment has its own coordinate frame for position. That is, the
+// spline should be continuous in position, rather than having discontinuities
+// caused by the change in coordinate frames at TrackSegment boundaries.
+//
+// The spline should generally extend all the way to the end of the simulation,
+// or even well past it, even if it is known that the spline will be changed in
+// the near future. This prevents the sim from ever failing to find a valid
+// part of the spline when needed.
+message CtrlCmdVehicleTrajectory {
+    required int32          vID = 1;
+    required Spline         spline = 2;
+}
+
+// For simulating a network where the switching mechanism
+// resides on the vehicle, not the track.
+// trackIDs list future track segs. The track segs are
+// appended to the existing list of planned track segs.
+// To first clear all future segments (not including the one
+// currently on) from the vehicle's itinerary, set clear to True.
+//
+// If a trackID is not connected to the prior track segment,
+// the Sim returns an SimMsgBodyInvalidID message.
+message CtrlCmdVehicleItinerary {
+    required int32          vID = 1;
+    repeated int32          trackIDs = 2 [packed=true];
+    optional bool           clear = 3;
+}
+
+message CtrlCmdPassengersEmbark {
+    required int32          vID = 1; // vehicleID
+    required int32          sID = 2; // stationID
+    required int32          platformID = 3;
+    required int32          berthID = 4;
+    repeated int32          passengerIDs = 5 [packed=true];
+}
+
+message CtrlCmdPassengersDisembark {
+    required int32          vID = 1; // vehicleID
+    required int32          sID = 2; // stationID
+    required int32          platformID = 3;
+    required int32          berthID = 4;
+    repeated int32          passengerIDs = 5 [packed=true];
+}
+
+// Moves a passenger from one station to another. This command requires some
+// trust that the Controller is behaving rationally, in that the sim is allowing
+// the controller to dictate the travel time.
+message CtrlCmdPassengerWalk {
+    required int32          passengerID = 1;
+    required int32          origin_stationID = 2;
+    required int32          dest_stationID = 3;
+    required double         travel_time = 4; // in seconds
+}
+
+// Move a vehicle that is stopped in the berth into the station's storage area.
+// The vehicle must be stopped and entirely within the specified berth.
+message CtrlCmdStorageEnter {
+    required int32          vID = 1; // vehicleID
+    required int32          sID = 2; // stationID
+    required int32          platformID = 3;
+    required int32          berthID = 4;
+}
+
+// Move a vehicle from a station's storage area to the berth. 'position' is the
+// desired position for the vehicle's nose, where 0 is the start of the platform.
+// The position must be chosen such that the vehicle will be entirely within
+// the berth.
+message CtrlCmdStorageExit {
+    required int32          sID = 1; // stationID
+    required int32          platformID = 2;
+    required int32          berthID = 3;
+    required float          position = 4;
+    required string         model_name = 5;
+}
+
+// For simulating a network where the switching
+// mechanism resides in the track, not the vehicle.
+// trackID is the 'switch' track segment.
+// nextID is the segment which vehicles will be routed to.
+// If trackID is not connected to nextID, the sim
+// will return a SimMsgBodyInvalidId message containing nextID.
+// There is a delay (set in sim's config file) during
+// which the switch is unusable. If a vehicle is on
+// the switch (straddling trackID and nextID) or attempts
+// to use it during the transition delay, a crash will
+// result. An attempt to change the position again during
+// the transition delay will be rejected with a
+// SimMsgBodyInvalidId message
+message CtrlCmdSwitch {
+    required int32           trackID = 1;
+    required int32           nextID = 2;
+}
+
+message CtrlRequestVehicleStatus {
+    required int32         vID = 2;
+}
+
+message CtrlRequestStationStatus {
+    required int32         sID = 2;
+}
+
+message CtrlRequestPassengerStatus {
+    required int32         pID = 2;
+}
+
+message CtrlRequestSwitchStatus {
+    required int32         swID = 2;
+}
+
+message CtrlRequestTrackSegmentStatus {
+    required int32         trackID = 2;
+}
+
+message CtrlRequestTotalStatus {
+}
+
+// Requests that a SimNotifyVehiclePosition message be sent
+// when the vehicle's nose reaches pos on the current track
+// segment (as defined by nose_locID).
+// Any of the following conditions will cause a SimMsgBodyInvalid message response:
+//   - vehicle's position is already past 'pos'
+//   - vehicle's trajectory does not reach 'pos' (e.g. vehicle is stopped)
+//   - 'pos' is negative, or is >= to the segment's length
+message CtrlSetnotifyVehiclePosition {
+    required int32         vID = 1;
+    required float         pos = 2;
+}
+
+message CtrlSetnotifyTime {
+    required double        time = 1; // in seconds
+}
+
+// Resume is a very non-realistic command with no possibility of 'changing
+// your mind' if another message arrives a fraction of second later (in wall-
+// clock time). To account for this, every CtrlResume message has a
+// last_sim_msgID which holds most recent msgID the controller has seen. If
+// last_sim_msgID is not the latest msgID the Sim has sent, it will disregard
+// the CtrlResume msg.
+message CtrlResume {
+    required int32	last_sim_msgID = 1;
+}
+
+// A controller may not be able to handle all possible track configurations,
+// vehicle placements, station layouts, etc. This message informs the
+// simulator that the controller cannot continue.
+message CtrlScenarioError {
+    optional int32      trackID = 1   [default = -1]; // Default to NONE_ID
+    optional int32      vehicleID = 2 [default = -1];
+    optional int32      stationID = 3 [default = -1];
+    optional int32      mergeID = 4   [default = -1];
+    optional int32      switchID = 5  [default = -1];
+    optional string     error_message = 6;
+}
+
+
+// --------------- Simulator Messages ----------------
+
+// Protocol Buffers messages do not specify their message type within the
+// message body. A value from this enum is included in the message header
+// to indicate the message type.
+enum SimMsgType {
+    SIM_GREETING = 1000;
+    SIM_START = 1001;
+    SIM_END = 1002;
+    SIM_UNIMPLEMENTED = 1003;
+
+    SIM_COMPLETE_PASSENGERS_EMBARK = 1010;
+    SIM_COMPLETE_PASSENGERS_DISEMBARK = 1011;
+    SIM_COMPLETE_PASSENGER_WALK = 1012;
+    SIM_COMPLETE_SWITCH = 1013;
+    SIM_COMPLETE_STORAGE_ENTER = 1014;
+    SIM_COMPLETE_STORAGE_EXIT = 1015;
+
+    SIM_RESPONSE_VEHICLE_STATUS = 1030;
+    SIM_RESPONSE_STATION_STATUS = 1031;
+    SIM_RESPONSE_PASSENGER_STATUS = 1032;
+    SIM_RESPONSE_SWITCH_STATUS = 1033;
+    SIM_RESPONSE_TRACK_STATUS = 1034;
+    SIM_RESPONSE_TOTAL_STATUS = 1035;
+
+    SIM_NOTIFY_VEHICLE_POSITION = 1040;
+    SIM_NOTIFY_VEHICLE_ARRIVE = 1041;
+    SIM_NOTIFY_VEHICLE_EXIT = 1042;
+    SIM_NOTIFY_VEHICLE_STOPPED = 1043;
+    SIM_NOTIFY_VEHICLE_SPEEDING = 1044;
+    SIM_NOTIFY_VEHICLE_COLLISION = 1045;
+    SIM_NOTIFY_VEHICLE_CRASH = 1046;
+    SIM_NOTIFY_PASSENGER_EMBARK_START = 1047;
+    SIM_NOTIFY_PASSENGER_EMBARK_END = 1048;
+    SIM_NOTIFY_PASSENGER_DISEMBARK_START = 1049;
+    SIM_NOTIFY_PASSENGER_DISEMBARK_END = 1050;
+    SIM_NOTIFY_TIME = 1051;
+
+    SIM_EVENT_TRACK_DISABLED = 1060;
+    SIM_EVENT_TRACK_REENABLED = 1061;
+    SIM_EVENT_SWITCH_DISABLED = 1062;
+    SIM_EVENT_SWITCH_REENABLED = 1063;
+    SIM_EVENT_STATION_DISABLED = 1064;
+    SIM_EVENT_STATION_REENABLED = 1065;
+    SIM_EVENT_VEHICLE_DISABLED = 1066;
+    SIM_EVENT_VEHICLE_REENABLED = 1067;
+    SIM_EVENT_PASSENGER_CREATED = 1068;
+    SIM_EVENT_PASSENGER_CHANGEDEST = 1069;
+
+    SIM_MSG_HDR_INVALID_SEPARATOR = 1080;
+    SIM_MSG_HDR_INVALID_TYPE = 1081;
+    SIM_MSG_HDR_INVALID_ID = 1082;
+    SIM_MSG_HDR_INVALID_TIME = 1083;
+    SIM_MSG_HDR_INVALID_SIZE = 1084;
+    SIM_MSG_BODY_INVALID = 1085;
+    SIM_MSG_BODY_INVALID_TIME = 1086;
+    SIM_MSG_BODY_INVALID_ID = 1087;
+}
+
+message SimGreeting {
+    required double         sim_end_time = 1;  // planned end of the simulation, in seconds, where 0 is the start time.
+    optional string         scenario_xml = 2;  // the contents of the scenario file. See prt-sim/schema/track_builder.xsd
+}
+
+message SimStart {
+}
+
+message SimEnd {
+    required double         sim_end_time = 1; // length of simulated time, in seconds.
+}
+
+message SimUnimplemented {
+    required int32          msgID = 1;
+}
+
+message SimCompletePassengersEmbark {
+    required int32          msgID = 1; // msgID of the CtrlCmdPassengersEmbark msg
+    required double         time = 2; // time of completion
+    optional CtrlCmdPassengersEmbark  cmd = 3; // the original message
+}
+
+message SimCompletePassengersDisembark {
+    required int32          msgID = 1; // msgID of the CtrlCmdPassengersDisembark msg
+    required double         time = 2; // time of completion
+    optional CtrlCmdPassengersDisembark  cmd = 3; // the original message
+}
+
+message SimCompletePassengerWalk {
+    required int32          msgID = 1; // msgID of the CtrlCmdPassengerWalk msg
+    required double         time = 2; // time of completion
+    optional CtrlCmdPassengerWalk  cmd = 3; // the original message
+}
+
+// Sent once the track-switch has completed it's throw,
+// and is once again ready for use.
+message SimCompleteSwitch {
+    required int32           msgID = 1; // msgID of the CtrlCmdSwitch msg
+    required int32           trackID = 2;
+    required int32           nextID = 3;
+    required double          time = 4; // time of completion
+}
+
+// Sent once the vehicle has been moved into storage and is no longer occupying the berth.
+message SimCompleteStorageEnter {
+    required int32               msgID = 1; // msgID of the CtrlCmdStorageEnter msg
+    required double              time = 2;  // time of completion
+    optional CtrlCmdStorageEnter cmd = 3;   // the original message
+}
+
+// Sent once the vehicle has been moved out of storage into the berth and is available to control.
+message SimCompleteStorageExit {
+    required int32               msgID = 1;    // msgID of the CtrlCmdStorageExit msg
+    required double              time = 2;     // time of completion
+    optional CtrlCmdStorageExit  cmd = 3;      // the original message
+    required VehicleStatus       v_status = 4; // vehicle that was brought out of storage
+}
+
+message SimResponseVehicleStatus {
+    required int32             msgID    = 1;
+    required double            time     = 2; // time of status
+    required VehicleStatus     v_status = 3;
+}
+
+message SimResponseStationStatus {
+    required int32             msgID    = 1;
+    required double            time     = 2; // time of status
+    required StationStatus     s_status = 3;
+}
+
+message SimResponsePassengerStatus {
+    required int32             msgID    = 1;
+    required double            time     = 2; // time of status
+    required PassengerStatus   p_status = 3;
+}
+
+message SimResponseSwitchStatus {
+    optional int32             msgID     = 1;
+    required double            time      = 2; // time of status
+    required SwitchStatus      sw_status = 3;
+}
+
+message SimResponseTrackStatus {
+    optional int32             msgID        = 1;
+    required double            time         = 2; // time of status
+    required TrackStatus       track_status = 3;
+}
+
+message SimResponseTotalStatus {
+    required int32             msgID    = 1;
+    required double            time     = 2; // time of status
+    repeated VehicleStatus     v_statuses = 3;
+    repeated StationStatus     s_statuses = 4;
+    repeated PassengerStatus   p_statuses = 5;
+    repeated SwitchStatus      sw_statuses = 6;
+    repeated TrackStatus       t_statuses = 7;
+}
+
+message SimNotifyVehiclePosition {
+    optional int32             msgID   = 1; // Ctrl msg that requested notify
+    required double            time    = 2; // time of event
+    required VehicleStatus     v_status = 3;
+}
+
+message SimNotifyTime {
+    optional int32	        msgID = 1; // Ctrl msg that requested notify
+    required double             time = 2; // in seconds
+}
+
+// Nose of vehicle has entered a new track segment.
+message SimNotifyVehicleArrive {
+    required int32             trackID  = 1;
+    required VehicleStatus     v_status = 2;
+    required double            time     = 3; // time of status
+}
+
+// Tail of vehicle has exited a track segment.
+message SimNotifyVehicleExit {
+    required int32             trackID  = 1;
+    required VehicleStatus     v_status = 2;
+    required double            time     = 3; // time of status
+}
+
+// Vehicle has come to a complete stop.
+message SimNotifyVehicleStopped {
+    required VehicleStatus     v_status = 1;
+    required double            time     = 2;
+}
+
+// Vehicle has exceeded the track segment maximum speed or the vehicle's
+// maximum speed (emergency limit). Sent when the vehicle first exceeds the limit
+// and upon arrival at each new track segment (if exceeding the new segment's limit).
+// For simplicity, a vehicle's speed is determined only its nose. If a vehicle
+// is straddling a segment boundry and only the tail is speeding, no notification
+// will be sent.
+message SimNotifyVehicleSpeeding {
+    required VehicleStatus     v_status = 1;
+    required double            time     = 2;
+    required float             speed_limit = 3;
+}
+
+// Used for collisions between two vehicles.
+message SimNotifyVehicleCollision {
+    required VehicleStatus      v1_status = 1; // frontmost
+    required VehicleStatus      v2_status = 2; // rearmost
+    required double             time      = 3;
+}
+
+// Used for a single vehicle crash. Used if a vehicle attempts to use a switch
+// while it is being thrown, or if a switch is thrown while the vehicle is on it.
+// Also used if the vehicle comes to the end of a dead-end TrackSegment.
+message SimNotifyVehicleCrash {
+    required int32              v_status  = 1;
+    required double             time      = 2;
+}
+
+message SimNotifyPassengerEmbarkStart {
+    required int32	vID = 1;         // vehicle id
+    required int32	sID = 2;         // station id
+    required int32      platformID = 3;  // platform index
+    required int32	pID = 4;         // passenger id
+    required int32      berthID = 5;     // berth index
+    required double     time     = 6;    // time of event
+}
+
+message SimNotifyPassengerEmbarkEnd {
+    required int32	vID = 1;         // vehicle id
+    required int32	sID = 2;         // station id
+    required int32      platformID = 3;  // platform index
+    required int32	pID = 4;         // passenger id
+    required int32      berthID = 5;     // berth index
+    required double     time     = 6;    // time of event
+}
+
+message SimNotifyPassengerDisembarkStart {
+    required int32	vID = 1;         // vehicle id
+    required int32	sID = 2;         // station id
+    required int32      platformID = 3;  // platform index
+    required int32	pID = 4;         // passenger id
+    required int32      berthID = 5;     // berth id
+    required double     time     = 6;    // time of event
+}
+
+message SimNotifyPassengerDisembarkEnd {
+    required int32	vID = 1;         // vehicle id
+    required int32	sID = 2;         // station id
+    required int32      platformID = 3;  // platform index
+    required int32	pID = 4;         // passenger id
+    required int32      berthID = 5;     // berth index
+    required double     time     = 6;    // time of event
+}
+
+message SimEventTrackDisabled {
+    required int32             trackID  = 1;
+    required double            time     = 2;
+}
+
+message SimEventTrackReenabled {
+    required int32             trackID  = 1;
+    required double            time     = 2;
+}
+
+message SimEventSwitchDisabled {
+    required int32             swID     = 1;
+    required double            time     = 2;
+}
+
+message SimEventSwitchReenabled {
+    required int32             swID     = 1;
+    required double            time     = 2;
+}
+
+message SimEventStationDisabled {
+    required int32             sID      = 1;
+    required double            time     = 2;
+}
+
+message SimEventStationReenabled {
+    required int32             sID      = 1;
+    required double            time     = 2;
+}
+
+message SimEventVehicleDisabled {
+    required int32             vID      = 1;
+    required double            time     = 2;
+}
+
+message SimEventVehicleReenabled {
+    required int32             vID      = 1;
+    required double            time     = 2;
+}
+
+message SimEventPassengerCreated {
+    required PassengerStatus    p_status = 1;
+    required double             time     = 2;
+}
+
+message SimEventPassengerChangedest {
+    required int32             pID      = 1;
+    required double            time     = 2;
+}
+
+message SimMsgHdrInvalidSeparator {
+    required int32	msgID = 1;
+    required int32	msg_sep = 2;
+}
+
+message SimMsgHdrInvalidType {
+    required int32	msgID = 1;
+    required int32	msg_type = 2;
+}
+
+message SimMsgHdrInvalidId {
+    required int32	msgID = 1;
+}
+
+message SimMsgHdrInvalidTime {
+    required int32	msgID = 1;
+    required int32	msg_time = 2;
+}
+
+message SimMsgHdrInvalidSize {
+    required int32	msgID = 1;
+    required int32	msg_size = 2;
+}
+
+// Catch-all for when something is wrong with the data
+// found in the msg body.
+message SimMsgBodyInvalid {
+    required int32      msgID = 1;
+}
+
+message SimMsgBodyInvalidTime {
+    required int32      msgID = 1;
+    required double     time = 2;
+}
+
+// Slightly more specific message for invalid IDs.
+message SimMsgBodyInvalidId {
+    required int32         msgID = 1;
+    required LocationType  id_type = 2;
+    required int32	   ID = 3;
+}
+
+// ------------- Status Types ----------------
+message VehicleStatus {
+    required int32         vID = 1;
+    required int32         nose_locID = 3;
+    required float         nose_pos = 4;
+    required int32         tail_locID = 6;
+    required float         tail_pos = 7;
+    required float         vel = 8;
+    required float         accel = 9;
+    repeated int32         passengerIDs = 10  [packed=true];
+
+    // Meters between this vehicle's nose and the lead vehicle's tail.
+    // 'Lead vehicle' is defined as the vehicle ahead of this one, on this
+    // vehicle's future path. 'lv_distance' does NOT take into account a vehicle
+    // that is merging in front of this vehicle, until the merging vehicle is
+    // obstructing this vehicle's path. Vehicles greater than 500 meters ahead
+    // are not reported in most cases.
+    // Ommitted if no lead vehicle is found.
+    optional int32         lvID        = 11 [default=-1]; // default to NONE_ID
+    optional float         lv_distance = 12;
+
+    // TODO:
+    // enum MalfunctionCode { ... }
+}
+
+message StationStatus {
+    required int32           sID = 1;
+    optional string          label = 2;
+    repeated PlatformStatus  platform_status = 3;
+    repeated int32           pID = 4  [packed=true]; // waiting passenger IDs
+    required int32           v_adv_time = 5; //milliseconds to advance a berth or slot (specified in conf file)
+    required StationPolicy   policy = 6;
+}
+
+message PlatformStatus {
+    required int32         platID = 1;
+    required int32         trackID = 2;
+    required bool          unloading = 3;
+    required bool          loading = 4;
+    repeated BerthStatus   berths = 5;
+}
+
+message BerthStatus {
+    // berthIDs are in the range from 0 to n-1, where n is the number of berths in the current platform. They are not globally unique.
+    required int32         bID = 1;
+    required int32         vID = 2; // vID of NONE_ID indicates no vehicle
+    required bool          busy = 3;
+}
+
+message PassengerStatus {
+    required int32         pID = 1;
+    required LocationType  loc_type = 3;
+    required int32         locID = 4;
+    required int32         src_stationID = 5;
+    required int32         dest_stationID = 6;
+    required double        creation_time = 7;
+    required int32         mass = 11; // in kg
+    required bool          trip_success = 13;  // the correct destinaton reached
+}
+
+message RoutingEntry {
+    required int32         vID = 1;
+    required int32         trackID = 2;
+    optional int32         msgID = 3; // msgID of the CtrlCmdSwitch message
+}
+
+message SwitchStatus {
+    required int32         swID = 1;
+    optional string        label = 2;
+    repeated RoutingEntry  entry = 3;
+}
+
+message TrackStatus {
+    required int32         trackID = 1;
+    optional string        label = 2;
+    required int32         max_speed = 3;
+    required int32         length = 4;
+    repeated int32         vID = 5  [packed=true]; // vehicle IDs of all vehicles on TrackSegment
+    required int32         next = 6;
+}

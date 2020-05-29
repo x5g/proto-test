@@ -1,0 +1,19 @@
+package bgs.protocol.report.v1;
+import "bgs/low/pb/client/account_types.proto";
+import "bgs/low/pb/client/report_types.proto";
+import "bgs/low/pb/client/rpc_types.proto";
+
+
+message SendReportRequest {
+	required .bgs.protocol.report.v1.Report report = 1;
+}
+
+message SubmitReportRequest {
+	optional .bgs.protocol.account.v1.GameAccountHandle agent_id = 1;
+	optional .bgs.protocol.report.v1.ReportType report_type = 2;
+}
+
+service ReportService {
+	rpc SendReport (.bgs.protocol.report.v1.SendReportRequest) returns (.bgs.protocol.NoData);
+	rpc SubmitReport (.bgs.protocol.report.v1.SubmitReportRequest) returns (.bgs.protocol.NoData);
+}

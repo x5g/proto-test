@@ -1,0 +1,7 @@
+{
+  "label": "hello",
+  "type": 111,
+  "somebutton": {
+    "button": "This is button"
+  }
+}

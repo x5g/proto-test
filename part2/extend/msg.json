@@ -1,0 +1,10 @@
+{
+  "head": {
+    "cid": 123
+  },
+  "ret": 321,
+  "[ProtoCS.id]": 111,
+  "[ProtoCS.modReq]": {
+    "b": true
+  }
+}

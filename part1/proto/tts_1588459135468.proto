@@ -1,0 +1,25 @@
+// IDL: Interface Definition Language
+
+// Protoc compiles and outputs an API that you can use to (de)seralize data to transmit
+
+// Proto3 is the latest and recommended syntax
+syntax = "proto3";
+
+// TTS Package
+package tts;
+
+// The service block declares the remote methods, with the rpc keyword, that make up the service
+// unary method thats send a single request and recieve a single response
+service TextToSpeech {
+    rpc TTS(Text) returns(Speech) {}
+}
+
+// Declare our messages (analogous to types)
+// Field level versioning as types are assigned a unique id
+message Text {
+    string text = 1;
+}
+
+message Speech {
+    bytes audio = 1;
+}

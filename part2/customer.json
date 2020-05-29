@@ -1,0 +1,49 @@
+{
+  "name": "organization",
+  "customer": [
+    {
+      "id": 1,
+      "firstName": "Chris",
+      "lastName": "Richardson",
+      "email": [
+        {
+          "email": "crichardson@email.com",
+          "type": "PROFESSIONAL"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "firstName": "Josh",
+      "lastName": "Long",
+      "email": [
+        {
+          "email": "jlong@email.com",
+          "type": "PROFESSIONAL"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "firstName": "Matt",
+      "lastName": "Stine",
+      "email": [
+        {
+          "email": "mstine@email.com",
+          "type": "PROFESSIONAL"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "firstName": "Russ",
+      "lastName": "Miles",
+      "email": [
+        {
+          "email": "rmiles@email.com",
+          "type": "PROFESSIONAL"
+        }
+      ]
+    }
+  ]
+}

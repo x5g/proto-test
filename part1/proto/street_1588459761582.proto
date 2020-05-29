@@ -1,0 +1,9 @@
+// Synatx using is proto3
+syntax = "proto3";
+import "Exercise2Solution/importsExercise/city.proto";
+
+message Street
+{
+string name =1;
+City city = 2;
+}

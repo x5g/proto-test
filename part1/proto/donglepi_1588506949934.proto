@@ -1,0 +1,140 @@
+import "nanopb.proto";
+
+message Config {
+  message GPIO {
+    message Pin {
+      enum Direction {
+        IN = 0;
+        OUT = 1;
+      }
+      enum Pull {
+        OFF = 0;
+        UP = 1;
+        DOWN = 2;
+      }
+      enum Edge {
+        BOTH = 0;
+        RISING = 1;
+        FALLING = 2;
+      }
+      required uint32 number = 1;
+      required bool active = 2 [default = true];
+      optional Direction direction = 3;
+      optional Pull pull = 4 [default = OFF];
+      optional Edge trigger = 5;
+    }
+    repeated Pin pins = 1;
+  }
+  message I2C {
+    enum Speed {
+      BAUD_RATE_100KHZ = 100;
+      BAUD_RATE_400KHZ = 400;
+    }
+    required bool enabled = 1;
+    optional Speed speed = 2 [default = BAUD_RATE_100KHZ];
+  }
+
+  message SPI {
+    required bool enabled = 1;
+    optional uint32 baudrate = 2 [default = 100000];
+    optional bool CPOL = 3 [default = false]; // Clock polarity leading: 0=rising, 1=falling trailing: 0=falling 1=rising
+    optional bool CPHA = 4 [default = false]; // Clock phase  leading: 0=Sample 1=setup trailing: 0=setup 1=sample
+    optional bool CS_LEVEL = 5 [default = false]; // false : low to select
+  }
+
+  message UART {
+    enum Speed {
+      BAUD_RATE_115200 = 115200;
+    }
+    enum Chr {
+      B5 = 5;
+      B6 = 6;
+      B7 = 7;
+      B8 = 8;
+      B9 = 9;
+    }
+    enum Parity {
+      NONE = 0;
+      ODD = 1;
+      EVEN = 2;
+    }
+    enum StopBits {
+      S1 = 1;
+      S2 = 2;
+    }
+    required bool enabled = 1;
+    required Speed speed = 2 [default = BAUD_RATE_115200];
+    required Chr chr = 3 [default = B8];
+    required Parity parity = 4 [default = NONE];
+    required StopBits stop_bits = 5 [default = S1];
+  }
+  optional GPIO gpio = 1; // pins are already callbacks
+  optional I2C  i2c = 2 [(nanopb).type = FT_CALLBACK];
+  optional UART uart = 3 [(nanopb).type = FT_CALLBACK];
+  optional SPI spi = 4 [(nanopb).type = FT_CALLBACK];
+}
+
+
+message Data {
+  message GPIO {
+    required uint32 mask = 1;
+    required uint32 values = 2;
+  }
+  message I2C {
+    message Read {
+      required uint32 addr = 1;
+      required uint32 size = 2;
+    }
+    message Write {
+      required uint32 addr = 1;
+      required bytes buffer = 2;
+    }
+    repeated Read reads = 1;
+    repeated Write writes = 2;
+  }
+  message SPI {
+    message Read {
+      required uint32 device_number = 1; // 0 or 1 for now
+      required uint32 size;
+    }
+    message Write {
+      required uint32 device_number = 1; // 0 or 1 for now
+      required bytes buffer = 2;
+    }
+    repeated Read reads = 1;
+    repeated Write writes = 2; // TODO: repeat Data instead so the dev can interleave requests
+  }
+  optional GPIO gpio = 1;
+  optional GPIO triggers = 2;
+  optional I2C i2c = 3;
+  optional SPI spi = 4;
+  optional bytes uart = 5;
+}
+
+message Transport {
+  required uint64 message_length = 1;
+}
+
+message DonglePiRequest {
+  required uint32 message_nb = 1;
+  optional Config config = 2; // optimization constraint: be sure config is decoded *before* the data that can relies it on.
+  optional Data data = 3;
+}
+
+message DonglePiResponse {
+  message Error {
+    enum Type {
+      CONFIG = 0;
+      GPIO = 1;
+      UART = 2;
+      I2C = 3;
+      SPI = 4;
+      OTHER = 15;
+    }
+    required Type type = 1;
+    optional string debug_info = 16;
+  }
+  required uint32 message_nb = 1;
+  optional Data data = 2;
+  optional Error error = 16;
+}

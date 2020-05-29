@@ -1,0 +1,377 @@
+syntax = "proto2";
+
+// Command types
+enum CommandTypeEnum{
+  Show_empty = 0;
+  I2C_test = 1;
+  SPI_test = 2;
+  USART_test = 3;
+  GPIO_digital = 4;
+  Analog_read = 5;		// Analog in, ADC config
+  Analog_write = 6;		// Analog out, PWM
+}
+
+
+
+
+// I2C options - descriptionben megadni melyik i2c interfeszt konfigolja fel
+enum i2cDirection{
+	I2C_write = 0;
+	I2C_read = 1;
+}
+
+enum i2cBus{
+	I2C1 = 1;
+	I2C2 = 2;
+	I2C3 = 3;
+}
+
+enum i2cSpeedMode{
+	I2C_SPEED_MODE_STANDARD = 0;
+	I2C_SPEED_MODE_FAST = 1;
+}
+
+enum i2cFastModeDutyCycle{
+	I2C_DUTY_CYCLE_TLOW_THIGH_2 = 0;
+	I2C_DUTY_CYCLE_TLOW_THIGH_16_9 = 1;
+}
+
+// Master only
+message i2cMessage{
+ required i2cBus bus = 1;
+ required uint32 address = 2;
+ required uint32 reg = 3;
+ required i2cDirection direction = 4; 	// 1: read, 0: write
+ required i2cSpeedMode speedMode = 5;
+ required uint32 clockSpeed = 6;
+ optional i2cFastModeDutyCycle dutyCycle = 7;
+ required uint32 size = 8;
+ required uint32 writeValue = 9;
+ required uint32 registerSize = 10;
+}
+
+
+
+
+// SPI options
+// only master modes should be available
+enum clockMode{
+	SPI_MODE_0 = 0;
+	SPI_MODE_1 = 1;
+	SPI_MODE_2 = 2;
+	SPI_MODE_3 = 3;
+}
+
+enum spiHardwareNSS{
+	DISABLE = 0;
+	NSS_INPUT = 1;
+	NSS_OUTPUT = 2;
+}
+
+enum spiBus{
+	SPI1 = 1;
+	SPI2 = 2;
+	SPI3 = 3;
+}
+
+enum spiOperatingMode{
+	SPI_MODE_FULL_DUPLEX_MASTER = 0;
+	SPI_MODE_TRANSMIT_4WIRE_MASTER = 1;	
+	SPI_MODE_RECEIVE_4WIRE_MASTER = 2;	
+	SPI_MODE_HALF_DUPLEX_TX_MASTER = 3;
+	SPI_MODE_HALF_DUPLEX_RX_MASTER = 4;
+}
+
+enum spiFrameFormat{
+	SPI_FRAME_FORMAT_MOTOROLA = 0;
+	SPI_FRAME_FORMAT_TI = 1;
+}
+
+enum spiDataSize{
+	SPI_DATA_SIZE_8_BITS = 0;
+	SPI_DATA_SIZE_16_BITS = 1;
+}
+
+enum spiFirstBit{
+	SPI_FIRST_BIT_MSB = 0;
+	SPI_FIRST_BIT_LSB = 1;
+}
+
+message spiMessage{
+ required spiBus bus = 1;
+ required spiOperatingMode  operatingMode = 2;
+ required uint32 command = 3;
+ required uint32 dummyClocks = 4;
+ required uint32 writeValue = 5;
+ required uint32 writeSize = 6;
+ required uint32 slaveResponse = 7;
+ required spiHardwareNSS hardwareNSS = 8;
+ required spiFrameFormat frameFormat = 9;
+ required spiDataSize dataSize = 10;
+ optional spiFirstBit firstBit = 11;
+ optional clockMode clockMode = 12;	//ide esetleg hintet megjeleniteni
+}
+
+
+
+// digitalGPIO options
+enum gpioDirection{
+	GPIO_OUTPUT = 0;
+	GPIO_INPUT = 1;
+}
+
+enum gpioPinState{
+	GPIO_LOW = 0;
+	GPIO_HIGH = 1;
+	GPIO_NON_APPLICABLE = 2;
+}
+
+enum gpioPins{
+	PA0 = 0;
+	PA1 = 1;
+	PA2 = 2;
+	PA3 = 3;
+	PA4 = 4;
+	PA5 = 5;	
+	PA6 = 6;
+	PA7 = 7;
+	PA8 = 8;
+	PA9 = 9;
+	PA10 = 10;
+	PA11 = 11;
+	PA12 = 12;
+	PA13 = 13;	
+	PA14 = 14;
+	PA15 = 15;	
+	PB0 = 20;
+	PB1 = 21;
+	PB2 = 22;
+	PB3 = 23;	
+	PB4 = 24;
+	PB5 = 25;	
+	PB6 = 26;
+	PB7 = 27;	
+	PB8 = 28;
+	PB9 = 29;	
+	PB10 = 30;
+	PB11 = 31;
+	PB12 = 32;
+	PB13 = 33;
+	PB14 = 34;
+	PB15 = 35;
+	PC0 = 40;
+	PC1 = 41;
+	PC2 = 42;
+	PC3 = 43;	
+	PC4 = 44;
+	PC5 = 45;	
+	PC6 = 46;
+	PC7 = 47;	
+	PC8 = 48;
+	PC9 = 49;	
+	PC10 = 50;
+	PC11 = 51;
+	PC12 = 52;
+	PC13 = 53;
+	PC14 = 54;
+	PC15 = 55;
+	P_INVALID = 100;
+}
+
+
+enum gpioPull{
+	GPIO_NO_PULL = 0;
+	GPIO_PULL_UP = 1;
+	GPIO_PULL_DOWN = 2;
+}
+
+message digitalGPIO{
+ required gpioPins pin = 1;
+ required gpioDirection direction = 2; 	 // Input/output
+ required gpioPinState state = 3;	// Low, high
+ required gpioPull pull = 4;
+}
+
+
+
+// Analog IN message
+enum adcInstance{		
+	ADC1 = 1;
+	ADC2 = 2;
+	ADC3 = 3;
+}
+
+
+enum adcResolution{		
+	ADC_12_BITS = 0;
+	ADC_10_BITS = 1;
+	ADC_8_BITS = 2;
+	ADC_6_BITS = 3;
+}
+
+enum adcClockPrescaler{		
+	ADC_PCLK2_DIVIDED_BY_2 = 0;
+	ADC_PCLK2_DIVIDED_BY_4 = 1;
+	ADC_PCLK2_DIVIDED_BY_6 = 2;
+	ADC_PCLK2_DIVIDED_BY_8 = 3;
+}
+
+enum adcChannel{		
+	ADC_CHANNEL_IN0 = 0;
+	ADC_CHANNEL_IN1 = 1;
+	ADC_CHANNEL_IN2 = 2;
+	ADC_CHANNEL_IN3 = 3;
+	ADC_CHANNEL_IN4 = 4;
+	ADC_CHANNEL_IN5 = 5;
+	ADC_CHANNEL_IN6 = 6;
+	ADC_CHANNEL_IN7 = 7;
+	ADC_CHANNEL_IN8 = 8;
+	ADC_CHANNEL_IN9 = 9;
+	ADC_CHANNEL_IN10 = 10;
+	ADC_CHANNEL_IN11 = 11;
+	ADC_CHANNEL_IN12 = 12;
+	ADC_CHANNEL_IN13 = 13;	
+	ADC_CHANNEL_IN14 = 14;		
+	ADC_CHANNEL_IN15 = 15;	
+	ADC_CHANNEL_TEMP = 20;
+	ADC_CHANNEL_VREFINT = 21;
+	ADC_CHANNEL_VBAT = 22;	
+}
+
+message analogIN{		
+ required adcInstance instance = 1;
+ required adcChannel channel = 2;
+ required gpioPins pin = 3;
+ required adcResolution resolution = 4;
+ required adcClockPrescaler clockPrescaler = 5;
+}
+
+enum pwmTimeDependency{		
+	PWM_TIME_DEPENDENCY_DISABLED = 0;
+	PWM_TIME_DEPENDENCY_ENABLED = 1;
+}
+
+
+// Analog OUT message
+message analogOUT{
+ required gpioPins pin = 1;
+ required float frequency = 2;
+ required uint32 dutyCycle = 3;
+ required pwmTimeDependency dependency = 4;
+ optional uint32 time = 5;
+}
+
+
+// USART message
+enum usartBus{
+	USART1 = 1;
+	USART2 = 2;
+	USART3 = 3;
+	USART4 = 4;
+	USART5 = 5;
+	USART6 = 6;	
+}
+
+enum usartDirection{
+	USART_TX = 0;
+	USART_RX = 1;
+	USART_TX_AND_RX = 2;	
+}
+
+enum usartWordLength{
+	USART_8_BITS = 0;
+	USART_9_BITS = 1;
+}
+
+enum usartParity{
+	USART_PARITY_NONE = 0;
+	USART_PARITY_EVEN = 1;
+	USART_PARITY_ODD = 2;
+}
+
+enum usartStopBits{
+	USART_STOP_BITS_1 = 1;
+	USART_STOP_BITS_2 = 2;
+}
+
+enum usartMode{
+	USART_MODE_ASYNCHRONOUS = 0;
+	USART_MODE_SYNCHRONOUS = 1;
+}
+
+enum usartHardwareFlowControl{
+	USART_HW_FLOW_DISABLE = 0;
+	USART_HW_FLOW_CTS_ONLY = 1;
+	USART_HW_FLOW_RTS_ONLY = 2;
+	USART_HW_FLOW_CTS_AND_RTS = 3;	
+}
+
+enum usartClockPolarity{
+	USART_CLOCK_POLARITY_LOW = 0;
+	USART_CLOCK_POLARITY_HIGH = 1;	
+}
+
+enum usartClockPhase{
+	USART_CLOCK_PHASE_ONE_EDGE = 0;
+	USART_CLOCK_PHASE_TWO_EDGE = 1;	
+}
+
+enum usartClockLastBit{
+	USART_CLOCK_LAST_BIT_DISABLE = 0;
+	USART_CLOCK_LAST_BIT_ENABLE = 1;	
+}
+
+message usartMessage{
+ required usartBus bus = 1;
+ required usartMode mode = 2;
+ required uint32 baudRate = 3;
+ required usartWordLength wordLength = 4;
+ required usartParity parity = 5;
+ required usartStopBits stopBits = 6;
+ required usartDirection direction = 7;
+ required uint32 command = 8;			// byte
+ optional usartClockPolarity clockPolarity = 9;
+ optional usartClockPhase clockPhase = 10;
+ optional usartClockLastBit clockLastBit = 11;
+ optional usartHardwareFlowControl hwFlowControl = 12;
+}
+
+
+enum responseEnum_t{
+ INVALID_MESSAGE = 0;
+ I2C_WRITE_OK = 10;
+ I2C_WRITE_FAIL = 11;
+ I2C_READ_FAIL = 12;
+ SPI_TRANSMISSION_OK = 20;
+ SPI_TRANSMISSION_FAIL = 21;
+ USART_TX_OK = 30;
+ USART_TX_FAIL = 31;
+ USART_RX_FAIL = 32;
+ USART_TX_RX_FAIL = 33;
+ GPIO_SET_HIGH = 40;
+ GPIO_SET_LOW = 41;
+ GPIO_SET_FAIL = 42;
+ GPIO_READ_FAIL = 43;
+ ADC_READ_FAIL= 50;
+ PWM_SET_OK = 60;
+ PWM_SET_FAIL = 61;
+ INVALID_PERIPHERAL = 100;
+}
+
+message responseMessage{
+ optional uint32 responseRead = 1;
+ optional responseEnum_t responseEnum = 2;
+}
+
+
+// Main message
+message Command{
+ required CommandTypeEnum commandType = 1;
+ optional	i2cMessage	i2c = 2;
+ optional	spiMessage	spi = 3;
+ optional usartMessage usart = 4;
+ optional	digitalGPIO	gpio = 5;
+ optional analogIN analog_in = 6;
+ optional analogOUT	analog_out = 7;
+ optional responseMessage response = 10;		
+}

@@ -1,0 +1,262 @@
+syntax = "proto2";
+package message;
+option java_package = "com.lemeng.server.command";
+option java_outer_classname = "GameCommand";
+
+//游戏命令
+
+//用户基本信息
+//cmd:userInfo
+message UserInfoCommand{
+    optional int32 userId = 1;
+    optional string mobile = 2;
+    optional string nickname = 3;
+    optional int32 level = 4;
+    optional int32 statue = 5;
+    optional int32 gemstone = 6;
+    optional int32 goldCoin = 7;
+
+    repeated string petList = 11;
+    repeated string skillList = 12;
+    repeated string footPrintList = 13;
+}
+
+message SimpleUserInfoCommand{
+    optional int32 userId = 1;
+    optional string nickname = 2;
+}
+
+
+//创建房间请求
+message CreateRoomRequestCommand{
+
+    optional int32 userId = 1;
+}
+//创建房间响应
+message CreateRoomResponseCommand{
+    optional int32 userId = 1;
+    optional int32 roomId = 2;
+    optional int32 statue = 3;      //创建成功
+    optional string msg = 4;        //返回信息
+
+
+}
+
+
+//邀请玩家加入游戏请求
+message InviteJoinGameRequestCommand{
+    optional int32 roomId = 1;      //队伍id
+    optional int32 userId = 2;
+    optional int32 invitedId = 3;  //被邀请人的id
+
+}
+//邀请玩家加入游戏响应
+message InviteJoinGameResponseCommand{
+    optional int32 statue = 1;      //状态
+    optional string msg = 2;      //信息
+    optional SimpleUserInfoCommand userInfo = 3;  //玩家信息
+
+}
+
+
+//被邀请加入游戏(转发给玩家)
+message BeInvitedJoinGameRequestCommand{
+
+    optional int32 roomId = 1;      //队伍id
+    optional int32 inviterId = 2;   //邀请人id    invitee被邀请人      （改）
+    optional string inviterName = 3; //邀请人名称                         （改）
+
+}
+//被邀请加入游戏(玩家发给服务器)
+message BeInvitedJoinGameResponseCommand{
+
+    optional int32 statue = 1;      //状态
+    optional string msg = 2;      //信息
+    optional int32 userId = 3;      //用户id      （新加）
+    optional int32 roomId = 4;      //队伍id      （新加）
+}
+
+
+//房间更新
+message RoomUpdateCommand{
+
+    optional int32 roomId = 1;      //队伍id
+    optional bytes gameType = 2;   //游戏类型
+    repeated SimpleUserInfoCommand userInfoList = 3;
+    optional SimpleUserInfoCommand hader = 4;   //房主
+
+}
+//寻找队列
+message FindGameRequestCommand{
+    optional int32 roomId = 1;      //队伍id
+    optional int32 headerId = 2;     //房主id
+
+}
+//退出组队
+message QuitRoomCommand{
+    optional int32 userId = 1;
+    optional int32 roomId = 2;
+}
+
+//拒绝开始游戏
+message RefuseGameCommand{
+    optional int32 roomId = 1;      //队伍id
+    optional int32 userId = 2;     //用户id
+
+}
+
+
+//对局已找到(服务器向客户端请求)
+message FindedGameRequestCommand{
+
+    //初始化玩家
+    repeated FullPlayerInfoCommand playerInfoList = 1;
+    //初始化地图
+    optional string mapName = 2;
+    //初始化箱子
+    repeated BoxCommand box = 3;
+    //初始化坚果
+    repeated NutCommand nut = 4;
+    //初始化天气
+    optional string weather = 5;
+
+}
+//新玩家加入（服务器向客户端请求）
+message NewPlayerJoinGameRequestCommand{
+    optional FullPlayerInfoCommand newPlayer = 1;
+}
+
+//战斗中主动离开游戏
+//cmd:qutiGame
+message QuitGameCommand{
+    optional int32 playerId = 4;
+    optional string nickname = 5;
+}
+
+//player全部信息，当某些事件触发时，推送
+//cmd: playerInfo
+message FullPlayerInfoCommand{
+
+    optional int32 id = 2;
+    optional string nickname = 3;
+    optional int32 hp = 4;
+    optional int32 attack = 5;
+    optional float positionX = 6;
+    optional float positionY = 7;
+    optional float positionZ  = 8;
+    optional float rotX = 9;
+    optional float rotY = 10;
+    optional float rotZ = 11;
+    optional float gunRot = 12;
+    optional float gunRoll = 13;
+    optional int32 teamId = 14;     //所属队伍
+    optional string actionName = 15;    //动作名称
+    optional int32 killNum = 16;        //杀人数
+    optional int32 assistNum = 17;      //助攻数
+    optional int32 level = 18;          //等级
+    repeated string skillList = 19;     //技能
+    optional int32 gameId = 20;      //所属游戏id
+}
+
+//升级事件
+message LevelUpRequestCommand{
+    optional int32 playerId = 1;
+}
+//升级响应
+message LevelUpResponseCommand{
+    optional int32 playerId = 1;
+    repeated string skillNameList = 2;
+    //随机返回三个技能
+}
+message ChooseSkillCommand{
+    optional int32 playerId = 1;
+    //升级后选择一个技能
+    optional string skillName = 2;
+}
+
+
+//吃
+//cmd：eat
+message EatCommand{
+    optional int32 playerId = 1;      //玩家id
+    optional int32 nutId = 2;   //坚果id
+    optional string name = 3;   //坚果类型（大坚果，小坚果）
+}
+
+//箱子同步位置
+//cmd:Box
+message BoxCommand{
+    optional int32 boxId = 1;
+    optional float positionX = 2;
+    optional float positionY = 3;
+    optional float positionZ  = 4;
+    optional float rotX = 5;
+    optional float rotY = 6;
+    optional float rotZ = 7;
+
+    optional int32 gameId = 8;      //所属游戏id
+}
+
+//击中
+//cmd：hit
+message HitCommand{
+    optional int32 enemyId = 2;     //敌人id
+    optional int32 damage = 3;      //伤害
+    optional int32 playerId = 4;  //自己id
+    optional int32 boxId = 5;//箱子id
+}
+//助攻实现：每一次击中
+//击杀
+message KillCommand{
+    optional int32 playerId = 1;  //击杀者id
+    optional int32 deadId = 2;  //被击杀id
+}
+//助攻
+message AssistCommand{
+    optional int32 playerId = 1;  //助攻id
+    optional int32 deadId = 2;  //被击杀id
+}
+//坚果位置
+message NutCommand{
+    optional int32 nutId = 1;
+    optional float positionX = 2;
+    optional float positionY = 3;
+    optional float positionZ  = 4;
+    optional float rotX = 5;
+    optional float rotY = 6;
+    optional float rotZ = 7;
+
+    optional int32 gameId = 8;      //所属游戏id
+    optional string name = 9;      //名称（大坚果，小坚果）
+}
+
+//游戏结束
+message GameOverCommand{
+    repeated TeamCommand teamList = 1;
+}
+
+//队伍
+message TeamCommand{
+    repeated FullPlayerInfoCommand playerList = 1;
+    optional int32 killNum = 2;
+    optional int32 deathNum = 3;
+    optional int32 assistNum = 4;
+    optional FullPlayerInfoCommand mvp = 5;
+    optional int32 gameId = 6;
+}
+//玩家位置
+message PlayerPositionCommand{
+    optional int32 playerId = 1;
+
+    optional float positionX = 2;
+    optional float positionY = 3;
+    optional float positionZ  = 4;
+    optional float rotX = 5;
+    optional float rotY = 6;
+    optional float rotZ = 7;
+    optional string actionName = 8;    //动作名称
+}
+//复活
+message RelifeComand{
+    optional int32 playerId = 1;
+}

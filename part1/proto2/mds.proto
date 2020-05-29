@@ -1,0 +1,53 @@
+syntax = "proto3";
+import "pbTime.proto";
+package mds;
+//option optimize_for = LITE_RUNTIME;
+
+message Metadata {
+  string name = 1;
+  uint32 owner = 2;
+  uint32 group = 3;
+  uint32 permissions = 4;
+  uint64 size = 5;
+  pbTime.Time ctime = 6;
+  pbTime.Time atime = 7;
+  pbTime.Time mtime = 8;
+
+  repeated Metadata metadata = 9; // for directories
+}
+
+message	Request {
+  pbTime.Time time = 1;
+  string path = 2;
+  
+  enum ReqType {
+    STAT = 0;
+    OPEN = 1;
+  }
+  
+  ReqType reqType = 3;
+  // need to support operations: truncate, create
+
+  message OpenInfo {
+    bool read = 1;
+    bool write = 2;
+    bool updateATime = 3;
+    bool truncate = 4;
+    bool create = 5;
+  }
+
+  OpenInfo openInfo = 4;
+  
+  // need to support open modes: O_RDONLY, O_WRONLY, O_RDWR, O_APPEND (client),
+  // O_DIRECT (client), O_DIRECTORY (response), O_DSYNC, O_EXCL, O_NOATIME, O_NOFOLLOW,
+  // O_SYNC, O_TRUNC
+
+}
+
+message Response {
+  uint32 status = 1;
+  pbTime.Time time = 2;
+  Metadata metadata = 3;
+  uint32 lock = 4;
+  fixed64 uuid = 5;
+}

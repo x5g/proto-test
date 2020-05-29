@@ -1,0 +1,357 @@
+message C2SLogin 
+{
+    required string account = 1;//账号
+    required string password = 2;//密码
+}
+
+message S2CLogin
+{
+    required uint64 userId = 1;//登录成功返回账号ID
+    required int32 type = 2;
+	required string name = 3;
+	required int32 hp = 4;
+    repeated GunInfo GunInfo = 5;
+    required int32 money = 6;
+    required int32 diamonds = 7;
+    required int32 experience = 8;//经验
+    required int32 integral = 9;//积分
+    required int32 experience_rank = 10;
+    required int32 integral_rank = 11;
+	required string modelType = 12;
+}
+
+message GunInfo
+{
+    required int32 id = 1;//id
+	required bool use = 2;//使用
+    required int32 experience = 3;//经验
+    required int32 quality = 4;//品质
+    required int32 count = 5;//弹药数量	
+    required float bullet_quality = 6;//子弹质量
+	required float caliber = 7;//口径
+    required float speed = 8;//速度
+    required int32 frequency = 9;//频率	
+    required float accurate = 10;//精准	
+    required float range = 11;//射程
+    required float recoil = 12;//后坐力
+    required float weight = 13;//重量    
+    required float swap_speed = 14;//换弹速度
+	required float aim_scale = 15;//瞄准镜放大倍率	
+}
+
+//PVP匹配
+message C2SPVP
+{
+    required int32 type = 1;
+	required int32 mapid = 2;
+}
+
+message S2CPVP
+{
+    required int32 result = 1;
+	required uint64 roomID = 2;
+	required bool roomMaster = 3;
+    repeated PVPInfo pvpInfo = 4;
+}
+
+message PVPInfo
+{
+    required uint64 userId = 1;
+	required string name = 2;
+	required int32 hp = 3;
+	required int32 type = 4;
+	required bool friendly = 5;
+    repeated GunInfo GunInfo = 6;
+	required string modelType = 7;
+}
+
+//角色动画(换枪，换弹夹等)
+message C2S_Actor_Animation
+{
+    required string animatiom = 1;
+	required uint64 roomNum = 2;
+	required uint64 num = 3;
+}
+
+message S2C_Actor_Animation
+{
+    required string animatiom = 1;
+	required uint64 roomNum = 2;
+	required uint64 num = 3;
+	required uint64 userId = 4;
+}
+
+//npc动画
+message C2S_NPC_Animation
+{
+    required uint64 npcId = 1;
+    required string animatiom = 2;
+	required uint64 roomNum = 3;
+	required uint64 num = 4;
+}
+
+message S2C_NPC_Animation
+{
+    required uint64 npcId = 1;
+    required string animatiom = 2;
+	required uint64 roomNum = 3;
+	required uint64 num = 4;
+}
+
+//角色移动
+message C2S_Actor_Move
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 moveState = 4;
+	required int32 dirState = 5;
+
+	required float time = 6;
+
+	required uint64 roomNum = 7;
+	required uint64 num = 8;
+}
+
+message S2C_Actor_Move
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 moveState = 4;
+	required int32 dirState = 5;
+
+	required uint64 userId = 6;
+
+	required float time = 7;
+	required uint64 num = 8;
+}
+
+//npc移动
+message C2S_NPC_Move_Point
+{
+    required float Bx = 1;
+	required float By = 2;
+	required float Bz = 3;
+
+	required float Ex = 4;
+	required float Ey = 5;
+	required float Ez = 6;
+
+	required uint64 npcId = 7;
+
+	required uint64 roomNum = 8;
+	required uint64 num = 9;
+}
+
+message S2C_NPC_Move_Point
+{
+    required float Bx = 1;
+	required float By = 2;
+	required float Bz = 3;
+
+	required float Ex = 4;
+	required float Ey = 5;
+	required float Ez = 6;
+
+	required uint64 npcId = 7;
+	required uint64 num = 8;
+}
+
+message C2S_NPC_Move_Target
+{
+    required uint64 tarId = 1;
+	required uint64 npcId = 2;
+	required uint64 roomNum = 3;
+	required uint64 num = 4;
+}
+
+message S2CNPC_Move_Target
+{
+    required uint64 tarId = 1;
+	required uint64 npcId = 2;
+	required uint64 num = 3;
+}
+
+//角色旋转
+message C2S_Actor_Rotation
+{
+    required float y = 1;
+	required float t = 2;
+
+	required uint64 roomNum = 3;
+	required uint64 num = 4;
+}
+
+message S2C_Actor_Rotation
+{
+    required float y = 1;
+	required float t = 2;
+
+	required uint64 userId = 3;
+	required uint64 num = 4;
+}
+
+//角色瞄准
+message C2S_Actor_Aim
+{
+    required float z = 1;
+	required float time = 2;
+	required int32 model = 3;
+
+	required uint64 roomNum = 4;
+	required uint64 num = 5;
+}
+
+message S2C_Actor_Aim
+{
+    required float z = 1;
+	required float time = 2;
+	required int32 model = 3;
+
+	required uint64 userId = 4;
+	required uint64 num = 5;
+}
+
+//NPC瞄准(包括所有旋转)
+message C2S_NPC_Aim_Point
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+	required float time = 4;
+
+	required uint64 npcId = 5;
+	required uint64 roomNum = 6;
+	required uint64 num = 7;
+}
+
+message S2C_NPC_Aim_Point
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+	required float time = 4;
+
+	required uint64 npcId = 5;
+	required uint64 num = 6;
+}
+
+message C2S_NPC_Aim_Target
+{
+    required uint64 tarId = 1;
+	required float time = 2;
+
+	required uint64 npcId = 3;
+	required uint64 roomNum = 4;
+	required uint64 num = 5;
+}
+
+message S2C_NPC_Aim_Target
+{
+    required uint64 tarId = 1;
+	required float time = 2;
+
+	required uint64 npcId = 3;
+	required uint64 num = 4;
+}
+
+//角色射击
+message C2S_Actor_Fire
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 date = 4;
+	required uint64 roomNum = 5;
+	required uint64 num = 6;
+}
+
+message S2C_Actor_Fire
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 date = 4;
+	required uint64 userId = 5;
+	required uint64 num = 6;
+}
+
+//npc射击
+message C2S_NPC_Fire
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 date = 4;
+	required uint64 npcId = 5;
+	required uint64 roomNum = 6;
+	required uint64 num = 7;
+}
+
+message S2C_NPC_Fire
+{
+    required float x = 1;
+	required float y = 2;
+	required float z = 3;
+
+	required int32 date = 4;
+	required uint64 npcId = 5;
+	required uint64 num = 6;
+}
+
+//角色击中
+message C2S_Actor_Hit
+{
+    optional uint64 userId = 1 [default = 0];
+    required uint64 tarId = 2;
+	required int32 date = 3;
+
+	required uint64 roomNum = 4;
+	required uint64 num = 5;
+}
+
+message S2C_Actor_Hit
+{
+    required uint64 userId = 1;
+    required uint64 tarId = 2;
+	required int32 date = 3;
+	required uint64 num = 4;
+}
+
+//角色死亡
+message S2C_Actor_Die
+{
+    required uint64 tarId = 1;
+}
+
+//NPC死亡(同角色)
+message S2C_NPC_Die
+{
+    required uint64 tarId = 1;
+}
+
+message C2S_Ping
+{
+    required float time = 1;
+}
+
+message S2C_Ping
+{
+    required float time = 1;
+}
+
+message C2S_ExitRoom
+{
+    required uint64 RoomId =1;
+}
+
+message S2C_ExitRoom
+{
+    required uint64 userId = 1;
+}

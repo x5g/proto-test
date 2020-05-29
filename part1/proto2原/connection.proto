@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option csharp_namespace = "Indy.Agent.Messages";
+
+// urn:sovrin:agent:message_type:sovrin.org/*
+
+message ConnectionOffer {
+    string did = 1;
+    string verkey = 2;
+    string endpoint = 3;
+    string offer_nonce = 4;
+}
+
+message ConnectionRequest {
+    string did = 1;
+    string request_nonce = 2;
+    string endpoint_did = 3;
+    string endpoint = 4;
+}
+
+message ConnectionResponse {
+    string did = 1;
+    string verkey = 2;
+    string request_nonce = 3;
+}
+
+message ConnectionAcknowledgement {
+    string message = 1;
+}
+
+// urn:sovrin:agent:message_type:streetcred.nyc/*
+
+message SendNym {
+    string did = 1;
+    string verkey = 2;
+}
+
+message CreateConnectionOffer {
+}

@@ -1,0 +1,181 @@
+4 0 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/data2.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:1body:"1"minor_version:0url:""query_string:""headers:[]}}
+------
+原json文件内容
+------
+{"cmd":"Connect","room":[{"channel":"1","count":1}]}
+======
+4 1 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/storage_messages.pb
+4 2 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/tallMessage.pb
+4 3 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test6.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:0minor_version:0url:""query_string:""headers:[]body:""}StringStringPair:{first:""second:""}}
+------
+原json文件内容
+------
+{}
+======
+4 5 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo2.pb
+4 6 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/complex.pb
+4 7 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/oneoftest.pb
+4 8 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/PersonProto.pb
+4 9 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/testP.pb
+4 10 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test4.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:1minor_version:0url:""query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"list":["BAR","BAR","BAR","BAR","BAR","BAR","BAR"]}
+======
+4 11 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/twist.pb
+4 12 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/HotMessage.pb
+4 13 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo.pb
+4 14 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/simple.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:12345minor_version:1url:"John"query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"id":12345,"isSimple":true,"name":"John","sampleList":[1,4,7,8]}
+======
+4 15 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/TimeSchema.pb
+4 16 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/anthor.pb
+4 17 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/OrderInfo.pb
+4 18 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/people.pb
+4 19 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/employee.pb
+4 20 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/product.pb
+4 21 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo4.pb
+4 22 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/transaction.pb
+4 23 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/book.pb
+4 24 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo6.pb
+4 25 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test2.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:1minor_version:2url:""query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"x":1,"y":2}
+======
+4 26 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/notification.pb
+4 27 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Rule.pb
+4 28 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/awesome.pb
+4 29 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test5.pb
+4 30 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/echo.pb
+4 31 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/player.pb
+4 32 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Account.pb
+4 33 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/MessageData.pb
+4 34 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/yages-schema.pb
+4 35 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/CompanyProto.pb
+4 36 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo3.pb
+4 37 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/protobuf.pb
+4 38 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/calendar.pb
+4 39 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test3.pb
+4 40 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo7.pb
+4 41 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/socket.pb
+4 42 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/fight.pb
+4 43 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/spirits.pb
+4 44 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/UDP.pb
+4 45 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/demo5.pb
+4 46 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/product2.pb
+4 47 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/student.pb
+4 48 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/protocolbufTest.pb
+4 49 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/GpsLocation.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:977358minor_version:480186url:""query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"latitude":488679,"longitude":240093}
+======
+4 50 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/cover_helloworld.pb
+4 51 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/dog.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:1minor_version:6url:""query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"barks":true,"yearsold":6}
+======
+4 52 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/KVCommand.pb
+4 53 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/innerMap.pb
+4 54 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/addressbook.pb
+4 55 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/SensorData.pb
+------
+网页转换内容
+------
+{HttpRequest:{minor_version:70major_version:0url:""query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"value":35}
+======
+4 56 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/qwe.pb
+4 57 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/UserInfo.pb
+4 58 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/game_service.pb
+4 59 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/my-message.pb
+4 60 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/wind.pb
+4 61 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Messages.pb
+4 62 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/data.pb
+4 63 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/addressbook3.pb
+4 64 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/message3.pb
+4 65 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/chat.pb
+4 66 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/attendee.pb
+4 67 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/example2.pb
+4 68 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/service.pb
+4 69 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/person3.pb
+4 70 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/test.pb
+4 71 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/lona.pb
+4 72 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/PersonTest.pb
+4 73 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/user3.pb
+4 74 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/msginfo.pb
+4 75 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/GroundData.pb
+4 76 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Login.pb
+4 77 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/nested.pb
+4 78 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/ProtocolModule.pb
+4 79 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/customer.pb
+4 80 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Message.pb
+4 81 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/item.pb
+4 82 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/employee2.pb
+4 83 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/example.pb
+4 84 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/person.pb
+4 85 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/hello.pb
+4 86 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/person4.pb
+4 87 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/user2.pb
+4 88 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/geolocation.pb
+4 89 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/ProtoMsg.pb
+4 90 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/cat.pb
+4 91 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/common2.pb
+------
+网页转换内容
+------
+{HttpRequest:{major_version:10101minor_version:20202url:"30303"query_string:""headers:[]body:""}}
+------
+原json文件内容
+------
+{"cmd":10101,"errorCode":20202,"description":"30303"}
+======
+4 92 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/msg.pb
+4 93 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/message2.pb
+4 94 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/addressbook2.pb
+4 95 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/protodemo.pb
+4 96 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/maps.pb
+4 97 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/person2.pb
+4 98 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/user.pb
+4 99 /Users/chenzixuan/Desktop/proto/http.proto /Users/chenzixuan/Desktop/proto/Common.pb
+5 0 /Users/chenzixuan/Desktop/proto/demo2.proto /Users/chenzixuan/Desktop/proto/data2.pb

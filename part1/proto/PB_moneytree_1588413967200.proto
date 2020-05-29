@@ -1,0 +1,33 @@
+
+package moneytree;
+import "PB_error_code.proto";
+
+message Moneytree 
+{
+	optional int32 			level = 1;	// 当前摇钱树等级
+	optional int32 			gold  = 2;	// 待领取金币
+	optional bool 			state = 3;	// 是否可以领取
+}
+
+// 获取摇钱树数据
+message PB_Moneytree 
+{
+	required int64		 	uid   = 1;
+}
+
+message PB_MoneytreeReturn 
+{
+	optional Moneytree 		tree  = 1;	// 当前摇钱树数据
+}
+
+// 领取金币
+message PB_GetMoney
+{
+	required int64		 	uid   = 1;
+}
+
+message PB_GetMoneyReturn
+{
+	required PB_ErrorCode 	code  = 1;
+	optional Moneytree		tree  = 2;	// 当前摇钱树数据
+}

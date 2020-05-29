@@ -1,0 +1,22 @@
+{
+  "Products": [
+    {
+      "ID": "1",
+      "Name": "Samsung Galaxy S10",
+      "Quantity": "10",
+      "Images": [
+        "img1",
+        "img2"
+      ]
+    },
+    {
+      "ID": "2",
+      "Name": "iPhone X",
+      "Quantity": "12",
+      "Images": [
+        "img3",
+        "img4"
+      ]
+    }
+  ]
+}

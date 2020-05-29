@@ -1,0 +1,497 @@
+import "protocol_base.proto";
+
+package Uqee.Protobufs.Server.Protocol;
+
+message MSG_HuData {
+        message Group {
+                repeated int32 pais = 1;
+                optional int32 from_side = 2;
+        }
+        message Side {
+                optional int32 side = 1;
+                optional int32 hu_val = 2;
+                optional int32 score = 3;
+                repeated Group groups = 4;
+                repeated Group open_groups = 5;
+                optional int32 money = 6;
+        }
+        optional int32 is_by_self = 1;
+        optional int32 is_nested = 2;
+        optional int32 is_pengpeng = 3;
+        optional int32 tai_num = 4;
+        optional int32 pai_type = 5; //0 noe, 1 pure, 2 mixed
+        optional int32 hu_side = 6;
+        optional int32 hu_pai = 7;
+        repeated Side sides = 8;
+        optional int32 take_all_side = 9;
+        optional int32 from_side = 10;
+}
+
+message C2S_RoomEnter {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_ENTER];
+        optional int32 room_type = 2; //0 golden, 1 tournament
+        optional int32 room_id = 3;
+        optional int32 max_round = 4;
+        optional int32 person_count = 5; // 0 --> 2 person，1 --> 4 person
+        optional int32 halve = 6; // 0 no, 1 yes
+        optional int32 room_charge = 7;
+        optional int32 hard_bump = 8; // 0 no, 1 yes
+        optional int32 restore_board = 9; // 0 no, 1 yes
+        optional int32 golden_room_type = 10;
+        optional int32 private_room_type = 11;
+        optional int32 change_table = 12;
+        optional int32 cur_room_id = 13;
+}
+
+message S2C_RoomEnter {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_ENTER];
+        optional int32 ret = 2; //0 ok, 1 no such room, 2 full
+        optional int32 room_id = 3;
+        optional int32 state = 4;
+        optional int32 side = 5;
+        optional int32 room_type = 6;
+        optional int32 round = 7;
+        optional int32 max_round = 8;
+        optional int32 dismiss_left_time = 9;
+        optional int32 person_count = 10;
+        optional int32 halve = 11;
+        optional int32 room_charge = 12;
+        optional int32 hard_bump = 13;
+        optional int32 restore_board = 14;
+        optional int32 golden_room_type = 15;
+        optional int32 private_room_type = 16;
+        optional int32 competition_room_type = 17;
+}
+
+message C2S_RoomPlayerList {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_PLAYER_LIST];
+}
+
+message S2C_RoomPlayerList {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAYER_LIST];
+        message PlayerInfo {
+                optional int64 id = 1;
+                optional int32 obj_type = 2;
+                optional int32 pos = 3;
+                optional string name = 4;
+                optional int32 is_owner = 5;
+                optional int32 ready_replay = 6;
+                optional int32 score = 7;
+                optional int32 money = 8;
+                optional int32 status = 9; // 0->online 1->offline 2->autoHold
+                optional string url_pic = 10;
+                optional string remote_ip = 11;
+        }
+        repeated PlayerInfo players = 2;
+}
+
+message C2S_RoomStart {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_START];
+}
+
+message S2C_RoomStart {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_START];
+        message Pai {
+                optional int32 id = 1;
+                optional int32 num = 2;
+        }
+        optional int32 master_side = 2;
+        repeated int32 random_values = 3;
+        optional int32 de = 4;
+        repeated Pai pais = 5;
+        optional int32 new_pai = 6;
+}
+
+message C2S_RoomReady {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_READY];
+}
+
+message S2C_RoomReady {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_READY];
+}
+
+message S2C_RoomTurnNotify {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_TURN_NOTIFY];
+        optional int32 pai = 2;
+        optional int32 actions = 3; //0 none, 1 chi, 2 peng, 4 gang, 8 hu
+        optional int32 cd_time = 4;
+        optional int32 extra_pai = 5;
+        optional int32 max_hu = 6;
+}
+
+message S2C_RoomTurnBroad {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_TURN_BROAD];
+        optional int32 pos = 2;
+        optional int32 cd_time = 3;
+        optional int32 or_actions = 4;
+}
+
+message C2S_RoomChooseAction {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_CHOOSE_ACTION];
+        optional int32 action = 2;
+        repeated int32 pais = 3;
+}
+
+message C2S_RoomLoadSideInfo {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_LOAD_SIDE_INFO];
+}
+
+message S2C_RoomLoadSideInfo {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_LOAD_SIDE_INFO];
+        message Pai {
+                optional int32 id = 1;
+                optional int32 num = 2;
+        }
+        message Group {
+                repeated int32 pais = 1;
+                optional int32 extra = 2;
+                optional int32 from_side = 3;
+        }
+        message OtherSide {
+                optional int32 pos = 1;
+                optional int32 left_num = 2;
+                repeated Group groups = 3;
+                repeated int32 logs = 4;
+        }
+        repeated Pai pais = 2;
+        repeated int32 logs = 3;
+        repeated Group groups = 4;
+        optional int32 cur_action_side = 5;
+        optional int32 cur_action = 6;
+        optional int32 extra_pai = 7;
+        optional int32 action_cd = 8;
+        optional int32 master_side = 9;
+        repeated OtherSide other_sides = 10;
+        repeated int32 random_values = 11;
+        optional int32 left_num = 12;
+        optional int32 de = 13;
+        optional int32 new_pai = 14;
+}
+
+message S2C_RoomBroadPaiNum {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_BROAD_PAI_NUM];
+        optional int32 num = 2;
+        optional int32 tail_num = 3;
+}
+
+message S2C_RoomBroadPaiPlay {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_BROAD_PAI_PLAY];
+        optional int32 from_side = 2;
+        optional int32 pai = 3;
+}
+
+message S2C_RoomBroadAction {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_BROAD_ACTION];
+        optional int32 action_type = 2;
+        optional int32 side = 3;
+        optional int32 from_side = 4;
+        repeated int32 pais = 5;
+        optional int32 extra = 6;
+}
+
+message S2C_RoomAddPaiLog {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_ADD_PAI_LOG];
+        optional int32 side = 2;
+        optional int32 pai = 3;
+}
+
+message S2C_RoomSidePaiNum {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_SIDE_PAI_NUM];
+        optional int32 side = 2;
+        optional int32 pai_num = 3;
+}
+
+message S2C_RoomHuNotify {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_HU_NOTIFY];
+        message Group {
+                repeated int32 pais = 1;
+                optional int32 from_side = 2;
+        }
+        message Side {
+                optional int32 side = 1;
+                optional int32 hu_val = 2;
+                optional int32 score = 3;
+                repeated Group groups = 4;
+                repeated Group open_groups = 5;
+                optional int32 money = 6;
+        }
+        optional int32 is_by_self = 2;
+        optional int32 is_nested = 3;
+        optional int32 is_pengpeng = 4;
+        optional int32 tai_num = 5;
+        optional int32 pai_type = 6; //0 noe, 1 pure, 2 mixed
+        optional int32 hu_side = 7;
+        optional int32 hu_pai = 8;
+        repeated Side sides = 9;
+        optional int32 take_all_side = 10;
+        optional int32 from_side = 11;
+}
+
+message S2C_RoomActionNotify {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_ACTION_NOTIFY];
+        optional int32 actions = 2;
+        optional int32 extra_pai = 3;
+        optional int32 max_hu = 4;
+}
+
+message C2S_RoomReadyReplay {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_READY_FOR_REPLAY];
+}
+
+message S2C_RoomReadyReplay {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_READY_FOR_REPLAY];
+        message Item {
+                optional int32 side = 1;
+                optional int32 ready = 2;
+        }
+        repeated Item items = 2;
+}
+
+message S2C_RoomUpdateRound {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_UPDATE_ROUND];
+        optional int32 round = 2;
+}
+
+message S2C_RoomFinished {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_FINISHED];
+        message Side {
+                optional int32 pos = 1;
+                optional int32 dian_pao_num = 2;
+                optional int32 normal_hu_num = 3;
+                optional int32 by_self_num = 4;
+                optional int32 pure_hu_num = 5;
+                optional int32 mixed_hu_num = 6;
+                optional int32 pair_hu_num = 7;
+                optional int32 nested_hu_num = 8;
+                optional int32 total_score = 9;
+                optional int32 winner = 10;
+                optional int32 bunko_score = 11;
+        }
+        repeated Side sides = 2;
+}
+
+message C2S_RoomDoAction {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_DO_ACTION];
+        optional int32 action = 2;
+        optional int32 num = 3;
+        optional int32 to_side = 4;
+}
+
+message S2C_RoomDoAction {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DO_ACTION];
+        optional int32 ret = 2;
+}
+
+message S2C_RoomDoActionNotify {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DO_ACTION_NOTIFY];
+        optional int32 action = 2;
+        optional int32 num = 3;
+        optional int32 from_side = 4;
+        optional int32 to_side = 5;
+}
+
+message C2S_RoomRequestQuitNow {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_REQUEST_QUIT_NOW];
+}
+
+message S2C_RoomRequestQuitNow {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_REQUEST_QUIT_NOW];
+}
+
+message S2C_RoomQuitNowNotify {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_QUIT_NOW_NOTIFY];
+        optional int64 id = 2;
+        optional int32 side = 3;
+}
+
+message C2S_RoomResponseQuitNow {
+        optional ProtocolType type = 1 [default = C_2_C_ROOM_RESPONSE_QUIT_NOW];
+        optional int32 is_accepted = 2; //0 reject, 1 accept
+}
+
+message S2C_RoomResponseQuitNow {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_RESPONSE_QUIT_NOW];
+        optional int64 id = 2;
+        optional int32 side = 3;
+        optional int32 is_accepted = 4;
+}
+
+message C2S_RoomPlayerQuit {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_PLAYER_QUIT];
+}
+
+message S2C_RoomPlayerQuit {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAYER_QUIT];
+        optional int64 id = 2;
+        optional int32 side = 3;
+        optional int32 ret = 4;
+}
+
+message C2S_RoomPlayerMoney {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_PLAYER_MONEY];
+}
+
+message S2C_RoomPlayerMoney {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAYER_MONEY];
+
+        message SideInfo {
+            optional int64 id = 1;
+            optional int32 pos = 2;
+            optional int32 money = 3;
+        }
+
+        repeated SideInfo side_info = 2;
+}
+
+message C2S_RoomPlayerOnHold {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_PLAYER_ON_HOLD];
+}
+
+message S2C_RoomPlayerOnHold {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAYER_ON_HOLD];
+        optional int32 ret = 2;
+        optional int64 id = 3;
+}
+
+message C2S_RoomPlayerOffHold {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_PLAYER_OFF_HOLD];
+}
+
+message S2C_RoomPlayerOffHold {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAYER_OFF_HOLD];
+        optional int32 ret = 2;
+        optional int64 id = 3;
+
+}
+
+message S2C_RoomDraw {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DRAW];
+}
+
+message S2C_RoomFinishTipInfo {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_FINISH_TIP_INFO];
+
+        message HuInfo {
+            optional int32 type = 1;
+            optional int32 num = 2;
+        }
+
+        message TaiInfo {
+            optional int32 type = 1;
+            optional int32 num = 2;
+        }
+
+        message SideInfo {
+            optional int32 pos = 1;
+            repeated HuInfo hu_info = 2;
+            repeated TaiInfo tai_info = 3;
+        }
+
+        repeated SideInfo side_info = 2;
+}
+
+message C2S_RoomCheckDistance {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_CHECK_DISTANCE];
+}
+
+message S2C_RoomCheckDistance {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_CHECK_DISTANCE];
+        optional int32 ret = 2;
+}
+
+message C2S_RoomDealDanger {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_DEAL_DANGER];
+        optional int32 ignore = 2;
+}
+
+message S2C_RoomDealDanger {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DEAL_DANGER];
+
+        message DealInfo {
+            optional int32 pos = 1;
+            optional int32 ignore = 2;
+        }
+
+        repeated DealInfo deal_infos = 2;
+}
+
+message C2S_RoomSearchNearRoom {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_SEARCH_NEAR_ROOM];
+}
+
+message S2C_RoomSearchNearRoom {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_SEARCH_NEAR_ROOM];
+
+        message RoomInfo {
+            optional int64 room_id = 1;
+            optional int32 private_room_type = 2;
+            optional int32 max_round = 3;
+            optional int32 max_side = 4;
+            optional string owner_name = 5;
+            optional int32 charge_room_type = 6;
+            optional int32 use_mammon = 7;
+            optional int32 restore_mammon = 8;
+            repeated string pic_urls = 9;
+        }
+
+        repeated RoomInfo room_infos = 2;
+}
+
+message S2C_RoomForceReadyTime {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_FORCE_READY_TIME];
+        optional int32 time = 2;
+}
+
+message C2S_RoomAddressInfo {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_ADDRESS_INFO];
+        optional int64 id = 2;
+}
+
+message S2C_RoomAddressInfo {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_ADDRESS_INFO];
+
+        message RoleInfo {
+            optional int64 id = 1;
+            optional float distance = 2;
+            optional string address = 3;
+        }
+
+        message InteractInfo {
+            optional int64 id = 1;
+            optional string address = 2;
+            repeated RoleInfo infos = 3;
+        }
+
+        repeated InteractInfo infos = 2;
+}
+
+message S2C_RoomDropRedbagRain {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DROP_REDBAG_RAIN];
+
+        message Redbag {
+            optional int64 id = 1;
+            optional float num = 2;
+        }
+
+        repeated Redbag redbags = 2;
+}
+
+message C2S_RoomDrawRedbagRain {
+        optional ProtocolType type = 1 [default = C_2_S_ROOM_DRAW_REDBAG_RAIN];
+        optional int64 id = 2;
+}
+
+message S2C_RoomDrawRedbagRain {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_DRAW_REDBAG_RAIN];
+        optional int32 ret = 2;
+        optional float num = 3;
+}
+
+message S2C_RoomForbiddenAction {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_FORBIDDEN_ACTION];
+}
+
+message S2C_RoomPlaySound {
+        optional ProtocolType type = 1 [default = S_2_C_ROOM_PLAY_SOUND];
+        optional int32 play = 2;
+}

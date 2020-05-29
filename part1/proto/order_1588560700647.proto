@@ -1,0 +1,183 @@
+/*
+ * Copyright © 2019 Mustapha Cherri
+ *
+ * This file is part of erp-akka-cqrs-es.
+ *
+ * erp-akka-cqrs-es is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * erp-akka-cqrs-es is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with erp-akka-cqrs-es.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+package mcherri.erp.akka.cqrs.es.model.protobuf;
+
+import "scalapb/scalapb.proto";
+import "common.proto";
+import "person.proto";
+
+option (scalapb.options) = {
+    single_file: true
+    import: "mcherri.erp.akka.cqrs.es.model.protobuf.common.Command"
+    import: "mcherri.erp.akka.cqrs.es.model.protobuf.common.DomainEvent"
+    import: "mcherri.erp.akka.cqrs.es.model.protobuf.common.State"
+    import: "mcherri.erp.akka.cqrs.es.model.protobuf.error.Error"
+    preamble: "sealed trait OrderCommand extends Command"
+    preamble: "sealed trait OrderDomainEvent extends DomainEvent"
+    preamble: "sealed trait OrderState extends State"
+    preamble: "sealed trait OrderError extends Error"
+};
+
+message LineItem {
+    string item_id = 1;
+    string code = 2;
+    Money price = 3;
+    string quantity = 4;
+}
+
+// OrderCommand
+message CreateOrder {
+    option (scalapb.message).extends = "OrderCommand";
+
+    Client client = 2 [(scalapb.field).no_box = true];
+}
+
+message AddItems {
+    option (scalapb.message).extends = "OrderCommand";
+
+    string id = 1;
+    repeated LineItem line_items = 2 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message DeleteItems {
+    option (scalapb.message).extends = "OrderCommand";
+
+    string id = 1;
+    repeated string item_ids = 2 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message CancelOrder {
+    option (scalapb.message).extends = "OrderCommand";
+
+    string id = 1;
+}
+
+message IssueOrder {
+    option (scalapb.message).extends = "OrderCommand";
+
+    string id = 1;
+}
+
+// OrderDomainEvent
+message OrderCreated {
+    option (scalapb.message).extends = "OrderDomainEvent";
+
+    string id = 1;
+    Client client = 2 [(scalapb.field).no_box = true];
+}
+
+message ItemsAdded {
+    option (scalapb.message).extends = "OrderDomainEvent";
+
+    string id = 1;
+    repeated LineItem line_items = 2 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message ItemsDeleted {
+    option (scalapb.message).extends = "OrderDomainEvent";
+
+    string id = 1;
+    repeated string item_ids = 2 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message OrderCanceled {
+    option (scalapb.message).extends = "OrderDomainEvent";
+
+    string id = 1;
+}
+
+message OrderIssued {
+    option (scalapb.message).extends = "OrderDomainEvent";
+
+    string id = 1;
+}
+
+// OrderState
+message UninitializedOrder {
+    option (scalapb.message).extends = "OrderState";
+}
+
+message EmptyOrder {
+    option (scalapb.message).extends = "OrderState";
+
+    string id = 1;
+    Client client = 2 [(scalapb.field).no_box = true];
+}
+
+message DraftOrder {
+    option (scalapb.message).extends = "OrderState";
+
+    string id = 1;
+    Client client = 2 [(scalapb.field).no_box = true];
+    repeated LineItem line_items = 3 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message CanceledOrder {
+    option (scalapb.message).extends = "OrderState";
+
+    string id = 1;
+}
+
+message IssuedOrder {
+    option (scalapb.message).extends = "OrderState";
+
+    string id = 1;
+}
+
+message CanceledIssuedOrder {
+    option (scalapb.message).extends = "OrderState";
+
+    string id = 1;
+}
+
+// OrderError
+message ItemIdsNotFoundError {
+    option (scalapb.message).extends = "Error";
+
+    string id = 1;
+    repeated string item_ids = 2 [(scalapb.field).collection_type = "scala.collection.immutable.Seq"];
+}
+
+message AlreadyCanceledError {
+    option (scalapb.message).extends = "Error";
+
+    string id = 1;
+}
+
+message AlreadyIssuedError {
+    option (scalapb.message).extends = "Error";
+
+    string id = 1;
+}
+
+message EmptyOrderError {
+    option (scalapb.message).extends = "Error";
+
+    string id = 1;
+}
+
+message UninitializedOrderError {
+    option (scalapb.message).extends = "Error";
+}
+
+message AlreadyInitializedError {
+    option (scalapb.message).extends = "Error";
+}

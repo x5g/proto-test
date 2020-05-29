@@ -1,0 +1,130 @@
+syntax = "proto3";
+package corepb;
+option java_package="org.medibloc.panacea.core.protobuf";
+option java_outer_classname="BlockChain";
+
+message BlockHeader {
+  bytes hash  = 1;
+  bytes parent_hash = 2;
+  bytes coinbase = 3;
+  bytes reward = 4;
+  bytes supply = 5;
+  int64 timestamp = 6;
+  uint32 chain_id = 7;
+  bytes sign = 12;
+  bytes acc_state_root = 21;
+  bytes tx_state_root = 22;
+  bytes dpos_root = 23;
+  bytes cpu_price = 30;
+  uint64 cpu_usage = 31;
+  bytes net_price = 32;
+  uint64 net_usage = 33;
+}
+
+message Block {
+  BlockHeader header = 1;
+  repeated Transaction transactions = 2;
+  uint64 height = 3;
+}
+
+message DownloadParentBlock {
+  bytes hash = 1;
+  bytes sign = 2;
+}
+
+message BlockHashTarget {
+  bytes parent_hash = 2;
+  bytes coinbase = 3;
+  bytes reward = 4;
+  bytes supply = 5;
+  int64 timestamp = 6;
+  uint32 chain_id = 7;
+  bytes acc_state_root = 21;
+  bytes tx_state_root = 22;
+  bytes dpos_root = 23;
+  bytes cpu_price = 30;
+  uint64 cpu_usage = 31;
+  bytes net_price = 32;
+  uint64 net_usage = 33;
+  repeated bytes tx_hash = 40;
+}
+
+message Transaction {
+  bytes hash = 1;
+  string tx_type = 2;
+  bytes to = 3;
+  bytes value = 4;
+  uint64 nonce = 5;
+  uint32 chain_id = 6;
+
+  bytes payload = 10;
+
+  bytes sign = 22;
+  bytes payerSign = 23;
+
+  Receipt receipt = 30;
+}
+
+message Receipt {
+  bool executed = 1;
+  int64 timestamp = 2;
+  uint64 height = 3;
+  uint64 cpu_usage = 11;
+  uint64 net_usage = 12;
+  bytes points = 13;
+  bytes error = 21;
+}
+
+message TransactionHashTarget {
+  string tx_type = 1;
+  bytes from = 2;
+  bytes to = 3;
+  bytes value = 4;
+  uint64 nonce = 5;
+  uint32 chain_id = 6;
+
+  bytes payload = 10;
+}
+
+message TransactionPayerSignTarget {
+  bytes hash = 1;
+  bytes sign = 2;
+}
+
+message DefaultPayload {
+  string message = 1;
+}
+
+message AddCertificationPayload {
+  int64 issue_time = 1;
+  int64 expiration_time = 2;
+  bytes hash = 3;
+}
+
+message RevokeCertificationPayload {
+  bytes hash = 1;
+}
+
+message AddRecordPayload {
+  bytes hash = 1;
+}
+
+message RegisterAliasPayload {
+  string alias_name = 1;
+}
+
+
+message Genesis {
+  // genesis meta
+  GenesisMeta meta = 1;
+
+  // genesis transactions
+  repeated Transaction transactions = 2;
+}
+
+message GenesisMeta {
+  // ChainID.
+  uint32 chain_id = 1;
+  // Dynasty size.
+  uint32 dynasty_size = 2;
+}

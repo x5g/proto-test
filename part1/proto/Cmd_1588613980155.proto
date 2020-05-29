@@ -1,0 +1,20 @@
+package com.gzyouai.mango.engine.cmd;
+
+//客户端发给服务端的命令数据
+message C2SData {
+	required sint32 pid = 1; //玩家id
+	required sint32 nid = 2; //netid
+	required sint32 messageId = 3;//命令ID
+	required sint32 clientIndex = 4; //客户端请求索引
+    optional bytes data = 5;//命令主数据
+}
+
+//服务端发给客户端的命令数据
+message S2CData {
+    required sint32 pid = 1;//玩家id
+	required sint32 nid = 2;//netid
+	required sint32 messageId = 3;//命令ID
+	required sint32 clientIndex = 4; //客户端请求索引
+    optional bytes data = 5;//命令主数据
+	required int32 result = 6;//服务端是否处理成功
+}

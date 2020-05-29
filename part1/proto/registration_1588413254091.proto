@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.prod.app.protobuff;
+
+import "worker.proto";
+import "consumer.proto";
+import "responsestatusenum.proto";
+import "login.proto";
+
+message RegistrationRequestPb {
+    WorkerPb worker = 1;
+    ConsumerPb comsumer = 2;
+    string password = 3;
+    string pushNotificationToken =4;
+}
+
+message RegistrationResponsePb {
+    WorkerPb worker = 1;
+    ConsumerPb consumer = 2;
+    LoginPb login = 3;
+    ResponseTypePb status = 4;
+}
+

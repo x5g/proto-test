@@ -1,0 +1,66 @@
+
+
+package protos;
+
+import "PB_game_config.proto";
+import "PB_error_code.proto";
+
+// 游戏场景恢复通知
+message PB_RecoverGameNotify
+{
+	optional int32 				serverid 	= 1;	// 所在serverid
+	optional PB_GameType 		gametype 	= 2;	// 所在的游戏类型
+	optional PB_LevelType 		leveltype 	= 3;	// 所在场次类型
+	optional int32 				tableid 	= 4;	// 所在的tableid
+}
+
+// 进入游戏请求
+message PB_JoinGame
+{
+	required PB_GameType gametype = 1;
+}
+
+message RoomInfo 
+{
+	optional PB_LevelType 		level 		= 1;	// 不同类型的游戏场
+	optional int32 				playernum 	= 2;	// 当前在线人数
+	optional int32				min_gold    = 3;	// 金币上限
+	optional int32				max_gold    = 4;	// 金币下限
+	optional int32				dizhu 		= 5;	// 底注
+}
+
+message PB_JoinGameReturn
+{
+	required PB_ErrorCode 		code 		= 1;
+	repeated RoomInfo 			infos 		= 2;	// 房间信息
+	optional int32 				serverid 	= 3;	// 所在serverid
+	optional PB_GameType 		gametype 	= 4;	// 所在的游戏类型
+	optional PB_LevelType 		leveltype 	= 5;	// 所在场次类型
+	optional int32 				tableid 	= 6;	// 所在的tableid
+}
+
+// 进入房间请求
+message PB_JoinRoom
+{
+	required PB_GameType 		gametype 	= 1;	// 游戏类型
+	required PB_LevelType 		leveltype 	= 2;	// 场次类型
+	optional bool 				is_zhuizong = 3;	// 是否是追踪方式
+}
+
+message PB_JoinRoomReturn
+{
+	required PB_ErrorCode 		code 		= 1;
+	optional int32 				serverid 	= 2;	// 服务器id
+}
+
+// 快速开始
+message PB_QuickJoin
+{
+	required PB_GameType        gametype	= 1;
+}
+
+message PB_QuickJoinReturn
+{
+	required PB_ErrorCode 		code 		= 1;
+	optional int32 				serverid 	= 2;	// 服务器id
+}

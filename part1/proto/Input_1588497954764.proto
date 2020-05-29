@@ -1,0 +1,300 @@
+package hello;
+
+import "matrix.proto";
+option java_package = "com.hello.suripu.api.input";
+option java_outer_classname = "InputProtos";
+// option optimize_for = SPEED;
+
+
+message SensorSampleBatch {
+    message  SensorSample {
+        enum SensorType {
+            AMBIENT_TEMPERATURE = 0;
+            AMBIENT_HUMIDITY = 1;
+            AMBIENT_LIGHT = 2;
+            AMBIENT_DECIBELS = 3;
+            AMBIENT_AIR_QUALITY = 4;
+            GPS = 5;
+            PHONE_ACCELERATION = 6;
+            PHONE_STEP_COUNT = 7;
+        }
+
+        optional SensorType sensor_type = 1;
+        optional int32 timestamp = 2;
+        optional bytes value = 3;
+
+    }
+
+    repeated SensorSample samples = 1;
+    optional string device_id = 2;
+}
+
+message MotionSensorBatch {
+
+    enum Manufacturer {
+        HELLO = 0;
+    }
+
+    message MotionSensor {
+        optional int64 timestamp = 1;
+        optional int32 value = 2;
+    }
+
+    optional Manufacturer manufacturer = 1;
+    repeated MotionSensor samples = 2;
+}
+
+message TrackerDataBatch {
+
+    message  TrackerData {
+        optional string tracker_id = 1;  // Do you think this is a good idea?
+        optional int64 timestamp = 2;
+        optional int32 offset_millis = 3;
+        optional int32 svm_no_gravity = 4;
+
+    }
+
+    repeated TrackerData samples = 1;
+
+}
+
+
+message SimpleSensorBatch {
+    message GpsInfo {
+        optional float latitude = 1;
+        optional float longitude = 2;
+        optional float accuracy = 3;
+        optional float speed = 4;
+        optional string provider = 5;
+    }
+
+    message SimpleSensorSample {
+        optional int64 timestamp = 1;
+        optional float ambient_temperature = 2; // deprecated
+        optional float ambient_humidity = 3; // deprecated
+        optional float ambient_light = 4; // deprecated
+        optional float ambient_decibels = 5;
+        optional float ambient_air_quality = 6; // deprecated
+        optional bytes device_data = 7;   //
+        optional bytes device_data_signature = 8;
+        optional float sound_amplitude = 9;
+
+        optional GpsInfo gps = 10;
+        optional int32 offset_millis = 11;
+    }
+
+    optional string device_id = 1;
+    repeated SimpleSensorSample samples = 2;
+
+}
+
+
+message ActivationRequest {
+    optional string device_id = 1;
+    optional string account_id = 2;
+    optional int64 timestamp = 3;
+    optional string firmware_version = 4;
+    optional bytes signature = 5;
+}
+
+
+message ActivationResponse {
+    optional bool success = 1;
+    // TODO: do we need retry / rate-limiting exposed here?
+    // TODO: do we need another proof?
+}
+
+message SyncRequest {
+    optional string device_id = 1; // deprecated
+    optional string firmware_version = 2;
+    optional bytes signature = 3;
+    optional string something = 4;
+}
+
+
+message SyncResponse {
+
+	message FileDownload {
+		optional string host =1;
+		optional string url =2;
+		optional bool copy_to_serial_flash =4;
+		optional bool reset_network_processor =5;
+		optional bool reset_application_processor =6;
+		optional string serial_flash_filename =7;
+		optional string serial_flash_path =8;
+		optional string sd_card_filename =3;
+		optional string sd_card_path =9;
+		optional bytes sha1 = 10;
+	}
+
+    message Alarm {
+        optional uint32 start_time = 1;  // obselete,  use ring_offset_from_now
+        optional uint32 end_time = 2;  // obselete, use ring_offset_from_now + ring_duration
+        optional int32 ringtone_id = 3 [default = 1];
+        optional int32 ring_offset_from_now_in_second = 4;  // This is a more fault tolerance design
+        optional int32 ring_duration_in_second = 5;
+    }
+
+    message PairingAction {
+        enum ActionType {
+            PAIR = 0;
+            UNPAIR = 1;
+        }
+
+        optional string ssid = 1;
+        optional ActionType type = 2;
+    }
+
+
+    message WhiteNoise {
+        optional int32 start_time = 1;
+        optional int32 end_time = 2;
+        optional int32 sound_id = 3;
+    }
+
+    message FlashAction {
+        optional int32 red =1;
+		optional int32 green =2;
+		optional int32 blue =3;
+
+		optional int32 delay_milliseconds = 4;
+		optional bool fade_in = 5;
+		optional bool fade_out = 6;
+		optional bool rotate = 7;
+		optional int32 alpha = 8;
+    }
+
+    enum RoomConditions {
+        IDEAL = 1;
+        WARNING = 2;
+        ALERT = 3;
+    }
+
+   message AudioControl {
+         //turn on/off audio capture
+         enum AudioCaptureAction {
+             OFF = 0;
+             ON = 1;
+         }
+
+        //minimum log2 audio energy above background noise to save off and classify.
+        //500 is a good value for this.  Raise to 1000 to be less sensitive.
+        optional int32 audio_min_energy_threshold = 1;
+
+        //feature vectors come in every 32ms  ( 256 / 16000Hz * 2, where the "2" is for the average 2, decimate)
+        //so every 1875 feat vecs is a minute.
+        optional int32 audio_num_feat_vecs_until_attempt_feature_upload = 2;
+
+        //buffer size in bytes of audio features.  Note every ~330 bytes is 32 feat vecs, ergo 1 minute is about 20K
+        //the buffer should be sized for your upload period
+        optional int32 audio_feat_buffer_size = 3;
+
+        //frames are 16ms long (256/16000).  When you detect snoring (or whatever), this is how many frames of data you want to record
+        optional int32 audio_recording_period_in_frames = 4;
+
+        //Matrix == 2D array of integers with some describing strings
+        //audio classifier and HMM determines when you should record to sd card
+        //You can think of the classifier as a high level feature extraction
+        //The HMM evaluation "fuses" the high level classification together
+        optional Matrix audio_recording_classifier = 5;
+        optional Matrix audio_recording_hmm = 6;
+
+        optional AudioCaptureAction audio_capture_action = 8;
+    }
+
+    // TODO: failure cases (timeout, exponential backoff, etc.)
+
+    optional int32 upload_cycle = 1;
+    optional int32 sync_cycle = 2;
+    optional int32 acc_scan_cyle = 3;
+    optional int32 acc_sampling_interval = 4;
+    optional int32 device_sampling_interval = 5;
+    optional Alarm alarm = 6;
+    optional PairingAction pairing_action = 7;
+    optional WhiteNoise white_noise = 8;
+    optional FlashAction flash_action = 9;
+    optional bool reset_device = 10;
+    optional RoomConditions room_conditions = 12;
+	repeated FileDownload files = 13;
+	optional bool reset_to_factory_fw = 14;
+    optional AudioControl audio_control = 15;
+
+    // TODO: settings for snoring detection
+    // TODO: settings for firmware update
+}
+
+// TODO:
+message PillData {
+    optional string pill_id = 1;
+    optional string account_id = 2;
+    optional bytes  data = 3;
+}
+
+// pill data msg in Kinesis
+message PillDataKinesis {
+    optional string pill_id = 1;
+    optional string account_id = 2;
+
+    optional int64 timestamp = 3;
+    optional int64 value = 4;   // data in milli-g
+    optional int32 offsetMillis = 5;
+    optional bytes encryptedData = 6;
+    optional int32 batteryLevel = 7;
+    optional int32 firmwareVersion = 8;
+    optional int64 pillIdLong = 9;
+    optional int64 accountIdLong = 10;
+    optional int32 upTime = 11;
+}
+
+message PillBlobHeader {
+    optional string first_sequence_number = 1;
+    optional string last_sequence_number = 2;
+    optional string first_sample_date = 3;
+    optional string last_sample_date = 4;
+    optional bytes compressed_bitmap_account_ids = 5;
+    optional string data_file_name = 6;
+    optional int32 num_items = 7;
+}
+
+
+message PillBlob {
+    repeated PillData items = 1;
+}
+
+message EventBatch{
+    message EventItem {
+        optional int64 start_timestamp = 1;
+        optional int64 end_timestamp = 2;
+        optional int32 offsetMillis = 3;
+    }
+
+    repeated EventItem events = 1;
+}
+
+
+
+message periodic_data {
+    optional int32 unix_time=1;
+    optional int32 light=2;
+    optional int32 temperature=3;
+    optional int32 humidity=4;
+    optional int32 dust=5;
+    optional string name=6;
+    optional bytes mac=7;
+    optional int32 light_variability=8;
+    optional int32 light_tonality=9;
+    optional int32 firmware_version=10;
+    // Please DONOT reuse index 11, is for pilldata previously
+    optional string device_id = 12;
+    optional int32 dust_variability=13;
+    optional int32 dust_max=14;
+    optional int32 dust_min=15;
+}
+
+
+
+message SenseLog {
+    optional int32 unix_time = 1;
+    optional string device_id = 2;
+    optional string text = 3;
+}

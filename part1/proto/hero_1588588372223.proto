@@ -1,0 +1,152 @@
+package Sanguo.protocol.hero;
+
+message Hero {
+    required int32 id = 1;
+    required int32 original_id = 2;
+
+    required int32 attack = 3;
+    required int32 defense = 4;
+    required int32 hp = 5;
+
+    required int32 cirt = 6;
+
+    required int32 step = 7;    // 阶
+    required int32 power = 8;
+
+    required int32 max_socket_amount = 9;  // 当前全部
+    required int32 current_socket_amount = 10; // 已经点亮
+}
+
+
+message HeroSoul {
+    required int32 id = 1;
+    required int32 amount = 2;
+}
+
+message HeroSoulNotify {
+    required bytes session = 1;
+    repeated HeroSoul herosouls = 2;
+}
+
+message AddHeroSoulNotify {
+    required bytes session = 1;
+    repeated HeroSoul herosouls = 2;
+}
+
+
+message UpdateHeroSoulNotify {
+    required bytes session = 1;
+    repeated HeroSoul herosouls = 2;
+}
+
+message RemoveHeroSoulNotify {
+    required bytes session = 1;
+    repeated int32 ids = 2;
+}
+
+
+
+
+message HeroNotify {
+    required bytes session = 1;
+    repeated Hero heros = 2;   
+}
+
+message AddHeroNotify {
+    required bytes session = 1;
+    repeated Hero heros = 2;   
+}
+
+message RemoveHeroNotify {
+    required bytes session = 1;
+    repeated int32 ids = 2;
+}
+
+message UpdateHeroNotify {
+    required bytes session = 1;
+    repeated Hero heros = 2;   
+}
+
+
+message GetHeroPanelNotify {
+    message PanelSocket {
+        required int32 id = 1;      // 插槽ID
+        required int32 hero_id = 2; // 武将ID
+        required bool opened = 3;   // 是否开启
+    }
+    required bytes session = 1;
+    required int32 refresh_seconds = 2;     // 还有多少秒后免费刷新
+    required int32 free_times = 3;          // 翻牌免费次数
+    required int32 open_sycee = 4;          // 元宝翻牌花费
+    required int32 refresh_sycee = 5;       // 刷新花费
+    repeated PanelSocket sockets = 6;
+}
+
+
+message GetHeroRequest {
+    required bytes session = 1;
+    required int32 id = 2;       // 插槽ID
+}
+
+
+message GetHeroResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 id = 3;
+    optional int32 hero_oid = 4;
+}
+
+
+message GetHeroRefreshRequest {
+    required bytes session = 1;
+}
+
+message GetHeroRefreshResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message HeroStepUpRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message HeroStepUpResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+
+    optional int32 id = 3;
+    optional int32 step = 4;    // 阶
+    optional int32 max_socket_amount = 5;  // 当前全部
+    optional int32 current_socket_amount = 6; // 已经点亮
+}
+
+message MergeHeroRequest {
+    required bytes session = 1;
+    repeated int32 using_hero_ids = 2;       // 选择的卡牌ID
+}
+
+message MergeHeroResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+message HeroToSoulNotify {
+    required bytes session = 1;
+    required int32 hero_id = 2;
+    required int32 soul_amount = 3;
+}
+
+
+message HeroRecruitRequest {
+    required bytes session = 1;
+    required int32 id = 2;      // 要招募的武将ID
+}
+
+message HeroRecruitResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+

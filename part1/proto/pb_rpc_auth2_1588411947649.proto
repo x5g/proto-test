@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_enum.proto";
+
+
+message PB_UserParam_CheckUserName2 {
+    
+}
+
+message PB_UserResponse_CheckUserName2 {
+
+}
+
+
+service RPC_Auth {
+    rpc CheckPhone (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc SendCode (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc SendCodeToSms (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc SendCodeToTelgram (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc SingUp (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc SingIn (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+    rpc LogOut (PB_UserParam_CheckUserName2) returns (PB_UserResponse_CheckUserName2);
+}
+

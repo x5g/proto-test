@@ -1,0 +1,364 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+package Panama.Grpc;
+
+option go_package = "ctp";
+
+service TradeService {	 
+
+	/**
+	 * 添加一个交易品种 
+	 * @param {Symbol} request 品种信息
+	 * @return {Result} 处理结果
+	 */
+    rpc AddSymbol(Symbol) returns(Result){}
+
+	/**
+	 * 添加一个主张号
+	 * @param {Investor} request 参数描述
+	 * @return {Result} 处理结果
+	 */
+    rpc AddInvestor(Investor) returns(Result){}
+
+	/**
+	* 获取品种列表
+	 * @return {Result} 查询结果
+	*/ 
+    rpc GetSymbols(google.protobuf.Empty) returns(Result){}
+
+	/**
+	* 获取品种列表
+	 * @return {Result} 查询结果
+	*/ 
+    rpc GetInvestors(google.protobuf.Empty) returns(Result){}
+	
+
+
+	/**
+	 * 发起一个订单委托请求
+	 * @param {OrderRequest} request 参数描述
+	 * @return {Result} 处理结果
+	 */
+    rpc PlaceOrder(OrderRequest) returns (Result) {}//CTP 通过SubExecutionReport返回OrdStatus=NEW/Rejected/filled/partially_filled
+    
+	/**
+	 * 撤单
+	 * @param {Order} request 参数描述
+	 * @return {Result} 处理结果
+	 */
+	rpc CancelOrder(OrderRequest) returns (Result){}//CTP 通过SubExecutionReport返回OrdStatus=CANCELLED/Rejeted
+	
+	/**
+	 * 订阅订单通知
+	 * @param {SubOrderRequest} request 参数描述
+	 * @return {ExecutionReport} 订单响应
+	 */
+	rpc SubExecutionReport(SubOrderRequest) returns (stream ExecutionReport) {}
+	
+	/**
+	 * 查询委托订单列表
+	 * @param {Order} request 查询参数
+	 * @return {Orders} 委托订单列表
+	 */
+    rpc GetOrders(OrderQueryRequest) returns(ExecutionReportsResult){}
+
+	/**
+	 * 查询持仓订单列表
+	 * @param {Order} request 查询参数
+	 * @return {Orders} 委托订单列表
+	 */
+    rpc GetOpenOrders(OrderQueryRequest) returns(OpenOrdersResult){}     
+	
+	/**
+	* 获取成交单列表
+	 * @param {OrderQueryRequest} request 查询参数
+	 * @return {ExecutionReportsResult} 查询结果
+	*/
+    rpc GetExecutionReports(OrderQueryRequest) returns(ExecutionReportsResult){}    
+
+	/**
+	* 查询账户资金
+	 * @param {AccountQueryRequest} request 查询参数
+	 * @return {AccountBalance} 查询结果
+	*/
+    rpc GetAccountBalance(AccountQueryRequest) returns(AccountBalance){}
+
+	
+	/**
+	* 查询投资人信息
+	 * @param {Investor} request 查询参数
+	 * @return {Result} 查询结果
+	*/
+    rpc GetInvestor(Investor) returns(Result){}
+
+	/**
+	* 查询仓位信息
+	 * @param {AccountQueryRequest} request 查询参数
+	 * @return {Result} 查询结果
+	*/
+    rpc GetPostion(AccountQueryRequest) returns(Result){}
+
+	/**
+	* 查询仓位明细
+	 * @param {AccountQueryRequest} request 查询参数
+	 * @return {Result} 查询结果
+	*/
+    rpc GetPostionDetail(AccountQueryRequest) returns(Result){}
+
+	/**
+	* 查询品种手续费费率
+	 * @param {SymbolQueryRequest} request 查询参数
+	 * @return {Result} 查询结果
+	*/
+    rpc GetInstrumentCommissionRate(SymbolQueryRequest) returns(Result){}
+
+	/**
+	* 查询品种保证金费率
+	 * @param {SymbolQueryRequest} request 查询参数
+	 * @return {Result} 查询结果
+	*/
+    rpc QryInstrumentMarginRate(SymbolQueryRequest) returns(Result){}
+ 
+}
+message Result{
+    string Code=1;//代码，0成功，其它失败
+    string Msg=2;//原因
+	google.protobuf.Any Data=3;
+}
+message SubOrderRequest{
+    string InvestorId=1;//投资人帐号
+}
+message SubExecutionReportRequest{
+    string InvestorId=1;//投资人帐号
+}
+
+message SubAccountBalanceRequest{
+    string InvestorId=1;//投资人帐号
+}
+
+message OrderQueryRequest{
+    string InvestorId=1;//投资人帐号
+	string Symbol=2;// 品种
+	string TimeStart=3;//查询开始时间
+	string TimeEnd=4;//查询结束时间
+	string OrderNo=5;//报单编号
+	string ExecuteNo=6;//成交编号
+}
+
+message AccountQueryRequest{
+    string InvestorId=1;//投资人帐号
+}
+
+//品种查询
+message SymbolQueryRequest{
+    string InvestorId=1;//投资人帐号
+    string Symbol=2;//指定品种，默认为空时拉取全部
+}
+
+//投资人帐号
+message Investor {
+    string BrokerId = 1;//经纪公司代码
+	string InvestorId = 2;//投资者代码
+    string Pwd = 3;//投资者密码
+    string Add=4;//前置机
+}
+
+//产品
+message Symbol{
+	string InvestorId=1;//投资者代码
+    string SymbolCode=2;//产品名称/合约代码
+    string SymblName=3;//中文名称
+    int32 Digits=4;//小数位数
+    int32 MaxVolume=5;//最大持仓量
+    string TradingTime=6;//交易时间段
+}
+
+/**
+* 委托订单请求
+*/
+message OrderRequest {
+	string InvestorId=1;//投资者帐号
+    string OrderNo=2;//委托编号    
+    OrderOCFlag OcType=3;//开平仓 
+    OrderType OrderType=4;//订单类型  
+    string Symbol=5;//产品序号    
+    OrderDirection Side=6;//买卖方向   
+    double Volume=7;//委托数量 
+    string Duration=8;//有效时间     
+    double LimitPrice=9;//委托价     
+    double SlPrice=10;//委托价     
+    double TpPrice=11;//委托价     
+    int64 RefOrderId=12;//关联单号   
+    int64 RequestId=13;//请求ID
+	string ExchangeID=14;//交易所ID 在撤单时候使用,上期能源INE
+}
+
+message ExecutionReportsResult {
+	Result Result=1;
+    repeated ExecutionReport Rows=2; 
+}
+
+/**
+* 订单回报
+*/
+message ExecutionReport {
+	string InvestorId=1;//投资者帐号
+    string OrderNo=2;//委托编号    
+    OrderOCFlag OcType=3;//开平仓 
+    OrderType OrderType=4;//订单类型  
+    string Symbol=5;//产品序号    
+    OrderDirection Side=6;//买卖方向   
+    double Volume=7;//数量 
+    string Duration=8;//有效时间     
+    double Price=9;//价格
+    double SlPrice=10;//委托价     
+    double TpPrice=11;//委托价     
+    int64 RefOrderId=12;//关联单号   
+    int64 RequestId=13;//请求ID
+    string OpenTime=14;//下单时间
+    double OpenPrice =15;//建仓价格
+    string ExecuteNo=16;//成交编号 
+    string ExecuteType=17;//成交类型    
+    string ExecuteTime=18;//成交时间
+	double ExecutePrice =19;//成交价格
+	double ExecuteVolume =20;//成交手数
+    double Commission =21;//手续费
+	string FrontID =22;//前置机编号
+	string ExchangeID=23;//交易所编号
+	OrderStatus OrderStatus=24;//订单状态
+	string Message=25;//消息描述
+	OrderResponseType ResponseType=26;//响应类别
+    string Info0=27;//扩展字段    
+    string Info1=28;//扩展字段    
+    string Info2=29;//扩展字段     
+    string Info3=30;//扩展字段 
+
+}
+
+message OrdersResult{
+	Result Result=1;
+    repeated Order Rows=2; 
+}
+message Order{
+    string OrderNo=1;//委托编号    
+    string Account=2;//账户    
+    string OcType=3;//开平仓 
+    string OrderType=4;//订单类型     
+    string TradeDate=5;//场次日期    
+    string PlaceTime=6;//下单时间    
+    string Symbol=7;//产品   
+    string Side=8;//买卖方向    
+    double Volume=9;//委托数量 
+    string Duration=12;//有效时间      
+    double LimitPrice=15;//挂单价   
+    double SlPrice=16;//止损价    
+    double TpPrice=17;//止盈价 
+    string CloseType=19;//操作类型  
+    string CloseBy=20;//操作人员   
+    string Reforderid=21;//被平仓的执行订单编号    
+    string ClientOrderID=22;//客户端订单编号   
+    string CptyAccount=23;//交易对手账户     
+    string TerminalType=24;//终端类型   
+    string Info0=25;//扩展字段    
+    string Info1=26;//扩展字段    
+    string Info2=27;//扩展字段     
+    string Info3=28;//扩展字段 
+    string orderStatus=29;//订单状态
+    string investorID=30;//主帐号
+    string externalID=31;//cpt订单号
+    string msg=32;//失败消息
+    string isDemo=33;//模拟交易
+
+}
+
+message OpenOrdersResult{
+	Result Result=1;
+    repeated OpenOrder Rows=2; 
+}
+
+message OpenOrder{
+    string openOrderNo=1;//报单编号
+    string executionNo=2;
+    string account=3;
+    string tradeDate=4;
+    string openTime=5;
+    string symbol=6;
+    string side=7;
+    double dealtAmount=8;
+    double openAmount=9;
+    double dealtPrice=10;
+    double holdPrice=11;
+    string marginValueType=12;
+    string marginValue=13;
+    double usedMargin=14;
+    string closeIndicator=15;
+    string terminalType=16;
+    string cptyAccount=17;
+    string investorId=18;
+}
+ 
+message AccountBalance {
+	string account=1;//帐号
+    string balance=2;//初始权益
+    string usedMargin=3;//占用保证金
+    string wdBalance=4;//当日出入金
+    string dayRealizedPnl=5;//当日实现盈亏-当日平仓交易
+    string holdRealizedPnl=6;//持仓实现盈亏
+    string dayCommission=7;//当日手续费
+    string freezedMargin=8;//委托订单的冻结保证金
+    string freezedCommission=9;//委托订单的冻结手续费
+}
+
+//订单类别
+enum OrderType {
+	//市价单
+	Market = 0;
+	//限价单
+	Limit = 1;
+}
+
+//订单方向
+enum OrderDirection {
+	//买入
+	Buy = 0;
+	//卖出
+	Sell = 1;
+}
+
+//开平操作标识
+enum OrderOCFlag {
+    // 开仓
+    Open = 0;
+    // 平仓
+    Close = 1;
+    // 强平
+    ForceClose = 2;
+    // 平今
+    CloseToday = 3;
+    // 平昨
+    CloseYesterday = 4;
+    // 强减
+    ForceOff = 5;
+    // 本地强平
+    LocalForceClose = 6;
+}
+
+//订单响应类别
+enum OrderResponseType {
+	NewOrder =0;
+	ExcutionReport=1;
+	CancelOrder = 2;
+}
+
+//订单状态
+enum OrderStatus {
+	New=0;//新建
+	Rejected=1;//拒绝
+	Accepted =2;//已经接受
+	Partially_filled=3;//部分成交
+	Filled=4;//全部成交
+	Cancelled =5;//已撤销
+}

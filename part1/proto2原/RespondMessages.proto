@@ -1,0 +1,40 @@
+
+syntax = "proto2";
+
+package Protocol.Respond;
+
+import "RawData/InternalData.proto";
+import "RawData/WorkTicketInformation.proto";
+
+message Respond_LoginAuth {
+	required string token = 1;
+	required int32 sceneId = 2;
+	required Protocol.RawData.PlayerInfo player = 3;
+	repeated Protocol.RawData.PlayerInfo neighborhood = 4;
+}
+
+
+message Respond_Logout
+{
+	required int32 pid = 1;
+}
+
+message Respond_Moving {
+	repeated Protocol.RawData.RespMovement movementList = 1;
+}
+
+message Respond_PlayerAppeared {
+	repeated Protocol.RawData.PlayerInfo neighborhood = 1;
+}
+
+message Respond_PlayerDisappeared {
+	repeated int32 playerIds = 1;
+}
+
+message Respond_Rotated {
+	repeated Protocol.RawData.RespRotated rotations = 1;
+}
+
+message Respond_WorkSheet {
+	required Protocol.DB.Table.WTI_Class_One data = 1;
+}

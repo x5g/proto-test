@@ -1,0 +1,3476 @@
+syntax = "proto3";
+
+package aladinfun.island.proto;
+
+message EnumItem {
+    string Name = 1;
+    uint32 Value = 2;
+}
+
+message EnumConfig {
+    string EnumTypeName = 1;
+    repeated EnumItem EnumItemAry = 2;
+}
+
+message EnumConfigAry {
+    repeated EnumConfig ary = 1;
+}
+
+// 奖励类型
+enum PriceEnum {
+    // [奖励类型]无
+    PriceDefault = 0;
+
+    // [奖励类型]钻石
+    PriceDiamond = 1;
+}
+
+// 个人类型
+enum PersonEnum {
+    // [个人类型]无
+    PersonDefault = 0;
+
+    // [个人类型]钻石
+    PersonDiamond = 1;
+}
+
+message IntArr {
+    repeated uint32 List = 1;
+}
+
+message Common {
+    PersonEnum PersonType = 1;
+}
+
+message RewardCommon {
+    string type = 1;
+    uint32 num = 2;
+}
+
+message DemoConfig {
+    uint32 A = 1;
+    repeated uint32 B = 2;
+    IntArr C = 3;
+    PriceEnum D = 4;
+    Common E = 5;
+}
+// 通用的奖励格式
+message CommonRewardItem {
+    string type = 1;    //道具的枚举值
+    int32 num = 2;      //道具的值数量，如果maxNum 不为0 就是道具的最小范围
+    int32 param = 3;    //piece 和 baby 的 号数
+    int32 maxNum = 4;   // 如果为0 不使用， 如果大于0 奖励范围的最大值
+    int32 img = 5;      // img 使用的图片
+    int32 rare = 6;      // 是否为稀有奖励 1:稀有 
+    int32 broadcast = 7; // 是否需要广播 1:需要
+
+}
+
+
+message DemoConfigAry {
+    repeated DemoConfig ary = 1;
+}
+
+
+message Props {
+    uint32 tongjiling   = 1;
+    uint32 fish         = 2;
+    uint32 heart        = 3;
+    uint32 speaker      = 4;
+    uint32 summon       = 5;
+    uint32 miniShield   = 6;
+    uint32 powPic       = 7;
+    uint32 broken       = 8;
+    uint32 dungeongun   = 9;
+    uint32 vip          = 10;
+    uint32 magicBottle  = 11;
+    uint32 snowBall     = 12;
+    uint32 mercy        = 13;
+    uint32 police       = 14;
+    uint32 umbrella     = 15;
+    uint32 tili         = 16;
+    uint32 money        = 17;
+    uint32 diamond      = 18;
+}
+
+
+message BeyondConfig {
+    uint32  star = 1;
+    Props   reward = 2;
+    uint32 key = 3;
+}
+
+
+message BeyondConfigAry {
+    repeated BeyondConfig ary = 1;
+}
+
+/*************** 家族奖励 (开始) *****************/
+
+
+//家族大餐对应奖励
+message MustRewardConfig {
+    string reward = 1;
+    uint32 max = 2;
+    uint32 min = 3;
+    uint32 level = 4;
+}
+
+message MustRewardConfigAry {
+    repeated MustRewardConfig ary = 1;
+}
+
+//可选奖励
+message PropsRewardConfig {
+    uint32 rate = 1;
+    string name = 2;
+    uint32 num = 5;
+    uint32 level = 4;
+}
+
+message PropsRewardConfigAry {
+    repeated PropsRewardConfig ary = 1;
+}
+
+message DinnerRewardConfig {
+    uint32 num = 1;
+    uint32 max = 2;
+    uint32 level = 3;
+}
+
+message DinnerRewardConfigAry {
+    repeated DinnerRewardConfig ary = 1;
+}
+/*************** 家族奖励 (结束) *****************/
+
+/*************** 每日登入 (开始) *****************/
+message LoginRewardItem {
+    uint32 num = 1;
+    uint32 img = 2;
+    string reward = 3;
+}
+
+message LoginRewardArr {
+    repeated LoginRewardItem value = 1;
+    uint32 key = 2;
+}
+
+message LoginRewardConfig {
+    LoginRewardArr first = 1; //第一轮的奖励，奖励比较丰富
+    LoginRewardArr cumu = 2;//第二轮及以后的奖励，相对较少
+}
+
+message LoginRewardConfigAry {
+    repeated LoginRewardConfig ary = 1;
+}
+
+message ConditionLoginConfigAry {
+    repeated ConditionLoginConfig ary = 1;
+}
+
+message ConditionLoginConfig {
+    uint32 money = 1;
+    uint32 loginDay = 2;
+}
+/*************** 每日登入 (结束) *****************/
+
+
+
+/*************** 弹弓活动(开始) *****************/
+//弹弓活动普通配置
+message SlingshotMutli {
+    uint32 rewardStartTime = 1;
+    uint32 rewardEndTime = 2;
+    string babySrc = 3; //宝贝资源用哪套
+}
+
+message SlingshotConfig {
+    uint32 recover = 1;
+    uint32 reserved = 2;
+    uint32 magicBottle = 3;
+    uint32 bottleNum = 4;
+    uint32 receiveLimit = 5;
+    uint32 sendLimit = 6;
+    uint32 ballGetEnergy = 7;
+    GiftBoxRate giftBoxRate = 8;
+    repeated SlingshotMutli multi = 9; 
+}
+
+message GiftBoxRate {
+    uint32 giftBoxReward = 1;
+    uint32 babyProduct = 2;
+}
+
+message SlingshotConfigAry {
+    repeated SlingshotConfig ary = 1;
+}
+
+
+//打中风铃的奖励
+message GiftBoxRewardItem {
+    string key = 1;
+    uint64 value = 2;
+}
+
+
+message GiftBoxRewardConfig {
+    uint32 rate = 1;
+    GiftBoxRewardItem rewards = 2;
+}
+
+
+message GiftBoxRewardConfigAry {
+    repeated GiftBoxRewardConfig ary = 1;
+}
+
+//碎片兑换奖励
+message BabyRewardConfig {
+    string index = 1;
+    repeated BabyRewardItem rewards = 2;
+}
+
+message BabyRewardItem {
+    string index = 1;
+    int32 value = 2;
+}
+
+message BabyRewardConfigAry {
+    repeated BabyRewardConfig ary = 1;
+}
+
+//风铃产出宝贝概率
+message BabyProductConfigAry {
+    repeated BabyProductConfig ary = 1;
+}
+
+message BabyProductConfig {
+    uint32 mine = 1;
+    uint32 friend = 2;
+}
+
+
+//风铃刷新，个数概率
+message GiftBoxConfig {
+    uint32 giftBox = 1;
+}
+
+message GiftBoxConfigAry{
+    repeated GiftBoxConfig ary = 1;
+}
+
+//获得小鸟的金币消耗
+message BallMoneyConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 value = 3;
+}
+
+message BallMoneyConfigAry {
+    repeated BallMoneyConfig ary = 1;
+}
+
+//超级奖励的概率
+message SuperGiftConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 rate = 3;
+    uint32 times = 4;
+}
+
+message SuperGiftConfigAry {
+    repeated SuperGiftConfig ary = 1;
+}
+
+//龙的概率
+message BoomConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 rate = 3;
+    uint32 times = 4;
+}
+
+message BoomConfigAry {
+    repeated BoomConfig ary = 1;
+}
+
+//兑奖活动在线奖励配置
+message SlingshotOnlineConfig {
+    uint32 rate = 1;
+    repeated GiftBoxRewardItem rewards = 2;
+}
+
+message SlingshotOnlineConfigAry {
+    repeated SlingshotOnlineConfig ary = 1;
+}
+
+//兑奖活动不在线奖励配置
+message SlingshotOfflineConfig {
+    uint32 rate = 1;
+    repeated GiftBoxRewardItem rewards = 2;
+}
+message SlingshotOfflineConfigAry {
+    repeated SlingshotOfflineConfig ary = 1;
+}
+
+//兑奖活动在线打好友奖励配置
+message SlingshotFriendOnlineConfig {
+    uint32 rate = 1;
+    repeated GiftBoxRewardItem rewards = 2;
+}
+
+message SlingshotFriendOnlineConfigAry {
+    repeated SlingshotFriendOnlineConfig ary = 1;
+}
+
+//兑奖活动不在线打好友奖励配置
+message SlingshotFriendOfflineConfig {
+    uint32 rate = 1;
+    repeated GiftBoxRewardItem rewards = 2;
+}
+message SlingshotFriendOfflineConfigAry {
+    repeated SlingshotFriendOfflineConfig ary = 1;
+}
+
+/*************** 弹弓活动(结束) *****************/
+
+/*************** 在线抽奖(开始) *****************/
+message RewardTypeConfig {
+    uint32 key = 1;
+    string reward = 2;
+    uint32 pic  = 3;
+    uint32 flag = 4;
+}
+
+message RewardTypeConfigAry {
+    repeated RewardTypeConfig ary = 1;
+}
+
+//随机
+message OlActItem {
+    string reward = 1;
+    uint32 value = 2;
+}
+
+message OlActRandConfig {
+    uint32 key = 1;
+    repeated uint32 per = 2;
+    OlActItem reward =3;
+}
+
+message OlActRandConfigAry {
+    repeated OlActRandConfig ary = 1;
+}
+
+message OlineTimeConfig {
+    uint32 randTotal = 1;
+}
+
+message OlineTimeConfigAry {
+    repeated OlineTimeConfig ary = 1;
+}
+/*************** 在线抽奖(结束) *****************/
+
+
+/*************** 七天冲星(开始) *****************/
+message StarUpReward  {
+    string name = 1;
+    uint32 value = 2;
+}
+message StarUpConfig {
+    uint32 star = 1;
+    repeated StarUpReward reward = 2;
+}
+message StarUpConfigAry {
+    repeated StarUpConfig ary = 1;
+}
+
+message StarUpActionConfig {
+    uint32 star = 1;
+    repeated StarUpReward reward = 2;
+}
+message StarUpActionConfigAry {
+    repeated StarUpActionConfig ary = 1;
+}
+
+message StarUpInfoConfig {
+    string activityTime = 1;
+    uint32 minStar = 2;
+}
+message StarUpInfoConfigAry {
+    repeated StarUpInfoConfig ary = 1;
+}
+/*************** 七天冲星(结束) *****************/
+
+
+/*************岛屿管理(开始）************************/
+
+message PlanetTiliItem {
+    uint32 max = 1;
+    uint32 recover = 2;
+    uint32 time = 3;
+    uint32 vipRecover = 4;
+    uint32 vipMax = 5;
+}
+
+message PlanetShieldItem {
+    uint32 max = 1;
+}
+
+message PlanetPriceItem {
+    repeated uint32 buildingPrice = 2;
+}
+
+message PlanetConfig {
+    PlanetTiliItem tili = 1;
+    PlanetShieldItem shield = 2;
+    uint32 buildingNum = 3;
+    uint32 buildingLength = 4;
+    uint32 maxHP = 5;
+    float repairRate = 6;
+    repeated PlanetPriceItem price = 7;
+    uint32 totalPrice = 8;
+    uint32 handBook = 9;
+    uint32 planetId = 10;
+}
+
+message PlanetConfigAry {
+    repeated PlanetConfig ary = 1;
+}
+
+message PlanetMaxConfig {
+    uint32 planetMax = 1;
+    uint32 planetMaxTest = 2;
+}
+
+
+message PlanetMaxConfigAry {
+    repeated PlanetMaxConfig ary = 1;
+}
+
+
+/*************大转盘(开始）************************/
+
+message DaZhuanPanConfig {
+    uint32 handBook = 1;
+    uint32 total = 2;
+    repeated string rand = 3;
+    uint32 planetId = 4;
+}
+
+message DaZhuanPanConfigAry {
+    repeated DaZhuanPanConfig ary = 1;
+}
+/**********************客户端展示转盘数据*******/
+
+/**********炸弹转盘**********/
+message ZhuanPanCarnivalConfigAry {
+      repeated ZhuanPanShowConfig ary = 1;
+}
+
+message ZhuanPanShowConfigAry {
+      repeated ZhuanPanShowConfig ary = 1;
+}
+
+message ZhuanPanShow1_4_0ConfigAry {
+      repeated ZhuanPanShowConfig ary = 1;
+}
+
+message  ZhuanPanShowConfig {
+    uint32 planetId = 1;
+    repeated ZhuanPanShowItem rand = 2;
+	uint32 total = 3;
+}
+
+message  ZhuanPanShowItem {
+    string key = 1;
+    uint32 value = 2;
+	uint32 privateWeight = 3;
+}
+/**********************客户端展示转盘数据(over)*******/
+
+/***转盘权重***/
+message ZhuanPanWeightConfigAry {
+    repeated ZhuanPanWeightConfig ary = 1;
+}
+
+message ZhuanPanWeightConfig {
+    uint32 planetId = 1;
+    uint32 total = 2;
+    repeated  uint32 weight = 3;
+}
+
+message ZPBoomWeightConfigAry {
+    repeated ZPBoomWeightConfig ary = 1;
+}
+message ZPBoomWeightConfig {
+    uint32 planetId = 1;
+    uint32 total = 2;
+    repeated  uint32 weight = 3;
+}
+/***转盘权重(over)***/
+
+/******* 转盘随机事件玩法 (开始)******/
+message ZhuanPanDestinyConfigAry {
+	repeated ZhuanPanDestinyConfig ary = 1;
+}
+
+message ZhuanPanDestinyConfig {
+	string name = 1;
+	int32 min = 2;
+	int32 max = 3;
+	uint32 weight = 4;
+}
+/******* 转盘随机事件玩法 (结束)******/
+
+/******* bet 炮和偷权重配置 (开始)******/
+message ZhuanPanBetWeightConfigAry {
+	repeated ZhuanPanBetWeightConfig ary = 1;
+}
+
+message ZhuanPanBetWeightConfig {
+	int32 bet = 1;
+	int32 fireWeight = 2;
+	int32 stealWeight = 3;
+}
+/******* bet 炮和偷权重配置 (结束)******/
+
+/*************大转盘(结束）************************/
+
+
+/*************过岛奖励(开始）************************/
+message GoPlanetRewardItem{
+    string index = 1;
+    uint32 value = 2;
+}
+
+message GoPlanetRewardConfig {
+    uint32 planetId = 1;
+    repeated GoPlanetRewardItem reward = 2;
+    repeated GoPlanetRewardItem shareReward = 3;
+}
+
+message GoPlanetRewardConfigAry {
+    repeated GoPlanetRewardConfig ary = 1;
+}
+/*************过岛奖励(结束）************************/
+
+/*************发送邀请奖励(开始）************************/
+
+message InviteRewardConfig{
+    string type = 1;
+    uint32 number = 2;
+    uint32 probability = 3;
+}
+
+message InviteRewardConfigAry {
+    repeated InviteRewardConfig ary = 1;
+}
+/*************发送邀请奖励(结束）************************/
+
+
+/*************召回推送(开始）************************/
+message BackPushRewardItem {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message BackPushRewardConfig {
+    uint32 id = 1;
+    repeated BackPushRewardItem reward = 2;
+    string rewardType = 3;
+}
+
+message BackPushRewardConfigAry {
+    repeated BackPushRewardConfig ary = 1;
+}
+
+message BackPushContentItem {
+    string lang = 1;
+    repeated string word = 2;
+}
+
+message BackPushConditionItem {
+    string field = 1;
+    string condition = 2;
+    string value = 3;
+}
+
+message BackPushContentConfig {
+    uint32 id = 1;
+    repeated BackPushContentItem content = 2;
+    string runTime = 3;
+    repeated BackPushConditionItem condition = 4;
+}
+
+message BackPushContentConfigAry {
+    repeated BackPushContentConfig ary = 1;
+}
+
+/*************召回推送(结束）************************/
+
+/*************任务推送(开始）************************/
+message TaskPushContentItem {
+    string lang = 1;
+    repeated string word = 2;
+}
+
+message TaskPushLangConfig {
+    uint32 id = 1;
+    repeated TaskPushContentItem content = 2;
+}
+
+message TaskPushLangConfigAry {
+    repeated TaskPushLangConfig ary = 1;
+}
+
+message TaskPushDescConfig {
+    uint32 id = 1;
+    uint32 rank = 2;
+    string frequency = 3;
+}
+
+message TaskPushDescConfigAry{
+    repeated TaskPushDescConfig ary = 1;
+}
+/*************任务推送(结束）************************/
+
+/*************超级转盘(开始）************************/
+message AttackWheelConfig {
+    uint32 planet = 1;
+    uint32 total = 2;
+    repeated string rand = 3;
+}
+
+message AttackWheelConfigAry {
+    repeated AttackWheelConfig ary = 1;
+}
+
+/***炮盾转盘前端展示*/
+message AttackWheelShowConfigAry {
+   repeated  AttackWheelShowConfig ary = 1;
+}
+
+message AttackWheelShowConfig {
+     uint32 planetId = 1;
+     repeated AttackWheelShowItem rand = 2;
+}
+
+message AttackWheelShowItem {
+    uint32 value = 1;
+    string key = 2;
+}
+/***炮盾转盘前端展示(over)*/
+
+/***炮盾转盘权重***/
+message AttackWheelWeightConfigAry {
+    repeated AttackWheelWeightConfig ary = 1;
+}
+
+message AttackWheelWeightConfig {
+    uint32 planetId = 1;
+    uint32 total = 2;
+    repeated  uint32 weight = 3;
+}
+/***炮盾转盘权重(over)***/
+
+message MoneyWheelConfig {
+    uint32 planet = 1;
+    uint32 total = 2;
+    repeated string rand = 3;
+}
+
+message MoneyWheelConfigAry {
+    repeated MoneyWheelConfig ary = 1;
+}
+ /***超级金币转盘展示***/
+message MoneyWheelShowConfigAry {
+    repeated MoneyWheelShowConfig ary = 1;
+}
+
+message MoneyWheelShowConfig {
+    repeated uint32 rand = 1;
+    uint32 planetId = 2;
+
+}
+/***超级金币转盘展示(over)***/
+
+/***超级金币转盘权重***/
+message MoneyWheelWeightConfigAry {
+    repeated MoneyWheelWeightConfig ary = 1;
+}
+
+message MoneyWheelWeightConfig {
+    uint32 planetId = 1;
+    uint32 total = 2;
+    repeated  uint32 weight = 3;
+}
+/***超级金币转盘权重(over)***/
+
+message TiliWheelConfig {
+    uint32 planet = 1;
+    uint32 total = 2;
+    repeated string rand = 3;
+}
+
+message TiliWheelConfigAry {
+    repeated TiliWheelConfig ary = 1;
+}
+/****体力转盘前端展示***/
+message TiliWheelShowConfigAry {
+    repeated TiliWheelShowConfig ary = 1;
+}
+
+message TiliWheelShowConfig {
+    repeated uint32 rand = 1;
+    uint32 planetId = 2;
+}
+
+/***超级体力转盘权重***/
+message TiliWheelWeightConfigAry {
+    repeated TiliWheelWeightConfig ary = 1;
+}
+
+message TiliWheelWeightConfig {
+    uint32 planetId = 1;
+    uint32 total = 2;
+    repeated  uint32 weight = 3;
+}
+/***超级体力转盘权重(over)***/
+
+/****体力转盘前端展示(over)***/
+/*************超级转盘(结束）************************/
+
+/*************活动上下线(开始）***********************/
+message ActionConfig{
+    string id = 1;
+    string name = 2;
+    uint32 stay = 3;
+    repeated string device = 4;
+    string country = 5;
+    string btn = 6;
+    string go = 7;
+    string tip = 8;
+    string content = 9;
+    string version = 10;
+    uint32 isTest = 11;
+    string startTime = 12;
+    string endTime = 13;
+    string platform = 14;
+    uint32 position = 15;
+    uint32 order = 16;
+    string startDate = 17;
+    string endDate = 18;
+    uint32 sid = 19;
+    uint32 iosReview = 20;
+    string posAndOrder = 21;
+    uint32 operate = 22;
+    string jumpOrText = 23;
+    string image = 24;
+	int32 showCountdown = 25; //是否展示倒计时， 1展示，0 不展示
+}
+
+message ActionConfigAry{
+    repeated ActionConfig ary = 1;
+}
+
+/*************活动上下线(结束）***********************/
+
+message TaskFinishRewardConfigAry {
+    repeated TaskFinishRewardConfig ary = 1;
+}
+
+message TaskFinishRewardConfig {
+    uint32 endTime = 1;
+    uint32 beginTime = 2;
+    repeated taskExpireReward expireReward = 3;
+    repeated taskExpireReward defaultReward = 4;
+}
+
+message taskExpireReward {
+    string type = 1;
+    string num = 2;
+}
+
+/***********拼图奖励********************************/
+message PicConfigAry {
+    repeated PicConfig ary = 1;
+}
+
+message PicGapLimit {
+    uint32 tili = 1;
+    uint32 money = 2;
+}
+
+message PicRewardItem {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message PicConfig {
+    uint32 mustZp = 1;
+    uint32 limitMoney = 2;
+    uint32 randRewardTotal = 3;
+    string iosSrc = 4;
+    string androidSrc = 5;
+    picNextAction nextAction = 6;
+    repeated uint32 rate = 7;
+    PicGapLimit minLimit = 8;
+    PicGapLimit maxLimit = 9;
+    uint32 doubleTime = 10; //最后倒数多少秒双倍
+    uint32 limitPlanetRatePic = 11; //开始发放稀有碎片的岛屿
+    uint32 maxSet = 12; //最多能得多少套
+    uint32 maxMoneySend = 13; //消耗碎片发放金币最多多少个
+    uint32 randZp = 14; //转转盘获得碎片的概率
+    uint32 rareNum = 15;
+    repeated PicRewardItem guideReward = 16; //引导奖励
+    uint32 rewardLimit = 17; //最大领奖次数
+    uint32 changeLimit = 18; //交易次数限制
+    uint32 recvMax = 19; //接收碎片最大次数
+    uint32 sendMax = 20; //发送碎片接受次数
+    uint32 sid = 21;
+    string picSrc = 22; //1.5.1 版本修改后 拼图字段
+}
+
+message picNextAction {
+    uint32 isTip = 1;
+    string nextIosSrc = 2;
+    string nextAndroidSrc = 3;
+    uint32 endTime = 4;
+    uint32 startTime = 5;
+}
+
+/***随机道具****/
+message RandRewardConfigAry {
+    repeated  RandRewardConfig ary = 1;
+}
+
+message RandRewardConfig {
+    string rewardType = 1;
+    uint32 num = 2;
+    uint32 rate = 3;
+}
+
+/***奖励限制****/
+message LimitRewardConfigAry {
+    repeated  LimitRewardConfig ary = 1;
+}
+
+message LimitRewardConfig {
+    uint32 rate = 1;
+    string gap = 2;
+    string rewardNum = 3;
+    string type = 5;
+}
+
+/****金币体力奖励概率***/
+message NewRewardConfigAry {
+    repeated  NewRewardConfig ary = 1;
+}
+message NewRewardConfig {
+    uint32 rate = 1;
+    string gap = 2;
+    string type = 3;
+}
+
+/**碎片获得限制**/
+message NewLimitConfigAry {
+    repeated  NewLimitConfig ary = 1;
+}
+
+message NewLimitConfig {
+    uint32 randRate = 1;
+    uint32 limitNum = 2;
+    uint32 limitMoney = 3;
+}
+
+/**消耗金币获得碎片配置**/
+message MoneyLimitConfig {
+    string range =1; // 0-3 获得第0个到第2个 需要的金币数量
+    uint32 limitMoney = 2; //触发碎片奖励需要的金币数量
+}
+
+message MoneyLimitConfigAry {
+    repeated  MoneyLimitConfig ary = 1;
+}
+
+/***消耗体力获得碎片*****/
+message TiliLimitConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 limitTili = 3;
+}
+message TiliLimitConfigAry {
+    repeated  TiliLimitConfig ary = 1;
+}
+/***********拼图奖励结束****************************/
+
+
+/***********combineTest(开始)********/
+message CombineReward {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message CombineRewardConfig {
+    uint32 level = 1;
+    repeated CombineReward reward = 2;
+}
+
+message CombineRewardConfigAry {
+    repeated CombineRewardConfig ary = 1;
+}
+/***********combineTest(结束)********/
+
+/***********公告版（开始）***********/
+
+message ChangeLogMessage {
+    string lang = 1;
+    string subTitle = 2;
+    string desc = 3;
+    string image = 4;
+    string open = 5;
+}
+
+message ChangeLogMsg{
+    string index = 1;
+    repeated ChangeLogMessage message = 2;
+}
+
+message ChangeTypeConfig {
+    uint32 type = 1;
+}
+message ChangeTypeConfigAry {
+    repeated ChangeTypeConfig ary = 1;
+}
+message ChangeLogConfig {
+    string version = 1;
+    string img = 2;
+    string channel = 3;
+    repeated ChangeLogMsg msg = 4;
+    string tag = 5;
+    string defaultLang = 6;
+    string test = 7;
+    string ctime = 8;
+    string index = 9;
+}
+
+message ChangeLogListConfigAry {
+    repeated ChangeLogConfig ary = 1;
+}
+
+/***********公告版（结束）***********/
+
+/*****岛主新闻*****/
+message IslandNewsMsg {
+    string lang = 1;
+    string desc = 2;
+    string image = 3;
+}
+
+message IslandNewsConfig {
+    string version = 1;
+    string img = 2;
+    string channel = 3;
+    repeated IslandNewsMsg msg = 4;
+    string tag = 5;
+    string defaultLang = 6;
+    string test = 7;
+    uint32 startTime = 8;
+    uint32 endTime = 9;
+    string index = 10;
+}
+
+message IslandNewsConfigAry {
+    repeated IslandNewsConfig ary = 1;
+}
+/*****岛主新闻（end)*****/
+
+/***********邀请成功奖励(开始)********/
+message ReplacePetReward {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message InviteActionConfig {
+    uint32 inviteNum = 1;
+    repeated ReplacePetReward replacePetReward = 2;
+    uint32 showNum = 3; //一次展示的好友数量 1.4.0
+}
+
+message InviteActionConfigAry {
+    repeated InviteActionConfig ary = 1;
+}
+
+message InviteActionRewardConfig {
+    repeated ReplacePetReward reward = 1; //结构刚好一样 就用了 ReplacePetReward
+}
+
+message InviteActionRewardConfigAry {
+    repeated InviteActionRewardConfig ary = 1;
+}
+/************邀请成功奖励(结束)********/
+
+/***********发送邀请IUserInvite(开始)********/
+
+message UserInviteConfig {
+    uint32 sendRewardTili = 1;
+    uint32 limitNum = 2;
+    uint32 succReward = 3;
+    uint32 rewardLimit = 4;
+    uint32 rewardExpire = 5;
+    repeated string starLevel = 7;
+    repeated uint32 starRewardTili = 8;
+    uint32 inviteRewardLen = 9;
+    uint32 groupLimitNum = 10; //1.4.0版本 发送到群组得到奖励的次数限制
+    uint32 momentLimitNum = 11; //"1.4.0版本 发送到QQ空间、朋友圈得到奖励的次数限制"
+    repeated string invitePic = 12; //图片资源名称
+    uint32 resetStartTime = 13; //在指定时间内会对已经完成邀请互动的用户进行数据重置，开始时间
+    uint32 resetEndTime = 14; //在指定时间内会对已经完成邀请互动的用户进行数据重置，开始结束
+}
+
+message UserInviteConfigAry {
+    repeated UserInviteConfig ary = 1;
+}
+
+message UserInviteRewardConfig {
+    repeated  CommonRewardItem groupReward = 1; //发送邀请到群组邀请
+    repeated  CommonRewardItem momentReward = 2; //发送邀请空间\朋友圈到群组邀请
+}
+
+message UserInviteRewardConfigAry {
+    repeated UserInviteRewardConfig ary = 1;
+}
+
+/***********发送邀请IUserInvite(结束)********/
+
+/***********好友关系Relationship(开始)********/
+message RelationShipConfig {
+    uint32 agreeExpire = 1;
+    uint32 stayTime = 2;
+    uint32 cdExpire = 3;
+    uint32 friendLimit = 4;
+    uint32 addDailyMax = 5;
+    uint32 addListMax = 6;
+}
+
+message RelationShipConfigAry {
+    repeated RelationShipConfig ary = 1;
+}
+/***********好友关系Relationship(结束)********/
+
+/***********送体力双倍(开始)********/
+message EnergyDoubleConfig {
+    string startTime = 1;
+    string endTime = 2;
+    uint32 multiple = 3;
+}
+
+message EnergyDoubleConfigAry {
+    repeated EnergyDoubleConfig ary = 1;
+}
+/***********送体力双倍(结束)********/
+
+
+/***********送体力双倍(开始)********/
+message PicDoubleConfig {
+    string startTime = 1;
+    string endTime = 2;
+    uint32 multiple = 3;
+}
+
+message PicDoubleConfigAry {
+    repeated PicDoubleConfig ary = 1;
+}
+/***********送体力双倍(结束)********/
+
+/***********每日任务配置********/
+message TaskPoolConfigAry {
+    repeated TaskPoolConfig ary = 1;
+}
+
+message TaskPoolConfig {
+    string taskId = 1;
+    uint32 mutexId = 2;
+    string taskType = 3;
+    repeated taskArr task = 4;
+    string type = 5;
+    string condition = 6;
+    int32 isOffline = 7; //是否下线
+}
+
+message taskArr {
+    string reward = 1;
+    uint32 target = 2;
+    string planet = 3;
+    uint32 weight = 4;
+}
+/***********每日任务配置结束********/
+
+/***********每日任务前8天********/
+message MustTaskConfigAry {
+    repeated MustTaskConfig ary = 1;
+}
+
+message MustTaskConfig {
+    repeated mustTaskArr task = 1;
+    uint32 day = 2;
+}
+
+message mustTaskArr {
+    string reward = 1;
+    uint32 target = 2;
+    string id = 3;
+    uint32 class = 4;
+}
+/***********每日任务前8天结束********/
+
+/***********部分任务目标值修正********/
+message TaskTargetConfigAry {
+    repeated TaskTargetConfig ary = 1;
+}
+
+message TaskTargetConfig {
+    string taskId = 1;
+    repeated TaskTargetItem task = 2;
+}
+
+message TaskTargetItem {
+    string gap = 1;
+    uint32 num = 2;
+}
+/***********部分任务目标值修正结束********/
+
+/***********副本金币和体力奖励********/
+
+message DunBaseRewardConfigAry {
+    repeated DunBaseRewardConfig  ary = 1;
+}
+message dunBaseRewardItem {
+    uint32 min = 1;
+    uint32 max = 2;
+    uint32 rate = 3;
+}
+
+message DunBaseRewardConfig {
+    string key = 1;
+    uint32 rank = 2;
+    repeated dunBaseRewardItem reward = 3;
+}
+/***********副本金币和体力奖励结束********/
+
+/***********副本道具奖励*******/
+message DunPropsRewardConfigAry {
+    repeated DunPropsRewardConfig ary = 1;
+}
+
+message DunPropsRewardConfig {
+    string rank = 1;
+    repeated DunPropsRewardItem reward = 2;
+}
+
+message DunPropsRewardItem {
+    string key = 1;
+    uint32 num = 2;
+    uint32 rate = 3;
+}
+/***********副本道具奖励结束********/
+
+/***********副本boss共用配置********/
+message DunBossCommonConfigAry {
+    repeated DunBossCommonConfig ary = 1;
+}
+
+message DunBossCommonConfig {
+    uint32 hp = 1;
+    uint32 dungeonExpired =2;
+    uint32 weakTime = 3;
+    uint32 weakThreshold = 4;
+    uint32 bossId = 5;
+    uint32 guideHp = 6;
+    repeated PaulBossConfig guideReward = 7;
+}
+/***********副本boss共用配置结束********/
+
+/***********副本boss特性配置********/
+message PaulBossConfigAry {
+    repeated PaulBossConfig ary = 1;
+}
+
+message PaulBossConfig {
+    string key = 1;
+    string value = 2;
+}
+/***********副本boss特性配置结束********/
+
+/***********功能解锁配置********/
+message FunctionUnlockConfigAry {
+    repeated FunctionUnlockConfig ary = 1;
+}
+
+message FunctionUnlockConfig {
+    string id = 1;
+    uint32 star = 2;
+    uint32 index = 3;
+}
+/***********功能解锁配置结束********/
+
+/***********超级转盘非转盘配置********/
+message MagicWheelConfigAry {
+    repeated MagicWheelConfig ary = 1;
+}
+
+message MagicWheelConfig {
+    uint32 energy = 1;
+    uint32 expireTime = 2;
+    uint32 times = 3;
+}
+
+message MagicWheelWeightConfigAry {
+    repeated MagicWheelWeightConfig ary = 1;
+}
+
+message MagicWheelWeightConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 attack = 3;
+    uint32 money = 4;
+    uint32 tili = 5;
+}
+/***********超级转盘非转盘配置********/
+
+
+/**********主线任务(开始)**************/
+
+message MainTaskReward {
+    string index = 1;
+    int32 value = 2;
+}
+
+message MainTaskConfig {
+    string key = 1;  //任务ID
+    string type = 2; // 任务类型
+    uint32 target = 3; //任务完成需要的次数
+    repeated MainTaskReward reward = 4; //任务奖励
+    uint32 go = 5; //跳转岛哪个场景
+    uint32 isFirst = 6; //是否是第一个任务
+    string next = 7; //下一个任务的任务ID
+    uint32 isOnline = 8; //任务是否在线
+    string condition = 9; //任务子条件
+    uint32 autoFinishStart = 10; //该任务自动完成的起始时间
+    uint32 autoFinishEnd = 11; //该任务自动完成的结束时间
+    //uint32 isPre = 10; //需要提前统计的任务
+}
+
+message MainTaskConfigAry {
+    repeated MainTaskConfig ary = 1;
+}
+
+/**********主线任务(结束)**************/
+
+/**********大地图**************/
+message BigMapConfigAry {
+    repeated BigMapConfig ary = 1;
+}
+
+message BigMapConfig {
+     uint32 planetId = 1;
+     repeated MapItem map = 2;
+}
+
+message MapItem {
+    uint32 money = 1;
+    uint32 reward = 2;
+}
+
+/**********大地图(结束)**************/
+
+
+/**********双倍奖励(开始)*****************/
+message DoubleRewardConfig {
+    string key = 1;
+    int32 startTime = 2;
+    int32 endTime = 3;
+    string rewardType = 4;
+    int32 first = 5;  //是否是限制当天第一次领奖
+    int32 times = 6; //倍数
+}
+
+message DoubleRewardConfigAry {
+    repeated DoubleRewardConfig ary = 1;
+}
+/**********双倍奖励(结束)*****************/
+
+/**********金币基准系数**************/
+message CoefficientConfigAry {
+    repeated CoefficientConfig ary = 1;
+}
+
+message CoefficientConfig {
+    uint32 planetId = 1;
+    uint32 coefficient = 2;
+}
+/**********金币基准系数(结束)**************/
+message MineShellConfigAry {
+     repeated MineShellConfig ary = 1;
+}
+/**********矿工**************/
+message MineShellConfig {
+    uint32 planetId = 1;
+    float rate = 2;
+    uint32 maxProduct = 3;
+    repeated uint32 product = 4;
+}
+
+message ShellConfigAry {
+    repeated ShellConfig ary = 1;
+}
+message ShellConfig {
+    uint32 grade = 1;
+    float rate = 2;
+    uint32 maxProduct = 3;
+    uint32 product = 4;
+}
+
+/**********矿工(结束)**************/
+
+/********** 召回奖励(开始) **************/
+
+message CallBackRewardLimit {
+    uint32 day = 1;
+    uint32 len = 2;
+    uint32 max = 3;
+    uint32 build = 4;
+}
+
+message rewardItem {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message CallBackMainConfig {
+    uint32 subTime = 1;
+    uint32 rewardDay = 2;
+    uint32 maxRewardNum = 3;
+    CallBackRewardLimit callBackRewardLimit = 4;
+    repeated uint32 rewardStar = 5;
+    uint32 cbShowNumQQ = 6; //召回列表显示的人数手Q
+    uint32 cbShowNumWX = 7; //召回列表显示的人数微信
+    uint32 cbShowNumFB = 8; //召回列表显示的人数手FB
+
+}
+
+message CallBackMainConfigAry {
+    repeated CallBackMainConfig ary = 1;
+}
+
+/********** 召回展示**************/
+message CallBackShowConfigAry {
+    repeated CallBackShowConfig ary = 1;
+}
+
+message CallBackStageRewardItem {
+    repeated CommonRewardItem reward = 1;
+    uint32 rewardNum = 2;
+}
+
+
+message CallBackShowConfig {
+    repeated CommonRewardItem speedReward  = 1;  //一键召回奖励
+    repeated CommonRewardItem callReward  = 2;  //
+    repeated CallBackStageRewardItem stageReward = 3; //阶段奖励 召回多少人发一个礼盒奖励
+    uint32   id = 4;  //兼容多期奖励 对应Action sid
+}
+ /********** 召回展示(结束) **************/
+ /********** 召回奖励(结束) **************/
+
+ /********** 召回奖励弃用(结束) **************/
+ message CallBackConfig {
+    uint32 subTime = 1;
+    uint32 rewardDay = 2;
+    uint32 maxRewardNum = 3;
+    repeated uint32 callBackStepConfig = 4;
+    CallBackRewardLimit callBackRewardLimit = 5;
+    repeated rewardItem callReward  = 6;
+    repeated rewardItem speedReward  = 7;
+}
+
+
+message CallBackConfigAry {
+    repeated CallBackMainConfig ary = 1;
+}
+
+//阶段性奖励
+message CallBackStageRewardConfig {
+    repeated rewardItem reward = 1;
+}
+message CallBackStageRewardConfigAry {
+    repeated CallBackStageRewardConfig ary = 1;
+}
+/********** 召回奖励弃用(结束)**************/
+
+/**********宠物配置**************/
+
+/****宠物基本数据****/
+message PetConfig {
+    uint32 petId = 1;
+    string name = 2;
+    string type = 3;
+    uint32 isType = 4;
+    uint32 rare = 5;
+    repeated uint32 sp = 6;
+    uint32 startTime = 7;
+    uint32 endTime = 8;
+}
+
+message PetBaseConfigAry {
+    repeated PetConfig ary = 1;
+}
+/****宠物基本数据(over)****/
+
+/****宠物比率配置，不同宠物的比率意义不同****/
+message PetSkillRateConfigAry {
+    repeated PetSkillRateConfig ary = 1;
+}
+
+message PetSkillRateConfig {
+    uint32 petId = 1;
+    repeated uint32 rate = 2;
+}
+/****宠物比率配置(over)****/
+
+/****宠物升级碎片****/
+message PetLevelConfigAry {
+    repeated PetLevelConfig ary = 1;
+}
+
+message PetLevelConfig {
+    uint32 petId = 1;
+    repeated uint32 upLv = 2;
+}
+/****宠物升级碎片配置(over)****/
+
+/****宠物MP配置和奖励****/
+message PetMpAndRewardConfigAry {
+    repeated petMpAndRewardConfig ary  = 1;
+}
+message PetDeafaultReward {
+    string key = 1;
+    uint32 value = 2;
+}
+
+message petMpAndRewardConfig {
+    repeated  PetDeafaultReward defaultReward = 1;
+    repeated uint32 maxMP = 2;
+}
+
+/****宠物MP配置和奖励(over)****/
+
+/****宠物奖励碎片***/
+message PetPuzzleConfigAry {
+    repeated PetPuzzleConfig  ary = 1;
+}
+
+message PetPuzzleConfig {
+    string act = 1;
+    repeated PuzzleReward reward = 2;
+}
+
+message PuzzleReward {
+    string key = 1;
+    uint32 value = 2;
+    uint32 rate = 3;
+}
+/****宠物奖励碎片(over)****/
+/**********宠物配置(结束)**************/
+
+/****版本管理****/
+message VersionManageConfigAry {
+    repeated VersionManageConfig ary = 1;
+}
+message VersionManageConfig {
+    string channel = 1;
+    string isReview = 2;
+    string sysVersion = 3;
+    string version = 4;
+    string minVersion = 5;
+    string newVersion = 6;
+    string msg = 7;
+    string download = 8;
+    string comment = 9;
+}
+/****版本管理(over)****/
+
+/****宝箱活动****/
+message BoxActionConfig {
+    uint32 maxStep = 1;
+    repeated uint32 minute = 2;
+}
+message BoxActionConfigAry {
+    repeated BoxActionConfig ary = 1;
+}
+
+message BoxReward {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message BoxActionRewardConfig {
+    repeated BoxReward reward = 1;
+}
+message BoxActionRewardConfigAry {
+    repeated BoxActionRewardConfig ary = 1;
+}
+/****宝箱活动(over)****/
+
+/*****好友攻击奖励********/
+
+message AttackFriendRewardItem {
+    string item = 1;
+    int32 value = 2;
+    int32 param = 3;
+}
+
+message AttackFriendRewardConfig {
+    string version = 1;
+    string canTest = 2;
+    string beginTime = 3;
+    string endTime = 4;
+    repeated AttackFriendRewardItem attackFriendReward = 5;
+}
+message AttackFriendRewardConfigAry {
+    repeated AttackFriendRewardConfig ary = 1;
+}
+
+/*****好友攻击奖励(over)********/
+
+/*******牌组算法********/
+message WheelConfig{
+    uint32 cur_planet = 1;
+    uint32 action_id = 2;
+    string card_id = 3;
+    string des = 4;
+}
+
+message WheelConfigAry{
+    repeated WheelConfig ary = 1;
+}
+
+message WheelCardConfig{
+    uint32 card_id = 1;
+    uint32 card_num = 2;
+    string props_name = 3;
+    uint32 props_value = 4;
+    uint32 condition_type = 5;
+}
+
+message WheelCardConfigAry{
+    repeated WheelCardConfig ary = 1;
+}
+
+message RankCardConfig {
+    int32 ID = 1;
+    int32 RankMin = 2;
+    int32 RankMax = 3;
+    string card_id = 4;
+}
+
+message RankCardConfigAry {
+    repeated RankCardConfig ary = 1;
+}
+
+/*******牌组算法(over)********/
+
+/*************** 转盘皮肤 *****************/
+message WheelSkinConfig{
+    uint32 startTime = 1;
+    uint32 endTime = 2;
+    uint32 id = 3;
+    string device = 4;
+}
+message WheelSkinConfigAry{
+    repeated WheelSkinConfig ary = 1;
+}
+
+message WheelFilesConfig{
+    uint32 id = 1;
+    string fileName = 2;
+    string device = 3;
+    string plat = 4;
+    string detail = 5;
+    int32 expire = 6; //皮肤持续时间
+    int32 wheelType = 7; //转盘类型免费送的还是 需要一定行为触发的
+    string commonFileName = 8; //前端资源字段
+}
+message WheelFilesConfigAry{
+    repeated WheelFilesConfig ary = 1;
+}
+/*************** 转盘皮肤 (end) ************/
+
+/*************** 游戏好友权限 *****************/
+message GameFriendConfig{
+    string type = 1;
+    uint32 platFriend = 2;
+    uint32 gameFriend = 3;
+    uint32 familyFriend = 4;
+
+}
+message GameFriendConfigAry{
+    repeated GameFriendConfig ary = 1;
+}
+
+
+/*************** 游戏好友权限 (end) ************/
+
+/**********array测试**********/
+message arraydddConfig {
+    string key = 1;
+    int32 value = 2;
+}
+
+message arraydddConfigAry {
+    repeated arraydddConfig ary = 1;
+}
+
+message array_gggConfig {
+    string key = 1;
+    int32 value = 2;
+}
+
+message array_gggConfigAry {
+    repeated array_gggConfig ary = 1;
+}
+
+message arrayRRRConfig {
+    string key = 1;
+    int32 value = 2;
+}
+
+message arrayRRRConfigAry {
+    repeated arrayRRRConfig ary = 1;
+}
+
+message arrayEeeConfig {
+    string key = 1;
+    int32 value = 2;
+}
+
+message arrayEeeConfigAry {
+    repeated arrayEeeConfig ary = 1;
+}
+/**********array测试(over)**********/
+
+
+/*********************空岛方案(开始)***********************/
+
+message EmptyUpdate {
+    uint32 building1 = 1;
+    uint32 building2 = 2;
+    uint32 building3 = 3;
+    uint32 building4 = 4;
+    uint32 building5 = 5;
+    uint32 shield = 6;
+}
+
+message EmptyPlanetConfig {
+    string planetRange = 1;
+    EmptyUpdate update = 2;
+    string destroyNum = 3; //空岛时需要被摧毁的数量
+    uint32 startDay = 4; //流失的天数
+    uint32 endDay = 5;//流失达到最大天数
+}
+
+message EmptyPlanetConfigAry {
+    repeated EmptyPlanetConfig ary =1;
+}
+
+/*********************空岛方案(结束)***********************/
+
+/***********chatPlay配置********/
+message ChatPlayConfigAry {
+    repeated ChatPlayConfig ary = 1;
+}
+
+message ChatPlayConfig {
+    repeated string ChatPlay = 1;
+}
+/***********chatPlay配置结束********/
+
+
+/**********************微信订阅(开始)******************************/
+message WXSubscribeConfig {
+    int32 id = 1;
+    string time = 2;
+    string type = 3;
+}
+
+message WXSubscribeConfigAry {
+   repeated WXSubscribeConfig ary = 1;
+}
+/**********************微信订阅(结束)******************************/
+
+/**********************系统限制(开始)*****************************/
+message SystemLimitItem {
+    string index = 1; //类型
+    uint32 value = 2; //限制的值
+}
+
+message SystemLimitConfig {
+    repeated SystemLimitItem limit = 1; //限制内容
+    string type = 2; //限制类别
+}
+
+message SystemLimitConfigAry {
+    repeated SystemLimitConfig ary = 1;
+}
+/**********************系统限制(结束)*****************************/
+
+/*******满岛展示***********/
+message FullIslandConfig {
+    uint32 showNum = 1;
+    string info = 2;
+    string time = 3;
+    uint32 show = 4;
+}
+
+message FullIslandConfigAry {
+    repeated FullIslandConfig ary = 1;
+}
+/*******满岛展示(end)***********/
+/*************贵族配置************/
+message NobleConfigAry {
+    repeated NobleConfig ary = 1;
+}
+
+message nobleBase {
+    string type = 1;
+    uint32 num = 2;
+}
+
+message NobleConfig {
+    uint32 perOutput = 1;
+    uint32 maxOutput = 2;
+    uint32 colMin = 3;
+    repeated nobleBase base = 4;
+
+}
+
+message NobleMailConfigAry {
+    repeated NobleMailConfig ary = 1;
+}
+
+message NobleMailConfig {
+    uint32 id = 1;
+    string desc = 2;
+    string mainTitle = 3;
+    string subTitle = 4;
+    string content = 5;
+    uint32 remainSec = 6;
+    repeated CommonRewardItem reward = 7;
+
+}
+
+/*************贵族配置(over)************/
+
+
+/*******************客服端分享图配置(开始)*************************/
+message ShareBgImageConfig {
+    string shareKey = 1;
+    repeated string imgList = 2;
+}
+
+message ShareBgImageConfigAry {
+    repeated ShareBgImageConfig ary = 1;
+}
+/*******************客服端分享图配置(结束)*************************/
+
+
+/**********************超级礼包配置(开始)********************************/
+message BigItemCondition {
+    string type = 1;
+    repeated string data = 2;
+}
+
+message BigItemConfig {
+    string                bigItemId = 1;
+    string               startTime = 2;
+    string               endTime  = 3;
+    int32                originalPrice = 4;
+    string                androidProductId = 5;
+    string                iosProductId = 6;
+    repeated BigItemCondition condition = 7;
+    uint32                  bigItemReportId = 8;
+}
+
+message BigItemConfigAry {
+    repeated BigItemConfig ary = 1;
+}
+
+/**********************超级礼包配置(结束)********************************/
+
+/*************************商品额外数据（开始）**************************/
+message PayExtraData {
+	int32 ifShowGood = 1; //是否展示物品及数量 1展示，0不展示
+	int32 ifShowOrginPrice = 2; //是否展示原价 1展示，0不展示
+	int32 ifShowCurPrice = 3; //是否展示现价 1展示，0不展示
+	int32 ifShowDiscount = 4; //是否展示折扣 1展示，0不展示
+	int32 discountRate = 5; //折扣率
+	string baseMapURL = 6; //活动底图
+	string iconURL = 7; //icon图片
+	int32 buyIndex = 8; //购买按钮底图编号
+}
+/*************************商品额外数据（结束）**************************/
+
+/***********************米大师androi商品(开始)d**********************************/
+message MidasBuyItem {
+    string index = 1;
+    int32  value = 2;
+}
+
+message MidasPayConfig {
+    string productId = 1; //首充礼包 上报日志
+    int32 buyType = 2; //购买类型
+    int32 price = 3; //价格
+    int32 buyMoney = 4; //购买商品得到的金币
+    int32 buyTili = 5; //购买商品得到的体力
+    repeated CommonRewardItem buyItem = 6; //购买商品得到的道具
+    int32 image = 7; //展示图片
+    int32 show = 8; // 0 不展示但是返回给前端 1展示 2 不返回给前端
+    int32 flag = 9; //标签
+    string name = 10; //名字
+    string desc = 11; //描述
+    string img = 12; //图片
+    string addDiamond = 13; //购买商品额外得到的钻石
+    int32 down = 15; //打折？
+    string version = 16; //多少版本以上会有
+    string className = 17;//道具上下线关联的类
+    string id = 18; //道具ID
+    int32 ext = 19; //额外字段，用于做特殊标记
+    int32 startTime = 20; //商品上线时间
+    int32 endTime = 21;//商品下线时间
+    int32 buyLimit = 22; //购买限制
+	PayExtraData extraData = 23; //商品额外数据
+}
+
+message MidasPayConfigAry {
+    repeated MidasPayConfig ary = 1;
+}
+/***********************米大师androi商品(结束)**********************************/
+
+/***********************米大师androi商品(开始)**********************************/
+message MidasPayIosConfig {
+    string productId = 1; //首充礼包 上报日志
+    int32 buyType = 2; //购买类型
+    int32 price = 3; //价格
+    repeated CommonRewardItem buyItem = 6; //购买商品得到的道具
+    int32 image = 7; //展示图片
+    int32 show = 8; // 0 不展示但是返回给前端 1展示 2 不返回给前端
+    int32 flag = 9; //标签
+    string name = 10; //名字
+    string desc = 11; //描述
+    string img = 12; //图片
+    string addDiamond = 13; //购买商品得到的钻石
+    int32 down = 15; //打折？
+    string version = 16; //多少版本以上会有
+    string className = 17;//道具上下线关联的类
+    string id = 18; //道具ID
+    int32 ext = 19; //额外字段，用于做特殊标记
+    int32 startTime = 20; //商品上线时间
+    int32 endTime = 21;//商品下线时间
+    int32 buyLimit = 22; //购买限制
+	PayExtraData extraData = 23; //商品额外数据
+}
+message MidasPayIosConfigAry {
+    repeated MidasPayIosConfig ary = 1;
+}
+/***********************米大师androi商品(结束)**********************************/
+
+/*********************米大师首充钻石双倍(开始)************************************/
+message MidasPayFirstDoubleConfig {
+    string type = 1;  //类型 ios / android
+    uint32 startTime = 2; //开始时间
+    uint32 endTime = 3; //结束时间
+}
+//商城首充钻石双倍
+message MidasPayFirstDoubleConfigAry {
+    repeated MidasPayFirstDoubleConfig ary = 1;
+}
+/*********************米大师首充钻石双倍(结束)************************************/
+
+/***********************海外(Oa)android商品(开始)**********************************/
+
+message OaPayConfig {
+    string productId = 1; //首充礼包 上报日志
+    int32 buyType = 2; //购买类型
+    int32 price = 3; //价格
+    int32 buyMoney = 4; //购买商品得到的金币
+    int32 buyTili = 5; //购买商品得到的体力
+    repeated CommonRewardItem buyItem = 6; //购买商品得到的道具
+    int32 image = 7; //展示图片
+    int32 show = 8; // 0 不展示但是返回给前端 1展示 2 不返回给前端
+    int32 flag = 9; //标签
+    string name = 10; //名字
+    string desc = 11; //描述
+    string img = 12; //图片
+    string addDiamond = 13; //购买商品额外得到的钻石
+    int32 down = 15; //打折？
+    string version = 16; //多少版本以上会有
+    string className = 17;//道具上下线关联的类
+    string id = 18; //道具ID
+    int32 ext = 19; //额外字段，用于做特殊标记
+    int32 startTime = 20; //商品上线时间
+    int32 endTime = 21;//商品下线时间
+    int32 buyLimit = 22; //购买限制
+	PayExtraData extraData = 23; //商品额外数据
+}
+message OaPayConfigAry {
+    repeated OaPayConfig ary = 1;
+}
+/***********************海外(Oa)androi商品(结束)**********************************/
+
+/***********************海外(Oa)ios商品(开始)**********************************/
+message OaPayIosConfig {
+    string productId = 1; //首充礼包 上报日志
+    int32 buyType = 2; //购买类型
+    int32 price = 3; //价格
+    repeated CommonRewardItem buyItem = 6; //购买商品得到的道具
+    int32 image = 7; //展示图片
+    int32 show = 8; // 0 不展示但是返回给前端 1展示 2 不返回给前端
+    int32 flag = 9; //标签
+    string name = 10; //名字
+    string desc = 11; //描述
+    string img = 12; //图片
+    string addDiamond = 13; //购买商品得到的钻石
+    int32 down = 15; //打折？
+    string version = 16; //多少版本以上会有
+    string className = 17;//道具上下线关联的类
+    string id = 18; //道具ID
+    int32 ext = 19; //额外字段，用于做特殊标记
+    int32 startTime = 20; //商品上线时间
+    int32 endTime = 21;//商品下线时间
+    int32 buyLimit = 22; //购买限制
+	PayExtraData extraData = 23; //商品额外数据
+}
+message OaPayIosConfigAry {
+    repeated OaPayIosConfig ary = 1;
+}
+/***********************海外(Oa)ios商品(结束)**********************************/
+
+/*********************海外(Oa)首充钻石双倍(开始)************************************/
+message OaPayFirstDoubleConfig {
+    string type = 1;  //类型 ios / android
+    uint32 startTime = 2; //开始时间
+    uint32 endTime = 3; //结束时间
+}
+//商城首充钻石双倍
+message OaPayFirstDoubleConfigAry {
+    repeated OaPayFirstDoubleConfig ary = 1;
+}
+/*********************海外(Oa)首充钻石双倍(结束)************************************/
+
+/**********************互相攻击限制(开始)********************************/
+message Fire2FireLimitConfig {
+    int32  intervalHour = 1;
+    int32  maxFireCount = 2;
+    int32  maxDailyFireCount = 3;
+}
+
+message Fire2FireLimitConfigAry {
+    repeated Fire2FireLimitConfig ary = 1;
+}
+/**********************互相攻击限制(结束)********************************/
+
+/*****************************家族配置(开始)************************************/
+message FamilyCreateItem {
+    int32 diamond = 1;  //折扣期间创建家族需要钻石
+    int32 oldDiamond = 2; //一般时间创建家族需要钻石
+    int64 disStartTime = 3; //折扣起始时间
+    int64 disEndTime = 4; // 折扣结束时间
+}
+
+message FamilyApplyItem {
+    int32 maxApply = 1; //最多申请
+    int32 maxAdd = 2; //最多加入
+}
+
+message FamilyKickingItem { //踢人限制   工会长限制
+    int32 deputyPatriarch = 1;
+    int32 elder = 2;
+}
+
+message FamilyConfig {
+    FamilyCreateItem create = 1;
+    FamilyApplyItem apply = 2;
+    FamilyKickingItem kicking = 3;
+    FamilyKickingItem post = 4;
+
+    int32 maxmembers = 5; //工会最大人数
+    int32 recommendRate = 6; //优先推荐人数比例在多少以上的家族
+    int64 startTime = 7;
+    int64 endTime = 8;
+    int32 defaultJoin = 9;  //默认加入方式
+    int32 needStar = 10; //默认需要的星星数
+    repeated int32 starConfig = 11; //星星数限制 选项
+    repeated CommonRewardItem bindReward = 12; //公会会长第一次绑定群奖励
+}
+
+message FamilyConfigAry {
+    repeated FamilyConfig ary = 1;
+}
+
+message FamilyCommonTaskCdt {
+    int32 times = 1; //需要完成多少次
+}
+
+message FamilyCommonTaskConfig {
+    int32 taskGroup =   1; //是第几组任务
+    string taskName =   2; //任务名字
+    FamilyCommonTaskCdt cdt = 3; //任务条件
+    int32 weight    =   4;  //任务权重
+    int32 scenes    =   5;  //任务跳转场景
+    string type      =   6;  //任务类型
+    string condition =  7;  //任务子条件
+    string action   =   8;  //与任务相关联的活动ID,根据活动时间上下线
+    string class    =   9;  //任务关联的类，method字段表明方法判断活动是否在线
+    string method   =   10; //根据class字段取类，在通过这个方法取判断任务是否应该上线
+    string param    =   11; //method 使用的刹那很熟
+    int32  mustShow = 12; //是否必出
+    int32 offline =   13; //活动是否在线
+    string week = 14;        //任务出现在第几周
+}
+
+message FamilyCommonTaskConfigAry {
+    repeated FamilyCommonTaskConfig ary = 1;
+}
+
+message FamilyTaskRewardItem {
+    string type = 1; //奖励类型
+    int32 value = 2; // 奖励值
+}
+
+message FamilyTaskRewardConfig {
+    int32 taskGroup = 1; //数据第几组任务的奖励
+    repeated FamilyTaskRewardItem reward = 2; //食材奖励
+    repeated CommonRewardItem propReward = 3; //道具奖励
+}
+
+message FamilyTaskRewardConfigAry {
+    repeated FamilyTaskRewardConfig ary = 1;
+}
+
+message FamilyLevelConfig {
+	int32 level = 1; //等级
+	int32 signReward = 2; //签到奖励等级
+	int32 maxContribution = 3; //当前等级最大贡献值
+	int32 maxMember = 4; //当前等级公会最大成员数
+	int32 dinnerLevel = 5; //当前等级对应的公会大餐等级
+	int32 propCtb = 6; //添加食材时获取的贡献值
+}
+
+message FamilyLevelConfigAry {
+    repeated FamilyLevelConfig ary = 1;
+}
+
+message FamilySignRewardConfig {
+	int32 level = 1; //奖励等级
+	repeated CommonRewardItem rewardList = 2; //具体奖励
+}
+
+message FamilySignRewardConfigAry {
+	repeated FamilySignRewardConfig ary = 1;
+}
+
+message FamilyGoodConfig {
+	uint32 goodID = 1; //商品ID
+	string goodName = 2; //商品名字,可以为空，后台暂时不用
+	int32 level = 3; //该商品需要的等级
+	int32 contribution = 4; //购买该商品需要的贡献值
+	uint32 limit = 5; //每日购买该商品的限制， 0表示没有限制
+	repeated CommonRewardItem rewardList = 6; //具体奖励，可选
+}
+
+message FamilyGoodConfigAry {
+	repeated FamilyGoodConfig ary = 1;
+}
+
+message GoodSmallGiftConfig {
+	uint32 weight = 1;
+	repeated CommonRewardItem rewardList = 2; //具体奖励
+}
+
+message GoodSmallGiftConfigAry {
+	repeated GoodSmallGiftConfig ary = 1;
+}
+
+message GoodDiscountBuildConfig {
+	uint32 minLevel = 1; //可以减价的最小等级
+	uint32 discountPer = 2; //减价百分比， 0到100， 0表示不减价， 100表示减价100%，即不要钱
+	uint32 limitHour = 3; //限时
+}
+
+message GoodDiscountBuildConfigAry {
+	repeated GoodDiscountBuildConfig ary = 1;
+}
+/*****************************家族配置(结束)************************************/
+
+/*****************************机器人公会配置(开始)*************************************/
+message RobotFamilyCreate {
+    int32 autoCreateNum = 1; //每次创建的数量
+    int64 openTime = 3;  // 开始时间 时间戳
+    int32 duration = 4;  // 持续时间 多少天
+    int32 createKeyExpire = 5;  //重发自动创建家族或多少时间内不可以再创建
+    int32 openNum = 6; //开服创建多少个
+}
+
+message RobotFamilyAutoAppoint {
+    int32 appointInterval = 1; //家族满人后 任命的时间间隔
+    int32 appointNumber = 2; //多少人开始任命副族长
+}
+
+message RobotFamilyAutoTransfer {
+    int32 transferInterval = 1; //公会任命副会长之后 转让的时间间隔
+}
+
+message RobotFamilyConfig {
+    RobotFamilyCreate create = 1;
+    RobotFamilyAutoAppoint autoAppoint = 2;
+    RobotFamilyAutoTransfer autoTransfer = 3;
+}
+
+message RobotFamilyConfigAry {
+    repeated RobotFamilyConfig ary = 1;
+}
+
+message FamilyCreateNameListConfig {
+    int32 uid = 1;   //创建公会机器人uid
+    string name = 2; //工会名称
+    string userName = 3; //机器人名字
+}
+
+message FamilyCreateNameListConfigAry {
+    repeated FamilyCreateNameListConfig ary = 1;
+}
+/*****************************机器人公会配置(结束)*************************************/
+
+
+/**********************有效期(开始)********************/
+message ExpireConfig {
+    int32 online = 1; //t_online
+}
+message ExpireConfigAry {
+    repeated ExpireConfig ary = 1;
+}
+/**********************有效期(结束)*********************/
+
+
+/****************************公会会长福利(开始)*******************************/
+message FamilyPatriarchRewardItem {
+    string index = 1;
+    int32 value = 2;
+}
+message FamilyPatriarchRewardConfig {
+    string rewardStartDate = 1;  //可以领奖的开始时间
+    string rewardEndDate  = 2;   //可以领奖的结束时间
+    repeated FamilyPatriarchRewardItem reward = 3; //奖励
+    string logStartDate = 4; //被扫描日志的开始时间
+    string logEndDate = 5; //被扫描日志的结束时间
+    string mailTitle = 6; //邮箱标题
+    string mailContent = 7; //邮箱内容
+    int32 mailExpire = 8; //邮箱有效期
+    string mailSubTitle = 9; //子标题
+}
+
+message FamilyPatriarchRewardConfigAry {
+    repeated FamilyPatriarchRewardConfig ary = 1;
+}
+/****************************公会会长福利(结束)*******************************/
+
+
+
+
+/****************************公会贡献排行奖励(开始)*******************************/
+message FamilyCtbRewardConfig {
+    int32 start = 1;
+    int32 end = 2;
+    repeated FamilyPatriarchRewardItem reward= 3;
+    string mailTitle = 4; //邮箱标题
+    string mailContent = 5; //邮箱内容
+    int32 mailExpire = 6; //邮箱有效期
+    string mailSubTitle = 7; //子标题
+}
+message FamilyCtbRewardConfigAry {
+    repeated FamilyCtbRewardConfig ary= 1;
+}
+message FamilyCtbRankConfig {
+    string endDate = 1;//贡献排行榜结算日期
+}
+message FamilyCtbRankConfigAry {
+    repeated FamilyCtbRankConfig ary = 1;
+}
+/****************************公会贡献排行奖励(结束)*******************************/
+
+/*******************岛屿诅咒**************************/
+message PlanetCurseConfigAry {
+    repeated PlanetCurseConfig ary = 1;
+}
+
+message PlanetCurseConfig {
+    uint32 planetId = 1;
+    string privateStart = 2;
+    repeated curseRateAndLevel level = 3;
+}
+
+message curseRateAndLevel {
+    uint32 curseRate = 1;
+    uint32 day = 2;
+}
+/*******************岛屿诅咒(结束)**************************/
+
+/**********************登录页(开始)********************/
+message LoginPageConfig{
+    uint32 startTime = 1;
+    uint32 endTime = 2;
+    uint32 id = 3;
+    string device = 4;
+}
+message LoginPageConfigAry{
+    repeated LoginPageConfig ary = 1;
+}
+
+message LoginPageFilesConfig{
+    uint32 id = 1;
+    string file = 2;
+    string device = 3;
+}
+message LoginPageFilesConfigAry{
+    repeated LoginPageFilesConfig ary = 1;
+}
+/**********************登录页(结束)*********************/
+
+/*******************岛主周报**************************/
+message WeeklyPaperConfigAry {
+    repeated WeeklyPaperConfig ary = 1;
+}
+
+message WeeklyPaperConfig {
+    int32                      titleID = 1;
+    string                     onlineTime = 2;
+    int32                      newUserLimit = 3;
+    repeated CommonRewardItem  rewardItems = 4;
+    repeated WeeklyTittleData  dataList = 5;
+}
+
+message WeeklyTittleData {
+    string data1 = 1;
+    string data2 = 2;
+}
+/*******************岛主周报(结束)**************************/
+
+/*******************岛主关系*************************/
+message UserRelationConfigAry {
+    repeated UserRelationConfig ary = 1;
+}
+
+message UserRelationConfig {
+    uint32 order = 1;
+    repeated RewardCommon reward = 2;
+}
+/************岛主关系(结束)**************************/
+
+/***********************IDIP粉色弹框(开始)***********************/
+message IDIPPinkBoxConfig {
+    string id = 1; //弹框ID
+    IDIPPinkBoxItem word = 2; //文案
+    repeated CommonRewardItem reward = 3; //奖励
+}
+
+message IDIPPinkBoxItem {
+    string preWord = 1; //名字前文字
+    string afterWord = 2; //名字后文字
+}
+
+message IDIPPinkBoxConfigAry {
+    repeated IDIPPinkBoxConfig ary = 1;
+}
+/***********************IDIP粉色弹框(结束)***********************/
+
+/************************趣味玩法道具(开始)**********************/
+message FunWayConfig{
+    uint32 startTime  = 1; //开始时间 时间戳
+    uint32 endTime  = 2; //结束时间 时间戳
+    uint32 time  = 3; //有效期 秒数
+    string type = 4; //道具类型
+}
+message FunWayConfigAry {
+    repeated FunWayConfig ary = 1;
+}
+/************************趣味玩法道具(结束)**********************/
+/*************** 聊天室 (开始) *****************/
+message ChatRoomMsg{
+    int32 start = 1;
+    int32 end = 2;
+    int32 roomNumber = 3;
+}
+message ChatRoomConfig {
+    string platform = 1;
+    repeated ChatRoomMsg roomMsg= 2;
+}
+
+message ChatRoomConfigAry {
+    repeated ChatRoomConfig ary = 1;
+}
+/*************** 聊天室 (结束) *****************/
+
+/********************嘉年华活动开关配置(开始)***********/
+message CarnivalSwitchConfig {
+    string type = 1;
+    int64 startDate = 2;
+    int64 endDate = 3;
+    uint32 showTime = 4;
+    string version = 5;
+    int32 id = 6;
+    int32   planet = 7;//多少岛屿开启
+}
+
+message CarnivalSwitchConfigAry {
+    repeated CarnivalSwitchConfig ary = 1;
+}
+
+/********************嘉年华活动开关配置(结束)***********/
+
+
+/********************嘉年华炸弹玩法(开始)***************/
+message CarnivalBoomConfig {
+    string boomTime = 1; //爆炸倒计时
+    repeated CarnivalBoomSafeLine safeLine = 2; //可以拆除成功的线
+    string planet = 3; //活动显示的岛屿
+    repeated CommonRewardItem reward = 4; //拆弹奖励
+    repeated CommonRewardItem boomReward = 5; //爆炸奖励
+    int32   tiliSend = 6; //多少体力送碎片
+    int32   dangerLineNum = 7; //拆弹要拆多少根爆炸
+    string  lowVersionMsg = 8; //低版本被装弹消息中心文案
+    string  lowVersionTitle = 9; //低版本被装消息 标题
+}
+message CarnivalBoomSafeLine {
+    uint32 boomNum = 1;
+    uint32 safeLineNum = 2;
+}
+message CarnivalBoomConfigAry {
+    repeated CarnivalBoomConfig ary = 1;
+}
+/********************嘉年华炸弹玩法(结束)***************/
+
+/********************嘉年华-接金币(开始)***************/
+message CarnivalGainCoinItemConfig {
+    int32    id    = 1;
+    string   type  = 2;
+    int32    num   = 3;
+    int32    param = 4;
+    float    speed = 5;
+    int32    rate  = 6; 
+    int32    scale = 7;
+}
+
+message CarnivalGainCoinItemConfigAry {
+    repeated CarnivalGainCoinItemConfig ary = 1;
+}
+
+message GainCoinLauncherItem {
+    int32 time = 1;      //多长时间
+    int32 frequency = 2; //多久一次        
+}
+
+message CarnivalGainCoinConfig {
+    int32 launcher = 1;
+    repeated GainCoinLauncherItem freInfo = 2;
+}
+
+message CarnivalGainCoinConfigAry {
+    repeated CarnivalGainCoinConfig ary = 1; 
+}
+
+/********************嘉年华-接金币(结束)***************/
+
+
+/********************嘉年华碎片(开始)***************/
+
+message CarnivalRandRewardItem {
+    int32 rate = 1; //随机权重
+    repeated CommonRewardItem reward = 2;
+}
+
+message CarnivalRewardConfig {
+    uint32 needNum = 1; //兑换需要的碎片数量
+    repeated CommonRewardItem reward = 2; //兑换的奖励
+    uint32 limit = 3; //限制兑换数量
+    uint32 id = 4;//标记用于兑换哪一个奖励
+    uint32 sendTili = 5; //嘉年华模式下，消耗多少体力获得碎片
+    repeated CarnivalRandRewardItem randReward = 6;//随机奖励配置
+}
+
+message CarnivalRewardConfigAry {
+    repeated CarnivalRewardConfig ary = 1;
+}
+/********************嘉年华碎片(结束)***************/
+
+/*******************公会战地图配置（开始）**************/
+message UnionCompetitionMapConfig {
+    string mapId = 1;
+    string version = 2;
+    uint32 totalWidth = 3;
+    uint32 totalHeight = 4;
+    uint32 cellLength = 5;
+    uint32 startX = 6;
+    uint32 startY = 7;
+    uint32 destBottomLeftX = 8;
+    uint32 destBottomLeftY = 9;
+    uint32 destTopRightX = 10;
+    uint32 destTopRightY = 11;
+    string mapData = 12;
+}
+
+message UnionCompetitionMapConfigAry {
+    repeated UnionCompetitionMapConfig ary = 1;
+}
+/*******************公会战地图配置（结束）**************/
+
+/************************聊天奖池********************/
+message ChatPlayPoolConfigAry {
+    repeated chatPlayPoolConfig ary = 1;
+}
+
+message chatPlayPoolConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 coldTime = 3;
+    uint32 rewardDuration = 4;
+    uint32 changeTime = 5;
+    uint32 kingRate = 6;
+    uint32 systemMoney = 7;
+    uint32 systemRate = 8;
+}
+/************************聊天奖池（结束）********************/
+
+
+/***********************打炮池子相关配置（开始）************************/
+
+message AttackRandConfigAry {
+    repeated AttackRandConfig ary = 1;
+}
+
+message AttackRandConfig {
+	int32 baseRand = 1;
+	float timeRate = 2;
+	float planetRate = 3;
+	int32 max = 4;
+	int32 shield = 5;
+	int32 planet = 6;
+	int32 defensed = 7;
+	int32 damaged = 8;
+	int32 destroied = 9;
+	int32 friendRand = 10;
+	int32 friendNum = 11;
+	PlanetLimit planetLimit = 12;
+	uint32 defaultInterval = 13;
+	uint32 dailyAttackLimit = 14;
+	float onlineRate = 15;
+	int32 newbieRank = 16;
+}
+
+message PlanetLimit {
+	uint32 curPlanet = 1;
+	uint32 timeInterval = 2;
+}
+
+message AttackPoolConfigAry {
+    repeated AttackPoolConfig ary = 1;
+}
+
+message AttackPoolConfig {
+	AttackPoolTarget allPool  = 1;
+	AttackPoolTarget partPool = 2;
+	uint32           topRankNum = 3;
+	uint32           topUserNumPerTime = 4;
+}
+
+message AttackPoolTarget {
+	int32 cap = 1;
+	int32 level = 2;
+}
+/***********************打炮池子相关配置（结束）************************/
+
+/***********************静默分享********************/
+message ShareDefaultQuietConfig {
+    string shareKey 	= 1;// 静默分享类型
+    int32  status 		= 2;// 开启状态0 关闭 1 开启
+}
+
+message ShareDefaultQuietConfigAry {
+    repeated ShareDefaultQuietConfig ary = 1;
+}
+/***********************静默分享(over)********************/
+
+/**************分享条件****************/
+message ShareConditionConfigAry {
+    repeated ShareConditionConfig ary = 1;
+}
+
+message ShareCondition {
+    string type = 1;
+    uint32 num = 2;
+}
+
+message ShareConditionConfig {
+	string id = 1;
+	repeated ShareCondition condition = 2;
+}
+/***********分享条件(结束)*************/
+
+/***********************嘉年华任务（开始）************************/
+message CarnivalTaskConfig {
+    string carnivalType = 1;
+    string taskId = 2;
+    string type = 3;
+    string condition = 4;
+    repeated CommonRewardItem reward = 5;
+    uint32 target = 6;
+}
+
+message CarnivalTaskConfigAry {
+    repeated CarnivalTaskConfig ary = 1;
+}
+
+/***********************嘉年华任务（结束）************************/
+
+/***********************同登入类型好友（开始）************************/
+message AutoAddFriendConfig {
+    int32 activeTimes = 1; // 1天内, 最多弹出消息数
+    int32 friLenLimit = 2; // 游戏内+FB好友数小于n时，触发推荐好友
+    int32 wheelMin = 3; // 触发推荐好友需转转盘次数(最小值)
+    int32 wheelMax = 4; // 触发推荐好友需转转盘次数（最大值）
+    int32 dailyTimes = 5; // 每天最多推荐n次好友
+    int32 maxTimes = 6; // 总共最多推荐n次好友
+}
+
+message LoginTypeFriendConfig {
+    string friendCount = 1; //推荐和被推荐都需要好友数量小于20
+    string friendNum = 2; //需要推荐的好友数量
+    string descFriendCount = 3; // 推荐的目标数量
+    string refresh = 4; //刷新时间
+    uint32 needStar = 5; //需要的星星数量
+    uint32 regOnlineNum = 6; // 当天注册在线用户取的个数
+    uint32 maxAddFriLen = 7; // 新手不再推荐的被加次数限制
+
+    AutoAddFriendConfig autoConf = 8; // 自动弹出加好友配置
+}
+
+message LoginTypeFriendConfigAry {
+    repeated LoginTypeFriendConfig ary = 1;
+}
+
+/***********************同登入类型好友（结束）************************/
+
+
+/***********************破产补助（开始）************************/
+
+message BankruptProtect {
+    int32 attack = 1; //触发保护后 多少小时内不会随机被打
+}
+
+message BankruptBuildUpdateConfig {
+    int32 rate = 1; //80% 损失比例
+    repeated int32 building = 2; //回复岛屿状态
+    int32 triggerNum = 3; //可恢复数
+}
+
+message BankruptConfig {
+    int32 lastTime = 1; //流失多少秒之内有效
+    int32 maxLevel = 2; //同一岛屿最多触发多少次
+    BankruptProtect protect = 3;//破产保护
+    int32 maxPlanet = 4; //距离最大岛屿多少岛不触发
+    int32 minPlanet = 5; //岛屿小于多少触发
+}
+
+message BankruptConfigAry {
+    repeated BankruptConfig ary = 1;
+}
+
+message BankruptBuildUpdateConfigAry {
+    repeated BankruptBuildUpdateConfig ary = 1;
+}
+
+/***********************破产补助（结束）************************/
+
+
+/*********************** 公会战活动配置（开始）************************/
+message UnionCompActionConfig {
+    string     onlineWeek = 1; //可以比赛的时间（周几）
+    string     startTime = 2; //开始游戏的时间（秒），格式为 hour:minute:second
+	int32      enterBeforeStart = 3; //参赛人员可以在开赛前多少秒进场
+	int32      standBy = 4; //开赛前准备时间
+	int32      maxDuration = 5; //比赛最长持续时间（秒）
+	int32      intervalPerCmd = 6; //船长每次发送命令的间隔时间（秒）
+	int32      cmdFollowTime = 7; //船员跟随船长时间的有效时间（秒）
+	int32      resetTime = 8; //中场休息时间（秒）
+}
+
+message UnionCompActionConfigAry {
+    repeated UnionCompActionConfig ary = 1;
+}
+
+message UnionCompPushConfig {
+    string lang = 1; //推送语言
+    string content = 2; //推送文案
+    string title = 3;//推送标题
+}
+
+message UnionCompPushConfigAry {
+    repeated UnionCompPushConfig ary = 1;
+}
+
+message UnionCompClientRuntimeConfig {
+	int64 speedUpUnit = 1;
+	int64 speedDownUnit = 2;
+	int64 speedMax = 3;
+	int64 speedMin = 4;
+	int64 speedDownOnCollide = 5;
+}
+
+message UnionCompClientRuntimeConfigAry {
+	repeated UnionCompClientRuntimeConfig ary = 1;
+}
+
+message UnionCompMiscConfig {
+	string goldMsg = 1; //公会赛冠军推送消息
+	int32 isTestMode = 2; //公会服务是否启用测试模式
+	int32 broadcastInterval = 3; //公会广播间隔， 单位 分钟
+	uint32 broadcastDuration = 4; //公会广播持续时长， 单位 小时
+}
+
+message UnionCompMiscConfigAry {
+	repeated UnionCompMiscConfig ary = 1;
+}
+
+message UnionCompTestCountConfig {
+	uint32 familyID = 1;
+}
+
+message UnionCompTestCountConfigAry {
+	repeated UnionCompTestCountConfig ary = 1;
+}
+
+/***********************公会战活动配置配置（结束）************************/
+
+/**************************自动建岛配置(开始)************************************/
+
+message ArchitectureConfig {
+    int32 archTime = 1; //自动建岛时间间隔
+    int32 expireTime = 2; //多久时间登入过才会自动建岛
+    int32 openPlanet = 3; //多少岛之后开始自动建岛
+    int32 autoArcNum = 4; //自动建岛次数
+}
+
+message ArchitectureConfigAry {
+    repeated  ArchitectureConfig ary = 1;
+}
+/***************************自动建岛(结束)******************************************/
+
+/*****************私密关系配置********************/
+message UserRelationMapConfigAry {
+    repeated UserRelationMapConfig ary = 1;
+}
+
+message UserRelationMapConfig {
+    uint32 id = 1;  //顺序编号
+    string type = 2;  //类型 A|B---E
+    uint32 pointer = 3; //指向， 1指向他人, 2指向我
+}
+
+/***************私密关系配置(over)**********************/
+
+/*****************多倍玩法配置********************/
+message BetMultipleConfigAry {
+    repeated BetMultipleConfig ary = 1;
+}
+
+message BetMultipleConfig {
+    uint32 multiple = 1;  //倍数
+    uint32 planet = 2;  //解锁数值
+    string version = 3;  //倍数对应的版本
+    string conditionType = 4; //条件类型:岛屿或vip
+}
+/*****************多倍玩法配置(over)********************/
+
+/**************分享类型*****************/
+message ShareReportConfigAry {
+    repeated ShareReportConfig ary = 1;
+}
+
+message ShareReportConfig {
+    string subType = 1;     //上报类型
+    uint32 subTypeValue = 2;//上报类型值
+    string type = 3;       //上报类型所属大类
+    uint32 typeValue = 4;  //上报类型所属大类值
+    uint32 max = 5;        //上报限制次数0 无限制，大于0有限制
+    string privateFunc = 6; //额外操作，后台使用
+    uint32 subOfPart = 7;   //1分享类型， 2 静默类型
+}
+/**************分享类型(over)*****************/
+
+/*********************体力全部消耗提示购买体力档次(开始)*************/
+message PayHabbitTiliConfig {
+    int32 nextTili = 1; //第二档  是当前档次后的第几档
+}
+
+message PayHabbitTiliConfigAry {
+    repeated PayHabbitTiliConfig ary = 1;
+}
+/*********************体力全部消耗提示购买体力档次(结束)*************/
+
+/*********************离线保护(开始)*************/
+message OfflineGuardPlanetConfig {
+    int32 offlineStart = 1; //离线天数范围起始值
+    int32 offlineEnd = 2; //离线天数范围结束值
+    int32 recoverRate = 3; //建筑等级恢复的百分比
+}
+
+message OfflineGuardPlanetConfigAry {
+    repeated OfflineGuardPlanetConfig ary = 1;
+}
+
+
+message OfflineGuardLimitConfig {
+    int32 minPlanet = 1; //触发保护的最小岛屿，与游戏最小岛屿的差值
+    int32 maxPlanet = 2; //触发保护的最大岛屿，与游戏最大岛屿的差值
+    int32 limitTimes = 3; //每天保护触发的最大次数限次
+}
+message OfflineGuardLimitConfigAry {
+    repeated OfflineGuardLimitConfig ary = 1;
+}
+/*********************离线保护(结束)*************/
+
+/*********************前端通用配置*************/
+// old
+message ClientCommonConfigAry {
+    repeated ClientCommonConfig ary = 1;
+}
+
+message ClientCommonConfig {
+    float ReloginTime = 1;
+    float UpdateTime = 2;
+    uint64 MaximumAvailableDiskSpace = 3;
+    string UnionCompetitionTcpServerAddr = 4;
+    uint32 UnionCompetitionTcpServerPort = 5;
+    string UnionCompetitionUdpServerAddr = 6;
+    uint32 UnionCompetitionUdpServerPort = 7;
+
+}
+
+// new 
+message ClientGeneralConfig {
+    string key = 1;
+    string value = 2;
+}
+
+
+message ClientGeneralConfigAry {
+    repeated ClientGeneralConfig ary = 1;
+}
+/*********************前端通用配置(over)*************/
+
+/*********************分享文案配置*************/
+message PlatformLanguageConfig {
+    string languageKey 	= 1;// 语言key
+    string languageValue = 2;// 语言值
+}
+
+message PlatformLanguageConfigAry {
+    repeated PlatformLanguageConfig ary = 1;
+}
+/*********************分享文案配置(over)*************/
+
+/*************工会战奖励(开始）************************/
+
+message UnionCompRewardConfig {
+    uint32 level = 1;
+    uint32 rank = 2;
+    repeated CommonRewardItem reward = 3;
+}
+
+message UnionCompRewardConfigAry {
+    repeated UnionCompRewardConfig ary = 1;
+}
+
+
+/*************工会战奖励(结束)************************/
+
+/*************新手八天签到(开始）************************/
+
+message NewerSignInConfig {
+    int32 index = 1; //第几天
+    int32 default = 2; //默认选第几个奖励 ，下表从1开始
+    repeated CommonRewardItem signReward = 3; //签到可选奖励
+}
+
+message NewerSignInConfigAry {
+    repeated NewerSignInConfig ary = 1;
+}
+/*************新手八天签到(结束)************************/
+
+/*************注册奖励************************/
+message RegisterRewardConfigAry {
+    repeated RegisterRewardConfig ary = 1;
+}
+
+message RegisterRewardConfig {
+    int32 sendPerSub = 1;     //每次发送邀请的递减时间
+    int32 registerLimit = 2;  //注册多长时间内可以触发
+    int32 rewardTime = 3;     //触发之后间隔多长可以领奖
+    string mainTitle = 4;     //发放奖励标题
+    string subTitle = 5;      //发放奖励子标题
+    string content = 6;       //发放奖励内容文字
+    string pushMsg = 7;       //推送内容
+    repeated CommonRewardItem reward = 8; //奖励
+}
+/*************注册奖励(over)************************/
+
+/*************累计充值奖励(开始）************************/
+message CumuRechargeRewardConfig {
+    uint32 id = 1;
+    uint32 diamond = 2;
+    repeated CommonRewardItem reward = 3;
+}
+
+message CumuRechargeRewardConfigAry {
+    repeated CumuRechargeRewardConfig ary = 1;
+}
+
+/*************累计充值奖励(结束)************************/
+
+/************************好友整合(开始)**************************/
+message SpineConfig {
+    repeated string spine = 1; //触发spiner动画的操作
+    int32 friendInterval = 2; //调好友信息接口的时间间隔
+}
+
+message SpineConfigAry {
+    repeated SpineConfig ary = 1;
+}
+/************************好友整合(结束)**************************/
+
+
+/************************转盘互助(开始)**************************/
+message FriendAcceptRewardRandItem {
+    int32 rate = 1; //设定随机范围出现的概率
+    int32 min = 2; // 随机范围的最小值
+    int32 max = 3; // 随机范围的最大值
+}
+
+message FriendHelpConfig {
+    int32 type = 1; //互助类型
+    int32 rate = 2; //触发概率
+    repeated CommonRewardItem useReward = 3;
+    repeated CommonRewardItem acceptReward = 4;
+    int32 max = 5; //单日最多触发多少次
+    repeated FriendAcceptRewardRandItem rand = 6;
+}
+
+message FriendHelpConfigAry {
+    repeated FriendHelpConfig ary = 1;
+}
+
+message FriendHelpLimitConfig {
+    int32 maxLimit = 1; //最大囤积多少个帮助
+    string lowerVersionMsg = 2; //低版本消息中心文案
+}
+
+message FriendHelpLimitConfigAry {
+    repeated FriendHelpLimitConfig ary = 1;
+}
+
+message ZhuanPanHelpConfig {
+    int32 type = 1; //互助类型
+    int32 rate = 2; //触发概率
+    repeated CommonRewardItem useReward = 3;
+    repeated CommonRewardItem acceptReward = 4;
+    int32 max = 5; //单日最多触发多少次
+    repeated FriendAcceptRewardRandItem rand = 6;
+}
+
+message ZhuanPanHelpConfigAry {
+    repeated ZhuanPanHelpConfig ary = 1;
+}
+
+message ZhuanPanHelpLimitConfig {
+    int32 maxLimit = 1; //最大囤积多少个帮助
+    string lowerVersionMsg = 2; //低版本消息中心文案
+}
+
+message ZhuanPanHelpLimitConfigAry {
+    repeated ZhuanPanHelpLimitConfig ary = 1;
+}
+
+/************************转盘互助(结束)**************************/
+
+/*************密友邀请奖励(开始）************************/
+message CloseFriendProcessConfig {
+    string id = 1;
+    int32 target = 2;
+    repeated CommonRewardItem reward = 3;
+}
+
+message CloseFriendProcessConfigAry {
+    repeated CloseFriendProcessConfig ary = 1; 
+}
+
+message CloseFriendConfig {
+    string id = 1;
+    int32 taskId = 2;
+    int32 max = 3;
+    string msgtype = 4;
+    string url = 5;
+    repeated CommonRewardItem perReward = 6;
+}
+
+message CloseFriendConfigAry {
+    repeated CloseFriendConfig ary = 1; 
+}
+/*************密友邀请奖励(结束）************************/
+
+
+/*************打好友奖励(开始）************************/
+message FightFriendRewardLevel {
+    uint32 param = 1;  //炮数
+    repeated CommonRewardItem reward = 2;
+}
+
+message FightFriendRewardConfig {
+    uint32 id = 1;  //对应Action sid
+    repeated FightFriendRewardLevel level = 2;
+}
+
+message FightFriendRewardConfigAry {
+    repeated FightFriendRewardConfig ary = 1;
+}
+
+/*************打好友奖励(结束)************************/
+
+/*************推荐大图配置(开始）************************/
+
+//推荐大图具体配置
+message RecommendListPic {
+    string desc = 1;
+    uint32 limitId = 2;
+    string jump = 3;
+    string jumpValue = 4;
+    string ctime = 5;
+    string image = 6;
+}
+
+message RecommendListConfig {
+    string version = 1;
+    string defaultLang = 2;
+    string test = 3;
+    string channel = 4;
+    string ctime = 5;
+    uint32 pop = 6;
+    repeated RecommendListPic pic = 7;
+}
+
+message RecommendListConfigAry {
+    repeated RecommendListConfig ary = 1;
+}
+
+//推荐大图限制条件
+message RecommendLimitCondition {
+    string type = 1;
+    repeated string data = 2;
+}
+
+message RecommendLimitConfig {
+    uint32 limitId = 1;
+    repeated RecommendLimitCondition condition = 2;
+}
+
+message RecommendLimitConfigAry {
+    repeated RecommendLimitConfig ary = 1;
+}
+
+//默认推荐大图
+message RecommendPicDefaultConfig {
+    string desc = 1;
+    string jump = 2;
+    string image = 3;
+}
+
+message RecommendPicDefaultConfigAry {
+    repeated RecommendPicDefaultConfig ary = 1;
+}
+
+
+/*************推荐大图配置(结束)************************/
+
+/*********************FB Feed链接(开始)****************/
+    message FBFeedImageConfig {
+        string shareKey = 1;
+        repeated string imgList = 2;
+    }
+
+    message FBFeedImageConfigAry {
+        repeated FBFeedImageConfig ary = 1;
+    }
+/*********************FB Feed链接(结束)****************/
+
+
+/************全球化资源配置-前端维护(开始)*************/
+
+message I18NLocalConfig {
+    string name = 1;
+    string resourcePath = 2;
+    string retrieverType = 3;
+}
+
+message I18NVersionLocalConfig {
+    string version = 1;
+    repeated I18NLocalConfig ary = 2;
+}
+
+message I18NVersionLocalConfigAry {
+    repeated I18NVersionLocalConfig ary = 1;
+}
+
+/************全球化资源配置-前端维护(结束)*************/
+
+/*************开心夺宝掉落(开始）************************/
+message HappyDropConfig {
+    uint32 drop_id = 1;  //掉落组id
+    repeated CommonRewardItem reward = 2;//掉落奖励
+    double height = 3;//掉落权重
+}
+
+message HappyDropConfigAry {
+    repeated HappyDropConfig ary = 1;
+}
+/*************开心夺宝掉落(结束）************************/
+
+/*************累计开心夺宝奖励(开始）************************/
+message HappyCumuRewardConfig {
+    uint32 cumu_times = 1; //累计夺宝次数
+    repeated CommonRewardItem reward = 2;
+}
+
+message HappyCumuRewardConfigAry {
+    repeated HappyCumuRewardConfig ary = 1;
+}
+
+/*************累计开心夺宝奖励(结束)************************/
+
+/*************开心夺宝价格配置(开始）************************/
+message HappyPriceConfig {
+    uint32 type = 1; // 夺宝类型1,10
+    uint32 diamond = 2;
+}
+
+message HappyPriceConfigAry {
+    repeated HappyPriceConfig ary = 1;
+}
+
+/*************开心夺宝价格配置(结束)************************/
+
+/*************广播内容配置(开始）************************/
+message BroadcastMsgConfig {
+    uint32 id = 1; 
+    string content = 2;
+}
+
+message BroadcastMsgConfigAry {
+    repeated BroadcastMsgConfig ary = 1;
+}
+
+/*************广播内容配置(结束)************************/
+
+/*************fb分享文案(开始）************************/
+message FbShareConfig {
+    string lang = 1;
+    string type = 2;
+    string title = 3;
+    string description = 4;
+    string image = 5;
+}
+
+message FbShareConfigAry {
+    repeated FbShareConfig ary = 1;
+}
+/*************fb分享文案(结束)************************/
+
+/*************转盘事件累计活动奖励(开始）************************/
+message WheelEventRewardLevel {
+    uint32 param = 1;  //累计数
+    repeated CommonRewardItem reward = 2;
+}
+
+message WheelEventRewardConfig {
+    uint32 id = 1;  //活动事件ID 对应Action sid
+    repeated WheelEventRewardLevel level = 2;
+}
+
+message WheelEventRewardConfigAry {
+    repeated WheelEventRewardConfig ary = 1;
+}
+
+/*************转盘事件累计活动奖励(结束)************************/
+
+/*************绑定奖励 FB用(开始)************************/
+message BindRewardConfig {
+    repeated CommonRewardItem reward = 1;
+}
+
+message BindRewardConfigAry {
+    repeated BindRewardConfig ary = 1;
+}
+/*************绑定奖励 FB用户(结束)************************/
+
+
+/*************海外CashKing金币上限控制表(开始）************************/
+
+message CkMoneyCeilingConfig {
+    uint32 minPlanet = 1;  //最低岛屿
+    uint32 maxPlanet = 2;  //最高岛屿
+    int32 ceilingMoney = 3;  //最大被偷金币数
+    int32 minMoneyRate = 4; //金币降幅比例
+}
+
+message CkMoneyCeilingConfigAry {
+    repeated CkMoneyCeilingConfig ary = 1;
+}
+
+/*************海外CashKing金币上限控制表(结束)************************/
+
+
+/*************场景礼包（开始）************************/
+message PayPackageConfig {
+	string name = 1; //礼包名
+	int32 isOpen = 2; //礼包是否开启
+	int32 rate = 3; //礼包弹出概率
+	int32 limitMinitue = 4; //礼包时限， 分钟
+}
+
+message PayPackageConfigAry{
+	repeated PayPackageConfig ary = 1;
+}
+
+//建岛礼包触发条件配置
+message PayPackageBuildConfig {
+	uint32 minPlanet = 1; //礼包触发的最小岛屿
+	uint32 maxCountDaily = 2; //每日触发的最大次数
+	uint32 minBuild = 3; //礼包触发的最小建筑数
+	uint32 maxTili = 4; //礼包触发的最大体力
+}
+
+message PayPackageBuildConfigAry {
+	repeated PayPackageBuildConfig ary = 1;
+}
+
+//摧毁严重礼包触发条件配置
+message PayPackageDestoryConfig {
+	uint32 minLevel = 1; //最小破产保护级数
+	uint32 maxCountDaily = 2; //每日触发的最大次数
+}
+
+message PayPackageDestoryConfigAry {
+	repeated PayPackageDestoryConfig ary = 1;
+}
+
+//通缉令触发条件配置
+message PayPackageTongjilingConfig {
+	uint32 maxCountWeek = 1; //每周触发的最大次数
+}
+
+message PayPackageTongjilingConfigAry {
+	repeated PayPackageTongjilingConfig ary = 1;
+}
+
+//弹弓礼包触发条件配置
+message PayPackageSlingshotConfig {
+	uint32 maxSnowBallCount = 1; //玩家小鸟的最大个数
+	uint32 maxCountDaily = 2; //每日触发的最大次数
+	uint32 validBeforeOutLine = 3; //弹弓小鸟下线前多少小时有效
+}
+
+message PayPackageSlingshotConfigAry {
+	repeated PayPackageSlingshotConfig ary = 1;
+}
+
+//拼图礼包触发条件配置
+message PayPackagePicConfig {
+	uint32 maxCountDaily = 1; //每日触发的最大次数
+	uint32 validBeforeOutLine = 2; //弹弓小鸟下线前多少小时有效
+	uint32 maxPicCount = 3; //当前玩家最多拥有多少套碎片
+}
+
+message PayPackagePicConfigAry {
+	repeated PayPackagePicConfig ary = 1;
+}
+
+
+//转盘深度付费相关
+message PayPackageWheelItemConfig {
+	uint32 bet = 1; //倍数
+	uint32 weight = 2; //权重
+}
+
+message PayPackageWheelConfig {
+	uint32 maxCountWeek = 1; //每周触发的最大次数
+	repeated string idList = 2; //可以触发的档位的商品ID列表
+	repeated PayPackageWheelItemConfig item = 3;
+}
+
+message PayPackageWheelConfigAry {
+	repeated PayPackageWheelConfig ary = 1;
+}
+
+/*************场景礼包（结束）************************/
+
+/*************一次性礼包（开始）************************/ 
+message OnetimePackageConfig {
+	int32 id = 1;
+	uint32 min = 2; //档位最小值
+	uint32 max = 3; //档位最大值
+	repeated CommonRewardItem rewardList = 4; //奖励
+}
+
+message OnetimePackageConfigAry {
+	repeated OnetimePackageConfig ary = 1;
+}
+/*************一次性礼包（结束）************************/
+
+/************* 选择性礼包（开始）************************/
+message OptionalPackageConfig {
+	int32 id = 1;
+	uint32 min = 2; //档位最小值
+	uint32 max = 3; //档位最大值
+	repeated CommonRewardItem rewardList = 4; //奖励
+}
+
+message OptionalPackageConfigAry {
+	repeated OptionalPackageConfig ary = 1;
+}
+/************* 选择性礼包（结束）************************/
+
+/************* 连续多天礼包（开始）************************/
+message ContinuousPackageConfig {
+	int32 id = 1;
+	uint32 min = 2; //档位最小值
+	uint32 max = 3; //档位最大值
+	repeated CommonRewardItem rewardList = 4; //奖励
+}
+
+message ContinuousPackageConfigAry {
+	repeated ContinuousPackageConfig ary = 1;
+}
+/************* 连续多天礼包（结束）************************/
+
+/*****************守护神卡牌收集(开始)************************/
+//用户卡片信息
+message GuardCardConfig {
+    uint32 groupId = 1; //卡组ID
+    uint32 unlockPlanet = 2;//卡组解锁岛屿
+    uint32 seaArea = 3; //卡组所属 海域
+    repeated uint32 card = 4;//卡组内卡片各个位置卡片等级，下标代表卡片位置
+    repeated CommonRewardItem reward =5; //卡组集齐的奖励
+}
+
+message GuardCardConfigAry {
+    repeated GuardCardConfig ary = 1;
+}
+
+message GuardCardRankBoxItem {
+    uint32 cardLevel = 1;//随机出的卡片等级
+    uint32 cardWeight = 2;// 随机出现该等级卡片的权重
+}
+
+//小宝箱配置
+message GuardCardRandBoxConfig {
+    uint32 randBoxId = 1;//小宝箱ID，
+    repeated GuardCardRankBoxItem randCard = 2; //随机出的卡片数据
+}
+
+message GuardCardRandBoxConfigAry  {
+    repeated GuardCardRandBoxConfig ary = 1;
+}
+
+//卡片宝箱配置
+message GuardCardBoxItem {
+    uint32 randBoxId = 1;//小宝箱ID
+    uint32 randBoxNum = 2; //具有的小宝箱数量
+}
+
+message GuardCardBoxConfig {
+    uint32 boxId = 1; //宝箱ID
+    repeated GuardCardBoxItem randBoxList = 2; //宝箱中包含的小宝箱情况
+}
+
+message GuardCardBoxConfigAry {
+    repeated GuardCardBoxConfig ary = 1;
+}
+
+message GuardCardRateItem {
+    uint32 cardLevel = 1; //卡片的等级，
+    uint32 num = 2; //一张卡片得到多少数量的时候减少权重
+    uint32 subWeight = 3; //达到要求的数量后，减少多少权重
+}
+
+//卡片权重相关配置
+message GuardCardRateConfig {
+    uint32 defaultRate = 1; //卡片默认的权重
+    uint32 minRate = 2; //卡片的最低权重
+    repeated GuardCardRateItem rateSub = 3; //权重变化配置
+
+}
+
+message GuardCardRateConfigAry {
+    repeated GuardCardRateConfig ary = 1;
+}
+
+message GuardCardSendSwitchItem {
+    uint32 startTime = 1;
+    uint32 endTime = 2;
+}
+
+//相关限制，和配置
+message GuardCardLimitConfig {
+    uint32 showPlanet = 1; //开启的岛屿
+    uint32 sendLimit = 2; //当天赠送上限
+    uint32 recvLimit = 3; //当天接收上限
+    repeated GuardCardSendSwitchItem sendSwitch = 4; //卡片赠送时间开关
+}
+message GuardCardLimitConfigAry {
+    repeated GuardCardLimitConfig ary = 1;
+}
+
+message GuardCardExchangeConfig {
+    int32 limit = 1; //每天的限制
+    repeated CommonRewardItem reward = 2; //兑换的奖励
+    int32 star = 3; //需要的星星数
+    int32 id = 4; //兑换奖励id
+}
+message GuardCardExchangeConfigAry {
+    repeated GuardCardExchangeConfig ary = 1;
+}
+/*****************守护神卡牌收集(结束)************************/
+
+
+/*************星星活动(开始）************************/
+message StarActionRewardConfig {
+    uint32  id = 1; //任务id
+    string  desc = 2;   //任务描述
+    uint32  cumu_times = 3; //累计次数
+    uint32  star = 4; //奖励的星星数
+}
+
+message StarActionRewardConfigAry {
+    repeated StarActionRewardConfig ary = 1;
+}
+
+message StarActionFreshConfig {
+    uint32  times = 1; //刷新次数
+    uint32  diamond = 2; //花费的钻石数
+}
+
+message StarActionFreshConfigAry {
+    repeated StarActionFreshConfig ary = 1;
+}
+
+/*************星星活动(结束)************************/
+
+/*************打折卡(开始)************************/
+message DisCardItem {
+    int32 rate = 1; //折扣力度
+    int32 weight = 2; //卡片权重
+}
+
+message DisCardConfig {
+    int32 payMoney = 1; //用户的支付额度
+    string disCardType = 2; //卡片类型
+    repeated DisCardItem cardList = 3;//卡片折扣力度和权重列表
+}
+
+message DisCardConfigAry {
+    repeated DisCardConfig ary = 1;
+}
+
+message DisCardLimitConfig {
+    int32 disCardExpireTime = 1; //保护卡过期时间
+    int32 useLimit = 2; //每天使用限制
+}
+
+message DisCardLimitConfigAry {
+    repeated DisCardLimitConfig ary = 1;
+}
+
+/*************打折卡(结束)************************/
+
+/*************迷你盾(开始)************************/
+message MiniShellConfig {
+    int32 dailyMax = 1; //当天可以使用的次数上限
+    int32 protectMax = 2; //迷你盾最多保护建筑数量
+}
+
+message MiniShellConfigAry {
+    repeated MiniShellConfig ary = 1;
+}
+
+/*************迷你盾(结束)************************/
+
+/*************好友的好友(开始)************************/
+message FrdOfFrdConfig {
+    int32 isOn = 1; //是否开启
+}
+
+message FrdOfFrdConfigAry {
+    repeated FrdOfFrdConfig ary = 1;
+}
+
+/*************好友的好友(结束)************************/
+
+/*************用户推送开关(开始)************************/
+message UserPushSwitchConfig {
+    int32 id = 1; //开关id
+    string startTime = 2; // 08:00
+    string endTime = 3; // 22:00
+}
+
+message UserPushSwitchConfigAry {
+    repeated UserPushSwitchConfig ary = 1;
+}
+/*************用户推送开关(结束)************************/
+
+/*********************首冲配置(开始)*************/
+message FirstPayConfigConfig {
+    int32 showPlanet = 1; // 第几岛屿开启首冲
+    int32 iosReviewPlanet = 2; // ios审核期间，第几岛开启首冲
+    int32 maxTime = 3; // 首冲展示的最长时间
+    int32 cycleTime = 4; // 首冲开放周期（开启一期的时间）
+}
+
+message FirstPayConfigAry {
+    repeated FirstPayConfigConfig ary = 1;
+}
+/*********************首冲配置(结束)*************/
+
+/************************FB/Message 配置(开始)*************/
+message ShareToMessageConfig {
+    string buttonActionUrlIOS = 1;
+    string buttonActionUrlAndroid = 2;
+    string buttonText = 3;
+    string imageUrl = 4;
+    string mainTitle = 5;
+    string subTitle = 6;
+    string type = 7;
+    string subType = 8;
+}
+
+message ShareToMessageConfigAry {
+    repeated ShareToMessageConfig ary = 1;
+}
+
+/************************FB/Message 配置(结束)*************/

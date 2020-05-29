@@ -1,0 +1,29 @@
+// player.proto
+// The protocol buffer structures used to create player_pb2.py, which is
+// used for serializing and deserializing messages to send over the wire
+
+package Player;
+
+message PlayerIP {
+	required uint32 player_no = 1;
+	required string IP = 2;
+}
+
+message StartMsg {
+	required uint32 proto_version = 1;
+	required uint32 player_no = 2;
+	repeated PlayerIP players = 3;
+}
+
+message GameMsg {
+
+  	message Position {
+  		required float x = 1;
+  		required float y = 2;
+  	}
+
+  	required uint32 mtype = 1;
+  	required uint32 player_no = 2;
+  	optional Position pos = 3;
+  	optional uint32 dir = 4;
+}

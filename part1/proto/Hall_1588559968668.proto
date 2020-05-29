@@ -1,0 +1,438 @@
+syntax = "proto2";
+package protocol;
+import "Vo.proto";
+
+
+//CRank 排行榜
+message CRank
+{
+    required uint32 	cmd 	= 1[default=0x5000];  // 
+    optional uint32 	type  	= 2;  	//类型 1表示财富榜 2表示本周局数榜
+	optional uint32 	index  	= 3;  	//1表示1-10条 2表示11-20条
+}
+
+message SRank
+{
+    required uint32 	cmd 	= 1[default=0x5000];  // 
+    optional uint32 	type  	= 2;  	//类型 1表示财富榜 2表示本周局数榜
+	repeated Rank 		list  	= 3;  	//返回排行榜
+	optional uint32 	err  	= 4;					//
+}
+
+//CShop 商城
+message CShop
+{
+    required uint32 	cmd 	= 1[default=0x5001];  // 
+    optional uint32 	type  	= 2;  	//类型 1表示房卡 2表示金币 3表示钻石
+}
+
+message SShop
+{
+    required uint32 	cmd 	= 1[default=0x5001];  // 
+    optional uint32 	type  	= 2;  	//类型 1表示房卡 2表示金币 3表示钻石
+	repeated ShopItem 	list  	= 3;  	//返回商城列表
+	optional uint32 	err  	= 4;					//
+}
+
+//CMail 邮件
+message CMail
+{
+    required uint32 	cmd 	= 1[default=0x5002];  //
+}
+
+message SMail
+{
+    required uint32 	cmd 	= 1[default=0x5002];  // 
+	repeated Mail 		list  	= 2;  	//返回邮件列表
+	optional uint32 	err  	= 3;					//
+}
+
+//CFriend 好友
+message CFriend
+{
+    required uint32 	cmd 	= 1[default=0x5003];  //
+}
+
+message SFriend
+{
+    required uint32 	cmd 	= 1[default=0x5003];  // 
+	repeated Friend 	list  	= 2;  	//返回好友列表
+	optional uint32 	err  	= 3;					//
+}
+
+//CFindFriend 查找好友
+message CFindFriend
+{
+    required uint32 	cmd 	= 1[default=0x5004];  //
+	optional string		uid		= 2;//玩家id
+	optional uint32		type	= 3;//1表示查找 2表示推荐
+}
+
+message SFindFriend
+{
+    required uint32 	cmd 	= 1[default=0x5004];  // 
+	repeated Friend 	list  	= 2;  	//返回好友
+	optional uint32		type	= 3;
+	optional uint32 	err  	= 4;					//
+}
+
+//CGiveFriend 赠送好友金币,每次赠送200
+message CGiveFriend
+{
+    required uint32 	cmd 	= 1[default=0x5005];  //
+	required string		uid		= 2;//玩家id
+}
+
+message SGiveFriend
+{
+    required uint32 	cmd 	= 1[default=0x5005];  // 
+	optional string 	uid  	= 2;  	//返回uid	
+	optional uint32 	err  	= 3;					//
+}
+
+//CAddFriend 添加好友
+message CAddFriend
+{
+    required uint32 	cmd 	= 1[default=0x5006];  //
+	required string		uid		= 2;//玩家id
+}
+
+message SAddFriend
+{
+    required uint32 	cmd 	= 1[default=0x5006];  // 
+	optional string 	uid  	= 2;  	//返回uid	
+	optional uint32 	err  	= 3;					//
+}
+
+//CAddFriendList 好友请求列表
+message CAddFriendList
+{
+    required uint32 	cmd 	= 1[default=0x5007];  //
+}
+
+message SAddFriendList
+{
+    required uint32 			cmd 	= 1[default=0x5007];  // 
+	repeated FriendNotice 		list 	= 2;  	//
+	optional uint32 			err  	= 3;	//
+}
+
+message CFriendChat{
+	optional uint32 	cmd 			= 1[default=0x5021];  	//
+	optional string		content			= 2;
+	optional string 	uid 			= 3;					//
+}
+
+message SFriendChat{
+	optional uint32 	cmd 			= 1[default=0x5021];  	//
+	optional FriendChat	chat			= 2;
+}
+
+message CFriendChatList{
+	optional uint32 	cmd 			= 1[default=0x5022];  	//
+}
+
+message SFriendChatList{
+	optional uint32 	cmd 			= 1[default=0x5022];  	//
+	repeated FriendChat list			= 2;
+}
+
+message CFriendChatRead{
+	optional uint32 	cmd 			= 1[default=0x5023];  	//
+	optional FriendChat chat			= 2;
+}
+
+message SFriendChatRead{
+	optional uint32 	cmd 			= 1[default=0x5023];  	//
+	optional FriendChat chat			= 2;
+	optional uint32 	err				= 3;
+}
+
+//CActive 活动
+message CActive
+{
+    required uint32 	cmd 	= 1[default=0x5008];  	//
+	required uint32 	type 	= 2;					//1表示精彩活动 2表示公告
+}
+
+message SActive
+{
+    required uint32 	cmd 	= 1[default=0x5008];  // 
+	repeated Active 	list  	= 2;  	//返回活动列表
+	optional uint32 	err  	= 3;					//
+}
+
+//CTask
+message CTask
+{
+    required uint32 	cmd 	= 1[default=0x5009];  	//
+}
+
+message STask
+{
+    required uint32 	cmd 	= 1[default=0x5009];  	//
+	repeated Task		list	= 2;//任务类型
+	optional uint32 	err  	= 3;					//
+}
+
+//CReward 领取奖励
+message CReward
+{
+    required uint32 	cmd 	= 1[default=0x500A];  	//
+	optional uint32		id		= 3;//奖励id
+}
+
+message SReward
+{
+    required uint32 	cmd 	= 1[default=0x500A];  	//
+	repeated Reward		reward	= 4;
+	optional uint32 	err  	= 5;					//
+}
+
+//CAgreeFriend 同意拒绝好友请求
+message CAgreeFriend
+{
+    required uint32 	cmd 	= 1[default=0x500B];  	//
+	optional bool 		agree  	= 2;					//
+	optional uint32 	nid  	= 3;					//
+	optional string 	userid  = 4;					//
+}
+
+message SAgreeFriend
+{
+    required uint32 	cmd 	= 1[default=0x500B];  	//
+	optional bool 		agree  	= 2;					//	
+	optional string 	userid  = 3;					//
+	optional uint32		nid		= 4;
+	optional uint32 	err  	= 5;					//
+}
+
+//CExchangeReward 兑换奖品列表
+message CExchangeReward
+{
+    required uint32 	cmd 	= 1[default=0x500C];  	//
+}
+
+message SExchangeReward
+{
+    required uint32 	cmd 	= 1[default=0x500C];  	//
+	repeated ExAward	list	= 2;
+	optional uint32 	err  	= 3;					//
+}
+
+//CExchangeCode
+message CExchangeCode
+{
+    required uint32 	cmd 	= 1[default=0x500D];  	//
+	optional string 	excode  = 2;					//兑换码
+	optional string 	yzcode  = 3;					//验证码
+}
+
+message SExchangeCode
+{
+    required uint32 	cmd 	= 1[default=0x500D];  	//
+	optional bool		success	= 2;//是否兑换成功
+	repeated Reward 	rd		= 3;
+	optional uint32 	err  	= 4;					//
+}
+
+//CExchangeRecord 兑换记录
+message CExchangeRecord
+{
+    required uint32 	cmd 	= 1[default=0x500E];  	//
+}
+
+message SExchangeRecord
+{
+    required uint32 	cmd 	= 1[default=0x500E];  	//
+	repeated ExRecord	list	= 2;
+	optional uint32 	err  	= 3;					//
+}
+
+//CExchange 兑换奖品
+message CExchange
+{
+    required uint32 	cmd 	= 1[default=0x500F];  	//
+	optional uint32 	id  	= 2;					//
+}
+
+message SExchange
+{
+    required uint32 	cmd 	= 1[default=0x500F];  	//
+	optional uint32 	id  	= 2;					//
+	optional string 	code  	= 3;					//
+	optional uint32 	err  	= 4;					//
+}
+
+//CApplePay 苹果支付
+message CApplePay
+{
+    required uint32 	cmd 	= 1[default=0x5010];  	//
+	optional uint32 	id  	= 2;					//
+	optional string	 	receipt = 3;					//
+}
+
+message SApplePay
+{
+    required uint32 	cmd 	= 1[default=0x5010];  	//
+	optional uint32 	id  	= 2;					//
+	optional uint32 	err  	= 3;					//
+}
+
+//CWxpayOrder 微信下单
+message CWxpayOrder
+{
+    required uint32 	cmd 	= 1[default=0x5011];  	//
+	optional uint32 	id  	= 2;					//
+	optional string	 	body	= 3;					//
+}
+
+message SWxpayOrder
+{
+    required uint32 	cmd 		= 1[default=0x5011];  	//
+	optional string 	noncestr 	= 2;					//
+	optional string 	payreq 		= 3;					//
+	optional string 	timestamp 	= 4;					//
+	optional string 	sign 		= 5;					//
+	optional uint32 	err  		= 6;					//
+}
+
+//CAliPayOrder 支付宝下单
+message CAliPayOrder
+{
+    required uint32 	cmd 	= 1[default=0x5018];  	//
+	optional uint32 	id  	= 2;					//
+	optional string	 	body	= 3;					//
+	optional uint32 	type  	= 4;					//1java 2非java
+}
+
+message SAliPayOrder
+{
+    required uint32 	cmd 		= 1[default=0x5018];  	//
+	optional string 	orderinfo 	= 2;					//
+	optional string 	appid 		= 3;					//
+	optional string 	timestamp 	= 4;					//
+	optional string 	privatekey 	= 5;					//
+	optional uint32 	err  		= 6;					//
+}
+
+//CAliPayOrder 支付宝支付成功通知
+message CAliPayResult
+{
+    required uint32 	cmd 	= 1[default=0x5019];  	//
+	optional string	 	content	= 2;					//
+}
+
+message SAliPayResult
+{
+    required uint32 	cmd 		= 1[default=0x5019];  	//
+	optional uint32 	err  		= 6;					//
+}
+
+//CWxpayQuery 微信支付结果查询与通知
+message CWxpayQuery
+{
+    required uint32 	cmd 	= 1[default=0x5012];  	//
+	optional string 	transid = 2;					//
+}
+
+message SWxpayQuery
+{
+    required uint32 	cmd 	= 1[default=0x5012];  	//
+	optional string 	transid = 2;					//
+	optional uint32 	err  	= 3;					//
+}
+
+//CFirstBuy 首充
+message CFirstBuy
+{
+    required uint32 	cmd 	= 1[default=0x5013];  	//
+	optional uint32 	type 	= 2;					//1苹果支付 2微信支付 3支付宝支付
+}
+
+message SFirstBuy
+{
+    required uint32 	cmd 		= 1[default=0x5013];  	//
+	optional string 	noncestr 	= 2;					//
+	optional string 	payreq 		= 3;					//
+	optional string 	timestamp 	= 4;					//
+	optional string 	sign 		= 5;					//
+	required uint32 	type 		= 6;
+	optional uint32 	err  		= 7;					//
+}
+
+//CFeedBack 反馈
+message CFeedBack
+{
+    required uint32 	cmd 	= 1[default=0x5014];  	//
+	optional string 	uid 	= 2;					//
+	optional string 	uname 	= 3;					//
+	optional string 	content = 4;					//
+}
+
+message SFeedBack
+{
+    required uint32 	cmd 	= 1[default=0x5014];  	//
+	optional uint32 	err  	= 2;					//
+}
+
+//CSign 签到
+message CSign
+{
+    required uint32 	cmd 	= 1[default=0x5015];  	//
+}
+
+message SSign
+{
+    required uint32 	cmd 	= 1[default=0x5015];  	//
+	optional uint32 	index  	= 2;					//奖励index
+	optional uint32 	count  	= 3;					//签到次数
+	optional uint32 	err  	= 4;					//
+}
+
+//CSignList 签到列表
+message CSignList
+{
+    required uint32 	cmd 	= 1[default=0x5016];  	//
+}
+
+message SSignList
+{
+    required uint32 	cmd 	= 1[default=0x5016];  	//
+	optional uint32 	sign  	= 2;					//是否已经签到
+	optional uint32 	count  	= 3;					//签到次数
+	repeated SignAward 	reward  = 4;					//奖励
+	repeated SignZhuan 	zhuan   = 5;					//转盘
+	optional uint32 	err  	= 6;					//
+}
+
+//CMailAward 领取邮件奖励
+message CMailAward
+{
+    required uint32 	cmd 	= 1[default=0x5017];  	//
+	required uint32 	id 		= 2;
+}
+
+message SMailAward
+{
+    required uint32 	cmd 	= 1[default=0x5017];  	//
+	optional uint32 	id  	= 2;					//
+	optional uint32 	err  	= 3;					//
+}
+
+//CFirsyBuyData 首充数据
+message CFirsyBuyData
+{
+    required uint32 	cmd 	= 1[default=0x5020];  	//
+}
+
+message SFirsyBuyData
+{
+    required uint32 	cmd 	= 1[default=0x5020];  	//
+	optional uint32		id		= 2;
+	repeated Reward 	reward  = 3;					//
+	optional Reward 	consume = 4;					//
+	repeated Reward 	give    = 5;					//
+	optional uint32 	err  	= 6;					//
+}
+

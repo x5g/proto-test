@@ -1,0 +1,9 @@
+// protoc --proto_path=$GOPATH/src --go_out=$GOPATH/src $GOPATH/src/github.com/lizebang/learning-proto3/base/new/new.proto
+syntax = "proto3";
+package old; // from base/old/old.proto, so package must be old
+option go_package = "github.com/lizebang/learning-proto3/base/new";
+
+// msg1 from base/old/old.proto
+message msg1 {
+  int32 field1 = 1;
+}

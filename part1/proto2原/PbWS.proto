@@ -1,0 +1,70 @@
+/** @file PbWS.proto
+ * @brief Protobuf Web Signature
+ *
+ * @copyright
+ * Copyright 2018 PbOSE <https://pbose.io>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+import "pbose/protobuf/PbWA.proto";
+import "pbose/protobuf/PbWK.proto";
+
+package pbose.protobuf;
+
+/**
+ * Protobuf Web Signature
+ * https://tools.ietf.org/html/rfc7515#section-3.2
+ */
+message PbWS {
+  bytes protected                       = 1;
+  bytes header                          = 2;
+  bytes payload                         = 3;
+  bytes signature                       = 4;
+}
+
+/**
+ * Header for PbWS (PbWSHeader)
+ * https://tools.ietf.org/html/rfc7515#section-4.1
+ */
+message PbWSHeader {
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.1 */
+  PbWSHeaderAlg.Enum alg                = 1;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.2 */
+  string jku                            = 2;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.3 */
+  PbWK jwk                              = 3;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.4 */
+  string kid                            = 4;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.5 */
+  string x5u                            = 5;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.6 */
+  repeated bytes x5c                    = 6;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.7 */
+  bytes x5t                             = 7;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.8 */
+  bytes x5t_s256                        = 8; // x5t#S256
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.9 */
+  string typ                            = 9;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.10 */
+  string cty                            = 10;
+  /* https://tools.ietf.org/html/rfc7515#section-4.1.11 */
+  repeated string crit                  = 11;
+}

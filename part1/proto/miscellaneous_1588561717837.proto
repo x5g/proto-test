@@ -1,0 +1,389 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+// import "Org.OData.Measures.V1.proto";
+// import "Org.OData.Validation.V1.proto";
+// import "Dummy.Namespace1.proto";
+// import "Dummy.Namespace2.proto";
+// import "Dummy.Namespace3.proto";
+// import "Dummy.Namespace4.proto";
+// import "Dummy.Namespace5.proto";
+// import "Dummy.Namespace6.proto";
+// import "Dummy.Namespace7.proto";
+// import "Org.OData.Communication.V1.proto";
+// import "org.example.seo.proto";
+// import "org.example.person.proto";
+// import "Org.OData.Capabilities.V1.proto";
+// import "Org.OData.Core.V1.proto";
+// import "org.example.display.proto";
+// import "org.example.task.proto";
+// import "org.example.vCard.proto";
+// import "anotherOne.proto";
+
+message First {
+
+}
+
+message org {
+
+  message example {
+
+    message Employee {
+      string ID = 1;
+      string FirstName = 2;
+      string LastName = 3;
+      .org.example.Manager Manager = 4;
+    }
+
+    message Manager {
+      string AnnualBudget = 1;
+      repeated .org.example.Employee Employees = 2;
+      string ID = 3;
+      string FirstName = 4;
+      string LastName = 5;
+      .org.example.Manager Manager = 6;
+    }
+
+    message Nothing {
+    }
+
+    message NotMuch {
+    }
+
+    message Category10 {
+      sint32 ID = 1;
+      string Name = 2;
+    }
+
+    message Category11 {
+      .org.example.EntityInfo Info = 1;
+      string Name = 2;
+    }
+
+    message EntityInfo {
+      sint32 ID = 1;
+      string Created = 2;
+    }
+
+    message OrderLine {
+      sint32 OrderID = 1;
+      sint32 LineNumber = 2;
+    }
+
+    message Measurement {
+      string Dimension = 1;
+      string Length = 2;
+    }
+
+    message Example16to21 {
+      repeated string Units = 1;
+      repeated string SuggestedTimes = 2;
+      string Amount32 = 3;
+      string Amount22 = 4;
+      string Amount3v = 5;
+      string Amount7f = 6;
+    }
+
+    message Product {
+      string ID = 1;
+      string CategoryID = 2;
+      string CategoryKind = 3;
+      .org.example.Category Category = 4;
+      .org.example.Supplier Supplier = 5;
+    }
+
+    message Supplier {
+      string ID = 1;
+    }
+
+    message Customer {
+      string ID = 1;
+    }
+
+    message Order {
+      sint64 ID = 1;
+    }
+
+    message Category {
+      string ID = 1;
+      string Kind = 2;
+      repeated .org.example.Product Products = 3;
+    }
+
+    message Dimensions {
+      string Height = 1;
+      string Weight = 2;
+      string Length = 3;
+    }
+
+    message Product25 {
+      string ID = 1;
+      .org.example.Dimensions ProductDimensions = 2;
+      .org.example.Dimensions ShippingDimensions = 3;
+    }
+
+    message ShipmentBox {
+      string ID = 1;
+      .org.example.Dimensions Dimensions = 2;
+    }
+
+    message NothingC {
+    }
+
+    message NotMuchC {
+    }
+
+    enum FileAccess {
+      // NOTE: this is a Flags enum
+      NOTHING = 0;
+      Read = 1;
+      Write = 2;
+      Create = 4;
+      Delete = 8;
+    }
+
+    enum Pattern {
+      // NOTE: this is a Flags enum
+      Plain = 0;
+      Red = 1;
+      Blue = 2;
+      Yellow = 4;
+      Solid = 8;
+      Striped = 16;
+      SolidRed = 9;
+      SolidBlue = 10;
+      SolidYellow = 12;
+      RedBlueStriped = 19;
+      BlueRedStriped = 19;
+      RedYellowStriped = 21;
+      BlueYellowStriped = 22;
+    }
+
+    enum ShippingMethod {
+      FirstClass = 0;
+      TwoDay = 1;
+      Overnight = 2;
+    }
+
+    message Length {
+      sint32 value = 1;
+    }
+
+    message Weight {
+      sint32 value = 1;
+    }
+
+    message Size {
+      .org.example.Length Height = 1;
+      .org.example.Weight Weight = 2;
+    }
+
+    message Product2 {
+      sint32 ID = 1;
+      string Name = 2;
+      string Description = 3;
+    }
+
+    message Example40 {
+      string AmountInReportingCurrency = 1;
+      string AmountInTransactionCurrency = 2;
+      string Currency = 3;
+    }
+
+  }
+
+}
+
+message Model1 {
+
+  message NullablePrimitiveTypes {
+    bool NullValue = 1;
+    bool TrueValue = 2;
+    bool FalseValue = 3;
+    bytes BinaryValue = 4;
+    sint32 IntegerValue = 5;
+    double DoubleValue = 6;
+    float SingleValue = 7;
+    string DecimalValue = 8;
+    string StringValue = 9;
+    string DateValue = 10;
+    string DateTimeOffsetValue = 11;
+    string DurationValue = 12;
+    string TimeOfDayValue = 13;
+    string GuidValue = 14;
+    sint64 Int64Value = 15;
+    .Model1.Color ColorEnumValue = 16;
+    string GeographyPoint = 17;
+    bytes StreamValue = 18;
+    .Model1.IntegerDecimal TypeDefValue = 19;
+    google.protobuf.Any PrimitiveValue = 20;
+  }
+
+  message NonNullablePrimitiveTypes {
+    bool NullValue = 1;
+    bool TrueValue = 2;
+    bool FalseValue = 3;
+    bytes BinaryValue = 4;
+    sint32 IntegerValue = 5;
+    double DoubleValue = 6;
+    float SingleValue = 7;
+    string DecimalValue = 8;
+    string StringValue = 9;
+    string DateValue = 10;
+    string DateTimeOffsetValue = 11;
+    string DurationValue = 12;
+    string TimeOfDayValue = 13;
+    string GuidValue = 14;
+    sint64 Int64Value = 15;
+    .Model1.Color ColorEnumValue = 16;
+    string GeographyPoint = 17;
+    bytes StreamValue = 18;
+    .Model1.IntegerDecimal TypeDefValue = 19;
+    .Model1.Text TextValue = 20;
+    google.protobuf.Any PrimitiveValue = 21;
+  }
+
+  enum Size {
+    S = 0;
+    M = 1;
+    L = 2;
+  }
+
+  enum Color {
+    // NOTE: this is a Flags enum
+    NOTHING = 0;
+    Yellow = 1;
+    Striped = 2;
+  }
+
+  message Weird {
+    string TheKey = 1;
+    string TheValue = 2;
+    string TheString = 3;
+    repeated string Tags = 4;
+    repeated string Dates = 5;
+    string Price = 6;
+    .Org.OData.Core.V1.Permission Permission = 7;
+    .Org.OData.Core.V1.Permission AliasPermission = 8;
+  }
+
+  message Address {
+    string Street = 1;
+    .Model1.City City = 2;
+    .Model1.Region Region = 3;
+    .Model1.Country Country = 4;
+    string MapLocation = 5;
+    repeated sint32 Numbers = 6;
+  }
+
+  message City {
+  }
+
+  message Region {
+  }
+
+  message Country {
+  }
+
+  message Planet {
+  }
+
+  message NavigationOnly {
+    .Model1.Planet Planet = 1;
+  }
+
+  message AnnotationOnly {
+  }
+
+  message Order {
+    string Quantity = 1;
+    string ShippingUnit = 2;
+  }
+
+  message Validated {
+    sint32 EvenNumber = 1;
+    sint32 PercentComplete = 2;
+    string Epsilon = 3;
+    string Temperature = 4;
+    string EmailAddress = 5;
+  }
+
+  message SpecialByte {
+    sint32 value = 1;
+  }
+
+  message Text50 {
+    string value = 1;
+  }
+
+  message Text {
+    string value = 1;
+  }
+
+  message LanguageDependentText {
+    string value = 1;
+  }
+
+  message IntegerDecimal {
+    string value = 1;
+  }
+
+  message IntegerDecimal10 {
+    string value = 1;
+  }
+
+  message VariableDecimal {
+    string value = 1;
+  }
+
+  message ExactTimestamp {
+    string value = 1;
+  }
+
+}
+
+message X {
+
+  message PersonType {
+  }
+
+  message MovieType {
+  }
+
+  message FriendType {
+  }
+
+}
+
+message Y {
+
+  message DeveloperType {
+  }
+
+  message ScrumTeamType {
+    .Y.DeveloperType ScrumMaster = 1;
+  }
+
+  message ArchivedMovieType {
+    string ArchivedAt = 1;
+  }
+
+  message SomeThingType {
+    string SomeProperty = 1;
+    repeated .X.PersonType Contacts = 2;
+    repeated .X.FriendType VIPs = 3;
+  }
+
+  message ChangeTrackingType {
+    repeated string InlineableStreamProperties = 1;
+  }
+
+}
+
+message Intentionally {
+
+  message Empty {
+
+  }
+
+}

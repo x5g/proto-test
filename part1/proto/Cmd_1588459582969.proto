@@ -1,0 +1,52 @@
+syntax = "proto3";
+package Cmd;
+//文件第一行必须是syntax = "proto3";
+//package Cmd;对应c++的namespace
+
+//如果一个字段例如int32 foo=2被删除，
+//那么该字段的Tag号(2)以后都不能再用了，删除时候必须把foo 和Tag号2都reserved
+//若果不加，不会引起显式错误。但新老版本消息兼容时，有可能发生严重错误
+//详情参考https://developers.google.com/protocol-buffers/docs/proto3#adding-comments
+//reserved 2, 15, 9 to 11;
+//reserved "foo", "bar";
+//message Person {
+//  string name = 1;
+//  int32 id = 2;
+//  //string email = 3;此处把email注释掉
+//  reserved 3;
+//  reserved "email";
+//  enum PhoneType {
+//    MOBILE = 0;
+//    HOME = 1;
+//    WORK = 2;
+//  }
+//  message PhoneNumber {
+//    string number = 1;
+//    PhoneType type = 2;
+//  }
+//  repeated PhoneNumber phone = 4;
+//}
+
+
+//import "google/protobuf/any.proto";
+
+message Base {
+    string msg_name = 1;
+    bytes msg = 2;
+}
+
+message ToS_EnterChannel {
+    int32 userid = 1;
+    int32 token = 2;
+    int64 channelid = 3;
+    enum ResultType {
+        DEFAULT = 0;
+        SUCCESS = 1;
+        FAILED = 2;
+    }
+    ResultType result =4;
+}
+
+message Msg_print{
+    string msg = 1;
+}

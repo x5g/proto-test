@@ -1,0 +1,11 @@
+{
+  "id": 12345,
+  "isSimple": true,
+  "name": "John",
+  "sampleList": [
+    1,
+    4,
+    7,
+    8
+  ]
+}

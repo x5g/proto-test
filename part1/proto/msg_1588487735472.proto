@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package buckhx.safari.msg;
+option go_package = "pbf";
+
+message Timestamp {
+	int64 unix = 1;
+}
+
+message Response {
+	bool ok = 1;
+	string msg = 2;
+	int32 code = 3;
+}

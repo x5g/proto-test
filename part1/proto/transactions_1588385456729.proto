@@ -1,0 +1,34 @@
+syntax = "proto3";
+package protocol;
+option go_package = "github.com/orbs-network/orbs-spec/types/go/protocol";
+
+import "primitives/protocol.proto";
+import "primitives/crypto.proto";
+import "protocol/signers.proto";
+import "protocol/contracts.proto";
+import "protocol/results.proto";
+
+// txhash = SHA256(serialized protocol.Transaction)
+// txid = concatenation of timestamp and txhash (without txhash length)
+
+message Transaction {
+    primitives.protocol_version protocol_version = 1;
+    primitives.virtual_chain_id virtual_chain_id = 2;
+    primitives.timestamp_nano timestamp = 3;
+    protocol.Signer signer = 4;
+    primitives.contract_name contract_name = 5;
+    primitives.method_name method_name = 6;
+    primitives.packed_argument_array input_argument_array = 7;
+}
+
+message SignedTransaction {
+    Transaction transaction = 1;
+    bytes signature = 2; // depends on transaction.signer scheme
+}
+
+message TransactionReceipt {
+    primitives.sha256 txhash = 1;
+    protocol.ExecutionResult execution_result = 2;
+    primitives.packed_argument_array output_argument_array = 3;
+    primitives.packed_events_array output_events_array = 4;
+}

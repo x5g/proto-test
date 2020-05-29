@@ -1,0 +1,239 @@
+message Guid {
+    required uint32 a=1;
+    required uint32 b=2;
+    required uint32 c=3;
+    required uint32 d=4;
+}
+
+message ChunkInfo {
+    required Guid guid=1;
+    required uint32 size=2;    //in MB
+    optional uint32 reside_on_disk=3;
+}
+
+message DiskInfo {
+    optional string id=1;
+    optional Guid guid=2;
+    required uint32 size=3;    //in GB
+    required uint32 free=4;    //in GB
+    required uint32 nchunks=5;
+    optional bool isSSD=6;
+    optional string smart=7;
+}
+
+message MachineInfo {
+    required uint32 cpu_sockets=1;
+    required uint32 cpu_cores=2;
+    required uint32 cpu_threads=3;
+    required uint32 memory=4;    //in GB
+    optional string uname_a=5;
+}
+
+message ChunkServerInfo {                   //P2S message
+    required string ServiceAddress=1;
+    required uint32 ServicePort=2;
+    optional MachineInfo MachineInfo=3;
+    repeated DiskInfo diskinfo=4;
+    repeated ChunkInfo chunks=5;
+    //optional LoadInfo load=6;
+}
+
+message GetChunkServers_Request {           //P2S message
+    optional uint32 randomCount=1;
+    repeated Guid specified=2;
+}
+
+message GetChunkServers_Response {
+    repeated ChunkServerInfo random=1;
+    repeated ChunkServerInfo specified=2;   
+}
+
+message NewChunk_Request {                  //P2P message
+    required uint32 size=1;                 //in MB
+    required uint32 count=2;                //number of chunks to create
+    optional Guid guid=3;                   //target device guid, (0,0,0,0) or NULL for default location
+}
+
+message NewChunk_Response {
+    repeated Guid guids=1;                  //guids of the created chunk
+    optional string error=101;
+}
+
+message DeleteChunk_Request {               //P2P message
+    repeated Guid guids=1;                  //array of guids of the chunks to delete
+}
+
+message DeleteChunk_Response {
+    repeated Guid guids=1;                  //array of guids of the chunks that has been deleted
+    optional string error=101;              //error code that describes why some chunks are not deleted, if any
+}
+
+message Volume {
+    required uint64 size=1;                 //in MB, only caculated by MDS
+    optional string assembler=2;            //assembled by an assembler,
+    repeated string parameters=3;           //with parameters
+    repeated Volume subvolumes=4;           //and a list of sub-volumes
+    optional Guid guid=5;                   //A volume can have a name (guid), or reference a chunk
+}
+
+message ReadVolume_Request {                //P2S message
+    required string fullpath=1;
+}
+
+message ReadVolume_Response {
+    required bytes volume=1;                //PB-encoded Volume as bytes
+    optional string error=101;
+}
+
+message WriteVolume_Request {               //P2S message
+    required string fullpath=1;
+    required bytes volume=2;                //PB-encoded Volume as bytes
+}
+
+message WriteVolume_Response {
+    optional string error=101;
+}
+
+//also used to "assemble" (active) a single chunk
+message AssembleVolume_Request {            //P2P message
+    required Volume volume=1;               //PB-encoded Volume as bytes
+}
+
+message AssembleVolume_Response {
+    optional string access_point=1;
+//    repeated string APs=2;                  // all the access points, if results in more than one.
+    optional string error=101;
+}
+
+message DisassembleVolume_Request {         //P2P message
+    required string access_point=1;
+}
+
+message DisassembleVolume_Response {
+    optional string error=101;
+}
+
+//message RepairVolume_Request {
+//}
+
+//message RepairVolume_Response {
+//}
+
+message MoveVolume_Request {                //P2S message
+    required string source=1;
+    required string destination=2;
+}
+
+message MoveVolume_Response {
+    optional string error=101;
+}
+
+message DeleteVolume_Request {              //P2S message
+    required string fullpath=1;
+}
+
+message DeleteVolume_Response {
+    optional string error=101;
+}
+
+message CreateDirectory_Request {           //P2S message
+    required string fullpath=1;
+    optional bool parents=2;
+}
+
+message CreateDirectory_Response {
+    optional string error=101;
+}
+
+message DeleteDirectory_Request {           //P2S message
+    required string fullpath=1;
+    optional bool recursively_forced=2;
+}
+
+message DeleteDirectory_Response {
+    optional string error=101;
+}
+
+message ListDirectory_Request {             //P2S message
+    required string fullpath=1;
+}
+
+message DirectoryItem {
+    required string name=1;                 //name of the item
+    required uint32 size=2;                 //size of the item, in MB, 0 indicates a sub-directory,
+    required uint32 mode=3;
+    required uint32 uid=4;
+    required uint32 gid=5;
+}
+
+message ListDirectory_Response {
+    repeated DirectoryItem items=1;
+    optional string error=101;
+}
+
+message ChMod_Request {                     //P2S message
+    required string fullpath=1;
+    required uint32 mod=2;
+}
+
+message ChMod_Response {
+    optional string error=101;
+}
+
+message CreateLink_Request {                //P2S message
+    required string destination=1;
+    required string link=2;
+}
+
+message CreateLink_Response {
+    optional string error=101;
+}
+
+//client internal connection messages
+message MapVolume_Request {
+    required Volume volume=1;
+}
+
+message MapVolume_Response {
+    required string error=101;
+}
+
+message SplitVolume_Request {
+    required string volume_name=1;
+}
+
+message SplitVolume_Response {
+    required string error=101;
+}
+
+message MountVolume_Request {
+    required Volume volume=1;
+}
+
+message MountVolume_Response {
+    required string error=101;
+}
+
+message UnmountVolume_Request {
+    required string volume_name=1;
+}
+
+message UnmountVolume_Response {
+    required string error=101;
+}
+
+message ClientWriteVolume_Request {
+    required Volume volume=1;
+}
+
+message ClientWriteVolume_Response {
+    required string error=101;
+}
+
+message ClientDeleteVolume_Request {
+    required string volume_name=1;
+}
+
+message ClientDeleteVolume_Response {
+    required string error=101;
+}

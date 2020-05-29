@@ -1,0 +1,109 @@
+option optimize_for = LITE_RUNTIME;
+package tencent.im.oidb.cmd0x5eb;
+
+message ReqBody
+{
+    repeated uint64 rpt_uint64_uins = 1;
+    optional uint32 uint32_max_package_size = 3; 
+    repeated bytes rpt_bytes_openid = 4;
+    optional uint32 uint32_appid = 5;
+
+    optional uint32 uint32_req_nick = 20002;  // nick name
+    optional uint32 uint32_req_gender = 20009; // gender
+    optional uint32 uint32_req_allow = 20014; // allow
+    optional uint32 uint32_req_face_id = 20015; // face_id
+    optional uint32 uint32_req_common_place1 = 20027; // common_place1
+    optional uint32 uint32_req_birthday = 20031; // birthday
+    optional uint32 uint32_req_full_birthday = 26004; // full birthday
+    optional uint32 uint32_req_full_age = 26005; // full age
+    optional uint32 uint32_req_country = 20003; // country
+    optional uint32 uint32_req_province = 20004; // province
+    optional uint32 uint32_req_city = 20020; // city
+    optional uint32 uint32_req_constellation = 20022; //constellation 
+    optional uint32 uint32_req_city_id = 20032; // city_id
+    optional uint32 uint32_req_city_zone_id = 20041; // city_zone_id
+    optional uint32 uint32_req_lang1 = 20033; // lang1
+    optional uint32 uint32_req_lang2 = 20034; // lang2
+    optional uint32 uint32_req_lang3 = 20035; // lang3
+    optional uint32 uint32_req_age = 20037; // lang3
+    optional uint32 uint32_req_oin = 20056; // open uin
+    optional uint32 uint32_req_simple_update_time = 26010; // simple data's update time
+    optional uint32 uint32_req_group_mem_credit_flag = 27022; // group_mem_credit_flag
+    optional uint32 uint32_req_face_addon_id = 27025; // face_addon_id
+    optional uint32 uint32_req_bubble_id = 20059; // bubble_id
+    optional uint32 uint32_req_music_gene = 27026; // music_gene
+
+    optional uint32 uint32_req_lflag = 21003; // lflag
+    optional uint32 uint32_req_ext_flag = 21004; // ext_flag
+    optional uint32 uint32_req_basic_svr_flag = 21006; // basic_svr_flag
+    optional uint32 uint32_req_basic_cli_flag = 21007; // basic_cli_flag
+
+    optional uint32 uint32_req_mss1_service = 21002; // mss1 sService[8]
+    optional uint32 uint32_req_mss2_identity = 21001; // mss2 sIdentity[4]
+    optional uint32 uint32_req_mss3_bitmapextra = 20030; // mss3 sBitmapExtra[8]
+    optional uint32 uint32_req_mss_update_time = 26011; // mss_update_time
+
+    optional uint32 uint32_req_stranger_nick = 27034; 
+    optional uint32 uint32_req_love_status = 27036;  
+    optional uint32 uint32_req_profession = 27037; 
+    optional uint32 uint32_req_mask_lightalk = 40506; // mask_lightalk
+    optional uint32 uint32_req_vip_flag = 41756; //member flag
+    optional uint32 uint32_req_auth_flag = 41783; //appointmeng auth flag
+};
+
+
+
+message UdcUinData
+{
+    optional uint64 uint64_uin = 1; // uin
+    optional bytes bytes_openid = 4; 
+
+    optional bytes bytes_nick = 20002;  // nick name
+    optional uint32 uint32_gender = 20009; // gender
+    optional uint32 uint32_allow = 20014; 
+    optional uint32 uint32_face_id = 20015; 
+    optional uint32 uint32_common_place1 = 20027; 
+    optional bytes bytes_birthday = 20031; 
+    optional bytes bytes_full_birthday = 26004;
+    optional bytes bytes_full_age = 26005;
+    optional bytes bytes_country = 20003;
+    optional bytes bytes_province = 20004; 
+    optional bytes bytes_city = 20020;
+    optional uint32 uint32_constellation = 20022; //constellation 
+    optional bytes bytes_city_id = 20032;
+    optional uint32 uint32_city_zone_id = 20041; // dwCityZoneID
+    optional uint32 uint32_lang1 = 20033; // lang1
+    optional uint32 uint32_lang2 = 20034; // lang2
+    optional uint32 uint32_lang3 = 20035; // lang3
+    optional uint32 uint32_age = 20037; // age
+    optional uint32 uint32_oin = 20056; // open uin
+    optional uint32 uint32_simple_update_time = 26010; // simple data's update time
+    optional uint32 uint32_group_mem_credit_flag = 27022; // group_mem_credit_flag
+    optional uint64 uint64_face_addon_id = 27025; // face_addon_id
+    optional uint32 uint32_bubble_id = 20059; // bubble_id
+    optional bytes bytes_music_gene = 27026; // music_gene
+
+    optional uint32 uint32_lflag = 21003; // lflag
+    optional uint32 uint32_ext_flag = 21004; // ext_flag
+    optional bytes bytes_basic_svr_flag = 21006; // basic_svr_flag, 20 bytes
+    optional bytes bytes_basic_cli_flag = 21007; // basic_cli_flag, 20 bytes
+
+    optional bytes bytes_mss1_service = 21002; 
+    optional bytes bytes_mss2_identity = 21001;
+    optional bytes bytes_mss3_bitmapextra = 20030; 
+    optional uint32 uint32_mss_update_time = 26011; 
+    optional bytes bytes_stranger_nick = 27034; 
+    optional uint32 uint32_love_status = 27036;
+    optional uint32 uint32_profession = 27037; 
+    optional uint32 uint32_mask_lightalk = 40506; 
+    optional uint32 uint32_vip_flag = 41756; //member flag
+    optional uint32 uint32_auth_flag = 41783; //appointmeng auth flag
+};
+
+message RspBody
+{
+    repeated UdcUinData rpt_msg_uin_data = 11; // uin data list
+    repeated uint64 rpt_uint64_unfinished_uins = 12; 
+};
+
+

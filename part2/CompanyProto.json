@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "name": "Global Company",
+  "address": "any where",
+  "website": "www.google.com",
+  "contact": [
+    "66666660",
+    "66666661"
+  ],
+  "staffs": [
+    {
+      "id": 10001,
+      "userName": "Peter Jeff",
+      "sex": "MALE",
+      "age": 28,
+      "job": "Java",
+      "department": "Dev",
+      "phoneNums": [
+        "05812345678"
+      ]
+    },
+    {
+      "id": 10001,
+      "userName": "Jack Allen",
+      "sex": "FEMALE",
+      "age": 32,
+      "job": "manager",
+      "department": "HR",
+      "phoneNums": [
+        "05899999999",
+        "05899999900"
+      ]
+    }
+  ]
+}

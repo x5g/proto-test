@@ -1,0 +1,95 @@
+package google.protobuf;
+// package abm.protobuf;
+option java_package = "com.asiainfo.billing.db.natsclient.pbcodes";
+option java_outer_classname = "PbAbmHeartBeat";
+
+// descriptor.proto must be optimized for speed because reflection-based
+// algorithms don't work during bootstrapping.
+option optimize_for = SPEED;
+
+/*******************************
+**route 节点 心跳 等配置的分发
+********************************/
+//心跳请求
+message PbHeartBeatReq{
+    required bytes  sIP                     = 1;    //主机IP
+    required bytes  sUserName               = 2;    //主机用户名
+    required bytes  sPassWord               = 3;    //密码
+    required int32  iProcessID              = 4;    //getpid
+    required int32  iLinkID                 = 5;    //第一次登陆的时候给0，后续心跳要把给定值带进来
+    optional int32  iTTState                = 6;    //TT状态 0-无信息 1-ACTIVE 2-STANDBY 3-IDLE 4-未知错误
+    optional int32  iPendingMsgs            = 7;    //nats消息缓冲消息数
+    optional int32  iPendingBytes           = 8;    //nats消息缓冲数据量
+    optional bytes  sSubs                   = 9;    //订阅主题，逗号分隔
+    optional uint64 ulMsgNumofSucceed       = 10;   //处理成功的消息数
+    optional uint64 ulMsgNumofFail          = 11;   //处理失败的消息数
+    optional uint64 ulNatsReceiveMsgNum     = 12;   //接收的nats消息数
+    optional uint64 ulNatsSendMsgNum        = 13;   //发送的nats消息数
+    optional uint64 ulMQReceiveMsgNum       = 14;   //接收的消息队列消息数
+    optional uint64 ulMQSendMsgNum          = 15;   //发送的消息队列消息数
+    optional uint64 ulMQLogSendMsgNum       = 16;   //发送的消息队列日志消息数
+	optional int32 	iMsgDealRate            = 17;   //消息处理速率
+	optional uint64 ulMsgHaSendRate         = 18;   //HA消息发送到Nats速率/小时
+	optional uint64 ulMsgHaSaveRate         = 19;   //HA消息保存到kafak速率/小时
+}
+
+message PbHANodeInfo{
+    required bytes sNodetype     = 1;   //节点业务类型
+    //节点组类型，主备，负载均衡，还是standalone,这些均是
+    //按照前置机的处理方式化划分的，客户端和前置机都属于standalone
+    required int32 iGroupType    = 2;  
+    required int32 iNodeGrpID    = 3;   //节点组ID
+    required int32 iNodeID       = 4;   //节点ID
+    required bytes sIP           = 5;   //节点IP
+    required bytes sUserName     = 6;   //用户名
+    optional bytes sHeartInfo    = 7;   //心跳线信息，"ip:port"
+    required bytes sNodeGrpName  = 8;   //节点组名字
+}
+//流量控制
+message PbFlowCtrl{
+    required int32 iCmdID        = 1;
+    required int32 iNumLimit     = 2;
+}
+//时间戳
+message PbTimestampCtrl{
+    required int32 iCmdID        = 1;
+    required int32 iSampleFreq   = 2;
+}
+
+// 消息优先级
+message PbMsgPriority{
+    required int32 iCmdID         = 1;
+    required int32 iPriorityLevel = 2;    // 优先级，分5级，1最低，5最高    
+}
+
+// 流量优先级和过载保护控制
+message PbFlowPriorityCtrl{
+    required int32         iLevel1Pending = 1;    // 优先级1级的pending数
+    required int32         iLevel2Pending = 2;
+    required int32         iLevel3Pending = 3;
+    required int32         iLevel4Pending = 4;
+    required int32         iLevel5Pending = 5;
+    repeated PbMsgPriority msgPriority    = 6;    // 消息优先级定义
+}
+
+// 转售商Id和GroupId关系
+message pbReseller {
+    required int64 resellerId    =    1;    // 转售商Id
+    required int32 groupId       =    2;    // 组Id
+}
+
+//心跳应答
+message PbHeartBeatRsp{
+    required int32                iNodeID               = 1;   //节点ID
+    required int32                iNodeGrpID            = 2;   //节点组ID
+    required int32                iLinkID               = 3;   //节点的连接ID
+    required int64                version4ctrl          = 4;   //鉴权，流量控制之类配置的版本号
+    repeated PbFlowCtrl           flowctrl              = 5;   //准许接受的命令码
+    repeated PbTimestampCtrl      tsctrl                = 6;   //时间戳采样频率
+    repeated PbHANodeInfo         nodes                 = 7;   //节点的具体信息
+    optional PbFlowPriorityCtrl   flowPriCtrl           = 8;   //流量优先级和过载保护控制
+    optional int32                iHeartBeatDuration    = 9;   //心跳间隔，单位：毫秒
+    repeated pbReseller           reseller              = 10;  //转售商关系
+}
+
+

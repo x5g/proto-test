@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package picture;
+
+service PictureService {
+  rpc Find (PictureQuery) returns (stream Picture) {}
+}
+
+message PictureQuery {
+  int32 id = 1;
+  string author = 2;
+  string authorId = 3;
+  string dateTaken = 4;
+  string published = 5;
+  string title = 6;
+}
+
+message Picture {
+  int32 id = 1;
+  string author = 2;
+  string authorId = 3;
+  string dateTaken = 4;
+  string published = 5;
+  string link = 6;
+  string title = 7;
+  string description = 8;
+  string tags = 9;
+  string media = 10;
+}

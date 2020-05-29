@@ -1,0 +1,16 @@
+// The syntax for this file is proto3
+syntax = "proto3";
+
+package my.date;
+
+message Date {
+
+	int32 year = 1;
+
+	//Month of the year. Must be from 1 to 12
+	int32 month = 2;
+
+	//Day of month must be valid for the year and month
+	int32 day = 3;
+	
+}

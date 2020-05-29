@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+message PBLoginField
+{
+	required uint32  userid        	= 1;   //登录者Id
+	optional string  szusername    	= 2;   //登录者名字
+	optional string  szaccount     	= 3;   //登录者帐号
+	optional string  szpassword    	= 4;   //登录这密码
+	optional bool    remember      	= 5;   //记住密码
+	optional bool    autologin     	= 6;   //自动登录
+	optional bool    startup       	= 7;   //开机自启动
+	optional uint32  updatetime 	= 8;   //登录更新时间
+}
+
+message PBLoginList
+{
+	repeated PBLoginField loginlist  = 1;
+}

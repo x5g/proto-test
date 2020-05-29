@@ -1,0 +1,153 @@
+// V1.1.9
+
+//option optimize_for = LITE_RUNTIME;
+
+// 游戏中玩家信息
+message PlayerInfo
+{
+  required int32  seat           = 1;    // 座位号
+  required string nick_name      = 2;    // 昵称
+  required int64  coins          = 3;    // 金币数
+  required int32  gender         = 4;    // 性别（0为女，1为男）
+  required int32  image_id       = 5;    // 用户头像的ID, image_id < 0则使用image_url获得头像
+  required string image_url      = 6;    // 头像URL
+  required int32  level          = 7;    // 等级
+  required int32  win_count      = 8;    // 胜利场数
+  required int32  lose_count     = 9;    // 失败场数
+  required int32  member_time    = 10;   // 会员剩余时间（以秒为单位）
+  optional bool   is_active      = 11;   // 是否参与本局
+  optional string city           = 12;   // 所在城市
+  optional int32 draw_count      = 13;	 // 平的场数
+  optional bytes custom_data    = 14;    // 各游戏特有的数据
+}
+
+message EnterGameNtf
+{
+	required string nick_name = 1 ;	// 玩家昵称
+	required bool is_self     = 2 ;	// 是否是收消息的玩家自己
+}
+
+// 分配座位号
+message AllotSeatNtf
+{
+  required int32 self_seat       = 1;    // 玩家自己的座位号
+}
+
+// 玩家请求坐下
+message SitDownReq
+{
+	required int32 seat = 1 ;	// 玩家要坐下的座位号，如果为-1，那么就由服务端来分配一个座位号
+}
+
+// 玩家坐下的回复
+message SitDownAck
+{
+  required int32  result         = 1 ;    // 坐下的结果
+  
+  enum Result
+  {
+    OK                           = 0 ;    // 坐下成功
+    FAILED_UNKNOWN               = 1 ;    // 坐下失败
+    FAILED_ALREADY_OCCUPANT      = 2 ;	  // 指定的座位已经有人了
+    FAILED_NO_EMPTY_SEAT         = 3 ;	  // 没有空闲的座位号了
+  }
+}
+
+// 玩家坐下
+message SitDownNtf
+{
+  repeated PlayerInfo players    = 1;    // 玩家信息（可能会同时发送多个玩家入桌的信息）
+  optional int32  ready_time     = 2;    // 自动准备倒计时
+}
+
+// 玩家站起（在之前所在的座位上，开始旁观）
+message StandUpReq
+{
+}
+
+// 玩家站起的回复
+message StandUpAck
+{
+  required int32  result         = 1;    // 站起的结果
+  
+  enum Result
+  {
+    OK                           = 0;    // 站起成功
+    FAILED                       = 1;    // 站起失败
+  }
+}
+
+// 玩家站起来
+message StandUpNtf
+{
+  repeated int32  seat           = 1;    // 离桌玩家的座位号
+}
+
+// 离开游戏
+message LeaveGameNtf
+{
+	required string nick_name = 1 ;	// 玩家昵称
+	required bool is_self     = 2 ;	// 是否是收消息的玩家自己
+}
+
+// 准备
+message PlayerReadyReq
+{
+  required int32  seat           = 1;    // 座位号
+}
+
+message PlayerReadyAck
+{
+  required int32  result         = 1;    // 准备的结果
+  
+  enum Result
+  {
+    OK                           = 0;    // 准备成功
+    FAILED                       = 1;    // 准备失败
+    ALREADY_STARTED              = 2;    // 游戏已经开始
+    NOT_ENOUGH_COINS             = 3;    // 金币不够
+    TOO_MANY_COINS               = 4;    // 金币过多
+  }
+}
+
+message PlayerReadyNtf
+{
+  required int32  seat           = 1;
+}
+
+// 托管
+message TrustPlayReq
+{
+  required int32  is_trust       = 1;    // 是否托管。1为超时托管,2为手动托管，0为解除托管
+}
+
+message TrustPlayAck
+{
+  required int32  result         = 1;
+}
+
+message TrustPlayNtf
+{
+  required int32  seat           = 1;
+  required int32  is_trust       = 2;	// 1表示该玩家托管了，0表示该玩家取消托管了
+}
+
+// 聊天
+message ChatReq
+{
+  required int32  seat           = 1;    // 座位号
+  required int32  msg_type       = 2;    // 聊天信息的类型（0为文字，1为表情）
+  required string message        = 3;    // 聊天信息
+}
+
+message ChatAck
+{
+  required int32  result         = 1;
+}
+
+message ChatNtf
+{
+  required int32  seat           = 1;    // 座位号
+  required int32  msg_type       = 2;    // 聊天信息的类型（0为文字，1为表情）
+  required string message        = 3;    // 聊天信息
+}

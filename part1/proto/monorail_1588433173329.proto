@@ -1,0 +1,239 @@
+// Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// This file *partially* describes Monorail API.
+// It is derived from
+// https://chromium.googlesource.com/infra/infra/+/f2e2a4d/appengine/monorail/services/api_svc_v1.py
+// and
+// https://chromium.googlesource.com/infra/infra/+/f2e2a4d/appengine/monorail/proto/api_pb2_v1.py
+
+syntax = "proto3";
+
+package monorail;
+
+// Monorail service can manipulate issues.
+service Monorail {
+    // Creates an issue.
+    rpc InsertIssue(InsertIssueRequest) returns (InsertIssueResponse){};
+    // Posts a comment to an issue. Can update issue attributes, such as status.
+    rpc InsertComment(InsertCommentRequest) returns (InsertCommentResponse){};
+    // Lists issues from a project.
+    rpc IssuesList(IssuesListRequest) returns (IssuesListResponse){};
+    // GetIssue gets an issue by id.
+    rpc GetIssue(GetIssueRequest) returns (Issue){};
+    // ListComments returns comments of an issue.
+    rpc ListComments(ListCommentsRequest) returns (ListCommentsResponse){};
+}
+
+// A monorail issue.
+message Issue {
+    // Reporter of the issue.
+    AtomPerson author = 1;
+    // Issues that must be fixed before this one can be fixed.
+    repeated IssueRef blockedOn = 2;
+    // People participating in the issue discussion.
+    repeated AtomPerson cc = 6;
+    // The text body of the issue.
+    string description = 8;
+    // Identifier of the issue, unique within the appengine app.
+    int32 id = 9;
+    // Monorail components for this issue.
+    repeated string components = 10;
+    // Arbitrary indexed strings visible to users,
+    // usually of form "Key-Value" or "Key-Value-SubValue",
+    repeated string labels = 11;
+    // Who is currently responsible for closing the issue.
+    AtomPerson owner = 12;
+    // Current status of issue. Standard values:
+    //
+    // Open statuses:
+    // "Unconrimed" - New, has been not verified or reproduced.
+    // "Untriaged" - Confirmed, not reviews for priority of assignment
+    // "Available" - Triaged, but no owner assigned
+    // "Started" - Work in progress.
+    // "ExternalDependency" - Requires action from a third party
+    // Closed statuses:
+    // "Fixed" - Work completed, needs verification
+    // "Verified" - Test or reporter verified that the fix works
+    // "Duplicate" - Same root cause as another issue
+    // "WontFix" -  Cannot reproduce, works as intended, invalid or absolete.
+    // "Archived" - Old issue with no activity.
+    string status = 17;
+    // A one line description of the issue.
+    string summary = 18;
+    // Last updated datetime of this issue.
+    string updated = 19;
+    // ID of the project containing the issue.
+    string projectId = 20;
+}
+
+// IssueRef references another issue in the same Monorail instance.
+message IssueRef {
+    // ID of the issue.
+    int32 issueId = 1;
+    // ID of the project containing the issue.
+    string projectId = 2;
+}
+
+// Request for Monorail.InsertIssue().
+message InsertIssueRequest {
+    // Definition of the issue.
+    // issue.id must be empty.
+    Issue issue = 2;
+    // Whether to send email to participants.
+    bool sendEmail = 3;
+}
+
+// Response for Monorail.InsertIssue()
+message InsertIssueResponse {
+    // Created issue.
+    Issue issue = 1;
+}
+
+// Request for Monorail.InsertComment()
+message InsertCommentRequest {
+    // Defines the comment.
+    // This message is partial.
+    // Derived from IssueCommentWrapper type in api_pb2_v1.py.
+    message Comment {
+        AtomPerson author = 2;
+        string content = 4;
+        Update updates = 8;
+    }
+    // Definition of the comment.
+    Comment comment = 1;
+    // The reference to post the comment to.
+    IssueRef issue = 2;
+    // SendEmail specifies whether an email must be sent.
+    bool sendEmail = 3;
+}
+
+message InsertCommentResponse{}
+
+// Request for a list of Issues.
+message IssuesListRequest {
+  // String name of the project, e.g. "chromium".
+  string projectId = 1;
+  // Additional projects to search.
+  repeated string additionalProject = 2;
+  enum CannedQuery {
+    ALL = 0;
+    NEW = 1;
+    OPEN = 2;
+    OWNED = 3;
+    REPORTED = 4;
+    STARRED = 5;
+    TO_VERIFY = 6;
+  }
+  // Use a canned query.
+  CannedQuery can = 3;
+  // Issue label or space separated list of labels.
+  string label = 4;
+  // Maximum results to retrieve.
+  int32 maxResults = 5;
+  // Issue owner.
+  string owner = 6;
+  // Search for Issues published before this timestamp.
+  int64 publishedMax = 7;
+  // Search for Issues published after this timestamp.
+  int64 publishedMin = 8;
+  // Free-form text query.
+  string q = 9;
+  // Sort-by field or fields, space separated terms with leading - to
+  // indicate decreasing direction. e.g. "estdays -milestone" to sort by
+  // estdays increasing, then milestone decreasing.
+  string sort = 10;
+  // Starting index for pagination.
+  int32 startIndex = 11;
+  // Issue status.
+  string status = 12;
+  // Search for Issues most recently updated before this timestamp.
+  int64 updatedMax = 13;
+  // Search for Issues most recently updated after this timestamp.
+  int64 updatedMin = 14;
+}
+
+message ErrorMessage {
+  int32 code = 1;
+  string reason = 2;
+  string message = 3;
+}
+
+message IssuesListResponse {
+  ErrorMessage error = 1;
+  // Search results.
+  repeated Issue items = 2;
+  // Total size of matching result set, regardless of how many are included
+  // in this response.
+  int32 totalResults = 3;
+}
+
+// Defines a mutation to an issue.
+// This message is partial.
+// Derived from Update type in api_pb2_v1.py.
+message Update {
+    // If set, the new status of the issue.
+    string status = 2;
+    // Adds or removes labels.
+    repeated string labels = 4;
+    // IsDescription makes the request content the new bug description
+    // instead of a new comment.
+    bool is_description = 13;
+}
+
+// Identifies a Monorail user.
+message AtomPerson {
+    // User email.
+    string name = 1;
+}
+
+message GetIssueRequest {
+  IssueRef issue = 1;
+}
+
+message ListCommentsRequest {
+  IssueRef issue = 1;
+  int32 max_results = 2;
+  int32 start_index = 3;
+}
+
+message ListCommentsResponse {
+  ErrorMessage error = 1;
+  // Actual comments.
+  repeated Comment items = 2;
+
+  // Total size of matching result set, regardless of how many are included
+  // in this response. Includes deleted comments.
+  int32 totalResults = 3;
+}
+
+// Comment represents monorail comment.
+// This field is partial.
+// Derived from `IssueCommentWrapper` type in api_pb2_v1.py.
+message Comment {
+  // Field `attachment` is not supported yet.
+
+  // Who authored the comment.
+  AtomPerson author = 2;
+
+  // Field `canDelete` is not supported yet.
+
+  // Content of the comment.
+  string content = 4;
+
+  // If the comment has been deleted, who deleted it.
+  AtomPerson deletedBy = 5;
+
+  // Comment ID, scoped to its parent issue.
+  int32 id = 6;
+
+  // Datetime of when this comment was published.
+  string published = 7;
+
+  // Updates made to the issue in this comment.
+  Update updates = 8;
+
+  // If true, this comment is actually an issue description.
+  bool is_description = 10;
+}

@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "msg_public.proto";
+import "msg.proto"; 
+import "msg_config.proto"; 
+
+//---------------说明---------------------------
+//自动生成的pb 配置文件
+//----------------------------------------------
+
+package pb;
+
+//center/GiftPack/GiftData
+message MsgCfgGiftData{
+	sint32 Channel = 1;
+	sint32 Mtype = 2;
+	sint32 Changroup = 3;
+	sint32 Door = 4;
+	sint32 Limit = 5;
+	bool Bymail = 6;
+	repeated CPriceItem Awards = 7;
+	sint32 I18Nid = 8;
+}
+
+//center/GiftPack/channelgroup
+message MsgGiftChannelGroup{
+	sint32 Gid = 1;
+	repeated string Chans = 2;
+}
+
+//center/RankList
+message MsgRankListCfg{
+	ERankListType Type = 1;
+	sint32 ShowLen = 2;
+	sint32 MaxLen = 3;
+	uint32 RefreshSpan = 4;
+}
+
+//fight/MonsterProperty
+message MsgMonsterCfg{
+	uint32 ID = 1;
+	string OriName = 2;
+}
+
+//game/FBCfg
+message MsgFBCfg{
+	uint32 ID = 1;
+	uint32 FightCnt = 2;
+	uint32 FirstWinItem = 3;
+	uint32 FirstWinICnt = 4;
+	uint32 Item = 5;
+	uint32 ItemCnt = 6;
+	uint32 DayCnt = 7;
+}
+
+//game/GoodsList
+message MsgItemCfg{
+	uint32 ID = 1;
+	string Name = 2;
+	uint32 Price = 3;
+	EGoodsType Type = 4;
+	string Param1 = 5;
+	string Param2 = 6;
+}
+
+//game/HeroAttri
+message MsgHeroCfg{
+	uint32 ID = 1;
+	uint32 SuiPianUse = 2;
+	uint32 Type = 3;
+	uint32 ZhengY = 4;
+	uint32 Job = 5;
+	float Atk = 6;
+	float AtkGrow = 7;
+	float DefPhy = 8;
+	float DefPhyGrow = 9;
+	float DefMagic = 10;
+	float DefMagicGrow = 11;
+	float HP = 12;
+	float HPGrow = 13;
+	float AtkSpeed = 14;
+	float Speed = 15;
+	float HPHuiFu = 16;
+	float MPHuiFu = 17;
+	uint32 WuQi = 18;
+	uint32 FangJu = 19;
+	uint32 SouSi = 20;
+	uint32 Xie = 21;
+	repeated uint32 Skill = 22;
+}
+
+//game/HeroLevel
+message MsgHeroLevelCfg{
+	uint32 Type = 1;
+	uint32 Level = 2;
+	uint32 NeedExp = 3;
+	float Rate = 4;
+}
+
+//game/HeroPinJie
+message MsgHeroPinJieCfg{
+	uint32 Type = 1;
+	uint32 Job = 2;
+	uint32 PinJie = 3;
+	uint32 NeedLevel = 4;
+	uint32 PinJieKa = 5;
+	uint32 Cost = 6;
+	uint32 CostCnt = 7;
+	uint32 JinBi = 8;
+	float Rate = 9;
+	repeated float Attr = 10;
+}
+
+//game/HeroStar
+message MsgHeroStarCfg{
+	uint32 Type = 1;
+	uint32 Star = 2;
+	uint32 LevelLimit = 3;
+	uint32 HeroCnt = 4;
+	uint32 HeroStar = 5;
+	uint32 JinBi = 6;
+	uint32 BeiDongLevel = 7;
+	uint32 SkillCnt = 8;
+	float Rate = 9;
+	repeated float Attr = 10;
+}
+
+//game/RegionList
+message MsgRegionList{
+	uint32 ID = 1;
+	EFBType Type = 2;
+	uint32 Level = 3;
+	uint32 Time = 4;
+	uint32 CostItem = 5;
+	uint32 CostCnt = 6;
+	uint32 CheckType = 7;
+}
+
+//game/SpecialItem
+message MsgSpecialItemCfg{
+	ESpecialItem Type = 1;
+	uint32 ID = 2;
+}
+
+//game/summon/TAward
+message MsgTripAward{
+	sint32 Id = 1;
+	repeated MsgAwardCell Awards = 2;
+}
+
+//util/dbcfg
+message MsgDBCfg{
+	string Type = 1;
+	string Name = 2;
+	string IP = 3;
+	uint32 Port = 4;
+	string User = 5;
+	string Password = 6;
+}
+

@@ -1,0 +1,2274 @@
+//登陆网关
+//opcode 10000
+message C2S_Connect // IMessage 
+{ 
+	required int64 tick = 1;    //  
+	required string sign = 2; 
+	required int32 agent = 3; 
+	required string  account   = 4;  // 帐号 
+	required string  accname = 5;  // 平台用户名 
+	required string  password = 6;  // 密码 
+	required string did = 7;  // 密码 
+	repeated string data = 8; 
+} 
+
+//登陆网关，服务端返回
+//opcode 10000 
+message S2C_Connect // IMessage 
+{ 
+	required int32 retcode = 1; 
+	required string accountId = 2; 
+	required int32 port = 3; 
+	required string ip = 4; 
+} 
+
+//登录协议
+//opcode 10001
+message C2S_AccountLogin // IMessage 
+{ 
+	required int64 key = 1;				
+	required string sign = 2; 
+	required string version = 3; 
+	required int32 agent = 4; 
+	required string accoundId = 5; 
+	required string accoundName = 6; 
+	required string password = 7; 
+	required string nick = 8; 
+	required string channel = 9; 
+	required string device = 10; 
+	required string did = 11; 
+} 
+
+//登录协议，服务端返回
+//opcode 10001
+message S2C_AccountLogin // IMessage 
+{ 
+	required int32 retcode = 1; 
+	required int64 tick = 2; 
+	required int32 uid = 3; 
+} 
+
+//opcode 10002 注册账号协议
+message C2S_AccountRegister // IMessage 
+{ 
+	required string version = 1;	// 客户端版本
+	required int32 type = 2;		// 0-快速注册，1-手机注册
+	required string regName = 3;	// 账号或手机号
+	required string password = 4;	// 密码
+	required string code = 5;		// 验证码 
+	required string device = 6;		// 登录设备端可选值如下： android| ios | web | pc,
+	required string did = 7;		// 设备ID
+} 
+
+//opcode 10002 注册账号协议
+message S2C_AccountRegister // IMessage 
+{ 
+	required int32 retcode = 1;		// 结果0-成功，1-验证不通过，2-账号已存在，3-单个设备注册超过上线
+} 
+
+//opcode 10003 绑定本机账号协议
+message C2S_AccountBinding // IMessage 
+{ 
+	required int32 type = 1;		// 0-快速绑定，1-手机绑定
+	required string regName = 2;	// 账号或手机号
+	required string password = 3;	// 密码
+	required string code = 4;		// 验证码
+} 
+
+//opcode 10003 绑定本机账号协议
+message S2C_AccountBinding // IMessage 
+{ 
+	required int32 retcode = 1;		// 结果0-成功，1-验证不通过，2-账号已存在，3-单个设备注册超过上线
+} 
+
+//opcode 10004 修改绑定密码
+message C2S_ChangePassword // IMessage 
+{ 
+	required string phone = 1;		// 手机号码
+	required string code = 2;		// 验证码
+	required string password = 3;		//新密码
+} 
+
+//opcode 10004 修改绑定密码
+message S2C_ChangePassword // IMessage 
+{ 
+	required int32 retcode = 1;		// 返回码0: 成功, 1:异常
+} 
+
+//opcode 10005 获取一个不存在的快速注册账号
+message C2S_GetRegister // IMessage 
+{ 
+	required string type = 1;		// 
+} 
+
+//opcode 10005 获取一个不存在的快速注册账号
+message S2C_GetRegister // IMessage 
+{ 
+	required string regName = 1;		// 
+	required string password = 2;		// 
+	required string code = 3;		// 
+} 
+
+//opcode 10006 手机号找回密码
+message C2S_GetPhoneCode // IMessage 
+{ 
+	required string phone = 1;		// 手机号
+	required string code = 2;
+} 
+
+//opcode 10006 手机号找回密码
+message S2C_GetPhoneCode // IMessage 
+{ 
+	required int32 retcode = 1;		// 结果0-成功，1-账号不合法
+} 
+
+//opcode 10007 登出协议
+message C2S_AccountLogout // IMessage 
+{ 
+	required int32 retcode = 1;
+} 
+
+//opcode 10007 登出协议
+message S2C_AccountLogout // IMessage 
+{ 
+	required int32 retcode = 1;		// 退出码  10007001:在别处登录 ，  10007002:GM踢下线, 10007003:GM封号
+	required int32 uid = 2;			// 玩家id
+} 
+
+//opcode 10008 心跳包
+message C2S_HeartBeat // IMessage 
+{ 
+	required int32 syc = 1;
+} 
+
+//opcode 10008 心跳包
+message S2C_HeartBeat // IMessage 
+{ 
+	required int32 syc = 1;
+} 
+
+//opcode 10009 通用错误消息
+message S2C_MessageErr // IMessage 
+{ 
+	required int32 type = 1;
+	required int32 errcode = 2;
+	required string errStr = 3;
+} 
+
+//opcode 10010 设置推荐人
+message C2S_InviteCodeBinding // IMessage 
+{ 
+	required string code = 1;	// 推荐人码
+} 
+
+//opcode 10010 设置推荐人
+message S2C_InviteCodeBinding // IMessage 
+{ 
+	required int32 retcode = 1;	// 0:成功,1:失败
+} 
+//opcode 10011 获取验证码
+message C2S_GetIdentifyingCode // IMessage 
+{ 
+	required int32 type = 1;	// 1 绑定验证码， 2 找回密码验证码
+	required string phone = 2;  //手机号
+} 
+//opcode 10011 获取验证码
+message S2C_GetIdentifyingCode // IMessage 
+{
+	required int32 retCode = 1;
+}
+//opcode 10012 获取验证码
+message C2S_ChangePhone // IMessage 
+{
+	required int32 type = 1;			//类型(1:旧手机号, 2:新手机号)
+	required string phone = 2;			//手机号
+	required string code = 3;			//验证码
+}
+//opcode 10012 获取验证码
+message S2C_ChangePhone // IMessage
+{
+	required int32 retcode = 1;
+}
+//================ 玩家信息，分类号:11 ===========
+//opcode 0 消费记录
+message ConsumeInfo // IMessage 
+{ 
+	required int64 createTime = 1;		// 创建时间
+	required string name = 2;			// 消费项目
+	required int64 num = 3;				// 消费金额
+	required int64 currentNum = 4;		// 当前金额
+} 
+
+//opcode 11000 请求玩家信息
+message C2S_PlayerInfo // IMessage 
+{ 
+	required int32 uid = 1;	// 
+} 
+
+//opcode 11000 请求玩家信息
+message S2C_PlayerInfo // IMessage 
+{ 
+	required int32 uid = 1;					//玩家id
+	required int32 serverId = 2;	 		//游戏服id
+	required int32 domainId = 3;	 		//大区id
+	required int32 sex = 4;	 				//性别
+	required int32 facelook = 5;	 		//自定义形象id
+	required string facelookl = 6;	 		//微信形象url
+	required int32 vip = 7;	 				//vip等级
+	required int32 vipRmb = 8;	 			//vip总充值
+	required int64 coin = 9;	 			//金币
+	required int64 gold = 10;	 			//石
+	required string nick = 11;	 			//玩家名
+	required int32 skin = 12;	 			//玩家皮肤id
+	required int32 playerType = 13;	 		//3银商
+	required string inviteCode = 14;	 	//邀请码            
+	required int64 phoneNum = 15;	 		//手机号码(0:未绑定)
+	required string remark = 16;	 		//签名
+	required int32 rank = 17;	 			//称号排名
+	required string resourceUrl = 18;	 	//资源url
+} 
+
+//opcode 11001 玩家金币、钻石信息变动
+message C2S_CoinRedCard // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 11001 玩家金币、钻石信息变动
+message S2C_CoinRedCard // IMessage 
+{
+	required int64 coin = 1;
+	required int64 gold = 2;
+}
+
+//opcode 11002 玩家修改性别
+message C2S_ChangeSex // IMessage 
+{ 
+	required int32 sex = 1;	// 1 男，2女， 3 保密
+} 
+
+//opcode 11002 玩家修改性别
+message S2C_ChangeSex // IMessage 
+{ 
+	required int32 retcode = 1;					//
+	required int32 sex = 2;					//
+} 
+
+//opcode 11003 玩家修改游戏名
+message C2S_ChangeNick // IMessage 
+{ 
+	required string nick = 1;
+} 
+
+//opcode 11003 玩家修改游戏名
+message S2C_ChangeNick // IMessage 
+{ 
+	required int32 retcode = 1;					//
+	required string nick = 2;					//
+} 
+
+//opcode 11004 更改玩家头像
+message C2S_ChangeFacelook // IMessage 
+{ 
+	required int32 iconId = 1;
+} 
+
+//opcode 11004 更改玩家头像
+message S2C_ChangeFacelook // IMessage 
+{ 
+	required int32 retcode = 1;					//
+	required int32 iconId = 2;					//
+} 
+
+//opcode 11005 获取消费记录
+message C2S_ConsumeList // IMessage 
+{ 
+	required int32 type = 1;   //1 获取金币记录，2获取钻石记录
+} 
+
+//opcode 11005 获取消费记录
+message S2C_ConsumeList // IMessage 
+{ 
+	required int32 type = 1;									//1 获取金币记录，2获取钻石记录
+	repeated ConsumeInfo listConsumeInfo = 2;					//消费记录列表	
+} 
+
+//opcode 11010 获取VIP信息
+message C2S_VipInfo // IMessage 
+{ 
+	required int32 uid = 1;
+} 
+
+//opcode 11010 获取VIP信息
+message S2C_VipInfo // IMessage 
+{ 
+	required int32 retcode = 1;					//0 成功, 1 失败
+	required int32 uid = 2;						//玩家ID
+	required int32 vip = 3;						//当前vip等级
+	required int64 vipRmb = 4;						//当前vip等级已充值金额
+	required int32 nextVip = 5;					//下一个VIP等级
+	required int64 needAmount = 6;				//升到下一级所需的金额
+}
+//opcode 11011 获取保险箱信息
+message C2S_BankInfo // IMessage 
+{ 
+	required int32 uid = 1;					//玩家id
+} 
+
+//opcode 11011 获取保险箱信息
+message S2C_BankInfo // IMessage 
+{ 
+	required int64 bankCoin = 1;					//保险箱金币
+	required int64 coin = 2;						//玩家身上的金币
+} 
+
+//opcode 11012 存入/取出保险箱金币
+message C2S_OperateBank // IMessage 
+{ 
+	required int32 uid = 1;					//玩家id
+	required int32 type = 2;					//操作类型(1:取出金币，2:存入金币)
+	required int64 coin = 3;					//取出/存入的金币
+} 
+
+//opcode 11012 存入/取出保险箱金币
+message S2C_OperateBank // IMessage 
+{ 
+	required int32 retCode = 1;				//0成功，1失败
+	required int64 bankCoin = 2;					//保险箱金币
+	required int64 coin = 3;						//玩家身上的金币
+} 
+
+//opcode 11014 推送玩家系统限制
+message S2C_PlayerSystemLimit // IMessage 
+{ 
+	required int32 retcode = 1;					//0 成功, 1 失败
+} 
+
+//opcode 11019 ios充值通知
+message C2S_IosRecharge // IMessage 
+{ 
+	required int32 uid = 1;					//
+	required int32 rechargeId = 2;					//
+	required string productId = 3;					//
+	required int32 payAmount = 4;					//
+	required string orderNote = 5;					//
+} 
+
+//opcode 11019 ios充值通知
+message S2C_IosRecharge // IMessage 
+{ 
+	required int32 retcode = 1;					//0 成功, 1 失败
+} 
+
+//opcode 11022 获取玩家面板信息
+message C2S_GetPlayerBoardInfo // IMessage 
+{ 
+	required int32 playerId = 1;					//
+} 
+
+//opcode 11022 获取玩家面板信息
+message S2C_GetPlayerBoardInfo // IMessage 
+{ 
+	required int32 retcode = 1;					//0 成功, 1 失败
+	required int32 playerId = 2;				//玩家Id
+	required string nick = 3;					//玩家名称
+	required int32 vip = 4;						//玩家VIP
+	required int32 facelook = 5;				//玩家头像
+	required string remark = 6;					//玩家签名
+	required int32 rank = 7;					//称号排名
+	required int64 coin = 8;					//玩家金币
+	required int32 rate = 9;					//标准场胜利，扩大100倍
+} 
+
+
+
+
+//================ 玩家信息，分类号:12 ===========
+//opcode 12000 聊天信息
+message S2C_ChatInfo // IMessage
+{
+	required int32 type = 1;						//类型: 1 广播， 2 世界，  3 场内
+	required int32 position = 2;						//聊天位置（场内聊天按照12002发的返回）:1 金鲨银鲨， 2 奔驰宝马， 3 红黑场，4 万人麻将
+	required int32 uid = 3;							//玩家id
+	required string nick = 4;						//玩家名
+	required int32 vip = 5;							//玩家vip
+	required int32 isBarrage = 6;				//是否弹幕，1 弹幕
+	required string content = 7;					//聊天信息
+}
+
+//opcode 12001 世界聊天
+message C2S_ChatWorld // IMessage
+{
+	required int32 isBarrage = 1;					//是否弹幕，1 弹幕
+	required string content = 2;					//聊天信息
+}
+
+//opcode 12001 世界聊天
+message S2C_ChatWorld // IMessage
+{
+	required int32 retCode = 1;					//返回结果
+}
+
+//opcode 12002 场内聊天
+message C2S_ChatRoom // IMessage
+{
+	required int32 position = 1;						//聊天位置（场内聊天按照12002发的返回）:1 金鲨银鲨， 2 奔驰宝马， 3 红黑场，4 万人麻将
+	required int32 isBarrage = 2;					//是否弹幕，1 弹幕
+	required string content = 3;					//聊天信息
+}
+
+//opcode 12002 场内聊天
+message S2C_ChatRoom // IMessage
+{
+	required int32 retCode = 1;					//返回结果
+}
+
+//opcode 12003 场内私聊/表情
+message C2S_ChatPrivate // IMessage
+{
+	required int32 toUid = 1;						//目标玩家ID
+	required string content = 2;					//聊天信息
+}
+
+//opcode 12003 场内私聊/表情
+message S2C_ChatPrivate // IMessage
+{
+	required int32 retCode = 1;					//返回结果
+	required int32 fromUid = 2;					//发起玩家ID
+	required int32 toUid = 3;						//目标玩家ID
+	required string content = 4;					//聊天信息
+}
+
+//opcode 12004 GM命令
+message C2S_ChatGm // IMessage
+{
+	required string content = 1;					//GM命令
+}
+
+//opcode 12004 GM命令
+message S2C_ChatGm // IMessage
+{
+	required int32 retCode = 1;					//返回结果
+}
+ 
+
+
+//================ 物品信息，分类号:13 ===========
+//opcode 0
+message GoodsRecord // IMessage
+{
+	required int32 goodsGtid = 1;				//道具类型id
+	required int32 goodsId = 2;					//道具id
+	required int32 goodsNum = 3;				//道具数量
+	required int32 location = 4;					//道具所在的位置  0：背包， 1：已装备
+}
+
+//opcode 13000 请求物品信息
+message C2S_GoodsInfo // IMessage
+{
+	required int32 location = 1;					//
+}
+
+//opcode 13000 请求物品信息
+message S2C_GoodsInfo  // IMessage
+{
+	repeated GoodsRecord goodsLst = 1;		//道具信息	
+}
+
+//opcode 13001 开宝箱
+message C2S_OpenTreasureBox  // IMessage
+{
+	required int32 goodsId = 1;						//道具ID
+	required int32 goodsNum = 2;					//数量
+}
+
+//opcode 13001 开宝箱
+message S2C_OpenTreasureBox  // IMessage
+{
+	required int32 retCode = 1;						//返回码 0：成功， 1：异常， 13002001：物品不足， 13002002:开宝箱的金币不足, 13002003:VIP等级不够, 13002004:物品过了有效期
+	repeated GoodsRecord goodsList = 2;		//物品列表
+}
+
+//opcode 13002 通知玩家物品变动
+message S2C_UpdateGoods  // IMessage
+{
+	repeated GoodsRecord goodsLst = 1;		//道具奖励	
+}
+
+//opcode 13003 获取赠送玩家名字
+message C2S_GetPlayerNick  // IMessage
+{
+	required int32 playerId = 1;						//其他玩家Id	
+}
+
+//opcode 13003 获取赠送玩家名字
+message S2C_GetPlayerNick  // IMessage
+{
+	required int32 retCode = 1;						
+	required int32 playerId = 2;						//玩家Id
+	required string nick = 3 ;							//玩家名称
+}
+
+//opcode 13004 赠送玩家金币
+message C2S_GiveCoinToPlayer // IMessage
+{
+	required int32 playerId = 1;						//其他玩家Id
+	required int32 coin = 2 ;							//赠送金币
+}
+
+//opcode 13004 赠送玩家金币
+message S2C_GiveCoinToPlayer // IMessage
+{
+	required int32 retCode = 1;						//返回结果
+}
+
+
+
+//=============================商城信息，分类号14======================================
+//opcode 0
+message ShopGoodsInfo // IMessage
+{
+	required int32 gtid = 1;							//道具类型id （与goods配置表id一致）
+	required int32 num = 2;							//数量
+}
+
+//opcode 0
+message ShopInfo // IMessage
+{
+	required int32 shopId = 1;						//商品id （与goods配置表id一致）
+	required int32 type = 2;								//商品类型，1、购买钻石,2、兑换金币,3、购买道具
+	required int32 sign = 3;							//标签 ， 0、无标签,1、热卖,2、降价,3、新品
+	required int32 costType = 4;						//花费类型 ，1、人民币,2、钻石,3、金币
+	required int32 cost = 5;							//花费费用
+	required int32 canBuy = 6;						//是否可以购买，1 表示可以购买
+	repeated ShopGoodsInfo reward = 7;		//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+	required string mark = 8;							//信息条
+}
+
+//opcode 14000 获取商城物品
+message C2S_GetShopType  // IMessage
+{
+	required int32 type = 1;							//商品类型
+}
+
+//opcode 14000 获取商城物品
+message S2C_GetShopType  // IMessage
+{
+	required int32 type = 1;							//商品类型
+	repeated ShopInfo shopList = 2;				//道具奖励		
+}
+
+//opcode 14001 购买钻石，充值
+message C2S_ShopBuyDiamond  // IMessage
+{
+	required int32 shopId = 1;						//商品id
+	required int32 isAipay = 2;						//是否是爱贝支付, 1 表示是爱贝支付	
+}
+
+//opcode 14001 购买钻石，充值
+message S2C_ShopBuyDiamond  // IMessage
+{
+	required int32 retCode = 1;						//返回码0: 成功, 1:异常
+	required int32 shopId = 2;						//商品id
+	required string transid = 3;						//爱贝交易流水号
+}
+
+//opcode 14002 购买商品(兑换金币 或 购买道具)
+message C2S_ShopBuyShop  // IMessage
+{
+	required int32 shopId = 1;						//商品id
+}
+
+//opcode 14002 购买商品(兑换金币 或 购买道具)
+message S2C_ShopBuyShop  // IMessage
+{
+	required int32 retCode = 1;						//返回码0: 成功, 1:异常
+	required int32 shopId = 2;						//商品id
+	required int32 canBuy = 3;						//是否可以购买，1 表示可以购买
+	repeated ShopGoodsInfo reward = 4;		//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+
+
+//=============================任务信息，分类号:15======================================
+//opcode 0
+message TaskRewardInfo  // IMessage
+{
+	required int32 gtid = 1;							//道具类型id（与goods配置表id一致）
+	required int32 num = 2;							//数量
+}
+
+//opcode 0
+message TaskInfo  // IMessage
+{
+	required int32 taskId = 1;							//任务id
+	required int32 type = 2;							//任务大类型,1 大厅，2 水果场，3 标准场，4 百人场 
+	required int32 subType = 3;						//任务子类
+	required int32 state = 4;							//状态, 1 未完成，2 可领取，3 已领取
+	required int32 sort = 5;					//排序序号
+	required int32 nowNum = 6;					//当前数量
+	required int32 needNum = 7;					//需要总数
+	repeated TaskRewardInfo reward = 8;		//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+
+//opcode 15000 获取任务列表
+message C2S_GetTaskList  // IMessage
+{
+	required int32 uid = 1;								//玩家id
+	required int32 type = 2;							//任务大类型,1 大厅，2 水果场，3 标准场，4 百人场 
+}
+
+//opcode 15000 获取任务列表
+message S2C_GetTaskList  // IMessage
+{
+	required int32 type = 1;							//任务大类型,1 大厅，2 水果场，3 标准场，4 百人场 
+	repeated TaskInfo taskList = 2;					//任务列表
+}
+
+//opcode 15001 领取任务奖励
+message C2S_TaskGetReward // IMessage
+{
+	required int32 taskId = 1;							//任务id
+}
+
+//opcode 15001 领取任务奖励
+message S2C_TaskGetReward // IMessage
+{
+	required int32 retCode = 1;					//返回码0: 成功, 1:异常
+	required int32 taskId = 2;							//任务id
+	repeated TaskRewardInfo reward = 3;		//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+
+//opcode 15002 任务数据更新
+message S2C_TaskUpdate  // IMessage
+{
+	required int32 taskId = 1;							//商品id
+	required int32 state = 2;							//状态, 1 未完成，2 可领取，3 已领取
+	required int32 nowNum = 3;					//当前数量
+	required int32 needNum = 4;					//需要总数
+}
+
+//opcode 15003 一键领取任务奖励
+message C2S_TaskGetAllReward  // IMessage
+{
+	required int32 type = 1;							//任务大类型,1 大厅，2 水果场，3 标准场，4 百人场
+}
+
+//opcode 15003 一键领取任务奖励
+message S2C_TaskGetAllReward  // IMessage
+{
+	required int32 retCode = 1;						//返回码0: 成功, 1:异常
+	repeated int32 idList = 2;							//任务id列表
+	repeated TaskRewardInfo reward = 3;		//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+
+
+
+//===========================活动，分类号:16===================
+//opcode 0 
+message ActivityRewardInfo // IMessage
+{
+	required int32 gtid = 1;								//道具类型id(与goods配置表id一致)
+	required int64 num = 2;								//数量
+}
+
+//opcode 0 活动信息
+message ActivityInfo // IMessage
+{
+	required int32 activityId = 1;						//活动id
+	required int32 type = 2;								//	活动大类型,1限时大赢家翻倍活动，2限时盈利奖励活动，3限时累计充值活动，4赠送金币活动
+	required int32 state = 3;								//状态, 1 未完成，2 可领取，3 已领取
+	required int32 nowNum = 4;						//当前数量
+	required int32 needNum = 5;						//需要总数
+	repeated ActivityRewardInfo reward = 6;	//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+//opcode 0 活动信息
+message ActivityTypeInfo // IMessage
+{
+	required int32 type = 1;						//活动类型
+	required int32 startTime = 2;					//活动开始时间
+	required int32 endTime = 3;						//活动结束时间
+	required int32 leftTime = 4;					//剩余时间
+	repeated int32 targetList = 5;					//活动目标列表[game_id, ...] game_id:小游戏id(31:金鲨银鲨, 32:奔驰宝马, 33:万人麻将, 34: 红黑大战)
+}
+
+//opcode 16000 获取活动列表
+message C2S_GetActivityList // IMessage
+{
+	required int32 uid = 1;								//玩家id
+	required int32 type = 2;								//活动大类型,1限时大赢家翻倍活动，2限时盈利奖励活动，3限时累计充值活动，4赠送金币活动
+}
+
+//opcode 16000 获取活动列表
+message S2C_GetActivityList // IMessage
+{
+	required int32 type = 1;								//活动大类型,1限时大赢家翻倍活动，2限时盈利奖励活动，3限时累计充值活动，4赠送金币活动
+	repeated ActivityInfo activityList = 2;			//活动列表
+}
+
+//opcode 16001 领取活动奖励
+message C2S_ActivityGetReward // IMessage
+{
+	required int32 activityId = 1;								//活动id
+}
+
+//opcode 16001 领取活动奖励
+message S2C_ActivityGetReward // IMessage
+{
+	required int32 retCode = 1;								//返回码0: 成功, 1:异常
+	required int32 activityId = 2;								//活动id
+	repeated ActivityRewardInfo reward = 3;			//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+}
+
+//opcode 16002 活动数据更新
+message S2C_ActivityUpdate // IMessage
+{
+	required int32 activityId = 1;								//商品id
+	required int32 type = 2;										//活动类型
+	required int32 state = 3;										//状态, 1 未完成，2 可领取，3 已领取
+	required int32 nowNum = 4;								//当前数量
+	required int32 needNum = 5;								//需要总数
+}
+
+//opcode 16003 活动类型列表
+message C2S_ActivityTypeList // IMessage
+{
+	required int32 uid = 1;								//玩家id
+}
+
+//opcode 16003 活动类型列表
+message S2C_ActivityTypeList // IMessage
+{
+	repeated ActivityTypeInfo activityTypeList = 1;			//活动类型列表
+}
+
+
+////opcode 16004 一键领取活动奖励
+//message S2C_ActivityGetAllReward // IMessage
+//{
+//	required int32 type = 1;								//活动大类型,1限时大赢家翻倍活动，2限时盈利奖励活动，3限时累计充值活动，4赠送金币活动 
+//}
+//
+////opcode 16004 一键领取活动奖励
+//message S2C_ActivityGetAllReward // IMessage
+//{
+//	required int32 retCode = 1;								//返回码0: 成功, 1:异常
+//	repeated int32 idList = 2;									//活动id列表
+//	repeated ActivityRewardInfo reward = 3;			//奖励,[{id,数量}],金币id:100010001,钻石id:100010002
+//}
+
+
+
+
+
+// =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  玩家信息，分类号:17  =  =  =  =  =  =  =  =  =  =  = 
+//opcode 0 
+message LotBetInfo // IMessage
+{
+	required int32 type = 1;    //押注区域
+	required int64 coin = 2;    //押注数量
+}
+
+//opcode 0 
+message StarInfo // IMessage
+{
+	required int32 uid = 1;				//玩家id
+	required string nick = 2;			//玩家名
+	required int32 facelook = 3;		//玩家头像id
+	required int32 vip = 4;				//玩家vip等级
+	required int64 num = 5;				//玩家获得的金币奖励
+	required int64 winTime = 6;			//获奖时间戳
+}
+
+//opcode 17000 请求进入房间
+message C2S_JoinLotRoom // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17000 请求进入房间
+message S2C_JoinLotRoom // IMessage 
+{
+	required int32 retCode = 1;				//返回码0: 成功, 1:异常, 2:不能重复进入 
+	required int32 state = 2;				//房间状态（0：不可押注，1：押注状态，2：结算状态）
+	required int32 stateTime = 3;			//当前状态下倒计时时间(单位秒)
+	repeated int32 cards = 4;				//开奖的牌值
+	required int64 jackpot = 5;				//累积的奖池
+	required int64 lastLeopardTime = 6;		//上次开豹子的时间戳
+	repeated LotBetInfo betList = 7;		//全部押注列表[{type, coin}]
+	required StarInfo lastStar = 8;			//上一轮大赢家
+	repeated int32 historyList = 9;			//历史开奖记录
+	repeated int32 numLog = 10;				//单双记录
+	repeated LotBetInfo selfBetList = 11;	//玩家自己押注列表[{type, coin}]
+	required int32 autoNum = 12;			//自动押注剩余轮数，0表示没有自动押注
+	required int32 isRepeat = 13;			//是否可以重复押注 ，1 表示可以重复押注
+}
+
+//opcode 17001 离开房间
+message C2S_ExitLotRoom // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17001 离开房间
+message S2C_ExitLotRoom // IMessage 
+{
+	required int32 retCode = 1;			//0:成功, 1:异常
+}
+
+//opcode 17002 押注
+message C2S_LotBet // IMessage 
+{
+	required int32 type = 1;			//押注区域
+	required int32 coin = 2;			//数量
+}
+
+//opcode 17002 押注
+message S2C_LotBet // IMessage 
+{
+	required int32 retCode = 1;				//0:成功, 1:异常
+	required int32 type = 2;				//押注区域
+	required int64 coin = 3;				//数量
+	repeated LotBetInfo betList = 4;		//全部押注列表[{type, coin}]
+	repeated LotBetInfo selfBetList = 5;	//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 17003 广播活动状态
+message C2S_LotState // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17003 广播活动状态
+message S2C_LotState // IMessage 
+{
+	required int32 state = 1;				//房间状态（0：不可押注，1：押注状态，2：结算状态）
+	required int32 stateTime = 2;			//当前状态下倒计时时间(单位秒)
+}
+
+//opcode 17004 广播开奖
+message S2C_DrawLottery // IMessage 
+{
+	required int32 type = 1;				//开奖类型
+	required int32 typeNum = 2;				//1 表示单数, 2 表示双数
+	repeated int32 cards = 3;				//开奖的牌值
+	repeated int32 historyList = 4;			//历史开奖记录
+	repeated int32 numLog = 5;				//单双记录 
+}
+
+//opcode 17005 玩家个人结算
+message S2C_GetReward // IMessage 
+{
+	required int32 type = 1;				//开奖类型
+	required int64 typeCoin = 2;			//牌型赢的金币，0表示没有中
+	required int32 single = 3;				//1 表示单数, 2 表示双数
+	required int64 singleCoin = 4;			//单双赢的金币，0表示没有中	
+}
+
+//opcode 17006 广播更新奖池，大赢家，豹子时间
+message S2C_UpdateStar // IMessage 
+{
+	required int64 jackpot = 1;				//累积的奖池
+	required int64 lastLeopardTime = 2;		//上次开豹子的时间戳
+	required StarInfo lastStar = 3;			//上一轮大赢家
+}
+
+//opcode 17007 所有区域押注信息
+message C2S_AllBet // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17007 所有区域押注信息
+message S2C_AllBet // IMessage 
+{
+	repeated LotBetInfo betList = 1;			//全部押注列表[{type, coin}]
+	repeated LotBetInfo selfBetList = 2;		//玩家自己押注列表[{type, coin}]	
+}
+
+//opcode 17008 重复押注
+message C2S_RepeatBet // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17008 重复押注
+message S2C_RepeatBet // IMessage 
+{
+	required int32 retCode = 1;					//0:成功, 1:异常
+	repeated LotBetInfo betList = 2;			//全部押注列表[{type, coin}]
+	repeated LotBetInfo selfBetList = 3;		//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 17009 自动押注
+message C2S_AutoBet // IMessage 
+{
+	required int32 autoNum = 1;
+}
+
+//opcode 17009 自动押注
+message S2C_AutoBet // IMessage 
+{
+	required int32 retCode = 1;					//0:成功, 1:异常
+	required int32 autoNum = 2;					//自动押注次数
+	repeated LotBetInfo betList = 3;			//全部押注列表[{type, coin}]
+	repeated LotBetInfo selfBetList = 4;		//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 17010 取消自动押注
+message C2S_CancelAutoBet // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17010 取消自动押注
+message S2C_CancelAutoBet // IMessage 
+{
+	required int32 retCode = 1;
+}
+
+//opcode 17011 广播奖池奖金
+message S2C_BroadcastStarInfo // IMessage 
+{
+	required int64 selfWinCoin = 1;				//自己活得的奖池奖励
+	required int64 allWinCoin = 2;				//奖池总共派送奖金
+	repeated StarInfo starList = 3;				//前三获得的奖金
+}
+
+//opcode 17012 获取大奖玩家列表
+message C2S_GetStarList // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 17012 获取大奖玩家列表
+message S2C_GetStarList // IMessage 
+{
+	repeated StarInfo starList = 1;				//大奖玩家列表
+}
+//=============================任务信息，分类号:19======================================
+//opcode 0 资源
+message GoodsInfo // IMessage
+{
+	required int32 goodsTypeId = 1;				//物品类型id,金币id:100010001,钻石id:100010002
+	required int32 num = 2;						//物品数量
+}
+message MailInfo // IMessage
+{
+	required int32 id = 1;						//邮件id
+	required int32 mailType = 2;				//邮件类型,前端暂时不需要 (1:系统邮件,9:客服中心邮件)
+	required int32 sendTime = 3;				//发送时间(时间戳 单位/s)
+	required int32 leftTime = 4;				//剩余过期时间(秒)，0表示无时间限制
+	required int32 isNew = 5;					//是否是新邮件未读取
+	required string title = 6;					//邮件标题 
+	required string content = 7;				//邮件内容
+	repeated GoodsInfo goodList = 8;				//附件列表
+}
+message BoardInfo // IMessage
+{
+	required int32 id = 1;						//id
+	required int32 sendTime = 2;				//发送时间
+	required int32 isNew = 3;					//是否是新公告，1是行公告	
+	required string title = 4;					//标题
+	required string content = 5;				//内容
+}
+//opcode 19001 系统公告
+message C2S_SystemAnnouncement // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 19001 系统公告
+message S2C_SystemAnnouncement // IMessage
+{
+	repeated BoardInfo boardList = 1;
+}
+//opcode 19002 系统信息(跑马灯)
+message S2C_SystemMarquee // IMessage
+{
+	required int32 type = 1;				//消息类型: 1 系统GM发送的信息, 2 游戏系统发送的信息
+	repeated GoodsInfo goodsList = 2;		//物品列表，当物品列表不为空时，content的值为玩家的
+	required string content = 3;			//公告内容
+}
+//opcode 19003 邮件列表
+message C2S_GetMail // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 19003 邮件列表
+message S2C_GetMail // IMessage
+{
+	required int32 isNewMail = 1;			//是否有未读取邮件(1:有未读邮件，0:没有未读邮件)	
+	repeated MailInfo mailList = 2;			//邮件列表
+}
+//opcode 19004 通知玩家有新邮件
+message S2C_NewMail // IMessage
+{
+	required MailInfo mailInfo = 1;
+}
+//opcode 19005 删除邮件
+message C2S_DeleteMail // IMessage
+{
+	required int32 id = 1;				//	邮件id
+}
+//opcode 19005 删除邮件
+message S2C_DeleteMail // IMessage
+{
+	required int32 retCode = 1;			//返回值(0成功,1失败)
+	required int32 id = 2;				//邮件id
+}
+//opcode 19006 删除所有邮件
+message C2S_DeleteAllMail // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 19006 删除所有邮件
+message S2C_DeleteAllMail // IMessage
+{
+	required int32 retCode = 1;
+}
+//opcode 19007 领取邮件附件
+message C2S_GetAttachment // IMessage
+{
+	required int32 id = 1;
+}
+//opcode 19007 领取邮件附件
+message S2C_GetAttachment // IMessage
+{
+	required int32 retCode = 1;
+	required int32 id = 2;
+}
+//opcode 19008 邮件已读
+message C2S_ReadMail // IMessage
+{
+	required int32 id = 1;
+}
+//opcode 19008 邮件已读
+message S2C_ReadMail // IMessage
+{
+	required int32 retCode = 1;				//返回值(0成功， 1失败)
+	required int32 id = 2;					//邮件id
+}
+//opcode 19009 公告已读
+message C2S_ReadBoard // IMessage
+{
+	required int32 id = 1;
+}
+//opcode 19009 公告已读
+message S2C_ReadBoard // IMessage
+{
+	required int32 retCode = 1;
+	required int32 id = 2;
+}
+//opcode 19010 一键领取邮件附件
+message C2S_GetAttachmentAll // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 19010 一键领取邮件附件
+message S2C_GetAttachmentAll // IMessage
+{
+	required int32 retCode = 1;
+}
+
+// =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  玩家信息，分类号:20  =  =  =  =  =  =  =  =  =  =  = 
+//opcode 0 资源
+message ProtoResurce // IMessage
+{
+	required int32 goodId = 1;				//物品类型Id
+	required int32 num = 2;					//数量
+}
+//opcode 20000 获取每日签到信息
+message C2S_GetDailySignInfo // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20000 每日签到信息
+message S2C_GetDailySignInfo // IMessage 
+{
+	required int32 todaySign = 1;			//今日是否已经签到，1 已签， 0 未签
+	required int32 today = 2;				//今天周几
+	repeated int32 signDay = 3;				//已经签到的星期几列表
+	required int32 signTime = 4;			//累计签到天数
+	repeated ProtoResurce totalSign = 5;	//累积签到情况，[{id, Ret}], Ret ：0 不可领取， 1可领取， 2已经领取
+}
+
+//opcode 20001 今日签到
+message C2S_DailySign // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20001 今日签到
+message S2C_DailySign // IMessage 
+{
+	required int32 retCode = 1;				//返回值, 0成功
+	required int32 dayCoin = 2;				//每日签到奖励
+	repeated ProtoResurce totalSign = 3;	//累积签到情况，[{id, Ret}], Ret ：0 不可领取， 1可领取， 2已经领取
+}
+
+//opcode 20002 每日签到补签
+message C2S_DailyReissue // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20002 每日签到补签
+message S2C_DailyReissue // IMessage 
+{
+	required int32 retCode = 1;				//返回值, 0成功
+	required int32 dayCoin = 2;				//每日签到奖励
+	repeated ProtoResurce totalSign = 3;	//累积签到情况，[{id, Ret}], Ret ：0 不可领取， 1可领取， 2已经领取
+}
+
+//opcode 20003 领取累积奖励
+message C2S_DailyTotal // IMessage 
+{
+	required int32 id = 1;					//累积奖励Id 
+}
+
+//opcode 20003 领取累积奖励
+message S2C_DailyTotal // IMessage 
+{
+	required int32 retCode = 1;					//返回值, 0成功
+	repeated ProtoResurce totalResurce = 2;		//累积签到奖励
+}
+
+//opcode 20004 获取摇钱树信息
+message C2S_GetTreeData // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20004 获取摇钱树信息
+message S2C_GetTreeData // IMessage 
+{
+	required int32 retCode = 1;				//返回值, 0成功
+	required int32 treeLevel = 2;			//摇钱树等级
+	required int64 treeCoin = 3;			//累积奖励
+	required int64 levelCoin = 4;			//当前等级每小时获得金币
+	required int32 isFull = 5;				//是否已经结满，1 表示已经满了
+	required int32 cdTime = 6;				//cd时间(秒)，0表示没有cd
+}
+
+//opcode 20005 收获摇钱树金币
+message C2S_ReceiveTreeCoin // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20005 收获摇钱树金币
+message S2C_ReceiveTreeCoin // IMessage 
+{
+	required int32 retCode = 1;				//返回值, 0成功
+	required int64 receiveCoin = 2;			//获得的金币 
+	required int32 cdTime  = 3;				//cd时间(秒)，0表示没有cd
+}
+
+//opcode 20006 通知玩家摇钱树升级
+message S2C_UpgradeTree // IMessage 
+{
+	required int32 oldTreeLevel = 1;		//旧等级
+	required int32 newTreeLevel = 2;		//新等级
+	required int64 treeCoin = 3;			//累积奖励
+	required int64 levelCoin = 4;			//当前等级每小时获得金币
+	required int32 isFull = 5;				//是否已经结满，1 表示已经满了
+	required int32 cdTime = 6;				//cd时间(秒)，0表示没有cd 
+}
+
+//opcode 20007 获取在线奖励信息
+message C2S_GetOnlineAward // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20007 在线奖励变为可领取的时候会广播
+message S2C_GetOnlineAward // IMessage 
+{
+	required int32 isEnd = 1;				//今天的是否已经领取完毕,1 表示已经全部领取
+	required int32 cdTime = 2;				//cd时间(秒)，0表示没有cd
+	required int32 onlineCoin = 3;			//当前可以领取金币
+}
+
+//opcode 20008 领取在线奖励
+message C2S_ReceiveOnlineAward // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20008 领取在线奖励
+message S2C_ReceiveOnlineAward // IMessage 
+{
+	required int32 retCode = 1;				//返回值, 0成功
+	required int32 receiveCoin = 2;			//领取到的金币
+	required int32 isEnd = 3;				//今天的是否已经领取完毕,1 表示已经全部领取
+	required int32 cdTime = 4;				//cd时间(秒)，0表示没有cd
+	required int32 onlineCoin = 5;			//当前可以领取金币
+}
+
+//opcode 20009 获取今日爱心卡已使用次数、剩余爱心卡数量、使用次数上限
+message C2S_GetFreeTimes // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20009 获取今日爱心卡已使用次数、剩余爱心卡数量、使用次数上限
+message S2C_GetFreeTimes // IMessage 
+{
+	required int32 usedTimes = 1;			//免费补偿已经领取次数
+	required int32 allTimes = 2;				//使用次数上限
+	required int32 leftNum = 3;				//剩余爱心卡数量
+}
+
+//opcode 20010 使用爱心卡
+message C2S_GetFreeAward // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 20010 使用爱心卡
+message S2C_GetFreeAward // IMessage 
+{
+	required int32 retCode = 1;					//0成功
+	required int32 usedTimes = 2;				//免费补偿已经领取次数
+	required int32 allTimes = 3;						//使用次数上限
+	required int32 leftNum = 4;							//剩余爱心卡
+	repeated ProtoResurce resurceList = 5;				//返回资源 
+}
+
+//opcode 20011 广播小红点
+message S2C_RedPoint // IMessage 
+{
+	required int32 pointType = 1;			//1 邮件， 2 任务
+	repeated int32 redList = 2;				//red_list为空表示没有小红点， list为 point_id，任务id（邮件为0）
+}
+//================ 玩家信息，分类号:29 ===========
+//opcode 0 信息  
+message ProtoCoinRank // IMessage
+{
+	required int32 rank = 1;				//排名
+	required int32 uid = 2;					//玩家id
+	required string nick = 3;				//玩家名称
+	required int32 vip = 4;					//玩家vip	
+	required int32 facelook = 5;			//玩家头像	
+	required int64 num = 6;					//数量
+}
+
+//opcode 29000 c2s获取金币排行榜
+message C2S_GetRankType // IMessage
+{
+	required int32 rankType = 1;
+}
+//opcode 29000 c2s获取金币排行榜
+message S2C_GetRankType // IMessage
+{
+	required int32 retCode = 1;						//返回码0: 成功, 1:异常
+	required int32 rankType = 2;					//排行榜类型
+	required int32 selfRank = 3;					//自己的排名，0 表示没有排名
+	repeated ProtoCoinRank rankList = 4;			//排行榜列表
+}
+
+
+
+//================ 玩家信息，分类号:31 ===========
+//opcode 0 押注信息
+message SharkBetInfo // IMessage
+{
+	required int32 type = 1;    //押注区域
+	required int64 coin = 2;    //押注数量
+}
+
+//opcode 0 玩家信息
+message SharkPlayerInfo // IMessage
+{
+	required int32 uid = 1;         //玩家Id
+	required int32 facelook = 2;    //头像
+	required int32 vip = 3;		  //vip等级
+	required string nick = 4;       //玩家名称
+	required int64 coin = 5;        //玩家金币
+	required int32 turnNum = 6;     //庄家剩余轮数，闲家为0
+}
+
+//opcode 0 大奖信息
+message SharkStarInfo // IMessage
+{
+	required int32 uid = 1;			//玩家Id
+	required int32 facelook = 2;		//头像
+	required int32 vip = 3;			//vip等级
+	required string nick = 4;			//玩家名称
+	required int64 coin = 5;			//玩家金币
+	required int64 winTime = 6;		//获奖时间戳
+}
+
+//opcode 31000 请求进入房间
+message C2S_JoinSharkRoom // IMessage 
+{
+	required int32 uid = 1;				//
+}
+
+//opcode 31000 请求进入房间
+message S2C_JoinSharkRoom // IMessage 
+{
+	required int32 redCode = 1;				//返回码0: 成功, 1:异常
+	required int32 state = 2;					//房间状态（0：不可押注，1：押注状态， 2：开奖状态，3：结算状态，4：休息状态）
+	required int32 stateTime = 3;				//当前状态下倒计时时间(单位秒)
+	required int32 openId = 4;				//本轮开出的跑灯，0 表示没有
+	required int64 jackpot = 5;				//累积的奖池
+	required int32 isBanker = 6;				//自己是否是庄家
+	repeated SharkPlayerInfo bankerInfo = 7;		//庄家信息
+	repeated int32 historyList = 8;		//历史开奖记录
+	repeated SharkBetInfo betList = 9;			//全部押注列表[{type, coin}]
+	repeated SharkBetInfo selfBetList = 10;	//玩家自己押注列表[{type, coin}]
+	required int32 autoNum = 11;		//自动押注剩余轮数，0表示没有自动押注
+}
+
+//opcode 31001 离开房间
+message C2S_ExitSharkRoom // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 31001 离开房间
+message S2C_ExitSharkRoom // IMessage 
+{
+	required int32 redCode = 1;				//0:成功, 1:异常
+}
+
+//opcode 31002 押注
+message C2S_SharkBet // IMessage 
+{
+	required int32 type = 1;					//押注区域
+	required int64 coin = 2;					//数量
+}
+
+//opcode 31002 押注
+message S2C_SharkBet // IMessage 
+{
+	required int32 retCode = 1;				//0:成功, 1:异常
+	required int32 type = 2;					//押注区域
+	required int64 coin = 3;					//数量
+	repeated SharkBetInfo betList = 4;			//全部押注列表[{type, coin}]
+	repeated SharkBetInfo selfBetList = 5;		//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 31003 广播活动状态
+message S2C_SharkState // IMessage 
+{
+	required int32 state = 1;					//房间状态（0：不可押注，1：发牌状态，2：押注状态，3：开牌状态， 4：结算状态，5：休息状态）
+	required int32 stateTime = 2;				//当前状态下倒计时时间(单位秒)
+}
+
+//opcode 31004 广播开奖
+message S2C_SharkOpen // IMessage 
+{
+	required int32 openId = 1;				//本轮开出的跑灯，0 表示没有
+	required int32 isJackpot = 2;				//是否开奖池，1 表示开奖池
+}
+
+//opcode 31005 广播结算
+message S2C_SharkBalance // IMessage 
+{
+	required int64 jackpotCost = 1;			//奖池特殊奖励总支出
+	required int64 jackpot = 2;				//奖池最新金额
+	required int64 bankerWin = 3;				//庄家赢的金额
+	required int64 bankerLose = 4;			//庄家输的金额
+	required int64 bankerCoin = 5;			//庄家最新金额
+	required int64 selfWin = 6;				//玩家自己赢得金额
+	repeated SharkPlayerInfo bankerInfo = 7;		//庄家信息
+	repeated SharkStarInfo lastStar = 8;		//本轮大赢家
+	repeated SharkStarInfo jackpotStar = 9;		//奖池大赢家
+}
+
+//opcode 31006 请求所有区域押注信息
+message C2S_SharkAllBet // IMessage 
+{
+	required int32 uid = 1;
+}
+
+//opcode 31006 请求所有区域押注信息
+message S2C_SharkAllBet // IMessage 
+{
+	repeated SharkBetInfo betList = 1;			//全部押注列表[{type, coin}]
+	repeated SharkBetInfo selfBetList = 2;		//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 31007 申请上庄
+message C2S_SharkApplyBanker // IMessage 
+{
+	required int32 uid = 1;					//玩家
+}
+
+//opcode 31007 申请上庄
+message S2C_SharkApplyBanker // IMessage 
+{
+	required int32 retCode = 1;				//返回值0成功
+}
+
+//opcode 31008 取消玩家申请上庄
+message C2S_SharkCancelBanker // IMessage 
+{
+	required int32 uid = 1;					//玩家Id
+}
+
+//opcode 31008 取消玩家申请上庄
+message S2C_SharkCancelBanker // IMessage 
+{
+	required int32 redCode = 1;					//返回值0成功
+	required int32 type = 2;
+	required int32 uid = 3;						//玩家Id	
+}
+
+//opcode 31009 玩家主动下庄
+message C2S_SharkOutBanker // IMessage 
+{
+	required int32 uid = 1;					//玩家Id
+}
+
+//opcode 31009 玩家主动下庄
+message S2C_SharkOutBanker // IMessage 
+{
+	required int32 retCode = 1;					//返回值0成功
+}
+
+//opcode 31010 广播新庄家
+message S2C_SharkNewBanker // IMessage 
+{
+	required int32 type = 1;					//下庄方式，1 正常下庄，2 爆庄
+	repeated SharkPlayerInfo oldBanker = 2;		//旧庄家信息
+	repeated SharkPlayerInfo newBanker = 3;		//新庄家信息
+}
+
+//opcode 31011 获取庄家申请列表
+message C2S_SharkApplyList // IMessage 
+{
+	required int32 uid = 1;					//玩家Id
+}
+
+//opcode 31011 获取庄家申请列表
+message S2C_SharkApplyList // IMessage 
+{
+	required int32 retCode = 1;					//返回值0成功
+	repeated SharkPlayerInfo applyList = 2;			//申请上庄玩家信息
+}
+
+//opcode 31012 获取开奖记录
+message C2S_SharkLog // IMessage 
+{
+	required int32 uid = 1;					//玩家Id
+}
+
+//opcode 31012 获取开奖记录
+message S2C_SharkLog // IMessage 
+{
+	required int32 retCode = 1;					//返回值0成功
+	repeated int32 historyLog = 2;			//开奖记录
+}
+
+//opcode 31013 获取大奖大赢家列表
+message C2S_SharkStarList // IMessage 
+{
+	required int32 uid = 1;						//玩家Id
+}
+
+//opcode 31013 获取大奖大赢家列表
+message S2C_SharkStarList // IMessage 
+{
+	repeated SharkStarInfo starList = 1;						//大赢家信息
+}
+
+//opcode 31014 重复押注
+message C2S_SharkRepeatBet // IMessage 
+{
+	required int32 uid = 1;						//玩家Id
+}
+
+//opcode 31014 重复押注
+message S2C_SharkRepeatBet // IMessage 
+{
+	required int32 retCode = 1;						//0:成功, 1:异常
+	repeated SharkBetInfo betList = 2;					//全部押注列表[{type, coin}]
+	repeated SharkBetInfo selfBetList = 3;				//玩家自己押注列表[{type, coin}]	
+}
+
+//opcode 31015 自动押注
+message C2S_SharkAutoBet // IMessage 
+{
+	required int32 autoNum = 1;					//自动押注次数
+}
+
+//opcode 31015 自动押注
+message S2C_SharkAutoBet // IMessage 
+{
+	required int32 retCode = 1;					//0:成功, 1:异常
+	required int32 autoNum = 2;					//自动押注次数
+	repeated SharkBetInfo betList = 3;				//全部押注列表[{type, coin}]
+	repeated SharkBetInfo selfBetList = 4;			//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 31016 取消自动押注
+message C2S_SharkCancelAutoBet // IMessage 
+{
+	required int32 uid = 1;				//玩家id 
+}
+
+//opcode 31016 取消自动押注
+message S2C_SharkCancelAutoBet // IMessage 
+{
+	required int32 retCode = 1;				//0:成功, 1:异常 
+}
+
+
+//==================================玩家信息,分类号:32=================================
+//opcode 0 押注信息
+message CarsBetInfo // IMessage
+{
+	required int32 type = 1;			//押注区域
+	required int64 coin = 2;			//押注数量
+}
+//opcode 0 押注信息
+message CarsPlayerInfo // IMessage
+{
+	required int32 uid = 1;				//玩家id
+	required int32 facelook = 2;		//头像		
+	required int32 vip = 3;				//vip等级
+	required string nick = 4;			//玩家名字
+	required int64 coin = 5;			//玩家金币
+}
+//opcode 0 押注信息
+message CarsStarInfo // IMessage
+{
+	required int32 uid = 1;				//玩家id
+	required int32 facelook = 2;		//头像
+	required int32 vip = 3;				//VIP等级
+	required string nick = 4;			//玩家名字
+	required int64 coin = 5;			//玩家金币
+	required int64 winTime = 6;			//时间戳
+}
+//opcode 0 押注信息
+message CarsPrizeInfo // IMessage
+{
+	required int32 prizeId = 1;			//上次大奖类型
+	required int64 prizeTime = 2;		//上次开大奖的时间戳
+}
+//opcode 32000 请求进入房间
+message C2S_JoinCarsRoom // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32000 请求进入房间
+message S2C_JoinCarsRoom // IMessage
+{
+	required int32 retCode = 1;			//返回码0: 成功, 1:异常
+	required int32 state = 2;			//房间状态（说明：0：不可押注，1：准备押注，2：押注状态， 3：开奖状态，4：结算状态）
+	required int32 stateTime = 3;		//当前状态下倒计时时间(单位秒)	
+	required int32 openId = 4;			//本轮开出的跑灯，0 表示没有
+	required int64 jackpot = 5;			//累积的奖池	
+	repeated CarsPrizeInfo prizeList = 6;		//大奖信息			
+	repeated int32 historyList = 7;			//历史开奖记录		
+	repeated CarsBetInfo betList = 8;		//全部押注列表
+	repeated CarsBetInfo selfBetList = 9;		//玩家自己押注列表
+	required int32 autoNum = 10;				//自动押注剩余轮数，0表示没有自动押注
+}
+//opcode 32001 离开房间
+message C2S_ExitCarsRoom // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32001 离开房间
+message S2C_ExitCarsRoom // IMessage
+{
+	required int32 retCode = 1;
+}
+//opcode 32002 押注
+message C2S_CarsBet // IMessage
+{
+	required int32 type = 1;			//押注区域
+	required int64 coin = 2;			//数量
+}
+//opcode 32002 押注
+message S2C_CarsBet // IMessage
+{
+	required int32 retCode = 1;				//0:成功, 1:异常
+	required int32 type = 2;				//押注区域
+	required int64 coin = 3;				//数量
+	repeated CarsBetInfo betList = 4;		//数量
+	repeated CarsBetInfo selfBetList = 5;		//玩家自己押注列表
+}
+//opcode 32003 广播活动状态
+message S2C_CarsState // IMessage
+{		
+	required int32 state = 1;				//房间状态
+	required int32 stateTime = 2;			//当前状态下倒计时时间
+}
+//opcode 32004 广播开奖
+message S2C_CarsOpen // IMessage
+{
+	required int32 openId = 1;				//本轮开出的跑灯，0 表示没有
+	required int32 isJackpot = 2;			//是否开奖池，1 表示开奖池
+	repeated CarsPrizeInfo prizeList = 3;		//大奖信息
+}
+//opcode 32005 广播结算
+message S2C_CarsBalance // IMessage
+{
+	required int64 jackpotCost = 1;			//奖池特殊奖励总支出
+	required int64 jackpot = 2;				//奖池最新金额
+	required int64 selfWin = 3;				//玩家自己赢得金额
+	repeated CarsStarInfo lastStar = 4;		//本轮大赢家
+	repeated CarsStarInfo jackpotStar = 5;		//奖池大赢家
+}
+//opcode 32006 请求所有区域押注信息
+message C2S_CarsAllBet // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32006 所有区域押注信息
+message S2C_CarsAllBet // IMessage
+{
+	repeated CarsBetInfo betList = 1;
+	repeated CarsBetInfo selfBetList = 2;
+}
+//opcode 32007 获取开奖记录
+message C2S_CarsLog // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32007 获取开奖记录
+message S2C_CarsLog // IMessage
+{
+	required int32 retCode = 1;
+	repeated int32 historyList = 2;			//开奖记录
+}
+//opcode 32008 获取大奖大赢家列表
+message C2S_CarsStarList // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32008 获取大奖大赢家列表
+message S2C_CarsStarList // IMessage
+{
+	repeated CarsStarInfo starList = 1;			//大赢家信息
+}
+//opcode 32009 重复押注
+message C2S_CarsRepeatBet // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32009 重复押注
+message S2C_CarsRepeatBet // IMessage
+{
+	required int32 retCode = 1;
+	repeated CarsBetInfo betList = 2;
+	repeated CarsBetInfo selfBetList = 3;
+}
+//opcode 32010 自动押注
+message C2S_CarsAutoBet // IMessage
+{
+	required int32 autoNum = 1;
+}
+//opcode 32010 自动押注
+message S2C_CarsAutoBet // IMessage
+{
+	required int32 retCode = 1;
+	required int32 autoNum = 2;
+	repeated CarsBetInfo betList = 3;
+	repeated CarsBetInfo selfBetList = 4;
+}
+//opcode 32011 取消自动押注
+message C2S_CarsCancelAutoBet // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32011 取消自动押注
+message S2C_CarsCancelAutoBet // IMessage
+{
+	required int32 retCode = 1;
+}
+//opcode 32012 获取奖池赢家列表
+message C2S_CarsJackpotList // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 32012 获取奖池赢家列表
+message S2C_CarsJackpotList // IMessage
+{
+	repeated CarsStarInfo starList = 1;
+}
+//==================================玩家信息,分类号:33=================================
+//opcode 0 押注信息
+message MahjongBetInfo // IMessage
+{
+	required int32 type = 1;				//押注区域， 2顺门、3天门、4地门
+	required int64 coin = 2;				//押注数量	
+}
+//opcode 0 开奖记录信息
+message MahjongHistoryInfo // IMessage
+{
+	required int32 type = 1;				//区域：2顺门、3天门、4地门
+	repeated int32 logList = 2;				//记录：1赢，2 输
+}
+//opcode 0 发牌信息
+message MahjongDealCard // IMessage
+{
+	required int32 type = 1;				//区域：1庄家，2顺门、3天门、4地门
+	required int32 card = 2;				//牌值 
+}
+//opcode 0 开牌信息
+message MahjongOpenCard // IMessage
+{
+	required int32 type = 1;				//区域：1庄家，2顺门、3天门、4地门
+	required int32 isWin = 2;				//闲区输赢：1 赢，2 输
+	required int32 cardType = 3;			//牌型：0~9点数，10豹子，11金豹子
+	repeated int32 cards = 4;				//开奖的牌值 
+}
+//opcode 0 玩家信息
+message MahjongPlayerInfo // IMessage
+{
+	required int32 uid = 1;					// 玩家Id
+	required int32 facelook = 2;			//头像
+	required int32 vip = 3;					//vip等级
+	required string nick = 4;				//玩家名称
+	required int64 coin = 5;				//玩家金币
+	required int32 pos = 6;					//上座玩家位置 , 1 到 10
+}
+//opcode 0 闲家玩家输赢信息
+message MahjongSeatWin // IMessage
+{
+	required int32 pos = 1;					//上座玩家位置 , 1 到 10, 0表示所有非上座
+	required int64 coin = 2;				//玩家金币
+	repeated MahjongBetInfo betList = 3;		//各押注区域情况
+}
+//opcode 0 大奖信息
+message MahjongStarInfo // IMessage
+{
+	required int32 uid = 1;					//玩家Id
+	required int32 facelook = 2;			//头像
+	required int32 vip = 3;					//vip等级
+	required string nick = 4;				//玩家名称
+	required int64 coin = 5;				//玩家金币
+	required int32 type = 6;				//1 庄家，2闲家
+	required int64 winTime = 7;				//获奖时间戳
+}
+//opcode 33000 请求进入房间
+message C2S_JoinMahjongRoom // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33000 请求进入房间
+message S2C_JoinMahjongRoom // IMessage
+{
+	required int32 retCode = 1;								//返回码0: 成功, 1:异常
+	required int32 state = 2;								//房间状态（0：不可押注，1：发牌状态，2：押注状态，3：开牌状态， 4：结算状态）
+	required int32 stateTime = 3;							//当前状态下倒计时时间(单位秒)
+	required int32 isBanker = 4;							//自己是否是庄家
+	required int32 seatPos = 5;								//自己上座位置，0表示没有上座
+	required MahjongPlayerInfo bankerInfo = 6;				//庄家信息
+	repeated MahjongPlayerInfo seatList = 7;				//上座玩家信息
+	repeated MahjongDealCard cardList = 8;					//详细牌信息，空列表表示没有
+	repeated MahjongBetInfo betList = 9;					//全部押注列表[{type, coin}]
+	repeated MahjongBetInfo selfBetList = 10;				//玩家自己押注列表[{type, coin}]	
+}
+//opcode 33001 离开房间
+message C2S_ExitMahjongRoom // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33001 离开房间
+message S2C_ExitMahjongRoom // IMessage
+{
+	required int32 retCode = 1;				
+}
+//opcode 33002 押注
+message C2S_MahjongBet // IMessage
+{
+	required int32 type = 1;					//押注区域
+	required int64 coin = 2;					//数量
+}
+//opcode 33002 押注
+message S2C_MahjongBet // IMessage
+{
+	required int32 retCode = 1;
+	required int32 type = 2;							//押注区域
+	required int64 coin = 3;								//数量
+	repeated MahjongBetInfo betList = 4;				//全部押注列表[{type, coin}]
+	repeated MahjongBetInfo selfBetList = 5;			//玩家自己押注列表[{type, coin}]
+}
+//opcode 33003 广播上座玩家押注
+message S2C_MahjongSeatBet // IMessage
+{
+	required int32 pos = 1;
+	required int32 uid = 2;
+	required int32 type = 3;
+	required int64 coin = 4;
+	required int64 newCoin = 5;
+	repeated MahjongBetInfo betList = 6;
+
+}
+//opcode 33004 广播活动状态
+message S2C_MahjongState // IMessage
+{
+	required int32 state = 1;
+	required int32 stateTime = 2;			//当前状态下倒计时时间(单位秒)	
+}
+//opcode 33005 广播发牌
+message S2C_MahjongDeal // IMessage
+{
+	repeated int32 poinList = 1;
+	repeated MahjongDealCard cardList = 2;
+}
+//opcode 33006 广播开牌
+message S2C_MahjongOpen // IMessage
+{
+	repeated MahjongOpenCard cardList = 1;				//详细牌信息，空列表表示没有
+}
+//opcode 33007 广播开奖，还未定义
+message S2C_MahjongBalance // IMessage
+{
+	repeated MahjongBetInfo bankerList = 1;
+	repeated MahjongSeatWin bankerSeat = 2;
+	repeated MahjongStarInfo lastList = 3;
+	required int64 bankerCoin = 4;
+	required int64 selfWin = 5;
+}
+//opcode 33008 请求所有区域押注信息
+message C2S_MahjongAllBet // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33008 请求所有区域押注信息
+message S2C_MahjongAllBet // IMessage
+{
+	repeated MahjongBetInfo betList = 1;					//全部押注列表
+	repeated MahjongBetInfo selfBetList = 2;				//玩家自己押注列表
+}
+//opcode 33009 申请上庄
+message C2S_MahjongApplyBanker // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33009 申请上庄
+message S2C_MahjongApplyBanker // IMessage
+{
+	required int32 retCode = 1;
+}
+//opcode 33010 取消申请上庄
+message C2S_MahjongCancelBanker // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33010 取消申请上庄
+message S2C_MahjongCancelBanker // IMessage
+{
+	required int32 retCode = 1;
+	required int32 type = 2;
+	required int32 uid = 3;
+}
+//opcode 33011 玩家主动下庄
+message C2S_MahjongOutBanker // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33011 玩家主动下庄
+message S2C_MahjongOutBanker // IMessage
+{
+	required int32 retCode = 1;
+}
+//opcode 33012 玩家上座
+message C2S_MahjongSitOn // IMessage
+{
+	required int32 seatPos = 1;
+}
+//opcode 33012 玩家上座
+message S2C_MahjongSitOn // IMessage
+{
+	required int32 retCode = 1;
+	repeated MahjongPlayerInfo playerInfo = 2;
+}
+//opcode 33013 广播新庄家
+message S2C_MahjongNewBanker // IMessage
+{
+	required int32 type = 1;					//下庄方式，1 正常下庄，2 爆庄
+	required MahjongPlayerInfo oldBanker = 2;
+	required MahjongPlayerInfo newBanker = 3;
+}
+//opcode 33014 广播玩家离座
+message S2C_MahjongLeaveSeat // IMessage
+{
+	required int32 pos = 1;
+}
+//opcode 33015 获取庄家申请列表
+message C2S_MahjongApplyList // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33015 获取庄家申请列表
+message S2C_MahjongApplyList // IMessage
+{
+	required int32 retCode = 1;
+	repeated MahjongPlayerInfo applyList = 2;
+}
+//opcode 33016 获取开奖记录
+message C2S_MahjongLog // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33016 获取开奖记录
+message S2C_MahjongLog // IMessage
+{
+	required int32 retCode = 1;
+	repeated MahjongHistoryInfo historyLog = 2;						//申请上庄玩家信息
+}
+//opcode 33017 获取大赢家列表
+message C2S_MahjongStarList // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33017 获取大赢家列表
+message S2C_MahjongStarList // IMessage
+{
+	repeated MahjongStarInfo starList = 1;
+}
+//opcode 33018 获取闲家信息
+message C2S_MahjongPlayer // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33018 获取闲家信息
+message S2C_MahjongPlayer // IMessage
+{
+	required int32 retCode = 1;
+	repeated MahjongPlayerInfo playerList = 2;				//闲家信息列表
+}
+//opcode 33019 重复押注
+message C2S_MahjongRepeatBet // IMessage
+{
+	required int32 uid = 1;
+}
+//opcode 33019 重复押注
+message S2C_MahjongRepeatBet // IMessage
+{
+	required int32 retCode = 1;
+	repeated MahjongBetInfo betList = 2;					//全部押注列表
+	repeated MahjongBetInfo selfBetList = 3;				//玩家自己押注列表
+}
+
+
+//==================================玩家信息,分类号:34=================================
+//opcode 0 押注信息
+message RedBlackBetInfo // IMessage
+{
+	required int32 type = 1;										//押注区域， 1红桃，2黑桃 ,3幸运一击
+	required int64 coin = 2;										//押注数量
+}
+
+//opcode 0 开牌信息
+message RedBlackCardInfo // IMessage
+{
+	required int32 type = 1;										//区域：1红桃，2黑桃
+	required int32 isWin = 2;										// 输赢：1赢，2输
+	required int32 cardType = 3;								//牌型：8豹子 7同花顺 6同花 5顺子 4对子 3高牌
+	repeated int32 cards = 4;										//开牌的牌值
+}
+
+//opcode 0 玩家信息
+message RedBlackPlayerInfo // IMessage
+{
+	required int32 uid = 1;											//玩家Id
+	required int32 facelook = 2;									//头像
+	required int32 vip = 3;											//vip等级
+	required string nick = 4;										//玩家名称
+	required int64 coin = 5;										//玩家金币
+	required int32 pos = 6;											//上座玩家位置 , 1 到 8
+}
+
+//opcode 0 队长信息
+message RedBlackLeaderInfo // IMessage
+{
+	required int32 type = 1;										//区域: 1红 2黑
+	required int32 uid = 2;											//队长id
+}
+
+//opcode 0 玩家赢钱信息
+message RedBlackSeatWin // IMessage
+{
+	required int32 pos = 1;											//上座玩家位置 , 1 到 8, 0表示所有非上座
+	required int64 coin = 2;										//玩家金币
+}
+
+//opcode 0 100场开奖记录红黑各胜场次数
+message RedBlackWinTimes // IMessage
+{
+	required int32 type = 1;										//1红 2黑
+	required int32 times = 2;										//胜场数
+}
+
+//opcode 0 100场开奖记录红黑各胜场次数
+message RedBlackCardType // IMessage
+{
+	required int32 type = 1;										//牌型
+	repeated int32 cards = 2;										//牌值
+}
+
+//opcode 34000 请求进入房间
+message C2S_JoinRedBlackRoom // IMessage
+{
+	required int32 uid = 1;											//
+}
+
+//opcode 34000 请求进入房间
+message S2C_JoinRedBlackRoom // IMessage
+{
+	required int32 retCode = 1;										//返回码0: 成功, 1:异常
+	required int32 state = 2;											//房间状态（0：不可押注，1：押注状态，2：发牌状态，3：开牌状态， 4：结算状态）
+	required int32 stateTime = 3;									//当前状态下倒计时时间(单位秒)
+	required int32 seatPos = 4;										//自己上座位置，0表示没有上座
+	repeated RedBlackPlayerInfo seatList = 5;					//上座玩家信息
+	repeated RedBlackCardInfo cardList = 6;					//开牌信息，空列表表示没有
+	repeated RedBlackBetInfo betList = 7;						//全部押注列表[{type, coin}]
+	repeated RedBlackBetInfo	selfBetList = 8;					//玩家自己押注列表[{type, coin}]
+	repeated int32 winList = 9;										//红/黑最近14轮胜利记录 1红赢 2黑赢
+	repeated RedBlackCardType winTypes = 10;				//最近6轮胜利牌型与牌值
+}
+
+//opcode 34001 离开房间
+message C2S_ExitRedBlackRoom // IMessage
+{
+	required int32 uid = 1;												//
+}
+
+//opcode 34001 离开房间
+message S2C_ExitRedBlackRoom // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+}
+
+//opcode 34002 押注
+message C2S_RedBlackBet // IMessage
+{
+	required int32 type = 1;											//押注区域 1红 2黑 3幸运
+	required int64 coin = 2;											//数量
+}
+
+//opcode 34002 押注
+message S2C_RedBlackBet // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+	required int32 type = 2;											//押注区域
+	required int64 coin = 3;											//数量
+	repeated RedBlackBetInfo betList = 4;						//全部押注列表[{type, coin}]
+	repeated RedBlackBetInfo selfBetList = 5;					//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 34003 广播上座玩家押注
+message S2C_RedBlackSeatBet // IMessage
+{
+	required int32 pos = 1;												//上座位置
+	required int32 uid = 2;												//玩家id
+	required int32 type = 3;											//押注区域
+	required int64 coin = 4;											//数量
+	required int64 newCoin = 5;										//当前最新金币
+	repeated RedBlackBetInfo betList = 6;						//全部押注列表[{type, coin}]
+}
+
+//opcode 34004 广播活动状态
+message S2C_RedBlackState // IMessage
+{
+	required int32 state = 1;											//房间状态（0：不可押注，1：押注状态，2：发牌状态，3：队长开牌状态，4：全场开牌状态，5：结算状态）
+	required int32 stateTime = 2;									//当前状态下倒计时时间(单位秒)
+	repeated RedBlackLeaderInfo leader = 3;					//队长信息[redUid,blackUid] 空列表表示没有
+}
+
+//opcode 34006 广播开牌
+message S2C_RedBlackOpen // IMessage
+{
+	repeated RedBlackCardInfo cardList = 1;					//详细牌信息，空列表表示没有
+}
+
+//opcode 34007 广播开奖
+message S2C_RedBlackBalance // IMessage
+{
+	required int32 winType = 1;										//胜利方 1红 2黑
+	repeated RedBlackSeatWin seatsCoin = 2;				//上座玩家金币数量
+	repeated RedBlackSeatWin seatsWin = 3;					//上座玩家赢得金币
+	required int64 selfWin = 4;										//玩家自己赢得金额
+	repeated int32 winList = 5;										//红/黑最近14轮胜利记录 1红赢 2黑赢
+	repeated RedBlackCardType winTypes = 6;				//最近6轮胜利牌型与牌值
+}
+
+//opcode 34008 请求所有区域押注信息
+message C2S_RedBlackAllBet // IMessage
+{
+	required int32 uid = 1;												//
+}
+
+//opcode 34008 所有区域押注信息
+message S2C_RedBlackAllBet // IMessage
+{
+	repeated RedBlackBetInfo	betList = 1;						//全部押注列表[{type, coin}]
+	repeated RedBlackBetInfo selfBetList = 2;					//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 34009 玩家上座
+message C2S_RedBlackSitOn // IMessage
+{
+	required int32 seatPos = 1;										//玩家要上座的位置
+}
+
+//opcode 34009 如果上座成功将广播给房间内的玩家
+message S2C_RedBlackSitOn // IMessage
+{
+	required int32 retCode = 1;										//返回值0成功
+	repeated RedBlackPlayerInfo	 playerInfo = 2;				//上座玩家信息
+}
+
+//opcode 34010 广播玩家离座
+message S2C_RedBlackLeaveSeat // IMessage
+{
+    required int32 retCode = 1;										//返回值0成功
+	required int32 pos = 2;												//离座位置
+}
+
+//opcode 34011 获取开奖记录
+message C2S_RedBlackLog // IMessage
+{
+	required int32 uid = 1;												//玩家id
+}
+
+//opcode 34011 获取开奖记录
+message S2C_RedBlackLog // IMessage
+{
+	required int32 retCode = 1;										//返回值0成功
+	repeated RedBlackWinTimes winTimes = 2;				//红黑各胜场数
+	repeated RedBlackCardType cardTypes = 3;				//近50轮胜方牌型记录
+	repeated int32 historyLog = 4;									//近120轮红黑胜利记录 1红赢 2黑赢
+}
+
+//opcode 34012 重复押注
+message C2S_RedBlackRepeatBet // IMessage
+{
+	required int32 uid = 1;											//
+}
+
+//opcode 34012 重复押注
+message S2C_RedBlackRepeatBet // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+	repeated RedBlackBetInfo betList = 2;						//全部押注列表[{type, coin}]
+	repeated RedBlackBetInfo selfBetList = 3;					//玩家自己押注列表[{type, coin}]
+}
+
+//opcode 34013 无座玩家
+message C2S_RedBlackNoSeat // IMessage
+{
+	required int32 uid = 1;										//0:成功, 1:异常
+}
+
+//opcode 34013 无座玩家
+message S2C_RedBlackNoSeat // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+	repeated RedBlackPlayerInfo noSeatList = 2;			//无座玩家列表[{type, coin}]
+}
+
+
+
+//==================================抽奖,分类号:35=================================
+//opcode 0 抽奖信息
+message DrawRes // IMessage
+{
+	required int64 time = 1;    //押注区域
+	required int64 gain = 2;    //押注数量
+}
+
+//opcode 35000 请求进入房间
+message C2S_JoinDrawRoom // IMessage
+{
+	required int32 uid = 1;											//玩家id
+}
+
+//opcode 35000 请求进入房间
+message S2C_JoinDrawRoom // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+	required int32 timeUsed = 2;										//已用抽奖次数
+	required int32 allTime = 3;											//总抽奖次数
+	repeated DrawRes drawLog = 4;									//历史记录
+}
+
+//opcode 35001 抽奖
+message C2S_DrawAction // IMessage
+{
+	required int32 uid = 1;											//玩家id
+}
+
+//opcode 35001 抽奖
+message S2C_DrawAction // IMessage
+{
+	required int32 retCode = 1;										//0:成功, 1:异常
+	required int32 openId = 2;										    //开奖格子(1~16)
+	required int32 timeLeft = 3;										//剩余次数
+	repeated DrawRes drawLog = 4;									//历史记录
+}
+
+
+
+
+
+
+//opcode 60001
+message C2R_Login // IRequest
+{
+	required string	Account	 = 1;	// 帐号
+	required string	Password = 2;	// 密码
+}
+
+//opcode 60001
+message R2C_Login // IResponse
+{
+	required string Address = 1;
+	required int64 	Key	    = 2;
+}
+
+//opcode 60002
+message C2G_LoginGate // IRequest
+{
+	required int64 Key = 1;	// 帐号
+}
+
+//opcode 60002
+message G2C_LoginGate // IResponse
+{
+	required int64 PlayerId = 1;
+}
+
+//opcode 60003
+message G2C_TestHotfixMessage // IMessage
+{
+	required string Info = 1;
+}
+
+//opcode 60004
+message C2M_TestActorRequest // IActorRequest
+{
+	required string Info = 1;
+}
+
+//opcode 60005
+message M2C_TestActorResponse // IActorResponse
+{
+	required string Info = 1;
+}
+
+//opcode 0
+message PlayerInfo // IMessage
+{
+}
+
+//opcode 60007
+message C2G_GetPlayerInfo // IRequest
+{
+}
+
+//opcode 60007
+message G2C_GetPlayerInfo // IResponse
+{
+	repeated PlayerInfo PlayerInfos = 1;
+}

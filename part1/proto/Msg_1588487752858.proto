@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.boundlessgeo.schema";
+option java_outer_classname = "MessagePbf";
+option go_package = "schema";
+
+message Msg {
+  string context = 1;
+  int64 correlationId = 2;
+  string to = 3;
+  string action = 4;
+  string payload = 5;
+  string jwt = 6;
+};

@@ -1,0 +1,26 @@
+// The syntax for this file is proto3
+syntax = "proto3";
+
+/* 
+ * Person message
+ */
+message Person {
+    int32 age = 1;
+    string first_name = 2;
+    string last_name = 3; 
+    bytes profile_picture = 4; // profile_picture represents a .jpg file of the person
+    bool has_drivers_license = 5;
+    float height = 6;
+    float weight = 7;
+
+    repeated string phone_numbers = 8;
+
+    enum Gender {
+        UNKNOWN = 0;
+        MALE = 1;
+        FEMALE = 2;
+        NO_GENDER = 3;
+    }
+
+    Gender gender = 9;
+}

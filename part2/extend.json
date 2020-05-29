@@ -1,0 +1,12 @@
+{
+  "timestamp": "1234321",
+  "owner": [
+    "abc",
+    "cba"
+  ],
+  "[name]": "name",
+  "res": [
+    "def",
+    "fed"
+  ]
+}

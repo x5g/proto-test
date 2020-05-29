@@ -1,0 +1,12 @@
+{
+  "timestamp": "4321234",
+  "owner": [
+    "qwe",
+    "ewq"
+  ],
+  "[xuetu.name]": "person_pb2.name",
+  "res": [
+    "person_pb2.res1",
+    "person_pb2.res2"
+  ]
+}

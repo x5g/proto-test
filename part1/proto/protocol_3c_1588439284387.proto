@@ -1,0 +1,129 @@
+syntax = "proto3";
+package wlst.pb2;
+
+option optimize_for = SPEED;
+
+// 3c协议模块基本修改
+message Wlst_com_0000 {
+  string server_ip = 1;
+  string server_port = 2;
+  string apn = 3;
+  string keep_alive = 4;
+  //通讯类型1-tcp，0-udp
+  string type = 5;
+  string sim = 6;
+  string cdma_username = 7;
+  string cdma_password = 8;
+}
+
+message Wlst_com_3e01 {
+  // 11位地址，默认”00000000000“
+  string addr = 1;
+  //组号
+  int32 group_mark = 2;
+  //位号，依据组号排序
+  repeated int32 args_mark = 3;
+}
+
+message Wlst_com_3e02 {
+  // 11位地址，默认”00000000000“
+  string addr = 1;
+  //组号
+  int32 group_mark = 2;
+  //位号，依据组号排序
+  repeated int32 args_mark = 3;
+
+  Group01 operators = 4;
+  Group02 channel = 5;
+  Group03 interface = 6;
+  Group04 sms = 7;
+  Group05 address = 8;
+  Group06 status = 9;
+
+  message Group01 {
+    string apn = 1;
+    string user = 2;
+    string pwd = 3;
+  }
+  message Group02 {
+    int32 channel1_type = 1;
+    repeated int32 channel1_ip = 2;
+    int32 channel1_port = 3;
+    int32 channel1_local_port = 4;
+    int32 channel2_type = 5;
+    repeated int32 channel2_ip = 6;
+    int32 channel2_port = 7;
+    int32 channel2_local_port = 8;
+    int32 keep_alive = 9;
+    int32 idle = 10;
+  }
+  message Group03 {
+    int32 port1_br = 1;
+    int32 port1_rc = 2;
+    int32 port2_br = 3;
+    int32 port2_rc = 4;
+    int32 work_mode = 5;
+  }
+  message Group04 {
+    int32 valid_count = 1;
+    // sim号码列表，最大10，ascii,不足补“0”（0x30）
+    repeated string sim = 2;
+    //最大16个字符，不足补0
+    string yecx = 3;
+  }
+  message Group05 {
+    // 11位bcd，不足补“0”（0x30）
+    string addr = 1;
+    // 32位unicode，最大16个中文字符
+    string street = 2;
+    //批号，20个ascII字符
+    string batch_number = 3;
+  }
+  message Group06 {
+    // 状态
+    string state = 1;
+    // 15位imei号码
+    int64 imei = 2;
+    // 模块版本
+    string ver = 3;
+  }
+}
+
+message Wlst_com_3e82 {
+  //状态0-失败，1-正常
+  int32 status = 1;
+  //组号
+  int32 group_mark = 2;
+  //位号，依据组号排序
+  repeated int32 args_mark = 3;
+}
+
+message Wlst_com_3e84 {
+  // 11位地址，默认”00000000000“
+  string addr = 1;
+  // 信号强度
+  int32 signal = 2;
+  // 网络模式，4-4g，2-2/3g
+  int32 net_type = 3;
+  // 掉线次数
+  int32 disconn_count = 4;
+  // 重启次数
+  int32 reset_count = 5;
+}
+
+message Wlst_ftp_0000 {
+  // 升级目标，rtu，com，slu，gb
+  string target = 1;
+  // ftp 地址
+  string ftp_ip = 2;
+  // ftp 端口
+  int32 ftp_port = 3;
+  // ftp 用户名
+  string ftp_user = 4;
+  // ftp 密码
+  string ftp_pwd = 5;
+  // ftp 文件名
+  string ftp_file = 6;
+  // ftp 路径
+  string ftp_dir = 7;
+}

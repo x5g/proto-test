@@ -1,0 +1,9 @@
+{
+  "firstName": "Alex",
+  "lastName": "Bondar",
+  "id": 24,
+  "email": "alex@startup.com",
+  "department": {
+    "departmentName": "Advanced and experimental development"
+  }
+}

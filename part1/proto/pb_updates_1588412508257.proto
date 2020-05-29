@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_enum.proto";
+import "pb_views.proto";
+
+message PB_UpdateRoomActionDoing{
+    string RoomKey = 2;
+    RoomActionDoingEnum ActionType = 3;
+}
+
+message PB_UpdateMessageMeta{
+    string RoomKey = 1;
+    int64 MessageId = 2; //this is even enough
+}
+
+message PB_Updates{
+    int64 LastChatSyncId = 1;
+
+    //new mssages
+    repeated PB_MessageView NewMessages = 5;
+    repeated PB_ChatView Chats = 2;
+
+    //messages meta info
+    repeated PB_UpdateMessageMeta MessagesReachedServer = 20;
+    repeated PB_UpdateMessageMeta MessagesDeliveredToUser = 21;
+    repeated PB_UpdateMessageMeta MessagesSeenByPeer = 22;
+
+    //room updates
+    repeated PB_UpdateRoomActionDoing RoomActionDoing = 30;
+
+}
+

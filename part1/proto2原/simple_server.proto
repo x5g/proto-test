@@ -1,0 +1,82 @@
+syntax="proto3";
+
+package helloworld; // for different languages package / class names should be add here (example for c++)
+
+service HelloService {
+
+    // rpc FunctionName (ArgumentType, ArgumentType) returns (ArgumentType);
+    // single request single response 
+
+    //  Client calls stub/client's method  -> server notified
+    //  (server can send some meta or wait for request)
+    //  server recieves message  -> makes work -> sends response
+    //  client recieves response
+    rpc SayHello(HelloRequest) returns (HelloResponse);
+
+    // rpc __ () returns (stream ___) ;
+    // `Server Streaming` : single request - multiple response 
+    // client reads until there is no messages in the stream 
+    // ---
+    //  same as previous but with some metadata when server ends the stream
+    rpc SayManyHellos(HelloRequest) returns (stream HelloResponse);
+
+    // rpc ___ (stream ___) returns (____);
+    // `Client streaming` : client makes multiple requests, finishes -> server response 
+    // ---
+    // same as simple rpc, server can wait all messages from client or respond right away
+
+
+    // rpc ___ (stream ___ ) stream (_____);
+    // `Bidirectional streaming` : client and server reads and writes independently
+    // order of messages preserved in streams
+    // ---
+    // depends on application logic
+
+
+    // -----
+    // gRPC generates server and stub/client
+    // with asynchronous and synchronous calls
+    // 
+
+    // ----
+    // Deadlines / Timeouts
+    // can be specified , depends on language 
+    // Python -  
+    // C++    - 
+
+    // ----
+    // channels - compressing, authentication
+ }
+
+
+// message is like a structure -> ArgumentType
+message HelloRequest {
+    string greeting = 1; // what is = 1?
+}
+
+message HelloResponse {
+    string reply = 1;
+}
+
+
+// https://github.com/grpc/grpc/tree/master/examples
+
+// python reference https://grpc.github.io/grpc/python/
+// build stubs
+// pip install grpcio-tools
+// python -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. ./simple_server.proto
+// simple_server_pb2_grpc.py -  service, stub
+// simple_server_pb2.py      -  message structures
+
+
+
+// cxx    reference https://grpc.github.io/grpc/cpp/grpc_8h.html
+// build stubs 
+// protoc -I ../../protos --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` ../../protos/route_guide.proto
+// protoc -I ../../protos --cpp_out=. ../../protos/route_guide.proto
+
+// protoc -I ./ --cpp_out=. ./simple_server.proto 
+// simple_server.pb.h - service, stub and structures
+
+
+// good intro talks https://grpc.io/docs/talks/ 

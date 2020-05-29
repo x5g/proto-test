@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package com.example.research.kafkabootdemo;
+
+option java_package = "com.example.rabbitmqdemo";
+option java_outer_classname = "NotificationProtos";
+
+message NotificationDTO {
+    string message = 1;
+    string sentAt = 2;
+}

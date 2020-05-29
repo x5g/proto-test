@@ -1,0 +1,12 @@
+package proto;
+
+enum FOO
+{
+    x = 0;
+};
+
+message UserInfo{
+    optional string message = 1;
+    optional int32 length = 2;
+    optional int32 cnt = 3;
+}

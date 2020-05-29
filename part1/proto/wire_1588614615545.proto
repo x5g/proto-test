@@ -1,0 +1,85 @@
+// Remember, send state, not differences
+package wire;
+
+// An update from the client to the server, sent over UDP
+message ClientQuickUpdate {
+    required sint32 x = 1;
+    required sint32 y = 2;
+    required float angle = 3;
+    // required float angularVelocity = 4;
+    required float velocityX = 4;
+    required float velocityY = 5;
+    // required float accelerationX = 7;
+    // required float accelerationY = 8;
+    
+    required bool isFiringFlamethrower = 6;
+        
+    optional sint32 viewportX = 7;
+    optional sint32 viewportY = 8;
+    optional sint32 viewportWidth = 9;
+    optional sint32 viewportHeight = 10;
+}
+
+// An update from the server to the clients, sent over UDP
+message ServerQuickUpdate {
+    message PlayerUpdate {
+        required uint32 playerID = 1;
+        required ClientQuickUpdate update = 2;
+    }
+    
+    repeated PlayerUpdate updates = 1;
+    
+    // required int32 health = 2;
+}
+
+// message ServerPlayerIDHandshake {
+// required uint32 playerID = 1;
+// }
+
+message Team {
+    required int32 tickets = 1;
+    repeated int32 members = 2 [packed=true];
+}
+message Score {
+    required Team red = 1;
+    required Team blu = 2;
+    
+    message MetaPlayer {
+        required int32 identifier = 1;
+        optional int32 kills = 2;
+        optional int32 deaths = 3;
+        optional int32 health = 4;
+        // required int32 ping = 5;
+    }
+    
+    repeated MetaPlayer metaplayers = 3;
+}
+
+message Chunk {
+    required sint32 x = 1;
+    required sint32 y = 2;
+    
+    // Chunks are versioned. If a chunk changes, then its version is increased (by the server ONLY!) so that other clients know to refresh it
+    required int32 version = 3;
+    
+    // Tiles are compressed with snappy. Or maybe simple huffman coding would be better.
+    optional bytes tiles = 4;
+    
+    // Metadata is put into a "snake" (hilbert curve) then compressed with snappy
+    optional bytes metadata = 5;
+}
+message Object {
+    
+    required sint32 x = 1;
+    required sint32 y = 2;
+    required sint32 angle = 3;
+}
+message ServerUpdate {
+    repeated Chunk chunks = 1;
+    repeated Object objects = 2;
+    optional Score score = 3;
+    required bool needsRespawn = 4;
+}
+message ClientUpdate {
+    required bool confirmRespawned = 1;
+}

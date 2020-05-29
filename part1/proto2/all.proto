@@ -1,0 +1,90 @@
+
+syntax = "proto3";
+
+option java_package = "com.mardomsara.social.pb";
+// option java_outer_classname = "PB";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (PB_Message) returns (PB_UserWithMe) {}
+}
+
+message PB_UserWithMe {
+	int32 UserId = 1;
+    string UserName = 2;
+    string FirstName = 3;
+    string LastName = 4;
+    string About = 5;
+    string FullName = 6;
+    string AvatarUrl = 7;
+    int32 PrivacyProfile = 8;
+    string Phone = 9;
+    int32 UpdatedTime = 10;
+    int32 AppVersion = 11;
+}
+
+message PB_Message {
+    string MessageKey = 1 ;
+    string RoomKey = 2 ;
+    int32 UserId = 3;
+    int32 RoomTypeId = 4;
+    int32 MessageTypeId = 5;
+    string Text = 6;
+    string ExtraJson = 7;
+    int32 IsByMe = 8;
+    int32 IsStared = 9;
+    int64 CreatedMs = 10;
+    int64 CreatedDeviceMs = 11;
+    int64 SortId = 12;
+    int64 PeerSeenTime = 13;
+    int64 ServerReceivedTime = 14;
+    int64 ServerDeletedTime = 15;
+    int64 ISeenTime = 16;
+    int32 ToPush = 17;
+    string MsgFile_LocalSrc = 18;
+    int32 MsgFile_Status = 19;
+}
+
+message PB_Res {
+	int32 Status = 1;
+}
+
+message PB_Req {
+	int32 Status = 1;
+}
+
+message PB_MsgAddMany {
+	repeated PB_Message Messages = 1;
+	repeated PB_UserWithMe Users = 2;
+}
+
+message PB_ReqMsgAddMany {
+	repeated PB_Message Messages = 1;
+	repeated PB_UserWithMe Users = 2;
+}
+
+///////////////////////////
+message PB_ResMsgAddMany {
+	PB_Res Res = 1;
+}
+
+message PB_ReqMsgAddOne {
+	PB_Message Message = 1;
+	PB_UserWithMe User = 2;
+}
+
+message PB_ResMsgAddOne {
+	PB_Res Res = 1;
+}
+///////////////////////////
+
+
+
+
+/*
+
+
+*/

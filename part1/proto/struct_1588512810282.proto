@@ -1,0 +1,111 @@
+syntax = "proto2";
+
+package roomgame;
+import "constant.proto";
+option optimize_for = LITE_RUNTIME;
+
+option java_package = "com.qzy.roomgame.proto";  
+option java_outer_classname = "Struct";  
+
+message Property {
+	required string key = 1;
+	required string value = 2;
+}
+ 
+message GameServer{
+    required int32 id = 1;
+    required string ip = 2;
+    required int32 port = 3;
+}
+
+//玩家信息
+message PlayerBaseInfo {
+	required int32 uid = 1;
+	required string nick = 2;
+	required string avatar = 3;
+	optional int32 sex = 4;
+	optional string ip = 5;
+	optional int32 cards = 9;
+	optional int32 locked_cards = 10;
+	optional bool is_agent = 11;
+	optional int32 belongs_agent_id = 12;
+}
+
+
+message GamePackage {
+	required string game_id = 1;
+	required int32 version = 2;
+}
+
+message GamePackageUpgradeInfo {
+	required string game_id = 1;
+	required string icon = 2;
+	required int32 version = 3;
+	required string description = 4;
+	optional bool force_upgrade = 5;
+}
+
+
+
+message Announcement {
+	required int32 id = 1;
+	required string category = 2;
+	required string title = 3;
+	required string content = 4;
+	required int32 sort = 5;
+	required int32 has_action = 6;
+	optional string action = 7;
+	required int32 popup = 8;//0 弹窗
+}
+
+
+message Dismiss {
+	required int32 applier = 1;
+	required int32 apply_time = 2;
+	repeated int32 agreed_players = 3;
+}
+
+message Poker {
+	required int32 flower = 1;//花色
+	required int32 value = 2;//面值
+}
+
+message PlayerPokers {
+	required int32 uid = 1;
+	repeated Poker pokers = 2;
+}
+
+message Chip {
+	required int32 uid = 1;
+	required int64 score = 2;
+}
+
+message Player {
+	required PlayerBaseInfo player_base_info = 1;
+	required bool is_in_room = 2;
+	required int64 score = 3;
+	required int32 seat = 4;
+	required int32 win = 5;
+	required PlayerState player_state = 6; 
+	required string gps_json = 8;
+}
+
+message RoomResult {
+	required int32 room_id = 1;
+	required int32 create_time = 2;
+	required int32 owner = 3;
+	required int32 countof_games = 4;
+	required string room_code = 5;
+	repeated RoomPlayerResult player_results = 6;
+}
+
+message RoomPlayerResult {
+	required int32 uid = 1;
+	required string nick = 2;
+	required string avatar = 3;
+	optional int32 sex = 4;
+	required int64 score = 5;
+	required int32 win = 6;
+}
+
+

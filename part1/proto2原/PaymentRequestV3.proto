@@ -1,0 +1,10 @@
+syntax="proto3";
+package com.bitcoin.proto3;
+
+message PaymentRequest {
+  uint32 payment_details_version = 1;
+  string pki_type = 2 ;
+  bytes  pki_data = 3;
+  bytes  serialized_payment_details = 4;
+  bytes  signature = 5;
+}

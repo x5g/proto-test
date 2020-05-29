@@ -1,0 +1,89 @@
+option java_package = "com.mtime.client.retail.contract.dto";
+option java_outer_classname = "OrderProtos";
+
+message Order
+{
+    required int32 OrderID = 1;
+    required string OrderCode = 2;
+}
+
+//零售订单
+message OrderInfo {
+    required int32 OrderID = 1;   		// 订单ID
+    required int32 OperatorID = 2;   	// 操作员ID
+    required int32 TerminalID = 3;   	// 终端ID
+    required int32 StoreID = 4;   		// 店铺ID
+    required int32 WarehouseID = 5;   	// 仓库ID
+    required int32 OrderStatus = 6;   	// 订单状态，对应GoodsOrderStatus枚举，0-新建，60-已发货
+    required string OrderCode = 7;   	// 订单编号
+    required string StoreOrderCode = 8;   // 店内订单编号
+    optional int32 PayStatus = 9;   	// 支付状态，0-未支付，1-已支付
+    optional int64 PayTime = 10;   		// 支付时间
+    optional int32 Quantity = 11;   	// 数量
+    optional int32 Amount = 12;  		// 金额，单位分
+    optional int32 ActualAmount = 13;   // 实际金额，单位分
+    optional int64 CreateTime = 14;   	// 创建时间
+    optional string Note = 15;   		//
+    repeated OrderLineInfo OrderLineInfos = 16; //订单明细
+    repeated OrderPaymentInfo PaymentList = 17; //支付流水
+
+    optional int32 CinemaID = 19;//影院ID
+    optional int32 DeductAmount = 20;//抵扣金额
+
+    repeated OrderLineActivityInfo OrderLineActivityInfos = 21; //子订单活动信息
+    optional OrderInvoiceInfo InvoiceInfo=22; //发票信息
+}
+
+//零售订单明细
+message OrderLineInfo {
+    required int32 OrderLineID = 1;      // 订单行ID
+    required int32 OrderID = 2;      	 // 订单ID
+    required int32 GoodsID = 3;      	 // 商品ID
+    required int32 SkuID = 4;      // SKU
+    required string BatchCode = 5;      // 批次编号
+    required int32 Price = 6;      // 价格，单位分
+    required int32 Quantity = 7;      // 数量
+    optional string Description = 8;      // 描述
+    optional int32 TxnPrice = 9; //成交价
+}
+
+//订单支付流水
+message OrderPaymentInfo {
+    optional int32 OrderPaymentID = 1;      // 订单支付ID
+    required int32 OrderID = 2;      // 订单ID
+    required int32 PaymentType = 3;      // 支付方式
+    required int32 Amount = 4;      // 金额，单位分
+    required int32 ActualAmount = 5;      // 实际金额，单位分
+    required int32 OddAmount = 6;      // 找零金额，单位分
+    optional string VoucherCode = 7;      // 凭证号，POS机小票上凭证号
+    optional int64 CreateTime = 8;      // 创建时间
+    optional int32 PosID = 9;      // 收银机ID
+}
+
+//订单行活动信息
+message OrderLineActivityInfo{
+    required int32 OrderLineID = 1;      // 订单行ID
+    required int32 ActivityID = 2;      // 活动ID
+    required int32 OrderID = 3;         // 订单ID
+}
+
+//订单发票信息
+message OrderInvoiceInfo{
+    required int32 OrderID = 1;
+    required int32 InvoiceType = 2;
+    optional int32 InvoiceMode = 3;
+    optional int32 InvoiceTitleType = 4;
+    optional string InvoiceTitle = 5;
+    optional string ConsigneeName   = 6;
+    optional string Telephone = 7;
+    optional string Email = 8;
+    optional string Address = 9;
+    optional int32 ProvinceID = 10;
+    optional int32 CityID = 11;
+    optional int32 DistinctID = 12;
+    optional int32 StreetID = 13;
+    optional int32 UpdateUser = 14;
+    optional int64 UpdateTime = 15;
+    optional int32 InvoiceStatus = 16;
+    optional string AddressFull=17;
+}

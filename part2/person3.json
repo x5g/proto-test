@@ -1,0 +1,10 @@
+{
+  "name": "John",
+  "nickname": "Johnny",
+  "gender": "MALE",
+  "friends": [
+    "Maria",
+    "Joseph",
+    "David"
+  ]
+}

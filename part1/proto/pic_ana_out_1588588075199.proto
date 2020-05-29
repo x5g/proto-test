@@ -1,0 +1,125 @@
+syntax = "proto3";
+import "common.proto";
+
+package kedacom;
+
+///人员抓拍分析输出
+message SnapPersonAnaOutInfo {
+    bytes objid = 1;
+    bytes relationid = 2;
+    bytes appear_time = 3;
+    int64  appear_frame = 4;
+    bytes disappear_time = 5;
+    int64  disappear_frame = 6;
+    int32 person_speedtype = 7;            // 人员速度，0：正常，1：快速，2：滞留，
+    int32 person_dirtype = 8;              // 人员方向，0:向上，背向，1：向下，正向，-1：未知
+
+    SnapPersonPicInfo person_info = 9;                // 抓拍的人员信息
+    repeated SnapFacePicInfo face_info = 10;         // 抓拍的人脸信息
+    SnapBgPicInfo bg_info = 11;                       // 抓拍的全景信息
+};
+
+///车辆抓拍分析输出
+message SnapVehAnaOutInfo {
+    bytes objid = 1;
+    bytes relationid = 2;
+    bytes appear_time = 3;
+    int64  appear_frame = 4;
+    bytes disappear_time = 5;
+    int64  disappear_frame = 6;
+
+	int32 veh_dir = 7;				// 目标方向
+	int32 veh_speed = 8;				// 目标速度
+    SnapVehPicInfo veh_info = 9;
+	VehBgPicInfo bg_info = 10;
+};
+
+message SnapOtherAnaOutInfo {
+	bytes objid = 1;				// 目标id
+    bytes appear_time = 2;			// 出现时间
+    int64  appear_frame = 3;		// 出现帧数
+    bytes disappear_time = 4;		// 消失时间
+    int64  disappear_frame = 5;		// 消失帧数
+	bytes snap_time = 6;			// 抓拍时间
+	bytes cap_url = 7;				// 抓拍小图路径
+	bytes bg_url = 8;				// 抓拍原图路径
+	Rect obj_rect = 9;				// 目标rect
+	int32 obj_dir = 10;				// 目标方向
+	int32 obj_speed = 11;			// 目标速度
+	int32 obj_color = 12;			// 目标颜色
+    int32 obj_size = 13;			// 目标大小
+	bytes common_feature = 14;		// 特征值
+}
+
+///抓拍图片信息
+message SnapPicInfo {
+    bytes picid = 1;
+    bytes url = 2;
+    bytes snap_time = 3;
+    int64  snap_frame = 4;
+    bytes pic_cap_path = 5;		// 小图路径
+    bytes collectorid = 6;     // 执法记录仪图片上传者id
+};
+
+/**
+*单张抓拍人员图片分析结果信息
+*/
+message SnapPersonPicInfo {
+    SnapPicInfo pic_info = 1;
+    PersonProp person_prop = 2;
+};
+
+/**
+*单张抓拍人脸图片分析结果信息
+*/
+message SnapFacePicInfo {
+    SnapPicInfo pic_info = 1;
+    FaceProp face_prop = 3;
+};
+/**
+*单张抓拍全景图片分析结果信息
+*/
+message SnapBgPicInfo {
+    bytes picid = 1;
+    bytes url = 2;
+    bytes snap_time = 3;
+    Rect face_rect = 4;
+    Rect head_rect = 5;
+    Rect person_rect = 6;
+};
+
+/**
+*车辆单张抓拍全景图片分析结果信息
+*/
+message VehBgPicInfo {
+	bytes  picid = 1;					// 图片id
+	bytes  bg_url = 2;					// 车辆背景图
+	bytes  lp_url = 3;					// 车牌图片
+	bytes snap_time = 4;				// 抓拍时间
+}
+
+/**
+*单张抓拍车辆图片分析结果信息
+*/
+message SnapVehPicInfo {
+    SnapPicInfo pic_info = 1;
+    VehicleProp veh_prop = 2;
+}
+
+
+/**
+*抓拍分析输出信息
+*/
+message SnapAnaOutInfo {
+    EMObjType obj_type = 1;					// 目标类型
+    bytes taskid = 2;						    // 任务id
+    bytes task_childid = 3;					    // 子任务id （设备实时分析结果 无意义）
+    bytes devid = 4;                            // 设备id （离线文件分析结果，无意义）
+    EMAnaAlgType alg_type = 5;			        // 算法分析类型
+    SnapPersonAnaOutInfo person_out = 6;      // 人员信息
+    SnapVehAnaOutInfo veh_out = 7;            // 车辆信息
+    SnapOtherAnaOutInfo other_out = 8;		// 物信息
+	EMSwitchDevType dev_type = 9;              //设备类型
+	bytes obj_sourceid = 10;                    //目标原始sourceid
+}
+

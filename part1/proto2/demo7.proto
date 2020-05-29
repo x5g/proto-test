@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+message B {
+  optional string b2 = 2;
+}
+
+message A {
+  repeated B b = 1;
+  optional string id = 2;
+}

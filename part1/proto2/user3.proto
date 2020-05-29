@@ -1,0 +1,9 @@
+syntax = "proto3";
+package user;
+message User {
+   string id = 1;
+   string name = 2;
+   repeated string role = 3;
+   string user_type = 4;
+   string user_status = 5;
+}

@@ -1,0 +1,39 @@
+// The syntax for this file is proto3
+syntax = "proto3";
+
+/* Person is used to identify users
+ * across our systems 
+ */
+message Person {
+    // the age as of the person's creation
+    int32 age = 1;
+    // the first name as documented in the signup form
+    string first_name = 2; 
+    string last_name = 3; // the last name as documented in the signup form
+    // small_picture represents a small .jpg file
+    bytes small_picture = 4;
+    bool is_profile_verified = 5;
+    // height of the person in cms
+    float height = 6;
+
+    // a list of phone numbers tha is optional to provide in signup
+    repeated string phones = 7;
+
+    enum EyeColor {
+        UNKNOWN_COLOR = 0;
+        BLUE = 1;
+        BROWN = 2;
+        GREEN = 3;
+    }
+
+    EyeColor eyeColor = 8;
+
+    // Person's birthdate
+    Date birthdate = 9;
+}
+
+message Date {
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+}

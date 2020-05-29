@@ -1,0 +1,253 @@
+/** @file PbWA.proto
+ * @brief Protobuf Web Algorithms
+ *
+ * @copyright
+ * Copyright 2018 PbOSE <https://pbose.io>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package pbose.protobuf;
+
+/**
+ * "alg" (Algorithm) Header Parameter Values for PbWS
+ * https://tools.ietf.org/html/rfc7518#section-3.1
+ */
+message PbWSHeaderAlg {
+enum Enum {
+  UNKNOWN                               = 0;
+  /* https://tools.ietf.org/html/rfc7518#section-3.2 */
+  HS256                                 = 1;
+  HS384                                 = 2;
+  HS512                                 = 3;
+  /* https://tools.ietf.org/html/rfc7518#section-3.3 */
+  RS256                                 = 4;
+  RS384                                 = 5;
+  RS512                                 = 6;
+  /* https://tools.ietf.org/html/rfc7518#section-3.4 */
+  ES256                                 = 7;
+  ES384                                 = 8;
+  ES512                                 = 9;
+  /* https://tools.ietf.org/html/rfc7518#section-3.5 */
+  PS256                                 = 10;
+  PS384                                 = 11;
+  PS512                                 = 12;
+  /* https://tools.ietf.org/html/rfc7518#section-3.6 */
+  NONE                                  = 13;   // none
+}
+}
+
+/**
+ * "alg" (Algorithm) Header Parameter Values for PbWE
+ * https://tools.ietf.org/html/rfc7518#section-4.1
+ */
+message PbWEHeaderAlg {
+enum Enum {
+  UNKNOWN                               = 0;
+  /* https://tools.ietf.org/html/rfc7518#section-4.2 */
+  RSA1_5                                = 14;
+  /* https://tools.ietf.org/html/rfc7518#section-4.3 */
+  RSA_OAEP                              = 15;   // RSA-OAEP
+  RSA_OAEP_256                          = 16;   // RSA-OAEP-256
+  /* https://tools.ietf.org/html/rfc7518#section-4.4 */
+  A128KW                                = 17;
+  A192KW                                = 18;
+  A256KW                                = 19;
+  /* https://tools.ietf.org/html/rfc7518#section-4.5 */
+  DIR                                   = 20;   // dir
+  /* https://tools.ietf.org/html/rfc7518#section-4.6 */
+  ECDH_ES                               = 21;   // ECDH-ES
+  ECDH_ES_A128KW                        = 22;   // ECDH-ES+A128KW
+  ECDH_ES_A192KW                        = 23;   // ECDH-ES+A192KW
+  ECDH_ES_A256KW                        = 24;   // ECDH-ES+A256KW
+  /* https://tools.ietf.org/html/rfc7518#section-4.7 */
+  A128GCMKW                             = 25;
+  A192GCMKW                             = 26;
+  A256GCMKW                             = 27;
+  /* https://tools.ietf.org/html/rfc7518#section-4.8 */
+  PBES2_HS256_A128KW                    = 28;   // PBES2-HS256+A128KW
+  PBES2_HS384_A192KW                    = 29;   // PBES2-HS256+A192KW
+  PBES2_HS512_A256KW                    = 30;   // PBES2-HS256+A256KW
+}
+}
+
+/**
+ * Header Parameters Used for ECDH Key Agreement for PbWE
+ * https://tools.ietf.org/html/rfc7518#section-4.6.1
+ */
+message PbWEHeaderECDH {
+  bytes epk                             = 1;
+  bytes apu                             = 2;
+  bytes apv                             = 3;
+}
+
+/**
+ * Header Parameters Used for AES GCM Key Encryption for PbWE
+ * https://tools.ietf.org/html/rfc7518#section-4.7.1
+ */
+message PbWEHeaderAESGCM {
+  bytes iv                              = 1;
+  bytes tag                             = 2;
+}
+
+/**
+ * Header Parameters Used for PBES2 Key Encryption for PbWE
+ * https://tools.ietf.org/html/rfc7518#section-4.8.1
+ */
+message PbWEHeaderPBES2 {
+  bytes p2s                             = 1;
+  bytes p2c                             = 2;
+}
+
+/**
+ * "enc" (Encryption Algorithm) Header Parameter Values for PbWE
+ * https://tools.ietf.org/html/rfc7518#section-5.1
+ */
+message PbWEHeaderEnc {
+enum Enum {
+  UNKNOWN                               = 0;
+  /* https://tools.ietf.org/html/rfc7518#section-5.2 */
+  A128CBC_HS256                         = 31;   // A128CBC-HS256
+  A192CBC_HS384                         = 32;   // A192CBC-HS384
+  A256CBC_HS512                         = 33;   // A256CBC-HS512
+  /* https://tools.ietf.org/html/rfc7518#section-5.3 */
+  A128GCM                               = 34;
+  A192GCM                               = 35;
+  A256GCM                               = 36;
+}
+}
+
+/**
+ * "kty" (Key Type) Parameter Values for PbWK
+ * https://tools.ietf.org/html/rfc7518#section-6.1
+ */
+message PbWKType {
+enum Enum {
+  UNKNOWN                               = 0;
+  EC                                    = 1;
+  RSA                                   = 2;
+  OCT                                   = 3;    // oct
+}
+}
+
+/**
+ * Parameters for Elliptic Curve Keys
+ * https://tools.ietf.org/html/rfc7518#section-6.2
+ */
+message PbWKTypeEC {
+  PbWKTypeECCurve.Enum crv              = 1;
+  bytes x                               = 2;
+  bytes y                               = 3;
+  bytes d                               = 4;
+}
+
+/**
+ * "crv" (Curve) Parameter for PbWK
+ * https://tools.ietf.org/html/rfc7518#section-6.2.1.1
+ */
+message PbWKTypeECCurve {
+enum Enum {
+  UNKNOWN                               = 0;
+  P_256                                 = 1;    // P-256
+  P_384                                 = 2;    // P-384
+  P_521                                 = 3;    // P-521
+}
+}
+
+/**
+ * Parameters for RSA Keys
+ * https://tools.ietf.org/html/rfc7518#section-6.3
+ */
+message PbWKTypeRSA {
+  bytes n                               = 1;
+  bytes e                               = 2;
+  bytes d                               = 3;
+  bytes p                               = 4;
+  bytes q                               = 5;
+  bytes dp                              = 6;
+  bytes dq                              = 7;
+  bytes qi                              = 8;
+  repeated PbWKTypeRSAOther oth         = 9;
+}
+
+/**
+ * "oth" (Other Primes Info) Parameter
+ * https://tools.ietf.org/html/rfc7518#section-6.3.2.7
+ */
+message PbWKTypeRSAOther {
+  bytes r                               = 1;
+  bytes d                               = 2;
+  bytes t                               = 3;
+}
+
+/**
+ * Parameters for Symmetric Keys
+ * https://tools.ietf.org/html/rfc7518#section-6.4
+ */
+message PbWKTypeOct {
+  bytes k                               = 1;
+}
+
+/**
+ * "alg" (Algorithm) Parameter Values for PbWK
+ * https://tools.ietf.org/html/rfc7518#section-7.1
+ */
+message PbWKAlg {
+enum Enum {
+  UNKNOWN                               = 0;
+  HS256                                 = 1;
+  HS384                                 = 2;
+  HS512                                 = 3;
+  RS256                                 = 4;
+  RS384                                 = 5;
+  RS512                                 = 6;
+  ES256                                 = 7;
+  ES384                                 = 8;
+  ES512                                 = 9;
+  PS256                                 = 10;
+  PS384                                 = 11;
+  PS512                                 = 12;
+  NONE                                  = 13;   // none
+  RSA1_5                                = 14;
+  RSA_OAEP                              = 15;   // RSA-OAEP
+  RSA_OAEP_256                          = 16;   // RSA-OAEP-25
+  A128KW                                = 17;
+  A192KW                                = 18;
+  A256KW                                = 19;
+  DIR                                   = 20;   // dir
+  ECDH_ES                               = 21;   // ECDH-ES
+  ECDH_ES_A128KW                        = 22;   // ECDH-ES+A128KW
+  ECDH_ES_A192KW                        = 23;   // ECDH-ES+A192KW
+  ECDH_ES_A256KW                        = 24;   // ECDH-ES+A256KW
+  A128GCMKW                             = 25;
+  A192GCMKW                             = 26;
+  A256GCMKW                             = 27;
+  PBES2_HS256_A128KW                    = 28;   // PBES2-HS256+A128KW
+  PBES2_HS384_A192KW                    = 29;   // PBES2-HS256+A192KW
+  PBES2_HS512_A256KW                    = 30;   // PBES2-HS256+A256KW
+  A128CBC_HS256                         = 31;   // A128CBC-HS256
+  A192CBC_HS384                         = 32;   // A192CBC-HS384
+  A256CBC_HS512                         = 33;   // A256CBC-HS512
+  A128GCM                               = 34;
+  A192GCM                               = 35;
+  A256GCM                               = 36;
+}
+}

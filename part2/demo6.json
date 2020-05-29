@@ -1,0 +1,11 @@
+{
+  "endpoint": " ",
+  "token": " ",
+  "params": {
+    "ASYNC_BATCH": "ASYNC_BATCH",
+    "ASYNC": "ASYNC",
+    "BATCH": "BATCH",
+    "NORMAL": "NORMAL"
+  },
+  "body": " "
+}

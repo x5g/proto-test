@@ -1,0 +1,284 @@
+syntax = "proto3";
+
+package proto;
+import "profile.proto";
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "any.proto";
+
+message WebsocketMessage {
+    enum MessageType {
+        UNKNOWN = 0;
+        CHAT_MESSAGE = 1;
+        USER_ACTION = 2;
+        SYSTEM_MESSAGE = 3;
+        PING = 4;
+        SYSTEM_ACTION = 5;
+    }
+
+    string id = 1;
+    MessageType type = 2;
+    string timestamp = 3;
+    string channel = 4;
+    string sender = 5;
+
+    oneof message {
+        UserMessage user_message = 6;
+        UserMessage user_action = 7;
+        SystemMessage system_message = 8;
+        SystemAction system_action = 10;
+    }
+
+    string recipient = 9; // this field is deprecated => use recipients field
+    repeated string recipients = 11;
+
+    bool processed_by_crawler = 16;
+	bool deleted = 17;
+}
+
+message MessageBodyAnnotation {
+    enum SliceType {
+        UNKNOWN = 0;
+        PLAINTEXT = 1;
+        // @fix ...
+        USER_MENTION = 2;
+        WEB_LINK = 3;
+        CHANNEL_LINK = 4;
+        EMAIL = 5;
+        TEAMSPEAK = 6;
+        QUESTION = 7;
+    }
+
+    SliceType type = 1;
+    int32 pos_start = 2;
+    int32 pos_end = 3;
+    string replacement = 4;
+    string target = 5;
+    bytes proprietary = 6;
+}
+
+message MessageBodyAnnotationChannelLinkExtension {
+    MessageBodyAnnotationChannelLinkExtensionInvitation invitation = 1;
+}
+
+message MessageBodyAnnotationChannelLinkExtensionInvitation {
+    bool consumed = 1;
+}
+
+message UserMessage {
+    enum Type {
+        NONE = 0;
+        QUESTION = 1;
+        // future types might include website/image/video etc.
+    }
+
+    string body = 1;
+    repeated MessageBodyAnnotation body_annotations = 2;
+    ChatUser user = 3;
+    string deleted_timestamp = 4;
+    string deleted_user = 5;
+    Type type = 6;
+
+    string conversation_id = 7;
+
+    // rich message >= 16;
+    oneof extension {
+        string quote = 16;
+        Website website = 17;
+    }
+
+    repeated MessageAttachment attachments = 18;
+}
+
+message MessageAttachment {
+    enum AttachmentType {
+        UNKNOWN = 0;
+        QUOTE = 1; // body string
+        IMAGE = 2; // body AttachmentImage
+        IMAGE_GALLERY = 3; // body AttachmentImageGallery
+        VIDEO = 4; // body AttachmentMedia
+        AUDIO = 5; // body AttachmentMedia
+        WEBSITE = 6; // body AttachmentWebsite
+        EMBED = 7; // body ??
+        DOCUMENT = 8; // AttachmentFile
+        FILE = 9; // AttachmentFile
+        MESSAGE = 10; // WebsocketMessage
+        REPLY_TO = 11; // WebsocketMessage
+
+        // External services with rich attachment support
+        EXTERNAL_TWITCH = 100; // AttachmentExternalMedia
+        EXTERNAL_YOUTUBE = 101; // AttachmentExternalMedia
+        EXTERNAL_VIMEO = 102; // AttachmentExternalMedia
+        EXTERNAL_SOUNDCLOUD = 103; // AttachmentExternalMedia
+
+        // TODO: Add Social Media Sites
+    }
+
+    AttachmentType type = 1;
+    int32 pos_start = 2;
+    int32 pos_end = 3;
+    string fallback_url = 4;
+
+    repeated AttachmentAction actions = 5;
+
+    oneof body {
+        string quote = 16; // QUOTE
+        AttachmentWebsite website = 17; // WEBSITE
+        AttachmentImage image = 18; // IMAGE
+        AttachmentImageGallery gallery = 19; // IMAGE_GALLERY
+        AttachmentMedia media = 20; // VIDEO, AUDIO
+        AttachmentExternalMedia external_media = 21; // EXTERNAL_TWITCH, EXTERNAL_YOUTUBE, EXTERNAL_VIMEO, EXTERNAL_SOUNDCLOUD
+        AttachmentFile file = 22; // DOCUMENT, FILE
+        WebsocketMessage message = 23; // MESSAGE, REPLY_TO
+    }
+}
+
+message AttachmentAction {
+    // VOID
+}
+
+message AttachmentWebsite {
+    string url = 1;
+    string title = 2;
+    string description = 3;
+    string favicon = 4;
+
+    AttachmentImage image = 16;
+    AttachmentMedia media = 17;
+}
+
+message AttachmentImage {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string caption = 5;
+    string mime_type = 6;
+}
+
+message AttachmentImageGallery {
+    repeated AttachmentImage images = 1;
+}
+
+message AttachmentMedia {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string preview_url = 5;
+    string mime_type = 6;
+}
+
+message AttachmentExternalMedia {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string preview_url = 5;
+    string content_id = 6;
+}
+
+message AttachmentFile {
+    string url = 1;
+    string title = 2;
+    string preview = 3;
+    string mime_type = 4;
+    string encoding = 5;
+    int64 size = 6;
+}
+
+message Website {
+    enum WebsiteType {
+        DEFAULT = 0;
+        TWITCH_CHANNEL = 1;
+        YOUTUBE_VIDEO = 2;
+    }
+
+    string url = 1;
+    string title = 2;
+    string description = 3;
+    string image = 4;
+    string video = 5;
+    int32 image_width = 6;
+    int32 image_height = 7;
+    WebsiteType type = 8;
+    string content_id = 9;
+}
+
+message UserAction {
+    string id = 1;
+    string message = 2;
+    string user_id = 3;
+    string channel = 4;
+}
+
+message SystemMessage {
+    enum MessageType {
+        UNKNOWN = 0;
+        TYPING = 1;
+        STATUS = 2;
+        SYSTEM_MESSAGE = 3;
+        USER_JOINED = 4;
+        USER_LEFT = 5;
+        FRIEND_UPDATED = 6;
+        READ_STATUS_UPDATE = 7;
+        REQUEST_TO_PULL = 8;
+        USER_VOICE_STATUS = 9;
+        MESSAGE_DELETED = 10;
+        MESSAGE_BATCH_DELETED = 11;
+    }
+
+    MessageType type = 1;
+    string channel = 2;
+
+    oneof body {
+        TypingStatus typing = 3;
+        ChatUser user = 4;
+        string message = 5;
+        UserVoiceStatusUpdate user_voice_status = 8;
+        MessageBatch message_batch = 9;
+    }
+
+    ChannelUser.ChannelUserType user_type_v1 = 6;
+    ChannelMembershipRecord.MembershipType user_type = 7;
+    Any payload = 16;
+}
+
+message SystemAction {
+    enum Type {
+        UNKNOWN = 0;
+        GENERAL = 1;
+        USER_LOGGED_IN = 2;
+		DONATION = 3;
+    }
+    Type type = 1;
+    string body = 2;
+    repeated MessageBodyAnnotation body_annotations = 3;
+    Any payload = 4;
+}
+
+message SystemActionPayloadUserLoggedIn {
+    ChatUser former_user = 1;
+    ChatUser current_user = 2;
+}
+
+message MessageBatch {
+	string start = 1;
+	string end = 2;
+}
+
+message UserVoiceStatusUpdate {
+    string user_id = 1;
+    ChannelMembershipRecord.VoiceStatus user_voice_status = 2;
+}
+
+message TypingStatus {
+    string user_id = 1;
+    bool is_typing = 2;
+}
+
+message MessageWithMeta {
+    WebsocketMessage message = 1;
+    UserAgent sender_agent = 2;
+}

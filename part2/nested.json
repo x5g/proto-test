@@ -1,0 +1,12 @@
+{
+  "name": "building",
+  "buildingNumber": "buildingNumber",
+  "street": {
+    "name": "street",
+    "city": {
+      "name": "city",
+      "zipCode": "zipCode",
+      "countryName": "countryName"
+    }
+  }
+}

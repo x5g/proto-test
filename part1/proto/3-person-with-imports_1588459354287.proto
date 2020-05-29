@@ -1,0 +1,41 @@
+// The syntax is proto3
+
+syntax = "proto3";
+
+/*
+Person is used to identify users
+Multiline weee
+*/
+import "/proto/3-basics-part-ii/3-date.proto";
+
+message Person {
+  int32 age = 1;
+  string first_name = 2;
+  string last_name = 3;
+  // small_picture represents a small .jpg file
+  bytes small_picture = 4;
+  bool is_profile_verified = 5;
+  // height of person in cm
+  float height = 6;
+  repeated string phone_numbers = 7; 
+
+  enum EyeColor {
+    UNKNOWN_EYE_COLOR = 0;
+    EYE_GREEN = 1;
+    EYE_BROWN = 3;
+    EYE_BLUE = 4;
+  }
+
+  EyeColor eye_color = 8;
+  Date birthday = 9;
+
+  message Address {
+    string address_line_1 = 1;
+    string address_line_2 = 2;
+    string zip_code = 3;
+    string city = 4; 
+    string country = 5;
+  }
+  repeated Address addresses = 10;
+}
+

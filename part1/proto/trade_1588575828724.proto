@@ -1,0 +1,219 @@
+syntax = "proto3";
+
+package trade;
+
+service TradeService {	 
+    rpc PlaceOrder(Order) returns (Result) {} 
+    rpc CancelOrder(Order) returns (Result){}
+    rpc GetAccountBalance(GetAccountBalanceRequest) returns(AccountBalance){}
+    rpc GetOrders(GetOrderRequest) returns(Orders){}
+    rpc GetOpenOrders(GetOpenOrderRequest) returns(OpenOrders){}
+    rpc GetPositions(GetPositionRequest) returns(Positions){}
+    rpc GetSymbols(GetSymbolsRequest) returns(Symbols){}
+
+} 
+message Result{
+    string Code=1;//代码，0成功，其它失败
+    string Msg=2;//原因
+}
+ 
+message SubAccountBalanceRequest{
+    string Account=1;//账户
+}
+message SubOpenOrdersRequest{
+    string Account=1;//账户
+}
+message GetAccountBalanceRequest{
+    string Account=1;//账户
+}
+message GetOrderRequest{
+    string Account=1;//账户
+}
+message GetOpenOrderRequest{
+    string Account=1;//账户
+}
+message GetSymbolsRequest{
+    string Account=1;//账户
+}
+message GetPositionRequest{
+    string Account=1;//账户
+}
+ 
+ message Orders{
+    repeated Order orders=1; 
+ }
+message Order{
+      
+    string OrderNo=1;//委托编号    
+    string Account=2;//账户    
+    string OCType=3;//开平仓 
+    string OrderType=4;//订单类型     
+    string TradeDate=5;//场次日期    
+    string PlaceTime=6;//下单时间    
+    string Symbol=7;//产品   
+    string Side=8;//买卖方向    
+    double Volume=9;//委托数量 
+    double OpenVolume=10;//开仓数量
+    double AvgPrice=11;//开仓均价
+    string Duration=12;//有效时间      
+    double LimitPrice=13;//挂单价   
+    double SLPrice=14;//止损价    
+    double TPPrice=15;//止盈价 
+    string CloseType=16;//操作类型  
+    string CloseBy=17;//操作人员   
+    string Reforderid=18;//被平仓的执行订单编号    
+    string ClientOrderID=19;//客户端订单编号   
+    string CptyAccount=20;//交易对手账户     
+    string TerminalType=21;//终端类型   
+    string Info0=22;//扩展字段    
+    string Info1=23;//扩展字段    
+    string Info2=24;//扩展字段     
+    string Info3=25;//扩展字段 
+    string Info4=26;//扩展字段
+    string OrderStatus=27;//订单状态
+    string ExecType=28;//执行类型
+    double MaxOffSet=29;//偏移量
+    string InvestorID=30;//主帐号
+    string ExternalID=31;//cpt订单号
+    string Msg=32;//失败消息
+    string IsDemo=33;//模拟交易
+    double FreezedMargin=34;//冻结保证金
+    double FreezedCommission=35;//冻结手续费  
+
+}
+message OpenOrders{
+    repeated OpenOrder OpenOrders=1; 
+ }
+message OpenOrder{
+    string OpenOrderNo=1;//持仓编号
+    string ExecutionNo=2;//成交编号
+    string Account=3;//账户
+    string TradeDate=4;//场次
+    string OpenTime=5;//下单
+    string Symbol=6;//产品
+    string Side=7;//方向
+    double Volume=8;//持仓数量
+    double OpenVolume=9;//已平仓数量
+    double DealtPrice=10;//交易价格
+    double HoldPrice=11;//持仓均价
+    string MarginValueType=12;//保证金类型(F 固定,R比例)
+    double MarginValue=13;//保证金值
+    double MarginPercent=14;//百分比
+    double UsedMargin=15;//占用保证金
+    string CloseIndicator=16;//是否平仓完标记
+    string TerminalType=17;//终端类型(A anroid, O IOS ，C PC，S系统)
+    string CptyAccount=18;//配资方帐号
+    string InvestorID=19;//主帐号
+    string IsDemo=20;//模拟交易
+	string Info1=21;//扩展字段    
+    string Info2=22;//扩展字段     
+    string Info3=23;//扩展字段 
+    string Info4=24;//扩展字段
+     
+}
+message Positions{
+    repeated Position Positions=1; 
+}
+message Position{
+    string Account =1;//帐号          
+	string Symbol  =2;//产品               
+	double LongPosition  =3;//多头仓位         
+	double TodayLongPosition  =4;//多头今仓     
+	double LongUsedMargin   =5;//多头保证金
+	double LongAverage     =6;//多头均价
+	double LongHoldPrice   =7;//多头持仓均价
+	double ShortPosition   =8;//空头仓位
+	double TodayShortPosition  =9;//空头今仓
+	double ShortUsedMargin   =10;//空头保证金     
+	double ShortAverage     =11;//空头均价
+	double ShortHoldPrice   =12;//空头持仓均价
+	double NetPostion     =13;//净值
+	double RealizedPnl    =14;//已实现盈亏
+	string IsDemo=15;//模拟交易
+}
+message ExecutionReport {    
+	string	OrderID=1;	 
+	string	ClOrdID=2;
+	string	RefOrderID=3;
+	string	OpenOrderID=4;
+	string	ExecID=5;
+	string	ExecType=6;
+	string	OrdStatus=7;
+	string	OrdRejReason=8;
+	string	TradeDate=9;
+	string	Account=10;
+	string	Symbol=11;
+	string	Side=12;
+	string	OrdType=13;
+	string	OrderQty=14;
+	string	Price=15;
+	string	TimeInForce=16;
+	string	ExpireDate=17;
+	string	ExpireTime=18;
+	string	LastQty=19;
+	string	LastPx=20;
+	string	LeavesQty=21;
+	string	CumQty=22;
+	string	AvgPx=23;
+	string	TakeProfitPrice=24;
+	string	StopLossPrice=25;	 
+	string	OpenCloseType=26; 
+	string	CloseType=27;
+	string	CloseBy=28;
+	string	CptyAccount	=29; 
+	string	TerminalType =30;		 
+}
+ 
+message AccountBalance {
+	string Account=1;//帐号
+    double Balance=2;//初始权益
+    double UsedMargin=3;//占用保证金
+    double WDBalance=4;//当日出入金
+    double DayRealizedPnl=5;//当日实现盈亏-当日平仓交易
+    double HoldRealizedPnl=6;//持仓实现盈亏
+    double DayCommission=7;//当日手续费
+    double FreezedMargin=8;//委托订单的冻结保证金
+    double FreezedCommission=9;//委托订单的冻结手续费
+    string IsDemo=10;//是否demo
+}
+message Symbols{
+    repeated Symbol Symbols=1; //产品列表
+    repeated SymbolGroup SymbolGroups=2;//产品组列表
+    repeated GroupCommissionSet GroupCommissionSets=3;//产品组费用设置
+    Group Group=4;//客户组    
+}
+message Group{
+    string GroupName=1;//组名称
+    string GroupType=2;//组类型:客户组，游客组
+	double ClientWarnValue=3;//预警比例
+    double ClientCloseValue=4;//强平比例  
+}
+message SymbolGroup{
+    string SymbolGroupName=1;//产品组名称
+	string Exchange=2;//交易所名称
+	string Remark=3;//备注 
+}
+message GroupCommissionSet{
+    string GroupName =1;//客户组
+	string SymbolGroupName =2;//产品组 
+	double LotSize     =3;//最小委托量
+	double OrderVolLimit  =4;   //最大委托量    
+	double ClientMaxHoldingQty  =5;//客户最大持仓
+}
+message Symbol{
+    string Symbol=1;//产品
+    string SymbolCn=2;//中文名称
+    string SymbolEn=3;//英文名称
+    double ContractSize=4;//规格
+    int32 Digits=5;//小数位数
+	double TickSize=6;//最小波动
+    string SymbolStatus=7;//产品状态
+    string MarginValueType=8;//保证金类型:默认为F,按手数收取
+    double MarginValue=9;//保证金值
+    double MarginPercent=10;//保证金比例
+    int32 Sorting=11;//顺序号
+    string TradingTime=12;//交易时间段
+    string SymbolGroupName=13;//产品组
+    string SymbolType=14;//产品分类
+ 
+}

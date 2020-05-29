@@ -1,0 +1,313 @@
+syntax = "proto3";
+
+import "Server/proto/common/common.proto";
+
+package fetch;
+
+service Fetch{
+    rpc FetchReviewNews(common.CommRequest) returns (NewsReply) {}
+    rpc FetchTags(common.CommRequest) returns (TagsReply) {}
+    rpc FetchAps(ApRequest) returns (ApReply) {}
+    rpc FetchAllAps(common.CommRequest) returns (ApReply) {}
+    rpc FetchUsers(common.CommRequest) returns (UserReply) {}
+    rpc FetchApStat(common.CommRequest) returns (ApStatReply) {}
+    rpc FetchTemplates(common.CommRequest) returns (TemplateReply) {}
+    rpc FetchWifi(WifiRequest) returns (WifiReply) {}
+    rpc FetchVideos(common.CommRequest) returns (VideoReply) {}
+    rpc FetchBanners(common.CommRequest) returns (BannerReply) {}
+    rpc FetchWifiPass(WifiPassRequest) returns (WifiPassReply) {}
+    rpc FetchStsCredentials(common.CommRequest) returns (StsReply) {}
+    rpc FetchFlashAd(AdRequest) returns (AdReply) {}
+    rpc FetchConf(common.CommRequest) returns (ConfReply) {}
+    rpc FetchKvConf(KvRequest) returns (KvReply) {}
+    rpc FetchActivity(common.CommRequest) returns (ActivityReply) {}
+    rpc FetchAdBan(common.CommRequest) returns (AdBanReply) {}
+    rpc FetchWhiteList(common.CommRequest) returns (WhiteReply) {}
+    rpc FetchFeedback(common.CommRequest) returns (FeedbackReply) {}
+    rpc FetchMenu(common.CommRequest) returns (MenuReply) {}
+    rpc FetchLatestVersion(VersionRequest) returns (VersionReply) {}
+    rpc FetchPortal(common.CommRequest) returns (PortalReply) {}
+    rpc FetchPortalDir(common.CommRequest) returns (PortalDirReply) {}
+    rpc FetchChannelVersion(common.CommRequest) returns (ChannelVersionReply) {}
+    rpc FetchMonitor(MonitorRequest) returns (MonitorReply) {}
+    
+}
+
+message NewsInfo {
+    int64 id = 1;
+    string title = 2;
+    string tag = 3;
+    string source = 4;
+    string ctime = 5;
+}
+
+message NewsReply {
+    common.Head head = 1;
+    repeated NewsInfo infos = 2;
+    int64 total = 3;
+}
+
+message TagInfo {
+    int64 id = 1;
+    string content = 2;
+}
+
+message TagsReply {
+    common.Head head = 1;
+    repeated TagInfo infos = 2;
+    int64 total = 3;
+}
+
+message ApInfo {
+    int64 id = 1;
+    double longitude = 2;
+    double latitude = 3;
+    string address = 4;
+}
+
+message ApStatInfo {
+    int64 id = 1;
+    string address = 2;
+    string mac = 3;
+    int64 count = 4;
+    int64 bandwidth = 5;
+    int64 online = 6;
+}
+
+message ApRequest {
+    common.Head head = 1;
+    double longitude = 2;
+    double latitude = 3;
+}
+
+message ApReply {
+    common.Head head = 1;
+    repeated ApInfo infos = 2;
+}
+
+message UserInfo {
+    int64 id = 1;
+    string phone = 2;
+    string imei = 3;
+    string active = 4;
+    string remark = 5;
+    int64 times = 6;
+    int64 duration = 7;
+    int64 traffic = 8;
+    string address = 9;
+    string utime = 10;
+    string nickname = 11;
+    string head = 12;
+    int64 coin = 13;
+    bool award = 14;
+    bool share = 15;
+}
+
+message TemplateInfo {
+    int64 id = 1;
+    string title = 2;
+    string content = 3;
+    int64 online = 4;
+}
+
+message UserReply {
+    common.Head head = 1;
+    repeated UserInfo infos = 2;
+    int64 total = 3;
+}
+
+message ApStatReply {
+    common.Head head = 1;
+    repeated ApStatInfo infos = 2;
+    int64 total = 3;
+}
+
+message TemplateReply {
+    common.Head head = 1;
+    repeated TemplateInfo infos = 2;
+    int64 total = 3;
+}
+
+message WifiRequest {
+    common.Head head = 1;
+    double longitude = 2;
+    double latitude = 3;
+}
+
+message WifiReply {
+    common.Head head = 1;
+    repeated common.WifiInfo infos = 2;
+}
+
+message VideoInfo {
+    int64 id = 1;
+    string img = 2;
+    string title = 3;
+    string dst = 4;
+    string ctime = 5;
+    string source = 6;
+    int64 duration = 7;
+}
+
+message VideoReply {
+    common.Head head = 1;
+    repeated VideoInfo infos = 2;
+    int64 total = 3;
+}
+
+message BannerReply {
+    common.Head head = 1;
+    repeated common.BannerInfo infos = 2;
+    int64 total = 3;
+}
+
+message WifiPassRequest {
+    common.Head head = 1;
+    double longitude = 2;
+    double latitude = 3;
+    repeated string ssids = 4;
+}
+
+message WifiPass {
+    string ssid = 1;
+    string pass = 2;
+}
+
+message WifiPassReply {
+    common.Head head = 1;
+    repeated WifiPass wifipass = 2;
+}
+
+message StsCredential {
+    string accesskeysecret = 1;
+    string accesskeyid = 2;
+    string expiration = 3;
+    string securitytoken = 4;
+}
+
+message StsReply {
+    common.Head head = 1;
+    StsCredential credential = 2;
+}
+
+message AdRequest{
+    common.Head head = 1;
+    int64 term = 2;
+    int64 version = 3;
+}
+
+message AdReply {
+    common.Head head = 1;
+    common.BannerInfo info = 2;
+}
+
+message ConfReply {
+    common.Head head = 1;
+    repeated common.KvInfo infos = 2;
+}
+
+message KvRequest {
+    common.Head head = 1;
+    string key = 2;
+}
+
+message KvReply {
+    common.Head head = 1;
+    string val = 2;
+}
+
+message ActivityReply {
+    common.Head head = 1;
+    common.BannerInfo activity = 2;
+}
+
+message AdBanReply {
+    common.Head head = 1;
+    repeated common.AdBan infos = 2;
+}
+
+message WhiteUser {
+    int64 uid = 1;
+    string phone = 2;
+}
+
+message WhiteReply {
+    common.Head head = 1;
+    repeated WhiteUser infos = 2;
+    int64 total = 3;
+}
+
+message FeedbackInfo {
+    int64 uid = 1;
+    string phone = 2;
+    string content = 3;
+    string ctime = 4;
+    int64 term = 5;
+}
+message FeedbackReply {
+    common.Head head = 1;
+    repeated FeedbackInfo infos = 2;
+    int64 total = 3;
+}
+
+message MenuInfo {
+    int64 type = 1;
+    int64 ctype = 2;
+    string title = 3;
+    string dst = 4;
+}
+
+message MenuReply {
+    common.Head head = 1;
+    repeated MenuInfo infos = 2;
+}
+
+message VersionRequest {
+    common.Head head = 1;
+    string channel = 2;
+}
+
+message VersionReply {
+    common.Head head = 1;
+    string version = 2;
+    string downurl = 3;
+    string title = 4;
+    string desc = 5;
+}
+
+message PortalReply {
+    common.Head head = 1;
+    string dir = 2;
+}
+
+message PortalDirReply {
+    common.Head head = 1;
+    repeated common.PortalDirInfo infos = 2;
+    int64 total = 3;
+}
+
+message ChannelVersionReply {
+    common.Head head = 1;
+    repeated common.ChannelVersionInfo infos = 2;
+    int64 total = 3;
+}
+
+message MonitorRequest {
+    common.Head head = 1;
+    int64 seq = 2;
+    int64 num = 3;
+    string name = 4;
+}
+
+message MonitorInfo {
+    int64 id = 1;
+    int64 req = 2;
+    int64 succrsp = 3;
+    string ctime = 4;
+}
+
+message MonitorReply {
+    common.Head head = 1;
+    repeated MonitorInfo infos = 2;
+    int64 total = 3;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package demo;
+
+message GetWeatherRequest {
+	string city = 1;
+	int32 days = 2;
+}
+
+message WeatherInfo {
+	string city = 1;
+	string date = 2;
+	int32 temperature_low = 3; // in degree Fahrenheit
+	int32 temperature_high = 4;
+	int32 wind = 5;     // in mph
+	int32 humidity = 6; // in percentage, 50% will have value 50.
+}
+
+message GetWeatherResponse {
+	repeated WeatherInfo weatherinfo = 1;
+}

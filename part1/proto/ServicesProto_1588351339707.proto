@@ -1,0 +1,76 @@
+syntax = "proto3";
+option java_package = "org.onosproject.grpc.grpcintegration.models";
+
+package grpcintegration;
+
+import "protobuf/proto/net/packet/OutboundPacketProto.proto";
+import "protobuf/proto/net/flow/FlowRuleProto.proto";
+import "protobuf/proto/net/topology/TopologyGraphProto.proto";
+import "protobuf/proto/net/topology/TopologyProto.proto";
+import "protobuf/proto/grpcintegration/EventNotificationProto.proto";
+import "protobuf/proto/grpcintegration/StatusProto.proto";
+import "protobuf/proto/grpcintegration/ControlMessagesProto.proto";
+import "protobuf/proto/net/HostIdProto.proto";
+import "protobuf/proto/net/HostProto.proto";
+import "protobuf/proto/net/PortProto.proto";
+import "protobuf/proto/net/DeviceIdProto.proto";
+import "protobuf/proto/net/DeviceProto.proto";
+import "protobuf/proto/net/ConnectPointProto.proto";
+
+
+
+// Corresponds to PacketOut service
+service PacketOutService {
+    rpc emit (net.packet.OutboundPacketProto) returns (PacketOutStatus);
+}
+
+// Corresponds to FlowRule service
+service FlowService {
+    rpc applyFlowRules (FlowRules) returns (FlowServiceStatus);
+    rpc removeFlowRules (FlowRules) returns (FlowServiceStatus);
+    rpc getFlowRuleCount (Empty) returns (FlowRuleCount);
+}
+
+// Corresponds to Topology service
+service TopoService {
+    rpc getGraph (Empty) returns (net.topology.TopologyGraphProto);
+    rpc currentTopology (Empty) returns (net.topology.TopologyProto);
+    rpc getPaths (getPathRequest) returns (Paths);
+}
+
+// Corrsponds to Host Service
+service HostService {
+    rpc getHosts (Empty) returns (Hosts);
+    rpc getHostCount (Empty) returns (HostCountProto);
+    rpc getHost (net.HostIdProto) returns (net.HostProto);
+    rpc getConnectedHostsByDeviceId (net.DeviceIdProto) returns (Hosts);
+    rpc getConnectedHostsByConnectedPoint (net.ConnectPointProto) returns (Hosts);
+
+}
+
+// Corresponds to Device Service
+service DeviceService {
+    rpc getDeviceCount (Empty) returns (DeviceCountProto);
+    rpc getDevices (Empty) returns (Devices);
+    rpc getPorts (net.DeviceIdProto) returns (Ports);
+    rpc getDevice (net.DeviceIdProto) returns (net.DeviceProto);
+}
+
+
+// Corresponds to Core Service
+service CoreService {
+
+
+}
+
+// Corresponds to EventNotification service
+service EventNotification {
+    rpc register (RegistrationRequest) returns (RegistrationResponse);
+    rpc onEvent (Topic) returns (stream Notification);
+
+}
+
+
+
+
+

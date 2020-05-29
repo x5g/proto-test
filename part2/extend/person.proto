@@ -1,0 +1,6 @@
+package xuetu;
+import "main.proto";
+extend base {
+    optional string name = 100;
+    repeated string res= 101;
+}

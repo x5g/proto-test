@@ -1,0 +1,323 @@
+syntax = "proto3";
+
+option objc_class_prefix = "HLW";
+
+package nfs;
+
+// The service definitions.
+service NFS {
+  rpc NFSPROC_MKDIR(MKDIRargs) returns (MKDIRres) {}
+  rpc NFSPROC_RMDIR(RMDIRargs) returns (RMDIRres) {}
+  rpc NFSPROC_SETATTR(SETATTRargs) returns (SETATTRres) {}
+  rpc NFSPROC_GETATTR(GETATTRargs) returns (GETATTRres) {}
+  rpc NFSPROC_READ(READargs) returns (READres) {}
+  rpc NFSPROC_WRITE(WRITEargs) returns (WRITEres) {}
+  rpc NFSPROC_COMMIT(COMMITargs) returns (COMMITres) {}
+  rpc NFSPROC_CREATE(CREATEargs) returns (CREATEres) {}
+  rpc NFSPROC_REMOVE (REMOVEargs) returns (REMOVEres) {}
+  rpc NFSPROC_LOOKUP(LOOKUPargs) returns (LOOKUPres) {}
+}
+
+// The message definitions.
+message nfs_fh {
+  string data = 1;
+}
+
+message fattr {
+  enum ftype {
+    NFSREG = 0;
+    NFSDIR = 1;
+    NFSBLK = 2;
+    NFSCHR = 3;
+    NFSLNK = 4;
+    NFSSOCK = 5;
+    NFSFIFO = 6;
+  }
+  ftype   type = 1;
+  uint64  size = 2;   // the size of the file in bytes.
+  uint64  used = 3;   // the actual disk space used for storing the file.
+  uint64  fsid = 4;   // file system identifier.
+  uint64  fileid = 5; // inode number of the file in the file system.
+  nfstime  atime = 6;  // timestamp when the file was last accessed.
+  nfstime  mtime = 7;  // timestamp when the file contents were last modified.
+  nfstime  ctime = 8;  // timestamp when the attributes of file were last changed.
+}
+
+message READargs {
+  nfs_fh file = 1;
+  uint64 offset = 2;
+  uint64 count = 3;
+}
+
+message READresok {
+  fattr   file_attributes = 1; // fattr directly used instead of post_op_attr.
+  uint64  count = 2;
+  bool    eof = 3;
+  bytes  data = 4;
+}
+
+message READresfail {
+  fattr file_attributes = 1; // fattr directly used instead of post_op_attr.
+}
+
+message READres {
+  oneof READrestype {
+    READresok   resok = 1;
+    READresfail resfail = 2;
+  }
+}
+
+message  lset_mode {
+    uint32 mode = 1; 
+}
+
+message lset_uid {
+   uint32 uid = 1; 
+}
+
+message lset_gid {
+   uint32 gid = 1; 
+}
+
+message nfstime {
+	uint32 seconds = 1; 
+	uint32 nseconds = 2; 
+}
+
+message lset_time {
+	nfstime time = 1; 
+}
+
+message sattr {
+	lset_mode mode = 1; 
+	lset_uid uid = 2; 
+	lset_gid gid = 3;
+        uint64 size = 4;
+        lset_time atime = 5;
+        lset_time mtime = 6;
+}
+
+message diropargs {
+	nfs_fh dir = 1;
+	string filename = 2; 
+}
+
+message MKDIRargs {
+	diropargs where = 1;
+	sattr attributes = 2; 
+}
+
+message post_op_fh {
+	nfs_fh handle = 1; 
+}
+
+message post_op_attr {
+	fattr attributes = 1; 
+}
+
+message wcc_attr {
+	uint64 size = 1; 
+	nfstime mtime = 2;
+	nfstime ctime = 3; 
+}
+
+message pre_op_attr {
+	wcc_attr attributes = 1; 
+}
+
+message wcc_data {
+	pre_op_attr before = 1; 
+	post_op_attr after = 2;
+}
+
+message MKDIRresok {
+	post_op_fh   obj = 1;
+        post_op_attr  obj_attributes = 2;
+        wcc_data      dir_wcc = 3;
+}
+
+message MKDIRresfail {
+       wcc_data      dir_wcc = 1;
+}
+
+message MKDIRres {
+  oneof MKDIRrestype {
+    MKDIRresok   resok = 1;
+    MKDIRresfail resfail = 2;
+  }
+}
+
+message RMDIRargs {
+	diropargs  object = 1;
+}
+
+message RMDIRresok {
+           wcc_data    dir_wcc = 1;
+} 
+
+message RMDIRresfail {
+           wcc_data    dir_wcc = 1;
+}
+
+message RMDIRres {
+  oneof RMDIRrestype {
+    RMDIRresok   resok = 1;
+    RMDIRresfail resfail = 2;
+  }
+}
+
+message WRITEargs {
+  nfs_fh file = 1;
+  uint64 offset = 2;
+  uint64 count = 3;
+  enum stable_how {
+    UNSTABLE = 0;
+    DATA_SYNC = 1;
+    FILE_SYNC = 2;
+  };
+  stable_how stable = 4;
+  bytes data = 5;
+}
+
+message WRITEresok {
+  wcc_data file_wcc = 1;
+  uint64 count = 2;
+  enum stable_how {
+    UNSTABLE = 0;
+    DATA_SYNC = 1;
+    FILE_SYNC = 2;
+  };
+  stable_how committed = 3;
+  string verf = 4;
+}
+
+message WRITEresfail {
+  wcc_data file_wcc = 1;
+}
+
+message WRITEres {
+  oneof WRITErestype {
+    WRITEresok   resok = 1;
+    WRITEresfail resfail = 2;
+  }
+}
+
+message GETATTRargs {
+  nfs_fh object = 1;
+}
+
+message GETATTRresok {
+  fattr obj_attributes = 1;
+}
+
+message GETATTRres {
+  GETATTRresok resok = 1;
+}
+
+message sattrguard {
+  nfstime obj_ctime = 1;
+}
+
+message SETATTRargs {
+  nfs_fh object = 1;
+  sattr new_attributes = 2;
+  sattrguard guard = 3;
+}
+
+message SETATTRresok {
+  wcc_data obj_wcc = 1;
+}
+
+message SETATTRresfail {
+  wcc_data obj_wcc = 1;
+}
+
+message SETATTRres {
+  oneof SETATTRrestype {
+    SETATTRresok resok = 1;
+    SETATTRresfail resfail = 2;
+  }
+}
+
+message COMMITargs {
+  nfs_fh file = 1;
+  uint64 offset = 2;
+  uint64 count = 3;
+}
+
+message COMMITresok {
+  wcc_data file_wcc = 1;
+  string verf = 2;
+}
+
+message COMMITresfail {
+  wcc_data file_wcc = 1;
+}
+
+message COMMITres {
+  oneof COMMITrestype {
+    COMMITresok resok = 1;
+    COMMITresfail resfail = 2;
+  }
+}
+
+message REMOVEargs {
+  diropargs  object = 1;
+}
+
+message REMOVEresok {
+  wcc_data    dir_wcc = 1;
+}
+
+message REMOVEresfail {
+  wcc_data    dir_wcc = 1;
+}
+
+message REMOVEres {
+  oneof REMOVErestype {
+    REMOVEresok   resok = 1;
+    REMOVEresfail resfail = 2;
+  }
+}
+
+message CREATEargs {
+  diropargs  where = 1;  
+}
+
+message CREATEresok {
+  post_op_fh   obj = 1;
+  post_op_attr  obj_attributes = 2;
+  wcc_data      dir_wcc = 3;
+}
+
+message CREATEresfail {
+  wcc_data    dir_wcc = 1;
+}
+
+message CREATEres {
+  oneof CREATErestype {
+    CREATEresok   resok = 1;
+    CREATEresfail resfail = 2;
+  }
+}
+
+message LOOKUPargs {
+	diropargs  what = 1;
+}
+
+message LOOKUPresok {
+	nfs_fh      object = 1;
+        post_op_attr obj_attributes = 2;
+        post_op_attr dir_attributes = 3;
+}
+
+message LOOKUPresfail {
+	post_op_attr dir_attributes = 1;
+}
+
+message LOOKUPres {
+  oneof LOOKUPrestype {
+    LOOKUPresok   resok = 1;
+    LOOKUPresfail resfail = 2;
+  }
+}

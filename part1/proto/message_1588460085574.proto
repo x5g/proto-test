@@ -1,0 +1,22 @@
+syntax = "proto3"; // 语法使用 protocol buffer proto3
+
+service Chat {
+    rpc BidStream(stream Request) returns (stream Response) {}
+    rpc Control(ControlRequest) returns (ControlReply);
+}
+
+message Request {
+    string input = 1;
+}
+
+message Response {
+    string output = 1;
+}
+
+message ControlRequest {
+    string command = 1;
+}
+
+message ControlReply {
+    string message = 1;
+}

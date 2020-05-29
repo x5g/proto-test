@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package common;
+
+enum ErrCode{
+    SUCC = 0;
+    CONN_SQL = 10001;
+    EXEC_SQL = 10002;
+    USED_PHONE = 10003;
+    NOT_EXIST  = 10004;
+    INVALID_TOKEN = 10005;
+    FETCH_SERVER = 10006;
+    CHECK_CODE = 10007;
+    ZTE_LOGIN = 10008;
+    ZTE_REMOVE = 10009;
+    NO_NEW_VERSION = 10010;
+    HAS_PUNCH = 10011;
+    ILLEGAL_CODE = 10012;
+    FREQUENCY_LIMIT = 10013;
+    LOGIN_FORBID = 10014;
+    DUPLICATE = 10015;
+    USED_RESERVE_CODE = 10016;
+    USED_DONATE_CODE = 10017;
+    INSUFFICIENT_BALANCE = 10018;
+    MIN_DRAW = 10019;
+    CHECK_PASSWD = 10020;
+    HAS_SIGN = 10021;
+    INSUFFICIENT_SCORE = 10022;
+    HAS_EXCHANGE = 10023;
+}
+
+message Head {
+    int64 uid = 1;
+    ErrCode retcode = 2;
+    int64 timecost = 3;
+    int64 ts = 4;
+    string sid = 5;
+    int64 term = 6;
+    int64 version = 7;
+}
+
+message CommRequest {
+    Head head = 1;
+    int64 seq = 2;
+    int64 num = 3;
+    int64 type = 4;
+    int64 id = 5;
+    int64 subtype = 6;
+    string search = 7;
+}
+
+message CommReply {
+    Head head = 1;
+    int64 id = 2;
+}
+
+message WifiInfo {
+    string ssid = 1;
+    string username = 2;
+    string password = 3;
+    double longitude = 4;
+    double latitude = 5;
+}
+
+message BannerInfo {
+    int64 id = 1;
+    string img = 2;
+    string dst = 3;
+    int64 online = 4;
+    int64 priority = 5;
+    int64 deleted = 6;
+    string title = 7;
+    int64 type = 8;
+    string expire = 9;
+    int64 dbg = 10;
+}
+
+message KvInfo {
+    string key = 1;
+    string val = 2;
+}
+
+message AdBan {
+    int64 id = 1;
+    int64 term = 2;
+    int64 version = 3;
+}
+
+message PortalDirInfo {
+    int64 id = 1;
+    string dir = 2;
+    string description = 3;
+    int64 online = 4;
+    string ctime = 5;
+    int64 type = 6;
+}
+
+message ChannelVersionInfo {
+    int64 id = 1;
+    string channel = 2;
+    string vname = 3;
+    int64 version = 4;
+    string downurl = 5;
+    string cname = 6;
+    string title = 7;
+    string desc = 8;
+}

@@ -1,0 +1,67 @@
+syntax = "proto2";
+
+package businessContext;
+
+option java_package = "cz.filipklimes.diploma.framework.businessContext.provider.server.grpc";
+option java_outer_classname = "BusinessContextProtos";
+
+service BusinessContextServer {
+    rpc FetchContexts (BusinessContextRequestMessage) returns (BusinessContextsResponseMessage) {}
+    rpc FetchAllContexts (Empty) returns (BusinessContextsResponseMessage) {}
+    rpc UpdateContext (BusinessContextUpdateRequestMessage) returns (Empty) {}
+    rpc BeginTransaction (Empty) returns (Empty) {}
+    rpc CommitTransaction (Empty) returns (Empty) {}
+    rpc RollbackTransaction (Empty) returns (Empty) {}
+}
+
+message ExpressionPropertyMessage {
+    required string key = 1;
+    required string value = 2;
+}
+
+message ExpressionMessage {
+    required string name = 1;
+    repeated ExpressionPropertyMessage properties = 2;
+    repeated ExpressionMessage arguments = 3;
+}
+
+message PreconditionMessage {
+    required string name = 1;
+    required ExpressionMessage condition = 2;
+}
+
+enum PostConditionTypeMessage {
+    UNKNOWN = 0;
+    FILTER_OBJECT_FIELD = 1;
+    FILTER_LIST_OF_OBJECTS = 2;
+    FILTER_LIST_OF_OBJECTS_FIELD = 3;
+}
+
+message PostConditionMessage {
+    required string name = 1;
+    required PostConditionTypeMessage type = 2;
+    required string referenceName = 3;
+    required ExpressionMessage condition = 4;
+}
+
+message BusinessContextMessage {
+    required string prefix = 1;
+    required string name = 2;
+    repeated string includedContexts = 3;
+    repeated PreconditionMessage preconditions = 4;
+    repeated PostConditionMessage postConditions = 5;
+}
+
+message BusinessContextsResponseMessage {
+    repeated BusinessContextMessage contexts = 1;
+}
+
+message BusinessContextRequestMessage {
+    repeated string requiredContexts = 1;
+}
+
+message BusinessContextUpdateRequestMessage {
+    required BusinessContextMessage context = 1;
+}
+
+message Empty {}

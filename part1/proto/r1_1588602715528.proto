@@ -1,0 +1,104 @@
+// Code generated with goa v3.1.1, DO NOT EDIT.
+//
+// calc protocol buffer definition
+//
+// Command:
+// $ goa gen defaults/design
+
+syntax = "proto3";
+
+package calc;
+
+option go_package = "calcpb";
+
+// The calc service performs operations on numbers
+service Calc {
+	// Addu implements addu.
+	rpc Addu (AdduRequest) returns (AdduResponse);
+	// addur updates to a parameter that is required
+	rpc Addur (AddurRequest) returns (AddurResponse);
+	// addud updates to a parameter that has a default
+	rpc Addud (AddudRequest) returns (AddudResponse);
+	// addurd updates to a parameter that is required and has a default
+	rpc Addurd (AddurdRequest) returns (AddurdResponse);
+	// Adds implements adds.
+	rpc Adds (stream Operands) returns (stream AddsResponse);
+	// addsr updates to a parameter that is required
+	rpc Addsr (stream OperandsR) returns (stream AddsrResponse);
+	// addsd updates to a parameter that has a default
+	rpc Addsd (stream OperandsD) returns (stream AddsdResponse);
+	// addsrd updates to a parameter that is required and has a default
+	rpc Addsrd (stream OperandsRD) returns (stream AddsrdResponse);
+}
+
+message AdduRequest {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AdduResponse {
+	sint32 field = 1;
+}
+
+message AddurRequest {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddurResponse {
+	sint32 field = 1;
+}
+
+message AddudRequest {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddudResponse {
+	sint32 field = 1;
+}
+
+message AddurdRequest {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddurdResponse {
+	sint32 field = 1;
+}
+
+message Operands {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddsResponse {
+	sint32 field = 1;
+}
+
+message OperandsR {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddsrResponse {
+	sint32 field = 1;
+}
+
+message OperandsD {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddsdResponse {
+	sint32 field = 1;
+}
+
+message OperandsRD {
+	sint32 a = 1;
+	sint32 b = 2;
+}
+
+message AddsrdResponse {
+	sint32 field = 1;
+}

@@ -1,0 +1,55 @@
+// We're using proto3 syntax
+syntax = "proto3";
+
+package twitter;
+
+// This is the service for our API
+service Twitter {
+  // This is where we define the methods in this service
+
+  // We have a method called `GetTimeline` which takes
+  // parameter called `Token` and returns
+  // the user `Timeline` (list of `Tweets`).
+  rpc GetTimeline(Token) returns (Timeline) {}
+
+  // We have a method called `UserStream` which takes
+  // parameter called `Token`and returns
+  // an stream of `Tweets`
+  rpc UserStream(Token) returns (stream Tweet) {}
+
+  // We have a method called `Filter` which takes
+  // parameter called `Search` and returns
+  // an stream of `Tweets`
+  rpc Filter(Search) returns (stream Tweet) {}
+}
+
+message Token {
+  string access_token = 1;
+  string secret_token = 2;
+}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string screen_name = 3;
+  string url = 4;
+}
+
+message Tweet {
+  int64 id = 1;
+  string Text = 2;
+  User user = 3;
+  bool retweeted = 4;
+  int32 retweet_count = 5;
+  bool favorited = 6;
+  int32 favorite_count = 7;
+}
+
+message Search {
+  string text = 1;
+  Token token = 2;
+}
+
+message Timeline {
+  repeated Tweet tweets = 1;
+}

@@ -1,0 +1,52 @@
+
+package email;
+import "PB_error_code.proto";
+
+message Email 
+{
+	optional int64 	id 		= 1;	// 邮件id
+	optional string title 	= 2;
+	optional string data 	= 3;
+	optional string time 	= 4;
+	optional bool 	state 	= 5; 	// 1 未读 2 已读
+}
+
+message PB_Email 
+{
+	required int64 playerid   	= 1;
+	required int32 last_id   	= 2;  // 从0开始(最后一封的邮件id)
+}
+
+message PB_EmailReturn 
+{
+	required PB_ErrorCode code 		= 1;
+	repeated Email 		  emails   	= 2; // 邮件
+}
+
+message PB_ReadEmail 
+{
+	required int64 playerid 	= 1;
+	required int64 id 			= 2; // 邮件id
+}
+
+message PB_ReadEmailReturn 
+{
+	required PB_ErrorCode code = 1;
+}
+
+message PB_DelEmail
+{
+	required int64 playerid  = 1;
+	repeated int64 ids 		 = 2;
+}
+
+message PB_DelEmailReturn
+{
+	required PB_ErrorCode code = 1;
+}
+
+message PB_NewEmailNotify
+{
+	required Email email = 1;
+}
+

@@ -1,0 +1,67 @@
+package account;
+import "crypto_pb/crypto.proto";
+
+//Account Transaction
+message Transaction {
+	enum TransactionStatus {
+		Negotiations= 0;
+		Fulfilment= 1;
+		Completed= 2;
+		Canceled= 3;
+	}
+	enum TransactionPrivacy {
+		Public = 0;
+		Private= 1;
+	}
+  	//Creditor Identifier
+  	optional bytes Creditor=  1;
+ 	// Debitor Identifier
+  	optional bytes Debitor = 2;
+	//Transaction Status	
+	required uint64 Status = 3;
+	//Privacy Setting
+	required uint64 Privacy = 4;	
+	optional float Amount = 5;
+	// multihash of the Products purchased
+  	repeated bytes Products = 6;
+	//Epoch Times of Transaction
+	optional int64 InitiationDate = 7;
+	optional int64 CompletionDate = 8;   
+}
+message Account {	
+  	//Public Account Key
+  	optional crypto.pb.PublicKey PubKey=  1;
+ 	//Private Account Key
+  	optional crypto.pb.PrivateKey PrivKey = 2;
+	//Epoch Times of Creation Date
+	optional int64 RegistrationDate = 3;   
+}
+message Credentials{	
+	optional bytes Password = 1;
+	optional bytes File = 2;
+	optional bytes StorageKey = 3;	
+}
+message Login{
+	optional bytes Salt = 1;
+	optional Credentials LoginCredentials= 2;
+	optional string Question1= 3;
+	optional string Question2= 4;
+	optional string Question3= 5;
+	optional bytes QSalt1 = 6;
+	optional bytes QSalt2 = 7;
+	optional bytes QSalt3 = 8;
+	optional bytes QKenc1 = 9;
+	optional bytes QKenc2 = 10;
+	optional bytes QKenc3 = 11;
+	optional bytes QSenc1 = 12;
+	optional bytes QSenc2 = 13;
+	optional bytes QSenc3 = 14;
+}
+message DeviceLogin{
+	optional bytes DeviceFile = 1;
+	optional bytes DeviceKey = 2; 
+}
+message DeviceRecord{
+	optional bytes File = 1;
+	optional bytes Password = 2;
+}

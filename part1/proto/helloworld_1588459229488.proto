@@ -1,0 +1,51 @@
+//syntax = "proto3";
+//package proto; //包名和go中的必须一致
+//option java_generic_services = true;
+//option java_multiple_files = true;
+//option java_package = "com.spw.proto";
+//option java_outer_classname = "HelloWorldProto";
+syntax = "proto3";
+option java_multiple_files = false;
+option java_package = "com.example.helloworld";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HLW";
+package helloworld;
+//健康檢查收入
+//message HealthCheckRequest {
+//    string service = 1;
+//}
+////健康檢查回傳
+//message HealthCheckResponse {
+//    enum ServingStatus {
+//        UNKNOWN = 0;
+//        SERVING = 1;
+//        NOT_SERVING = 2;
+//    }
+//    ServingStatus status = 1;
+//}
+//接口请求入参
+message HelloRequest{
+    string name  = 1;
+
+}
+//接口返回出参
+message HelloReply{
+    string message  = 1;
+}
+//定义接口
+service Greeter{
+    //一个简单的rpc
+    rpc helloWorld(HelloRequest) returns (HelloReply){}
+    //一个服务器端流式rpc
+    rpc helloWorldServerStream(HelloRequest) returns (stream HelloReply){}
+    //一个客户端流式rpc
+    rpc helloWorldClientStream(stream HelloRequest) returns (HelloReply){}
+    //一个客户端和服务器端双向流式rpc
+    rpc helloWorldClientAndServerStream(stream HelloRequest) returns (stream HelloReply){}
+}
+//service Health{
+//    //檢查健康
+//    rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+//    //查看
+//    rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+//}

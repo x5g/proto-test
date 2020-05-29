@@ -1,0 +1,10 @@
+syntax = "proto2";
+package examples;
+
+message PbMsg{
+  required string pb_str = 1;
+  required int32 pb_int = 2;
+  required int64 pb_ll = 3;
+  required bool pb_bool = 4;
+  repeated int32 pb_vec_int = 5;
+}

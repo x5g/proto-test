@@ -1,0 +1,219 @@
+option java_package = "com.cryptoregistry.protos";
+option cc_generic_services = false;
+option java_generic_services = false;
+option py_generic_services = false;
+
+message HelloProto {
+	required string registration_handle = 1;  // the remote sender's identifier
+	required string key_handle = 2; // the remote sender's key identifier
+}
+
+message PublishedKeyProto {
+	oneof key {
+		C2KeyForPublicationProto c2 = 1;
+		ECKeyForPublicationProto ec = 2;
+		RSAKeyForPublicationProto rsa = 3;
+		NTRUKeyForPublicationProto ntru = 4;
+	}
+}
+
+message SessionDetailsProto {
+	required string session_id = 1; // uuid;
+	
+	// key encapsulation for ephemeral keys -
+	// we always use an ephemeral key for our messaging to get perfect forward secrecy
+	// regardless of the handshake semantics
+	
+	required bytes session_key = 2; // 256 bits random key, encrypted; 
+						   // for EC and Curve25519, encryption of the session_key is always done with AES/CBC/PKCS7 
+						   // for RSA, encryption is done with RSA/OAEPWITHSHA256ANDMGF1PADDING
+						   // for NTRU, encryption is done with NTRU/EES1087EP2 (our default for this alg)
+						   
+	required string session_symmetric_alg = 3;
+							// the symmetric algorithm to be used for the remainder of the session's encryption
+							// options are AES/GCM, AES/CBC/PKCS7
+							// for AES/GCM it is important to always use a different IV per frame. 
+							
+	optional bytes iv = 5; // possible IV for 2
+}
+
+message HandshakeDigestProto {
+	required bytes digest = 1;
+}
+
+message BytesProto {
+	required bytes data = 1;
+}
+
+message StringProto {
+	required string data = 1;
+}
+
+message AuthenticatedStringProto {
+	required string data = 1;
+	required bytes hmac = 2;
+}
+
+message MapProto {
+	repeated EntryProto entries = 1;
+}
+
+message EntryProto {
+	required string key = 1;
+	required string value = 2;
+}
+
+message NamedMapProto {
+	required string uuid = 1;
+	required MapProto map = 2;
+}
+
+message ListProto {
+  repeated string list = 1;
+}
+
+message ByteListProto {
+  repeated bytes list = 1;
+}
+
+message NamedListProto {
+  required string uuid = 1;
+  required ListProto map = 2;
+}
+
+message CryptoContactProto {
+  required NamedMapProto map = 1;
+}
+
+message SignatureMetadataProto {
+  required string handle = 1;
+  required uint64 created_on = 2;
+	enum SigAlgProto {
+		RSA = 0;
+	   	ECDSA = 1;
+	   	ECKCDSA = 2;
+	   
+	}
+  required SigAlgProto signature_algorithm = 3;
+  required string digest_algorithm = 4;
+  required string signed_with = 5; //uuid from signer key
+  required string signed_by = 6; // uuid from signer registration
+}
+
+message SignatureProto {
+	required SignatureMetadataProto meta = 1;
+	required bytes b0 = 2;
+	optional bytes b1 = 3; // not used with some signatures
+	required ListProto data_refs = 4;
+}
+
+message KeyMetadataProto {
+	required string handle = 1;
+	required uint64 created_on = 2;
+	enum EncodingHintProto {
+	   	NOENCODING = 0;
+	   	RAWBYTES =1;
+		BASE2 = 2;
+		BASE10 = 3;
+		BASE16 = 4;
+		BASE64 = 5;
+		BASE64URL = 6;
+		
+	}
+	required EncodingHintProto encoding_hint = 3 [default = RAWBYTES];
+	required string key_generation_algorithm = 4;
+	
+	// used with RSA only, these were input values when key was created
+	optional int32 strength = 5;
+	optional int32 certainty = 6;
+}
+
+message SymmetricKeyContentsProto {
+	required KeyMetadataProto meta = 1;
+	required bytes key = 2;
+}
+
+message C2KeyContentsProto {
+	required KeyMetadataProto meta = 1;
+	required bytes public_key = 2;
+	optional bytes signing_private_key = 3;
+	optional bytes agreement_private_key = 4;
+}
+
+message C2KeyForPublicationProto {
+	required KeyMetadataProto meta = 1;
+	required bytes public_key = 2;
+}
+
+message CurveDefinitionProto {
+
+	enum ECFieldProto {
+	    FP = 0;
+		F2M = 1;
+	}
+	
+	required ECFieldProto field = 1;  
+	required string uuid = 2;
+	required MapProto map = 3;
+}
+
+message ECKeyContentsProto {
+	required KeyMetadataProto meta = 1;
+	required string Q = 2; // BouncyCastle ECPoint in following format: [base16x comma base16y]
+	
+	// curve_name is a standard cryptoregistry curve name string
+	oneof curve {
+		string curve_name = 3;                     // one of these is required to be defined
+		CurveDefinitionProto curve_definition = 4;
+	}
+	
+	optional bytes d = 5; // the private key bytes
+}
+
+message ECKeyForPublicationProto {
+	required KeyMetadataProto meta = 1;
+	required string Q = 2; // BouncyCastle ECPoint in following format: [base16x comma base16y]
+	oneof curve {
+		string curve_name = 3;                     // one of these is required to be defined
+		CurveDefinitionProto curve_definition = 4;
+	}
+	
+	// private key removed
+}
+
+// message code 15
+message RSAKeyContentsProto {
+	required KeyMetadataProto meta = 1;
+    required bytes Modulus = 2;
+    required bytes public_exponent = 3;
+    optional bytes private_exponent = 4;
+    optional bytes p = 5;
+    optional bytes q = 6;
+    optional bytes dP = 7;
+    optional bytes dQ = 8;
+    optional bytes qInv = 9;
+}
+
+message RSAKeyForPublicationProto {
+	required KeyMetadataProto meta = 1;
+    required bytes Modulus = 2;
+    required bytes public_exponent = 3;
+}
+
+// At the moment we're just implementing a named param strategy, see NTRUNamedParameters in buttermilk-core
+message NTRUKeyContentsProto {
+	required KeyMetadataProto meta = 1;
+	required string param_name = 2;
+	required bytes h = 3;
+	required bytes t = 4;
+	required bytes fp = 5;
+}
+
+message NTRUKeyForPublicationProto {
+	required KeyMetadataProto meta = 1;
+	required string param_name = 2;
+	required bytes h = 3;
+}
+
+
+

@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package buckhx.safari.warden;
+option go_package = "pbf";
+
+import "google/api/annotations.proto";
+import "registry.proto";
+import "pokedex.proto";
+import "msg.proto";
+
+// Warden is a service that trainers join and catch pokemon on
+service Warden {
+	// Encounter might add a pokemon to the event
+	//
+	// A pokemon will be added to the event and timestmap set if one is encountered
+	rpc Enter (Ticket) returns (Ticket) {
+		option (google.api.http) = {
+			get: "/trainer/{trainer.uid}/zone/{zone.opt_code}"
+		};
+	}
+
+	// Catch will attempt to catch the pokemon
+	//
+	// If caught, this pokemon will be deposited into the Trainer's PC
+	rpc Encounter (stream Action) returns (stream BattleMessage) {}
+}
+
+message Ticket {
+	string uid = 1;
+	registry.Trainer trainer = 2;
+	Zone zone = 3;
+	msg.Timestamp time = 4;
+	Expiry expires = 5;
+	message Expiry {
+		int32 encounters = 1;
+		int64 time = 2;
+	}
+}
+
+message Action {
+	oneof move {
+		string attack = 1;
+		string item = 2;
+		pokedex.Pokemon switch = 3;
+		bool run = 4;
+	}
+}
+
+message BattleMessage {
+	string msg = 1;
+	Status status = 2;
+	enum Status {
+		OK = 0;
+		DONE = 1;
+		ERROR = 2;
+	}
+}
+
+message Zone {
+	Code region = 1;
+	int32 opt_code = 15; //enum not supported in HTTP request
+	enum Code {
+		KANTO = 0;
+		JOHTO = 1;
+		HOENN = 2;
+		SINNOH = 3;
+		UNOVA = 4;
+		KALOS = 5;
+		ALOLA = 6;
+	}
+}

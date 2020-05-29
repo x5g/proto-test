@@ -1,0 +1,16 @@
+// Schema for csv to pbf messages.
+// We are using Protozero, so this is for external libraries and / or documentation only.
+//
+// Note: if you modify, add or delete the tags below, adapt tags.h and your code.
+
+package speed;
+
+message Header {
+    required uint64 groupSizeInBytes = 1;
+}
+
+message Group {
+    required repeated uint64 fromNodes = 1 [packed=true];
+    required repeated uint64 toNodes = 2 [packed=true];
+    required repeated uint32 speeds = 3 [packed=true];
+}

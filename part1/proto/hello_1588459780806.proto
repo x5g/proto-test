@@ -1,0 +1,18 @@
+syntax = "proto3";  //指定版本，必须要写（proto3、proto2）
+package lb;
+
+service Hello {
+	rpc Handler(Request) returns (Response){
+	};
+}
+
+message Request {
+	string Name =1;
+}
+
+message Response {
+	string Replay = 1;
+}
+
+
+

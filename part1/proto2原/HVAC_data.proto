@@ -1,0 +1,80 @@
+// To create _pb2.py and _pb2_grpc.py files, run the command,
+// python -m grpc_tools.protoc -I=. --python_out=. --grpc_python_out=. HVAC_data.proto
+
+syntax = "proto3";
+package hvac_data;
+
+// The HVAC Data definition.
+service HVACData {
+
+  // A simple RPC.
+  // CHECK: Sends the outside temperature for a given building, within a duration (start, end), and a requested window
+  // An error is returned if there is no meter, weather or tstat data for the given request.
+  rpc GetHVACData (HVACRequest) returns (HVACReply) {}
+
+}
+
+// The request message containing the requested data information.
+message HVACRequest {
+
+    // List of buildings - list(str)
+    repeated string buildings = 1;
+
+    // Start time - 'YYYY-MM-DDTHH:MM:SSZ'
+    string start = 2;
+
+    // The end time - 'YYYY-MM-DDTHH:MM:SSZ'
+    string end = 3;
+
+    // Point type - e.g. Building_Electric_Meter, Green_Button_Meter
+    string point_type = 4;
+
+    message Aggregate {
+
+        // Values include MEAN, MAX, MIN, COUNT, SUM, RAW (the temporal window parameter is ignored)
+        string meter = 1;
+        string tstat = 2;
+
+    }
+
+    message Window {
+
+        // The frequency/duration window (e.g., 10s, 15m, 1h)
+        // Supported units are: d,h,m,s
+        string meter = 1;
+        string tstat = 2;
+
+    }
+
+    Aggregate agg = 5;
+
+    Window window = 6;
+
+}
+
+// Dataframe structure for HVAC data
+message HVACPoint {
+
+    string time = 1;
+
+    // Outdoor air temperature
+    double oat = 2;
+
+    // Power consumption
+    double power = 3;
+
+    // Indoor air temperature for each zone
+    repeated double iat = 4;
+
+    // HVAC zones & their states
+    repeated int32 state = 5;
+
+}
+
+// The response message containing HVAC data
+message HVACReply {
+
+    // Dataframe containing HVAC data
+    repeated HVACPoint point = 1;
+
+}

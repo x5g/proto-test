@@ -1,0 +1,71 @@
+package google.protobuf;
+option optimize_for = SPEED;
+
+message LoginRequest {
+  required int64 CustomerID = 1;
+  required string Password = 2;
+  required bool CheckCode = 3;
+  optional string Code=4;
+}
+message LoginResponse {
+  required string Result = 1;
+  optional string Url = 2;
+}
+message GoodsRequest {
+  required int64 CustomerID=1;
+}
+message GoodsResponse {
+  message WJ_Goods {
+    required string GoodsID = 1;
+    required string GoodsName = 2;
+  }
+  repeated WJ_Goods result = 1;
+}
+message VolumeResponse {
+  message Volume {
+    required string VolumeID = 1;
+    required string VolumeName = 2;
+  }
+  repeated Volume result = 1;
+}
+message WJ_Record {
+    required int64 SeqID=1;
+    required int64 CustomerID=2;
+    required string WJID=3;
+    required int64 ID=4;
+    required string WorkSpace=5;
+    required string GoodsName=6;
+    required string BeginTime=7;
+    required string EndTime=8;
+    required string BgeinPhotoID=9;
+    required string EndPhotoID=10;
+    required float longitude=11;
+    required float Latitude=12;
+    required int32 Mode=13;
+	optional float Volum=14;
+}
+message RecordResponse {
+  required int64 record_id = 1;
+}
+message FileStartRequest {
+  required string name = 1;
+  required int64 CustomerID = 2;
+  required string AtTime = 3;
+  required string WJID = 4;
+}
+message WJ_Photo {
+  required int64 CustomerID = 1;
+  required string WJID = 2;
+  required string PhotoID = 3;
+  required string PhotoPath = 4;
+  required string AtTime = 5;
+}
+message FileResponse {
+  required int64 Result = 1;
+}
+message FileSend {
+  required bytes datas = 1;
+}
+message Heart {
+  required int64 time = 1;
+}

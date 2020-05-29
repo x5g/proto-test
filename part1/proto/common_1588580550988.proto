@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package common_pb;
+
+message OuterStruct {
+  int32 clientid = 1;
+  int32 stepid = 2;
+  bytes data = 3;
+}
+
+// The request message containing the user's name.
+message Key {
+  bytes key = 1;
+
+  // Zero knowledge proof of key's logarithm
+  DiscreteLogKnowledge proof = 2;
+}
+
+message DiscreteLogKnowledge {
+  bytes t = 1;
+  bytes r = 2;
+}
+
+message EqualsOneOfTwo {
+  bytes a_1 = 1;
+  bytes a_2 = 2;
+  bytes b_1 = 3;
+  bytes b_2 = 4;
+  bytes d_1 = 5;
+  bytes d_2 = 6;
+  bytes r_1 = 7;
+  bytes r_2 = 8;
+}
+
+message VerifiableShuffle {
+  repeated bytes c = 1;
+  bytes cd = 2;
+  bytes cCapitalD = 3;
+
+  bytes ERalpha = 4;
+  bytes ERbeta = 5;
+
+  repeated bytes f = 6;
+  bytes fd = 7;
+  bytes yd = 8;
+  bytes zd = 9;
+  repeated bytes bigF = 10;
+  bytes yCapitalD = 11;
+  bytes zCapitalD = 12;
+  bytes capitalZ = 13;
+}
+
+message DiscreteLogEquality {
+  repeated bytes ts = 1;
+  bytes r = 2;
+}

@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "url": "result1.url",
+      "title": "result1.title",
+      "snippets": [
+        "result1.snippets1",
+        "result1.snippets2"
+      ]
+    },
+    {
+      "url": "result2.url",
+      "title": "result2.title",
+      "snippets": [
+        "result2.snippets1",
+        "result2.snippets2"
+      ]
+    }
+  ]
+}

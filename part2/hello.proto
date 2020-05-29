@@ -1,0 +1,10 @@
+syntax="proto2";
+package hello;
+message HelloWorld{
+	required int32 x = 1;
+	required int32 y = 2;
+	optional int32 valid = 3;
+}
+message HelloArray{
+    repeated HelloWorld helloWorld = 1;
+}

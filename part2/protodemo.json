@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "name": "\u51cc\u66681\u70b921\u5206",
+  "email": "247600377@qq.com",
+  "sex": "MAN",
+  "phone": [
+    {
+      "number": "123456789",
+      "type": "HOME"
+    }
+  ]
+}

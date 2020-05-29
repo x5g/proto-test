@@ -1,0 +1,85 @@
+package com.tungstenapp.crypto.proto;
+
+option java_outer_classname = "LocalStorageProtos";
+
+message SessionStructure {
+    message Chain {
+        optional bytes senderCoreKey = 1;
+        optional bytes senderCoreKeyPrivate = 2;
+
+        message ChainKey {
+            optional uint32 index = 1;
+            optional bytes key = 2;
+        }
+
+        optional ChainKey chainKey = 3;
+
+        message MessageKey {
+            optional uint32 index = 1;
+            optional bytes cipherKey = 2;
+            optional bytes macKey = 3;
+            optional bytes iv = 4;
+        }
+
+        repeated MessageKey messageKeys = 4;
+    }
+
+    message PendingKeyExchange {
+        optional uint32 sequence = 1;
+        optional bytes localBaseKey = 2;
+        optional bytes localBaseKeyPrivate = 3;
+        optional bytes localCoreKey = 4;
+        optional bytes localCoreKeyPrivate = 5;
+        optional bytes localIdentityKey = 7;
+        optional bytes localIdentityKeyPrivate = 8;
+    }
+
+    message PendingInitKey {
+        optional uint32 InitKeyId = 1;
+        optional string signedInitKeyId = 3;
+        optional bytes baseKey = 2;
+    }
+
+    message InitializedState {
+        optional bytes localIdentityPublic = 1;
+        optional bytes remoteIdentityPublic = 2;
+        optional bytes rootKey = 3;
+        optional Chain senderChain = 4;
+    }
+
+    optional uint32 sessionVersion = 1;
+    optional uint32 previousCounter = 2;
+    optional string remoteRegistrationId = 3;
+    optional string localRegistrationId = 4;
+
+    optional bytes aliceBaseKey = 5;
+
+    optional InitializedState initializedState = 6;
+
+    repeated Chain receiverChains = 7;
+
+    optional PendingKeyExchange pendingKeyExchange = 8;
+    optional PendingInitKey pendingInitKey = 9;
+
+    optional bool needsRefresh = 10;
+
+}
+
+message RecordStructure {
+    optional SessionStructure currentSession = 1;
+    repeated SessionStructure previousSessions = 2;
+}
+
+message InitKeyRecordStructure {
+    optional uint32 id = 1;
+    optional bytes publicKey = 2;
+    optional bytes privateKey = 3;
+}
+
+message SignedInitKeyRecordStructure {
+    optional uint32 id = 1;
+    optional bytes publicKey = 2;
+    optional bytes privateKey = 3;
+    optional bytes signature = 4;
+    optional fixed64 timestamp = 5;
+}

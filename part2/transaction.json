@@ -1,0 +1,10 @@
+{
+  "amount": {
+    "currencyCode": "CURRENCY_USD",
+    "value": "200"
+  },
+  "creditAccount": {
+    "accountType": "PAYTM_WALLET",
+    "accountIdentifier": "9898989898"
+  }
+}

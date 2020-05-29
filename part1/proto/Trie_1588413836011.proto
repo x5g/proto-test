@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+// Protocol Buffer for Serialization of trie data structure.
+
+option java_package = "com.alation.indexing.TrieDS";
+option java_outer_classname = "TrieProto";
+
+message TrieNodePB{
+	required int32 character = 1;
+	repeated TrieNodePB children = 2;
+	//required TrieNodePB parent = 3;
+	required int32 value = 4;
+	required bool is_word = 5;
+	required bool is_leaf = 6;
+	repeated string reference_list = 7;
+}
+
+message TriePB{
+	required TrieNodePB root = 1;
+}

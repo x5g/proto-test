@@ -1,0 +1,465 @@
+syntax = "proto3";
+
+
+
+message EnumItem {
+    string Name = 1;
+    uint32 Value = 2;
+}
+
+message EnumConfig {
+    string EnumTypeName = 1;
+    repeated EnumItem EnumItemAry = 2;
+}
+
+message EnumConfigAry {
+    repeated EnumConfig ary = 1;
+}
+
+// 奖励类型
+enum PriceEnum {
+    // [奖励类型]无
+    PriceDefault = 0;
+
+    // [奖励类型]钻石
+    PriceDiamond = 1;
+}
+
+// 个人类型
+enum PersonEnum {
+    // [个人类型]无
+    PersonDefault = 0;
+
+    // [个人类型]钻石
+    PersonDiamond = 1;
+}
+
+message IntArr {
+    repeated uint32 List = 1;
+}
+
+message Common {
+    PersonEnum PersonType = 1;
+}
+
+message DemoConfig {
+    uint32 A = 1;
+    repeated uint32 B = 2;
+    IntArr C = 3;
+    PriceEnum D = 4;
+    Common E = 5;
+}
+
+message DemoConfigAry {
+    repeated DemoConfig ary = 1;
+}
+
+
+message Props {
+    uint32 tongjiling   = 1;
+    uint32 fish         = 2;
+    uint32 heart        = 3;
+    uint32 speaker      = 4;
+    uint32 summon       = 5;
+    uint32 miniShield   = 6;
+    uint32 powPic       = 7;
+    uint32 broken       = 8;
+    uint32 dungeongun   = 9;
+    uint32 vip          = 10;
+    uint32 magicBottle  = 11;
+    uint32 snowBall     = 12;
+    uint32 mercy        = 13;
+    uint32 police       = 14;
+    uint32 umbrella     = 15;
+    uint32 tili         = 16;
+    uint32 money        = 17;
+    uint32 diamond      = 18;
+}
+
+
+message BeyondConfig {
+    uint32  star = 1;
+    Props   reward = 2;
+    uint32 key = 3;
+}
+
+
+message BeyondConfigAry {
+    repeated BeyondConfig ary = 1;
+}
+
+/*************** 家族奖励 (开始) *****************/
+
+
+//家族大餐对应奖励
+message MustRewardConfig {
+    string reward = 1;
+    uint32 max = 2;
+    uint32 min = 3;
+    uint32 level = 4;
+}
+
+message MustRewardConfigAry {
+    repeated MustRewardConfig ary = 1;
+}
+
+//可选奖励
+message PropsRewardConfig {
+    uint32 rate = 1;
+    string name = 2;
+    uint32 num = 5;
+    uint32 level = 4;
+}
+
+message PropsRewardConfigAry {
+    repeated PropsRewardConfig ary = 1;
+}
+
+message DinnerRewardConfig {
+    uint32 num = 1;
+    uint32 max = 2;
+    uint32 level = 3;
+}
+
+message DinnerRewardConfigAry {
+    repeated DinnerRewardConfig ary = 1;
+}
+/*************** 家族奖励 (结束) *****************/
+
+/*************** 每日登入 (开始) *****************/
+message LoginRewardItem {
+    uint32 num = 1;
+    uint32 img = 2;
+	string reward = 3;
+}
+
+message LoginRewardArr {
+    repeated LoginRewardItem value = 1;
+	uint32 key = 2;
+}
+
+message LoginRewardConfig {
+    LoginRewardArr first = 1; //第一轮的奖励，奖励比较丰富
+	LoginRewardArr cumu = 2;//第二轮及以后的奖励，相对较少
+}
+
+message LoginRewardConfigAry {
+    repeated LoginRewardConfig ary = 1;
+}
+/*************** 每日登入 (结束) *****************/
+
+
+
+/*************** 弹弓活动(开始) *****************/
+//弹弓活动普通配置
+message SlingshotConfig {
+    uint32 recover = 1;
+    uint32 reserved = 2;
+    uint32 magicBottle = 3;
+    uint32 bottleNum = 4;
+    uint32 receiveLimit = 5;
+    uint32 sendLimit = 6;
+	uint32 ballGetEnergy = 7;
+    GiftBoxRate giftBoxRate = 8;
+    uint32 ballGet = 9;
+}
+
+message GiftBoxRate {
+    uint32 giftBoxReward = 1;
+    uint32 babyProduct = 2;
+}
+
+message SlingshotConfigAry {
+	repeated SlingshotConfig ary = 1; 
+}
+
+
+//打中风铃的奖励
+message GiftBoxRewardItem {
+    string key = 1;
+    uint64 value = 2;
+}
+
+
+message GiftBoxRewardConfig {
+    uint32 rate = 1;
+    GiftBoxRewardItem rewards = 2;
+}
+
+
+message GiftBoxRewardConfigAry {
+    repeated GiftBoxRewardConfig ary = 1;
+}
+
+//碎片兑换奖励
+message BabyRewardConfig {
+    string index = 1;
+    repeated BabyRewardItem rewards = 2;
+}
+
+message BabyRewardItem {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message BabyRewardConfigAry {
+    repeated BabyRewardConfig ary = 1;
+}
+
+//风铃产出宝贝概率
+message BabyProductConfigAry {
+    repeated BabyProductConfig ary = 1;
+}
+
+message BabyProductConfig {
+    uint32 mine = 1;
+    uint32 friend = 2;
+}
+
+
+//风铃刷新，个数概率
+message GiftBoxConfig {
+    uint32 giftBox = 1;
+}
+
+message GiftBoxConfigAry{
+    repeated GiftBoxConfig ary = 1;
+}
+
+//获得小鸟的金币消耗
+message BallMoneyConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 value = 3;
+}
+
+message BallMoneyConfigAry {
+    repeated BallMoneyConfig ary = 1;
+}
+
+//超级奖励的概率
+message SuperGiftConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 rate = 3;
+    uint32 times = 4;
+}
+
+message SuperGiftConfigAry {
+    repeated SuperGiftConfig ary = 1;
+}
+
+//龙的概率
+message BoomConfig {
+    uint32 start = 1;
+    uint32 end = 2;
+    uint32 rate = 3;
+    uint32 times = 4;
+}
+
+message BoomConfigAry {
+    repeated BoomConfig ary = 1;
+}
+
+
+/*************** 弹弓活动(结束) *****************/
+
+/*************** 在线抽奖(开始) *****************/
+message RewardTypeConfig {
+    uint32 key = 1;
+    string reward = 2;
+    uint32 pic  = 3;
+}
+
+message RewardTypeConfigAry {
+    repeated RewardTypeConfig ary = 1;
+}
+
+//随机
+message OlActItem {
+    string reward = 1;
+    uint32 value = 2;
+}
+
+message OlActRandConfig {
+    uint32 key = 1;
+    repeated uint32 per = 2;
+    OlActItem reward =3;     
+}
+
+message OlActRandConfigAry {
+    repeated OlActRandConfig ary = 1;
+}
+
+message OlineTimeConfig {
+    uint32 randTotal = 1;
+}
+
+message OlineTimeConfigAry {
+    repeated OlineTimeConfig ary = 1;
+}
+/*************** 在线抽奖(结束) *****************/
+
+
+/*************** 七天冲星(开始) *****************/
+message StarUpReward  {
+    string name = 1;
+    uint32 value = 2;
+}
+
+message StarUpConfig {
+    uint32 star = 1;
+    repeated StarUpReward reward = 2;
+}
+
+message StarUpConfigAry {
+    repeated StarUpConfig ary = 1;
+}
+/*************** 七天冲星(结束) *****************/
+
+
+/*************岛屿管理(开始）************************/
+
+message PlanetTiliItem {
+    uint32 max = 1;
+    uint32 recover = 2;
+    uint32 time = 3;
+}
+
+message PlanetShieldItem {
+    uint32 max = 1;
+}
+
+message PlanetPriceItem {
+    repeated uint32 buildingPrice = 2;
+}
+
+message PlanetConfig {
+    PlanetTiliItem tili = 1;
+    PlanetShieldItem shield = 2;
+    uint32 buildingNum = 3;
+    uint32 buildingLength = 4;
+    uint32 maxHP = 5;
+    float repairRate = 6;
+    repeated PlanetPriceItem price = 7;
+    uint32 totalPrice = 8;
+    uint32 handBook = 9;
+    uint32 planetId = 10;
+}
+
+message PlanetConfigAry {
+    repeated PlanetConfig ary = 1;
+}
+
+message PlanetMaxConfig {
+    uint32 planet_max = 1;
+}
+
+
+message PlanetMaxConfigAry {
+    repeated PlanetMaxConfig ary = 1;
+}
+
+
+/*************大转盘(开始）************************/
+
+message DaZhuanPanConfig {
+    uint32 handBook = 1;
+    uint32 total = 2;
+    repeated string rand = 3;
+    uint32 planetId = 4;
+}
+
+message DaZhuanPanConfigAry {
+    repeated DaZhuanPanConfig ary = 1;
+}
+/*************大转盘(结束）************************/
+
+
+/*************过岛奖励(开始）************************/
+message GoPlanetRewardItem{
+    string index = 1;
+    uint32 value = 2;
+}
+
+message GoPlanetRewardConfig {
+    uint32 planetId = 1;
+    repeated GoPlanetRewardItem reward = 2;
+}
+
+message GoPlanetRewardConfigAry {
+    repeated GoPlanetRewardConfig ary = 1;
+}
+/*************过岛奖励(结束）************************/
+
+/*************发送邀请奖励(开始）************************/
+
+message InviteRewardConfig{
+    string type = 1;
+    uint32 number = 2;
+    uint32 probability = 3;
+}
+
+message InviteRewardConfigAry {
+    repeated InviteRewardConfig ary = 1;
+}
+/*************发送邀请奖励(结束）************************/
+
+
+/*************召回推送(开始）************************/
+message BackPushRewardItem {
+    string index = 1;
+    uint32 value = 2;
+}
+
+message BackPushRewardConfig {
+    uint32 id = 1;
+    repeated BackPushRewardItem reward = 2;
+    string reward_type = 3;
+}
+
+message BackPushRewardConfigAry {
+    repeated BackPushRewardConfig ary = 1;
+}
+
+message BackPushContentItem {
+    string lang = 1;
+    repeated string word = 2;
+}
+
+message BackPushConditionItem {
+    string field = 1;
+    string condition = 2;
+    string value = 3;
+}
+
+message BackPushContentConfig {
+    uint32 id = 1;
+    repeated BackPushContentItem content = 2;
+    string runTime = 3;
+    repeated BackPushConditionItem condition = 4;
+}
+
+message BackPushContentConfigAry {
+    repeated BackPushContentConfig ary = 1;
+}
+
+
+
+
+/*************召回推送(结束）***********************/
+message taskFinishRewardConfigAry {
+   repeated taskFinishRewardConfig ary = 1;
+}
+
+message taskFinishRewardConfig {
+   uint32 endTime = 1;
+   uint32 beginTime = 2;
+   repeated taskExpireReward expireReward = 3;
+   repeated taskExpireReward defaultReward = 4;
+}
+
+message taskExpireReward {
+    string type = 1;
+    string num = 2;
+}

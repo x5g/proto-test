@@ -1,0 +1,81 @@
+package bgs.protocol.user_manager.v1;
+import "bgs/low/pb/client/user_manager_types.proto";
+import "bgs/low/pb/client/entity_types.proto";
+import "bgs/low/pb/client/role_types.proto";
+import "bgs/low/pb/client/rpc_types.proto";
+
+
+message SubscribeRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required uint64 object_id = 2;
+}
+
+message SubscribeResponse {
+	repeated .bgs.protocol.user_manager.v1.BlockedPlayer blocked_players = 1;
+	repeated .bgs.protocol.user_manager.v1.RecentPlayer recent_players = 2;
+	repeated .bgs.protocol.Role role = 3;
+}
+
+message UnsubscribeRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	optional uint64 object_id = 2;
+}
+
+message AddRecentPlayersRequest {
+	repeated .bgs.protocol.user_manager.v1.RecentPlayer players = 1;
+	optional .bgs.protocol.EntityId agent_id = 2;
+	optional uint32 program = 3;
+}
+
+message ClearRecentPlayersRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	optional uint32 program = 2;
+}
+
+message BlockPlayerRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.EntityId target_id = 2;
+	optional uint32 role = 3;
+}
+
+message UnblockPlayerRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.EntityId target_id = 2;
+}
+
+message BlockedPlayerAddedNotification {
+	required .bgs.protocol.user_manager.v1.BlockedPlayer player = 1;
+	optional .bgs.protocol.EntityId game_account_id = 2;
+	optional .bgs.protocol.EntityId account_id = 3;
+}
+
+message BlockedPlayerRemovedNotification {
+	required .bgs.protocol.user_manager.v1.BlockedPlayer player = 1;
+	optional .bgs.protocol.EntityId game_account_id = 2;
+	optional .bgs.protocol.EntityId account_id = 3;
+}
+
+message RecentPlayersAddedNotification {
+	repeated .bgs.protocol.user_manager.v1.RecentPlayer player = 1;
+}
+
+message RecentPlayersRemovedNotification {
+	repeated .bgs.protocol.user_manager.v1.RecentPlayer player = 1;
+}
+
+service UserManagerService {
+	rpc Subscribe (.bgs.protocol.user_manager.v1.SubscribeRequest) returns (.bgs.protocol.user_manager.v1.SubscribeResponse);
+	rpc AddRecentPlayers (.bgs.protocol.user_manager.v1.AddRecentPlayersRequest) returns (.bgs.protocol.NoData);
+	rpc ClearRecentPlayers (.bgs.protocol.user_manager.v1.ClearRecentPlayersRequest) returns (.bgs.protocol.NoData);
+	rpc BlockPlayer (.bgs.protocol.user_manager.v1.BlockPlayerRequest) returns (.bgs.protocol.NoData);
+	rpc UnblockPlayer (.bgs.protocol.user_manager.v1.UnblockPlayerRequest) returns (.bgs.protocol.NoData);
+	rpc BlockPlayerForSession (.bgs.protocol.user_manager.v1.BlockPlayerRequest) returns (.bgs.protocol.NoData);
+	rpc Unsubscribe (.bgs.protocol.user_manager.v1.UnsubscribeRequest) returns (.bgs.protocol.NoData);
+}
+
+service UserManagerListener {
+	rpc OnBlockedPlayerAdded (.bgs.protocol.user_manager.v1.BlockedPlayerAddedNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnBlockedPlayerRemoved (.bgs.protocol.user_manager.v1.BlockedPlayerRemovedNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnRecentPlayersAdded (.bgs.protocol.user_manager.v1.RecentPlayersAddedNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnRecentPlayersRemoved (.bgs.protocol.user_manager.v1.RecentPlayersRemovedNotification) returns (.bgs.protocol.NO_RESPONSE);
+}

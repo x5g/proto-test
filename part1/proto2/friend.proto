@@ -1,0 +1,159 @@
+package Sanguo.protocol.friend;
+
+import "common.proto";
+
+enum FriendStatus {
+    FRIEND_NOT = 1;     // 不是好友
+    FRIEND_OK = 2;      // 已经是好友了
+    FRIEND_ACK = 3;     // 等待对方确认
+    FRIEND_APPLY = 4;   // 别人加自己好友，自己需要确认
+}
+
+message Friend {
+    enum FriendGotPlunderTimesStatus {
+        CAN_GET = 1;
+        ALREADY_GET = 2;
+        CAN_NOT_GET = 3;
+    }
+
+    required Sanguo.protocol.common.CharacterInfomation char = 1;
+
+    required FriendStatus status = 2; 
+    required bool can_give_plunder_times = 3;    // 是否能对其赠送行军令
+    required FriendGotPlunderTimesStatus got_plunder_times_status = 4;   // 是否能从其领取
+}
+
+// 好友列表/申请列表
+message FriendsNotify {
+    required bytes session = 1;
+    repeated Friend friends = 2;
+}
+
+
+message FriendRefreshRequest {
+    required bytes session = 1;
+}
+
+message FriendRefreshResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 新好友通知，包括自己加别人，别人加自己
+message NewFriendNotify {
+    required bytes session = 1;
+    required Friend friend = 2;
+}
+
+message RemoveFriendNotify {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message UpdateFriendNotify {
+    required bytes session = 1;
+    required Friend friend = 2;
+}
+
+
+message FriendsAmountNotify {
+    required bytes session = 1;
+    required int32 max_amount = 2;
+    required int32 cur_amount = 3;
+}
+
+
+// 玩家列表请求
+message PlayerListRequest {
+    required bytes session = 1;
+}
+
+message PlayerListResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated Friend players = 3;
+}
+
+// 添加好友
+message FriendAddRequest {
+    required bytes session = 1;
+    optional int32 id = 2;
+    optional string name = 3;
+}
+
+message FriendAddResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 终止好友
+message FriendTerminateRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message FriendTerminateResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 取消好友申请
+message FriendCancelRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message FriendCancelResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 确认别人加自己的请求
+message FriendAcceptRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message FriendAcceptResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 拒绝别人加自己的请求
+message FriendRefuseRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message FriendRefuseResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+
+// 赠送行军令（掠夺次数）
+message FriendGivePlunderTimesRequest {
+    required bytes session = 1;
+    required int32 friend_id = 2;
+}
+
+message FriendGivePlunderTimesResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 领取
+message GetFriendGivePlunderTimesRequest {
+    required bytes session = 1;
+    required int32 friend_id = 2;
+}
+
+message GetFriendGivePlunderTimesResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+

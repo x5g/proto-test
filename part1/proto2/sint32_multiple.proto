@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message SInt32 {
+  sint32 sint32_field1 = 1;
+  sint32 sint32_field2 = 2;
+  sint32 sint32_field3 = 3;
+}

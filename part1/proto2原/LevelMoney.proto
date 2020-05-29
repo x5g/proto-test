@@ -1,0 +1,410 @@
+enum Error {
+    UNKNOWN_ERROR = -1;
+    NO_ERROR = 0;
+    NO_TOKEN = 300;
+    TOKEN_EXPIRED = 301;
+    INSUFFICIENT_TOKEN_SENSITIVITY = 302;
+    NO_API_TOKEN = 303;
+    BAD_API_TOKEN = 304;
+    ILLEGAL_PATH = 305;
+    REQUEST_SCHEMA_MISMATCH = 306;
+    STRICT_MODE_FAILURE = 307;
+    LOCK_FAILURE = 500;
+    NOT_IMPLEMENTED_YET = 700;
+}
+
+enum FatLoginError {
+    UNKNOWN_ERROR_FATLOGIN = -1;
+    NO_ERROR_FATLOGIN = 0;
+    SOME_ERROR = 1;
+    NO_DEMO_ACCOUNTS = 2;
+}
+
+message Events {
+    optional int64 sensitive_token_expiration_time = 1;
+    optional int64 insensitive_token_expiration_time = 2;
+    optional bool needs_reauth = 3;
+    optional string popup_message = 9;
+    optional string error_description = 10;
+    optional bool invalidate_all_caches = 100;
+    optional bool invalidate_everything_and_log_out = 101;
+}
+
+enum AccountType {
+    UNRECOGNIZED = 0;
+    ASSET = 1;
+    CREDIT_CARD = 2;
+}
+
+enum AggErrorStatus {
+    UNKNOWN_AGG = 0;
+    NO_ERROR_AGG = 1;
+    UNHEALTHY = 2;
+    I_SENSE_A_DISTURBANCE = 3;
+    CLOSED = 4;
+}
+
+message AggErrorInfo {
+    optional string account_status_description = 2;
+    optional AggErrorStatus error_status = 1;
+    optional int64 status_start_timestamp = 3;
+}
+
+message Account {
+    optional string account_id = 1;
+    optional string account_name = 5;
+    optional AccountType account_type = 7;
+    optional bool activating = 15;
+    optional bool active = 4;
+    optional AggErrorInfo agg_error_info = 20;
+    optional int64 autosave_account_priority = 25;
+    optional int64 balance = 6;
+    optional bool bank_needs_pin = 17;
+    optional bool can_be_autosave_funding_source = 24;
+    optional bool can_be_autosave_target = 23;
+    optional bool does_not_support_pending = 18;
+    optional int64 institution_id = 2;
+    optional string institution_login_id = 19;
+    optional string institution_name = 3;
+    optional bool is_autosave_source = 21;
+    optional bool is_autosave_target = 22;
+    optional string last_digits = 8;
+    optional bool needs_mfa = 9;
+    optional bool needs_reauth = 10;
+    optional int64 no_reauth_before = 11;
+    optional bool onboarding_finished = 14;
+    optional bool onboarding_started = 13;
+    optional bool soft_delinked = 16;
+
+}
+
+enum TransferStatus {
+    UNKNOWN_STATUS = 0;
+    UNKNOWN_FAILURE = 1;
+    SCHEDULED = 2;
+    PENDING = 3;
+    CLEARED = 4;
+    CANCELLED_DUE_TO_INSUFFICIENT_FUNDS = 5;
+    CANCELLED_BY_USER = 6;
+    CANCELLED_BY_LEVEL = 7;
+    CANCELLED_BY_BANK = 8;
+}
+
+message ScheduledTransfer {
+    optional int64 amount = 6;
+    optional int64 cancellation_timestamp = 5;
+    optional string funding_account_id = 2;
+    optional bool is_cancellable = 7;
+    optional int64 scheduled_timestamp = 4;
+    optional string scheduled_transfer_id = 1;
+    optional string target_account_id = 3;
+    optional TransferStatus transfer_status = 8;
+}
+
+enum AutosaveStatus {
+    NOT_SET_UP = 0;
+    ACTIVE = 1;
+    PAUSED = 2;
+}
+
+message AutosaveData {
+    optional AutosaveStatus autosave_status = 1;
+    optional string funding_account_id = 6;
+    optional bool has_lulz_minimum_funding_account_balance = 4;
+    optional bool has_lulz_savings_target_amount = 2;
+    optional int64 minimum_funding_account_balance = 5;
+    repeated ScheduledTransfer past_scheduled_transfers = 10;
+    optional int64 savings_target_amount = 3;
+    optional ScheduledTransfer scheduled_smansfer = 8;
+    optional ScheduledTransfer scheduled_withdrawal = 9;
+    optional string target_account_id = 7;
+}
+
+message Transaction {
+    optional string account_id = 2;
+    optional int64 aggregation_time = 23;
+    optional int64 amount = 7;
+    optional string categorization = 21;
+    optional int64 clear_date = 26;
+    repeated string insight_ids = 17;
+    optional bool is_pending = 5;
+    optional bool is_transfer = 14;
+    optional string memo_only_for_testing = 24;
+    optional string merchant = 4;
+    optional int64 original_amount = 10;
+    optional string original_merchant = 9;
+    optional int64 original_transaction_time = 11;
+    optional int64 paycheck_id = 16;
+    optional string payee_name_only_for_testing = 25;
+    optional bool possibly_is_bank_fee_maybe = 13;
+    optional string previous_transaction_id = 18;
+    optional string raw_merchant = 3;
+    optional int64 target_fund_id = 8;
+    optional bool target_is_goal = 12;
+    optional string transaction_id = 1;
+    optional int64 transaction_time = 6;
+    optional string transaction_time_string_read_only = 22;
+    optional string transfer_partner_id = 15;
+    optional string user_json_data = 20;
+    optional string user_note = 19;
+}
+
+enum BucketType {
+    UNKNOWN_BUCKET = -1;
+    LEGACY_INSIGHT = 0;
+    BILL = 1;
+    MAGIC_DONT_COUNT = 3;
+    DEBIT_INSIGHT = 5;
+    CREDIT_INSIGHT = 6;
+    RECURRING_INCOME = 7;
+    MAGIC_TRANSFER = 8;
+    MAGIC_SAVINGS = 9;
+}
+
+enum DisplayStyle {
+    MONTH_TO_MONTH = 1;
+    ALL_TIME = 2;
+}
+
+message Bucket {
+    repeated Transaction archetype_transactions = 10;
+    repeated string blacklisted_transaction_ids = 12;
+    optional string bucket_id = 9;
+    optional BucketType bucket_type = 32;
+    optional int32 color = 22;
+    optional DisplayStyle display_style = 23;
+    optional bool dummy = 1;
+    optional string icon = 21;
+    optional bool is_autogenerated = 33;
+    optional int64 last_update_timestamp = 2;
+    repeated string matched_predicted_transaction_ids = 14;
+    repeated string matched_transaction_ids = 13;
+    optional string title = 20;
+    repeated string whitelisted_transaction_ids = 11;
+}
+
+message BucketedTransactionsCard {
+    repeated string bucket_ids = 2;
+    repeated string transaction_ids = 1;
+}
+
+message CancelledScheduledTransferCard {
+    optional string scheduled_transfer_id = 1;
+}
+
+enum CardType {
+    UNKNOWN_CARD = -1;
+    NORMIES = 1;
+    TRANSFER = 2;
+    BUCKETED_TRANSACTIONS = 3;
+    SUGGESTED_TRANSACTION = 4;
+    EXPLAINER = 7;
+    ADJUST_SPENDABLE = 8;
+    GENERIC_TEXT = 9;
+    SUGGESTED_ADD_TO_EXISTING_BUCKET = 10;
+    DISPLAY = 11;
+    SUMMARY = 12;
+    UPCOMING_SMANSFER = 13;
+    PENDING_SMANSFER = 14;
+    CANCELLED_SMANSFER = 15;
+    CLEARED_SMANSFER = 16;
+}
+
+message ClearedScheduledTransferCard {
+    optional string scheduled_transfer_id = 1;
+    optional string source_transaction_id = 2;
+    optional string target_transaction_id = 3;
+}
+
+enum DisplayType {
+    NEW_MONTH = 1;
+}
+
+message DisplayCard {
+    optional string description = 2;
+    optional DisplayType display_type = 1;
+}
+
+enum ExplainerType {
+    WELCOME = 1;
+    RENAME_ACCOUNTS = 2;
+    DONT_COUNT = 4;
+    ICONS = 5;
+    TRACKERS = 6;
+    ENABLE_AUTOSAVE = 7;
+}
+
+message ExplainerCard {
+    optional ExplainerType explainer_type = 1;
+}
+
+enum CardFlag {
+    UNKNOWN_FLAG = -1;
+    DISMISSED = 1;
+}
+
+message GenericTextCard {
+    optional string call_to_action_text = 3;
+    optional string call_to_action_url = 4;
+    optional string copy = 2;
+    optional string header = 1;
+}
+
+message NormieCard {
+    repeated string transaction_ids = 1;
+}
+
+message PendingScheduledTransferCard {
+    optional string scheduled_transfer_id = 1;
+}
+
+message SuggestedAddToExistingBucketCard {
+    optional string bucket_id = 2;
+    optional string transaction_id = 1;
+}
+
+message SummaryCard {
+    repeated string active_bucket_ids = 4;
+    repeated string highlighted_transaction_ids = 5;
+    optional int64 total_bills = 2;
+    optional int64 total_spending = 1;
+    optional int64 total_transactions = 3;
+}
+
+message TransferCard {
+    repeated string transaction_ids = 1;
+}
+
+message UpcomingScheduledTransferCard {
+    optional string scheduled_transfer_id = 1;
+}
+
+message SuggestedTransactionCard {
+    optional Bucket bucket = 2;
+    optional string transaction_id = 1;
+}
+
+message Card {
+    optional BucketedTransactionsCard bucketed_transactions = 12;
+    optional CancelledScheduledTransferCard cancelled_scheduled_transfer = 21;
+    optional string card_id = 1;
+    optional CardType card_type = 3;
+    optional ClearedScheduledTransferCard cleared_scheduled_transfer = 22;
+    optional DisplayCard display = 17;
+    optional ExplainerCard explainer = 14;
+    repeated CardFlag flags = 4;
+    optional GenericTextCard generic_text = 15;
+    optional NormieCard normie = 10;
+    optional PendingScheduledTransferCard pending_scheduled_transfer = 20;
+    optional int64 sort_order = 2;
+    optional SuggestedAddToExistingBucketCard suggested_add_to_existing_bucket = 16;
+    optional SuggestedTransactionCard suggested_transaction = 13;
+    optional SummaryCard summary = 18;
+    optional TransferCard transfer = 11;
+    optional UpcomingScheduledTransferCard upcoming_scheduled_transfer = 19;
+}
+
+message FeatureFlags {
+    optional bool is_smart_savings_enabled = 1;
+}
+
+message CacheContents {
+    repeated Account accounts = 20;
+    optional AutosaveData autosave_data = 50;
+    repeated Bucket buckets = 22;
+    repeated Card cards = 30;
+    optional FeatureFlags features = 40;
+    optional bool has_lulz_v3_spendable = 32;
+    repeated Transaction projected_transactions = 23;
+    repeated Transaction transactions = 21;
+    optional int64 transactions_cursor = 24;
+    optional int64 v3_spendable = 31;
+}
+
+enum UserAgent {
+    UNSPECIFIED = 1;
+    IPHONE = 2;
+    ANDROID = 3;
+    WEB = 4;
+    CONSOLE = 5;
+    GOOGLE_GLASS = 6;
+    ANDROID_WEAR = 7;
+    IWATCH = 8;
+    SKYNET = 9;
+    TOASTER = 10;
+    BLACKBERRY = 11;
+    WINDOWS_PHONE = 12;
+}
+
+message User {
+    optional UserAgent client_user_agent = 10;
+    optional int64 client_version = 11;
+    optional int64 created = 4;
+    optional string email = 1;
+    optional string first_name = 8;
+    optional bool has_lulz_autogenerated_insights = 6;
+    optional bool has_lulz_budget = 3;
+    optional string last_name = 9;
+    optional string password = 2;
+    optional string phone_number = 7;
+    optional bool variabill_migrated = 5;
+}
+
+message FatLoginResponse {
+    optional Error error = 1;
+    optional Events events = 2;
+    optional FatLoginError error2 = 3;
+    optional int64 uid = 10;
+    optional string token = 11;
+    optional CacheContents cache_contents = 12;
+    optional User user = 13;
+}
+
+message CallerInfo {
+    optional string os_version_string = 4;
+    optional UserAgent user_agent = 1;
+    optional int64 version = 2;
+    optional string version_string = 3;
+}
+
+message Args {
+    optional string api_token = 12;
+    optional CallerInfo caller_info = 9;
+    optional bool demo_mode = 4;
+    optional string device_id = 15;
+    optional string json_args = 8;
+    optional bool json_strict_mode = 14;
+    optional bool json_verbose_response = 16;
+    optional int64 masquerade_as = 7;
+    optional int64 time = 13;
+    optional float time_zone = 10;
+    optional string time_zone_string = 11;
+    optional string token = 2;
+    optional int64 uid = 1;
+    optional bool user_has_pin = 5;
+}
+
+message GetCacheContentsRequest {
+    optional Args args = 1;
+    optional int32 card_version = 2;
+}
+
+message LoginRequest {
+    optional Args args = 3;
+    optional int32 card_version = 12;
+    optional string device_id = 4;
+    optional string email = 1;
+    optional string password = 2;
+}
+
+enum GetCacheContentsError {
+    UNKNOWN_ERROR_GETCACHE = -1;
+    NO_ERROR_GETCACHE = 0;   
+}
+
+message GetCacheContentsResponse {
+    optional CacheContents cache_contents = 4;
+    optional Error error = 1;
+    optional GetCacheContentsError error2 = 3;
+    optional Events events = 2;
+}

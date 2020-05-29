@@ -1,0 +1,172 @@
+syntax = "proto3";
+package youliao.pdu.friendlist;
+import "youliao.base.proto";
+
+
+message Group_Friend
+{
+    uint32 group_id   = 1;          //好友列表 组id
+//    string   group_name = 2;        //好友列表 组名
+    repeated youliao.pdu.base.FriendInfo friend = 3; //该组下的好友
+}
+
+
+//请求好友列表
+message FriendListRequest
+{
+    uint32 user_id = 1;
+    uint32 msg_serv_idx = 2;
+}
+
+//响应
+message FriendListRespone
+{
+    uint32 user_id = 1;
+    map<uint32, Group_Friend> friend_list = 2;
+}
+
+
+message GroupsRequest
+{
+    uint32 user_id = 1;
+}
+
+
+message GroupsRespone
+{
+    uint32 user_id = 1;
+    map<uint32, string> user_groups = 2;
+}
+
+//好友状态更改
+message FriendStatusChangeMessage
+{
+    uint32 user_id = 1;
+    uint32 friend_id = 2;
+    youliao.pdu.base.UserStatusType user_status_type = 3;
+}
+
+//好友个性签名修改
+message SignatureChangeResquest
+{
+    uint32 user_id = 1;
+    string user_signature = 2;
+}
+
+message SignatureChangeRespone
+{
+    uint32 user_id = 1;
+    string user_signature = 2;
+    youliao.pdu.base.ResultType result_type = 3;
+}
+
+//经RouteServer广播到MsgServer再转发到目的用户
+message FriendSignatureChangedNotify
+{
+    uint32 friend_id = 1;
+    string friend_signatrue = 2;
+}
+
+message ModifyFriendGroupNameRequest
+{
+    uint32 user_id = 1;
+    uint32 group_id = 2;
+    string new_group_name = 3;
+}
+
+message AddNewFriendGroupRequest
+{
+    uint32 user_id = 1;
+    string new_group_name = 2;
+}
+
+message AddNewFriendGroupRespone
+{
+    uint32 user_id = 1;
+    uint32 group_id = 2;
+    string group_name = 3;
+}
+
+message RenameFriendGroupRequest
+{
+    uint32 user_id = 1;
+    uint32 group_id = 2;
+    string group_new_name = 3;
+}
+
+message DeleteFriendGroupRequest
+{
+    uint32 user_id = 1;
+    uint32 group_id = 2;
+}
+
+message MoveFriendToGroupRequest
+{
+    uint32 user_id   = 1; //用户id
+    uint32 friend_id = 2; //好友id
+    uint32 group_id  = 3; //目的分组id
+}
+
+message DeleteFriendRequest
+{
+    uint32 user_id = 1;
+    uint32 friend_id = 2;
+}
+
+message DeleteFriendRespone
+{
+    uint32 user_id = 1;
+    uint32 friend_id = 2;
+}
+
+message ModifyFriendRemarkRequest
+{
+    uint32 user_id = 1;
+    uint32 friend_id = 2;
+    string friend_remark = 3;
+}
+
+message SearchFriendRequest
+{
+    uint32 user_id = 1;
+    string search_data = 2; //搜索类型
+    youliao.pdu.base.SearchType search_type = 3;  //搜索类型
+}
+
+message SearchFriendRespone
+{
+    uint32 user_id = 1;
+    repeated youliao.pdu.base.FriendInfo friends = 2; //该组下的好友
+}
+
+message AddFriendRequest
+{
+    uint32 user_id = 1;
+    string user_nick = 2;
+    string user_head_url = 3;
+    uint32 friend_id = 4;
+    string friend_remark = 5;
+    uint32 group_id = 6;
+    string validateData = 7;
+}
+
+
+message AddFriendRespone
+{
+    uint32 user_id = 1;
+    uint32 friend_id = 2;
+    uint32 result_id = 3;   //1 同意 2 拒绝 3 忽略
+    uint32 group_id = 4;
+    string remark = 5;
+}
+
+message GetAddRequestHistoryRequest
+{
+    uint32 user_id = 1;
+}
+
+message GetAddRequestHistoryRespone
+{
+    uint32 user_id = 1;
+    repeated youliao.pdu.base.AddRequestInfo history = 2;
+}

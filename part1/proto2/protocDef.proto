@@ -1,0 +1,34 @@
+package pbf;
+
+message Event {
+    required int64      number   = 1;
+    required uint64     time     = 2;
+    
+    message Channel {
+        required int32  id       = 1;
+	optional int32  module   = 3;
+	
+	message Data {	
+	    required bytes  payload = 1;
+	    optional int64  time    = 2;
+	    optional int32  integral = 3;
+	}
+	
+	repeated Data    data     = 2;
+    }
+    
+    repeated Channel    channel  = 3;
+    
+}
+
+message Header{
+     required bool     zipped    = 1;
+     required int64    startdate = 2;
+     required int64    creationdate = 3;
+     required string   runidentifier = 4;
+     required int32    filenumber = 5;
+    
+     optional string   runmode    =6;
+     optional string   startedby  =7;
+     optional string   notes      =8;
+}

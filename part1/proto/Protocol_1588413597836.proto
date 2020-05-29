@@ -1,0 +1,642 @@
+// Filename: Protocol.proto
+//
+// Purpose: Define protocol buffers for Blazer's WCD/Programmer interface.
+//
+// Dependencies: Does not depend on any other protocol buffer specification(s).
+//
+// Copyright (c) 2015 Physio-Control, Inc. All rights reserved.
+
+package physiocontrol.blazer.protocol;
+
+option java_package = "com.physiocontrol.blazer.common.bl";
+
+//     Enumerations to indicate which vector(s) to send.
+enum VectorType {
+    PB_V_E1 = 0;
+    PB_V_E2 = 1;
+    PB_V_E3 = 2;
+    PB_V_E4 = 3;
+    PB_V_CM = 4;
+    PB_V_E12 = 5; // Changed from PB_V_EGG.
+    PB_V_E34 = 6;
+    PB_V_IMP0 = 7;
+    PB_V_PHA0 = 8;
+    PB_V_IMP1 = 9;
+    PB_V_PHA1 = 10;
+    PB_V_ACCX = 11;
+    PB_V_ACCY = 12;
+    PB_V_ACCZ = 13;
+    PB_V_TEMP = 14;
+    PB_V_ANNOT = 15;
+}
+
+//    Enumeration to indicate the type of status in a response.  The following
+//    is a summary of the data returned by each status message.  Note, status
+//    messages marked with an asterisk are reserved for future use.
+//
+//   *PB_STS_WARNING,				 data[0] = Warning ID
+//                                   verbose = Warning information.			                 
+//   *PB_STS_ALERT,					 data[0] = Alert ID
+//                                   verbose = Alert information.
+//    PB_STS_ECG_ELECTRODE_CONTACT,  data[0] = 1 E1 OK, 0 E1 Not OK
+//                                   data[1] = 1 E2 OK, 0 E2 Not OK
+//                                   data[2] = 1 E3 OK, 0 E3 Not OK
+//                                   data[3] = 1 E4 OK, 0 E4 Not OK
+//    PB_STS_ECG_LEAD_IMPEDANCE,     data[0] = E12 Lead Impedance
+//                                   data[1] = E34 Lead Impedance
+//    PB_STS_ECG_FRONTEND_STATUS,    data[0] = 1 OK, 0 Not Ok
+//   *PB_STS_PATIENT_HEARTRATE,      data[0] = Heart Rate (BPM)
+//    PB_STS_SYS_CONTROLLER_STATUS,  data[0] = 1 OK, 0 Not Ok
+//   *PB_STS_SYS_RESET_COUNTER,      data[0] = Number Of Resets
+//   *PB_STS_SYS_STORAGE_AVAILABLE,  data[0] = Bytes used on card
+//    PB_STS_WCD_BATTERY_STATUS,     data[0] = 1 OK, 0 Not OK
+//    PB_STS_CONN_WCD_PROGRAMMER,    data[0] = 1 OK, 0 Not OK
+//    PB_STS_CMD_COMPLETE,           data[0] = Command ID
+//                                   data[1] = 0 Success, 1 Failure
+//                                   Note: may have command specifid data.
+//    PB_STS_WCD_OPERATIONAL_STATUS, data[0] = 1 Ok, 0 Not Ok
+//    PB_STS_UICF_ACTION_STATUS,     data[0] = 0 Success, 1 Failure
+//    PB_STS_DIVERT_BUTTON_PRESSED,  No data, indicates button pressed
+//    PB_STS_DEVICE_INFO_UPDATE,	 No data, see verbose string
+//    PB_STS_SYS_HV_STATUS, 		 data[0] = 0 HV OK, 1 HV Not OK
+//    PB_STS_SYS_HV_CAPABLE, 		 data[0] = 0 is HV, 1 is Not HV
+//    PB_STS_SYS_HV_CHARGE_PROGRESS, data[0] = % complete from 1 to 100
+//
+enum StatusType {
+    PB_STS_WARNING = 0;
+    PB_STS_ALERT = 1;
+    PB_STS_ECG_ELECTRODE_CONTACT = 2;
+    PB_STS_ECG_LEAD_IMPEDANCE = 3;
+    PB_STS_ECG_FRONTEND_STATUS = 4;
+    PB_STS_PATIENT_HEARTRATE = 5;
+    PB_STS_SYS_CONTROLLER_STATUS = 6;
+    PB_STS_SYS_RESET_COUNTER = 7;
+    PB_STS_SYS_STORAGE_AVAILABLE = 8;
+    PB_STS_WCD_BATTERY_STATUS = 9;
+    PB_STS_CONN_WCD_PROGRAMMER = 10;
+    PB_STS_CMD_COMPLETE = 11;
+    PB_STS_WCD_OPERATIONAL_STATUS = 12;
+    PB_STS_UICF_ACTION_STATUS = 13;
+    PB_STS_DIVERT_BUTTON_PRESSED = 14;
+    PB_STS_DEVICE_INFO_UPDATE = 15;
+    PB_STS_SYS_HV_STATUS = 16;
+    PB_STS_SYS_HV_CAPABLE = 17;
+    PB_STS_SYS_HV_CHARGE_PROGRESS = 18;
+    // new statuses like command accepted, capacitor loaded energy
+    // and delivered shock status need to be added into list
+}
+
+//     Enumeration to indicate the type of request being received.
+enum RequestType {
+    TIMESTAMP = 0;
+    VECTOR = 1;
+    STATUS = 2;
+    UICF = 3;
+    OBSOLETE_SHOCK = 4; // Rolled into COMMAND type.
+    COMMAND = 5;        // Changed from CONFIGURE type.
+}
+
+//  WCD only parses PemRequest message; no other message is parsed.
+message PemRequest {
+    required RequestType type = 1 [default = STATUS];
+    optional VectorRequest vectorRequest = 3;
+    repeated UicfRequest uicfRequest = 4;
+    optional CommandRequest commandRequest = 5; // Changed from Configure.
+}
+
+//  Request to START or STOP streaming of a wcd vector.
+message VectorRequest {
+
+    //  Enumeration to indicate when to START or STOP streaming.
+    enum Action {
+        START = 0;
+        STOP = 1;
+    }
+
+    required Action action = 2 [default = START];
+    required VectorType vectorType = 1;
+}
+
+//	Defines a set of messages for controlling various system UI resources. All 
+//  messages, except for ScenarioData and PlayList, are never sent to the PEM.
+//  Rather they are serialized to a file and transferred to the PEM via scp or
+//  sftp. A file with serialized UicfRequest messages is considered a scenario.
+//  The ScenarioData message is sent to the PEM to initiate playback.  The PEM
+//  responds to the start action with a status message as described below:
+// 
+//  Status
+//      type = PB_STS_UICF_ACTION_STATUS
+//      data[0] = 0 Success, 1 Failure
+//
+//  If the client chooses to stop the scenario playback they can issue another
+//  ScenarioData message with a stop action.  The PEM will respond with another
+//  action status message as described above.  If the scenario completes on its
+//  own without being stopped an action status message will be returned with a
+//  verbose string saying "Scenario Complete".
+// 
+//  Note: Before a scenario can be started, the PEM must be in UICF mode.  See
+//  the command messages for more details.  Any UicfRequest message sent to the
+//  PEM while it is not in UICF mode will be ignored, and action status will be
+//  failed. 
+//
+//  The "modeinfo" field in the PemResponse message will indicate "UICF Ready"
+//  once the PEM enters UICF mode.  When a scenario is successfully started the
+//  "modeinfo" field will indicate "UICF Running" until the scenario completes.
+//  After the scenario completes, "modeinfo" field will return to "UICF Ready".
+//  The client must explicitly change the mode back to AUTO to exit UICF mode.
+//
+//  Scenario and play list files should always be uploaded to the directory
+//  "/card/usr/local/uicf".
+//
+message UicfRequest {
+
+    //  Enumeration to indicate when to START or STOP UI control.
+    enum Action {
+        START = 0;
+        STOP = 1;
+    }
+
+    //  Enumeration to indicate which wcd component to control.
+    enum TargetComponent {
+        PEM = 0;
+        ACM = 1;
+        GEM = 2;
+        PCD = 3;
+        ALL = 4;
+    }
+
+    //  Enumeration to indicate which device in a wcd component to control.
+    enum TargetDevice {
+        LED = 0;
+        SOUND = 1;
+        VIBE = 2;
+        SCREEN = 3;
+    }
+    
+    //  Enumeration to indicate which LED of a device to control.
+    enum LedDevice {
+        BUTTON_LED = 0;
+        SHOCK_LED = 1;
+        SERVICE_LED = 2;
+        SYSTEM_LED = 3;
+    }
+    
+    //  Enumeration to indicate LED color to display.
+    enum LedColor {
+        RED = 0;
+        ROSE = 1;
+        MAGENTA = 2;
+        VIOLET = 3;
+        BLUE = 4;
+        AZURE = 5;
+        CYAN = 6;
+        SPRING_GREEN = 7;
+        GREEN = 8;
+        CHARTREUSE_GREEN = 9;
+        YELLOW = 10;
+        ORANGE = 11;
+    }
+    
+    //  Enumeration to indicate LED light level (intensity).
+    enum LedLevel {
+        LEVEL1 = 0;
+        LEVEL2 = 1;
+        LEVEL3 = 2;
+        LEVEL4 = 3;
+        LEVEL5 = 4;
+        LEVEL6 = 5;
+        LEVEL7 = 6;
+        LEVEL8 = 7;
+    }
+
+    //  Message to control an LED in the WCD UI.
+    message LedData {
+        required Action action = 1 [deprecated=true];
+        required LedColor color = 2;
+        optional LedDevice device = 5;       // Specify which LED.
+        optional LedLevel level = 3;         // Intensity of LED.
+        optional int32 blinkIntervalmSec = 4 [default = 0];
+        optional int32 startTimemSec = 6;    // Relative start time msec. 
+        optional int32 durationTimemSec = 7; // Duration msec, 0 = forever.
+        optional int32 dutyCyclemSec = 8;    // On time msec, 0 = off.
+    }
+    
+    //  Enumeration bitmask to indicate which audio device to control.
+    enum AudioDevice {
+        PEM_SPEAKER  = 0x01; // PEM speaker only.
+        ACM_SPEAKER  = 0x02; // ACM speaker only.
+        ALL_SPEAKERS = 0x03; // PEM, ACM, and PCD speakers together.
+        WCD_SPEAKERS = 0x04; // PEM and ACM speakers together.
+        PCD_SPEAKER  = 0x05; // PCD speaker only.
+    }
+
+    //  Message to control audio in the WCD UI.
+    message SoundData {
+        required Action action = 1 [deprecated=true];
+        required AudioDevice device = 2 [deprecated=true];
+        optional int32 soundFileId = 3 [deprecated=true];
+        repeated int32 volume = 4;           // Values 1 - 10
+        repeated int32 gain = 5;             // Values 1 - 5
+        optional string soundFileName = 6;   // Sound file name, no extension
+        optional int32 startTimemSec = 7;    // Relative start time msec
+        optional int32 durationTimemSec = 8; // On time msec, 0 = play once
+        optional int32 repeatGapmSec = 9;    // Gap time msec, 0 = no gap
+    }
+    
+    //  Vibe pattern ids (NOTE: These are NOT formal enumerations)
+    //  
+    //    SHORT_SINGLE_BUZZ = 0
+    //    SHORT_DOUBLE_BUZZ = 1
+    //    SHORT_TRIPLE_BUZZ = 2
+    //    SHORT_QUINT_BUZZ = 3
+    //    MEDIUM_TRIPLE_BUZZ = 4
+    //    LONG_TRIPLE_BUZZ = 5
+    //
+    //  Vibe pattern ids may be extended without changing this interface.
+
+    //  Message to control vibe in the WCD UI. There are many ways to specify
+    //  which vibe pattern to use:
+    //
+    //  - vibePaternId,    One of six basic patterns described above.
+    //  - vibeBuiltInId,   Reserved for IDs used by specific haptic chip.
+    //  - vibePatternName, Reserved for future extension of vibe pattern names.
+    //
+    //  The PEM will only react to one of these as follows:
+    //
+    //  - Use vibePaternId unless < 0
+    //  - Use vibeBuiltInId unless < 0
+    //  - Use vibePatternName
+    //
+    //  All other fields apply to any kind of specified pattern.  
+    message VibeData {
+        required Action action = 1 [deprecated=true];
+        optional int32 vibePaternId = 2;
+        optional int32 vibeStrength = 3;     // Values 1 - 128
+        optional int32 vibeBuiltInId = 4;    // Built-in IC vibe ID
+        optional string vibePatternName = 5; // Vibe pattern name
+        optional int32 startTimemSec = 6;    // Relative start time msec
+        optional int32 durationTimemSec = 7; // On time msec, 0 = play once
+        optional int32 repeatGapmSec = 8;    // Gap time msec, 0 = no gap
+    }
+    
+    //  Message to control screens in the system UI.
+    message ScreenData {
+        required Action action = 1 [deprecated=true];
+        optional int32 screenId = 2;
+        optional int32 startTimemSec = 3;
+        optional int32 durationTimemSec = 4; // Up time msec, 0 = forever
+        optional int32 fileNameOnAction = 5; // May be redundant (now that we have BranchCondition).
+    }
+    
+    //  Branch condition for user action. PCD touch or ACM button press may be
+    //  specified explicitly as a scenario filename to take when the action 
+    //  occurs.  If no action is taken after the duration of the condition, the
+    //  specified no action scenario filename is taken.  If no action is given
+    //  the current scenario executes.
+    message BranchCondition {
+        optional int32 startTimemSec = 6;    // Relative start time msec
+        optional int32 durationTimemSec = 7; // Expiration of condition mSec.
+        optional string fileNameOnPcdTouch = 2;
+        optional string fileNameOnAcmPress = 3;
+        optional string fileNameOnNoAction = 4;
+    }
+
+    //  If a scenario filename is available for running an "end" scenario after the original
+    //  scenario is complete. If not provided, the scenario will  end when the original completes.
+    message EndScenarioCondition {
+        optional string fileNameOnScenarioEnd = 2;
+    }
+    
+    //  Play list indicates which file to use for a source of UICF messages.
+    //  The PEM has an area on its SD card (under /card/usr/local/playlists)
+    //  to store playlists.  The client should store a binary file containing
+    //  the appropriately serialized UICF messages making up the playlist with
+    //  a delimiter between each message, except for the last message.  The 
+    //  PEM will use this play list with the reference start time (in UTC) to
+    //  play back UICF scenarios.
+    //
+    message PlayList {
+        optional string dateTimeUtc = 2;    	// Start time "YYYYmmddHHMM.SS"
+        optional string playlistFileName = 3; 	// File containing scenarios
+    }
+    
+    //  Scenario data indicates to device, when to start or stop a scenario.
+    //  Scenarios can be stopped by the user, while they are executing. When
+    //  STOP action message is received, all pending UICF messages will be 
+    //  cleared.  START action will indicate what time to start the scenario 
+    //  and which scenario file to use. The PEM will ignore START command if a 
+    //  scenario is already in progress.  The PEM will respond with a status
+    //  message whenever a ScenarioData message is received.
+    message ScenarioData {
+        required Action action = 1;
+        optional int32 startTimemSec = 5;   	 // Relative start time msec
+        optional string scenarioFileName = 3;    // Optional scenario file
+    }
+
+    required TargetComponent component = 1;
+    required TargetDevice device = 2;
+    // Tag number 3 reserved.
+    // Tag number 4 reserved.
+    // Tag number 5 reserved.
+    // Tag number 6 reserved.
+    // Tag number 7 reserved.
+    optional LedData ledData = 8;
+    optional SoundData soundData = 9;
+    optional VibeData vibeData = 10;
+    optional ScreenData screenData = 11;
+    optional PlayList playList = 12;
+    optional ScenarioData scenarioData = 13;
+    optional BranchCondition branchCondition = 14;
+    optional EndScenarioCondition endScenarioCondition = 15;
+}
+
+//  Message to command the system to perform some task.  All command request
+//  messages contain a unique command ID (not an enumeration). After a command
+//  has been processed a response Status message of type PB_STS_CMD_COMPLETE is
+//  returned with the command ID as its first data member, followed by a second
+//  data member indicating 0 for success, and non-zero for failure. For example,
+// 
+//  Status
+//      type = PB_STS_CMD_COMPLETE
+//      data[0] = commandId
+//      data[1] = command result (0 success, or non-zero for failure)
+//  
+//  Some commands may return more data fields in addition to the commandId and 
+//  command result fields.  Extra status data will be indicated in the command
+//  comments below in this section by the term data[n], where n is the index of
+//  the integer in the Status data.
+message CommandRequest {
+
+    //  Command request to update current study data.  No additional status
+    //  data is returned when this command is finished processing.
+    message StudyData {
+        required int32 commandId = 1 [default = 1];
+        required string subjectId = 2;
+        required string pemSn = 3;
+        required string gemSn = 4;
+        required string garmentId = 5;
+    }
+    
+    //  Command request to update current service data.  No additional status
+    //  data is returned when this command is finished processing.
+    message ServiceData {
+        required int32 commandId = 1 [default = 2];
+        required string ssid = 2;        // Valid SSID name.
+        required string password = 3;    // Valid SSID password.
+    }
+
+    //  Command request to manage study data.  Only two commands are possible:
+    //
+    //  "New Study"     Ends current study; creates data folder for new study.
+    //  "Erase Data"    Erases all study data stored on the wcd.
+    //
+    //  No additional status data is returned when this command is finished 
+    //  processing.
+    message StudyCommand {
+        required int32 commandId = 1 [default = 3];
+        required string command = 2;
+    }
+    
+    //  Command request to control the device mode of operation.
+    //    
+    //  "UICF"  	Causes the system to enter a slave-only UICF mode.
+    //  "AUTO"  	Causes the system to enter an auto data-collection mode.
+    //  "Get Mode" 	Get current value of the device mode.
+    //
+    //  Additional status data is returned for the "Get Mode" command
+    //  as follows:
+    //
+    //  item[0] = "UICF Ready", "UICF Running" or "AUTO"
+    //
+    //  Note, UICF Ready and UICF Running are both sub-states of UICF mode.
+    //  When in UICF Ready, the PEM is ready to run a scenario.  When the PEM
+    //  is in UICF Running, it is actively running a scenario.
+    message ModeCommand {
+        required int32 commandId = 1 [default = 4];
+        required string command = 2;
+    }
+    
+    //  Command request to set device time.  All time is set in UTC.  Format of
+    //  the specified time is optional, but uses POSIX date format.  There is
+    //  no special data associated with this command response.
+    message TimeCommand {
+        required int32 commandId = 1 [default = 5];
+        required string dateTimeUtc = 2;
+        optional string dateTimeFormat = 3 [default = "YYYYmmddHHMM.SS"];
+    }
+    
+    //  Command request to get and set sound information.
+    //
+    //  "Get Built-In"      Get list of built-in sound file names.
+    //  "Get Card"          Get list of user settable files on card.
+    //  "Set Card Folder"   Set card folder for device to used.
+    //
+    //  Note, get commands return file names as a list of items in status
+    //  response.  Files are transferred, out of the protocol buffer band
+    //  (e.g. via scp or sftp).  The default location for custom audio files
+    //  is in "/card/usr/local/audio".
+    message SoundCommand {
+        required int32 commandId = 1 [default = 6];
+        required string command = 2;
+    }
+    
+    //  Command request to control impedance acquisition of device.
+    //
+    //  "Z12"           Enable impedance acquisition on vector Z12.
+    //  "Z34"           Enable impedance acquisition on vector Z34.
+    //  "Off"           Disable impedance acquisition.
+    //  "Get Impedance" Get current value of the impedance setting.
+    //
+    //  Additional status data is returned for the "Get Impedance" command
+    //  as follows:
+    //
+    //  item[0] = "Z12", "Z34", or "Off"
+    message ImpedanceCommand {
+        required int32 commandId = 1 [default = 7];
+        required string command = 2;
+    }
+    
+    //  Command request to control connectivity behavior of the system.
+    //
+    //  "Always On"     Connectivity of device is always on.
+    //  "Time Out"      Will time-out unless client device connected.
+    //  "Get Policy"    Get current value of the connectivity policy.
+    //  "Get SSID"      Get current value of the SSID.
+    //  "Get Password"  Get current value of the SSID password.
+    //    
+    //  Additional status data is returned for the "Get Policy" command
+    //  as follows:
+    //
+    //  item[0] = "Always On" or "Time Out"
+    //
+    //  Additional status data is returned for the "Get SSID" command
+    //  as follows:
+    //
+    //  item[0] = SSID Name
+    //
+    //  Additional status data is returned for the "Get Password" command
+    //  as follows:
+    //
+    //  item[0] = Password
+    //
+    message ConnectivityCommand {
+        required int32 commandId = 1 [default = 8];
+        required string command = 2; 
+    }
+    
+    //	Command to dismiss any ongoing alarms or alerts.
+    //
+    // 	"Dismiss All"	Dismiss all alarms and alerts.
+    //  "Dismiss Audio" Dismiss only audio alarms and alerts.
+    //  "Dismiss Light" Dismiss light-based alarms and alerts.
+    //  "Dismiss Vibe"  Dismiss vibe-based alarms and alerts.
+    //
+    //	Note, there is no special data associated with this command response.
+    message DismissCommand {
+    	required int32 commandId = 1 [default = 9];
+    	required string command = 2;
+    }
+    
+    //	Command to initiate software update after a file has been uploaded.
+    //
+    //	"Update Software"   Update software using specified file and digest.
+    //  "Clean Install"     Clean the install directory of any artifacts.
+    //  "Get Space"         Get free space, in bytes, on card in data[2].
+    //  
+    //  Put software update file in "/card/usr/local/install" before issuing
+    //  this command.  If possible, supply a separate file containing the SHA1 
+    //  digest for verifying the update file integrity.
+    message UpdateSwCommand {
+    	required int32 commandId = 1 [default = 10];
+    	required string command = 2;
+    	optional string updatefile = 3;
+    	optional string digestfile = 4;
+    }
+    
+    //  Command request for manual control of device therapy.  Three commands
+    //  are possible:
+    //
+    //  "Charge NJ" Charge to N Joules, where N may be 75, 100, 125 or 150.
+    //  "Dump"      Dump all energy from the charge capacitor.
+    //  "Shock"     Deliver energy from the charge capacitor.
+    //
+    //  "Auto Charge NJ" Like Charge NJ but discharges gel and different UI.
+    //  "Auto Dump"      Like Dump but different UI, used with Auto Charge NJ.
+    //  "Auto Shock"     Like Shock but different UI, used with Auto Charge NJ.
+    //
+    //  Note: the passcode must be provided with each command.  Additional 
+    //  status data is returned for the "Charge NJ" command as follows:
+    //
+    //  data[2] = Charge energy in Joules
+    //
+    //  Additional status data is returned for the "Shock" command as follows:
+    //
+    //  data[2] = Energy delivered in Joules
+    //  data[3] = Patient impedance in Ohms
+    //  data[4] = Charge time in seconds
+    //  
+    //  All therapy commands may return an optional verbose infomation message.
+    message TherapyCommand {
+        required int32 commandId = 1 [default = 100];
+        required string passcode = 2;
+        required string command = 3;
+    }
+    
+    //  Command request for control of defibrillation pads.  Three commands
+    //  are possible:
+    //
+    //  "Check"         Check front and both rear pad squibs.
+    //  "Fire Front"    Fire off the front pad gas discharge device.
+    //  "Fire Rear"     Fire off the rear pad gas discharge device.
+    //
+    //  Note: the passcode must be provided with each command.  Additional
+    //  status data is returned for the "Check" command as follows:
+    //    
+    //  data[2] = Rear A Status (0 = Squib Fired, 1 = Squib Ready)
+    //  data[3] = Rear B Status (0 = Squib Fired, 1 = Squib Ready)
+    //  data[4] = Front Status  (0 = Squib Fired, 1 = Squib Ready)
+    //
+    //  All therapy commands may return an optional verbose infomation message.
+    message PadControl {
+        required int32 commandId = 1 [default = 101];
+        required string passcode = 2;
+        required string command = 3; 
+    }    
+    
+    optional StudyData studyData = 1;
+    optional ServiceData serviceData = 2;
+    optional StudyCommand studyCommand = 3;
+    optional ModeCommand modeCommand = 4;
+    optional TimeCommand timeCommand = 5;
+    optional SoundCommand soundCommand = 6;
+    optional ImpedanceCommand impedanceCommand = 7;
+    optional ConnectivityCommand conectivityCommand = 8;
+    optional DismissCommand dismissCommand = 9;
+    optional UpdateSwCommand updateCommand = 10;
+    optional TherapyCommand therapyCommand = 100;
+    optional PadControl padControl = 101;
+}
+
+//  WCD only serializes responses out to server clients.  Some status messages
+//  do not have any data or verbose messages. In other words, the status type
+//  is self-explanatory without any additional information. Other messages have 
+//  details in response to a request or command via the PemRequest. The details 
+//  of such status messages are described in the corresponding sections above.  
+//  Finally, many status messages are provided by the PEM without a request.  
+//  These are described below:
+//
+//    Device info update:
+//      type = PB_STS_DEVICE_INFO_UPDATE
+//      data = None
+//      verbose = <SubjectId>,<PemSn>,<GemSn>,<GarmentId>,<PemSwVer>,<GemSwVer>
+//
+//      Note: Device info is sent back as a commas separated list of values.
+message PemResponse {
+
+    //  Status message returned by the WCD.  In addition to the regular status 
+    //  message generated by the WCD, many types of client requests will cause 
+    //  a status response to be generated.  In particular, CommandRequest and
+    //  UicfRequest messages cause status messages to be generated. 
+    message Status {
+        required StatusType type = 1;
+        repeated int32 data = 2;
+        optional string verbose = 3;  // Verbose status feedback.
+        repeated string item = 4;     // Multiple items, if applicable.
+        optional bytes array = 5;     // Optional raw data array.
+        // These requests are reflected back via response staus when received.
+        // The PCD is responsible for reacting to these UICF requests, not PEM.
+        optional physiocontrol.blazer.protocol.UicfRequest.ScreenData pcdScreenData = 6;
+        optional physiocontrol.blazer.protocol.UicfRequest.VibeData   pcdVibeData = 7;
+        optional physiocontrol.blazer.protocol.UicfRequest.SoundData  pcdSoundData = 8;
+    }
+
+    //  Vector response message contain data for subject data signals acquired
+    //  by the WCD.  
+    message Vector {
+        
+        enum DataType {
+            LIVE = 0;
+            ARCHIVED = 1;
+        }
+        
+        required VectorType type = 1;
+        repeated int32 data = 2;
+        repeated int64 dataTimestamp = 3;
+        required DataType dataType = 10 [default = LIVE];
+    }
+
+    //  Time is a response timestamp not currently implemented by the WCD.
+    message Time {
+        required int64 timestamp = 1;
+    }
+
+    required RequestType type = 1;
+    repeated Vector vector = 2;
+    optional Time time = 3;
+    repeated Status status = 4;
+    optional int32 modeinfo = 5 [default = 0]; // Mode information
+                                               //  -1 = No information,
+                                               //   0 = Normal AUTO, 
+                                               //   1 = UICF Ready,
+                                               //   2 = UICF Running
+}

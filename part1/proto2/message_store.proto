@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "api.proto";
+import "message.proto";
+
+// RPC - User
+
+service MessageService {
+	// Message store does no validation if user is allowed to load messages for target channel
+    rpc GetMessage (GetMessageRequest) returns (GetMessageResponse);
+    rpc GetMessages (GetMessagesRequest) returns (GetMessagesResponse);
+	rpc IndexMessages (IndexMessagesRequest) returns (IndexMessagesResponse);
+	rpc DeleteMessages (DeleteMessagesRequest) returns (DeleteMessagesResponse);
+	rpc DeleteMessageBatch (DeleteMessageBatchRequest) returns (DeleteMessageBatchResponse);
+}
+
+message GetMessageRequest {
+	string message_id = 1;
+}
+
+message GetMessageResponse {
+    WebsocketMessage message = 1;
+	bool success = 2;
+	APIError error = 3;
+}
+
+// Example Messages Until:
+// GetMessagesRequest {
+//     channel_id: 'uuid',
+//     end: '99999999999.0',
+// }
+//
+// Example Messages From:
+// GetMessagesRequest {
+//     channel_id: 'uuid',
+//     start: '123456789.0',
+// }
+message GetMessagesRequest {
+	string channel_id = 1;
+	// start timestamp for message range
+	string start = 2;
+	// end timestamp for message range
+	string end = 3;
+	// messages are sorted by timestamp in ascending order (older messages first)
+	bool sort_ascending = 4;
+	// deleted messages not included by default
+	bool include_deleted = 5;
+	// defaults to 40
+	int64 limit = 6;
+}
+
+message GetMessagesResponse {
+    repeated WebsocketMessage messages = 1;
+	bool success = 2;
+	APIError error = 3;
+}
+
+message IndexMessagesRequest {
+	repeated WebsocketMessage messages = 1;
+}
+
+message IndexMessagesResponse {
+	bool success = 1;
+	APIError error = 2;
+}
+
+message DeleteMessagesRequest {
+	repeated string message_ids = 1;
+	string user_id = 2;
+}
+
+message DeleteMessagesResponse {
+	bool success = 1;
+	APIError error = 2;
+}
+
+message DeleteMessageBatchRequest {
+	string channel_id = 1;
+	string start = 2;
+	string end = 3;
+	string user_id = 4;
+	string deleter_id = 5;
+}
+
+message DeleteMessageBatchResponse {
+	bool success = 1;
+	APIError error = 2;
+}

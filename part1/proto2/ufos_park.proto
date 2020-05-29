@@ -1,0 +1,48 @@
+/**
+ * RPC for UfosPark service
+ * and message structured data
+ * Install vscode-proto3 extension
+ * for help typing protobuf syntax.
+ */
+
+syntax = "proto3";
+
+import "payment.proto";
+
+option java_multiple_files = true;
+option java_package = "org.elsmancs.grpc";
+option java_outer_classname = "UfosParkProto";
+option objc_class_prefix = "UFP";
+
+/**
+ * Add an optional package specifier 
+ * to prevent name clashes between protocol message types.
+ * Sirve para importar estos mensajes a otros ficheros proto.
+ */
+package ufos.park;
+
+// Server exported interface
+
+service UfosPark {
+
+    // RPC:
+    // Dispatch: find an avaliable UFO for a credit card
+    // AssignUfo: book an UFO for the credit card 
+    // Credit Card message imported from payment.proto
+    // Processed message imported from payment.proto
+
+    rpc Dispatch (payment.CreditCard) returns (Ufo) {}
+    rpc AssignUfo (Ufo) returns (payment.Processed) {}
+    // For integration testing purpose
+    rpc UfoOf (payment.CreditCard) returns (Ufo) {}
+}
+
+// Message: Ufo booked by the credit card
+message Ufo {  
+    // UFO ID
+    string id = 1;
+    // card number
+    string cardNumber = 2;
+    // UFO fare
+    double fee = 3;
+}

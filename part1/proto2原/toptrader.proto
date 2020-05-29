@@ -1,0 +1,216 @@
+package toptrader.oscar;
+
+message GenHeader {
+  required uint32 magic = 1;
+  required uint32 len = 2;
+  required uint32 tag = 3;
+}
+
+message LoginCmd {
+  required string account = 1;
+  required string password = 2;
+}
+
+message LoginAck {
+  required bool success = 1;
+  optional string errcode = 2;    
+}
+
+message AccountQuery {
+  required string account = 1;
+}
+
+message AccountAck {
+  message AccountInfo {
+    required string account = 1;
+    required float balance = 2;
+    required float available = 3;
+    optional float lastbalance = 4;
+    optional float buyfreeze = 5;
+    optional float sellfreeze = 6;
+    optional float buymargin = 7;
+    optional float sellmargin = 8;
+    optional float settleprofit = 9;
+    optional float fee = 10;
+  } 
+
+  required AccountInfo accinfo = 1;
+
+  message OrderInfo {
+    required uint32 orderid = 1;
+    required string code = 2;
+    required string status = 3;
+    required bool buy = 4;
+    required bool open = 5;
+    required uint32 commissionslot = 6;
+    required float commissionprice = 7;
+    required uint32 settleslot = 8;
+    required float settleprice = 9;
+    required uint32 unsettleslot = 10;
+    required string commissiontime = 11;
+    required string declaretime = 12;
+    required string canceltime = 13;
+  }     
+  
+  repeated OrderInfo orderinfo = 2;
+
+  message PositionInfo {
+    required string code = 1;
+    required uint32 buyslot = 2;
+    required float buyprice = 3;
+    required uint32 sellslot = 4;
+    required float sellprice = 5;
+    required uint32 todaybuyslot = 6;
+    required uint32 todaysellslot = 7;
+  }  
+
+  repeated PositionInfo positioninfo = 3;
+}
+
+message MarketQuery {
+  required uint32 dum = 1;
+}
+
+message MarketAck {
+
+  message MarketInfo
+  {
+    required string name = 1;
+    optional uint32 opentime = 2;
+    optional uint32 closetime = 3;
+    optional uint32 timezone = 4;
+  }
+
+  repeated MarketInfo markets = 1;
+}
+
+message CodeQuery {
+  required string market = 1;
+}
+
+message CodeAck {
+  repeated string codes = 1;
+}
+
+message PlaybackCommand {
+
+  enum PlayCmd {
+    PB_CMD_PLAY = 0;
+    PB_CMD_PAUSE = 1;
+    PB_CMD_SPEED = 2;
+  }
+
+  required PlayCmd cmd = 1;
+  optional uint32 speed = 2;
+  optional string time = 3;
+}
+
+message Quote {
+  
+  required uint32 time = 1;
+  required string code = 2;
+  optional float lastclose = 3;
+  optional float open = 4;
+  optional float high = 5;
+  optional float low = 6;
+  optional float newprice = 7;
+  optional float vol = 8;
+  optional float amount = 9;
+
+  repeated float buyprice = 10;
+  repeated float buyvol = 11;
+  repeated float sellprice = 12;
+  repeated float sellvol = 13;
+};
+
+message PlaybackConfQuery {
+  required string account = 1;
+}
+
+message PlaybackConfAck {
+  required string code = 1;
+  required string time = 2;
+  required uint32 speed = 3;
+  enum PlaybackMode {
+    PB_MODE_SEQUENCE = 0;
+    PB_MODE_RANDOM = 1;
+  }
+}
+
+message TradeCommand { 
+  required string account = 1;
+  required string code = 2;
+  required bool buy = 3;
+  required bool open = 4;
+  required float commissionprice = 5;
+  required uint32 commissionslot = 6;
+}
+
+message TradeAck {
+ required uint32 dum = 1;
+}
+
+message TransactionQuery {
+  required string account = 1;
+  required uint32 starttime = 2;
+  required uint32 endtime = 3;
+  optional string code = 4;
+}
+
+message TransactionAck { 
+
+  required string account = 1;
+
+  message TransItem  {
+    required uint32 realtime = 1;
+    required uint32 simutime = 2;
+    required string code = 3;
+    required uint32 orderid = 4;
+    required uint32 transid = 5;
+    required bool buy = 6;
+    required bool open = 7;
+    required float price = 8;
+    required uint32 slot = 9;
+    required float fee = 10;
+    required float profit = 11;
+  }
+
+  repeated TransItem trans = 2;
+}
+
+message HistoryQuery {
+
+  required string code = 1;
+  required uint32 time = 2;
+  required uint32 count = 3;
+  
+  enum HistoryType {
+    _1MIN = 0;
+    _5MIN = 1;
+    _15MIN = 2;
+    _30MIN = 3;
+    _60MIN = 4;
+    DAY = 5;
+    WEEK = 6;
+    MONTH = 7;
+  }
+
+  required HistoryType type = 4 [default = DAY]; 
+}
+
+message HistoryAck {
+  message HistoryData {
+    required uint32 time = 1;
+    required float close = 2;
+    optional float open = 3;
+    optional float high = 4;
+    optional float low = 5;
+    optional float vol = 6;
+    optional float interest = 7;
+  }
+
+  repeated HistoryData data = 1;
+}
+
+
+

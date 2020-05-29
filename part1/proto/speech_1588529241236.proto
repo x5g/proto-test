@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package speech;
+
+option java_package = "com.ubtrobot.speech.ipc";
+option java_outer_classname = "SpeechProto";
+
+message Speakers {
+    repeated Speaker speakers = 1;
+}
+
+message Speaker {
+    string id = 1;
+    string name = 2;
+    int32 gender = 3;
+}
+
+message SynthesizeOption {
+    string sentence = 1;
+    string speaker_id = 2;
+    int32 speak_speed = 3;
+    int32 speak_volume = 4;
+}
+
+message Configuration {
+    string speaker_id = 1;
+    int32 speaking_speed = 2;
+    int32 speaking_volume = 3;
+    int32 recognize_mode = 4;
+    float understand_timeout = 5;
+}
+message SynthesizingProgress {
+    int32 state = 1;
+    float progress = 2;
+}
+
+message RecognizingProgress {
+    int32 state = 1;
+    int32 volume = 2;
+    RecognizeResult result = 3;
+}
+
+message RecognizeResult {
+    string text = 1;
+}
+
+message RecognizeOption {
+    int32 mode = 1;
+}
+
+message UnderstandOption {
+    string question = 1;
+    string language = 2;
+    float time_out = 3;
+    string params = 4;
+}
+
+message UnderstandResult {
+    string session_id = 1;
+    string source = 2;
+    string language = 3;
+    bool actionIncomplete = 4;
+    Intent intent = 5;
+    repeated Context contexts = 6;
+    Fulfillment fulfillment = 7;
+    string inputText = 8;
+}
+
+message Intent {
+    string name = 1;
+    string display_name = 2;
+    string parameters_json = 3;
+    float score = 4;
+}
+
+message Context {
+    string name = 1;
+    string parameters_json = 2;
+    int32 lifespan = 3;
+}
+
+message Fulfillment {
+    string speech = 1;
+    repeated Message messages = 2;
+    Message legacy_message = 3;
+    Status status = 4;
+}
+
+message Message {
+    string type = 1;
+    string platform = 2;
+    string parameters_json = 3;
+
+}
+message Status {
+    int32 code = 1;
+    string errorMessage = 2;
+    string errorDetails = 3;
+}
+message Error {
+    int32 code = 1;
+    string message = 2;
+    string detail = 3;
+
+}

@@ -1,0 +1,323 @@
+option java_package = "com.cubeia.games.poker.io.protocol";
+
+message Suit {
+	enum Enum {
+		CLUBS=0;
+		DIAMONDS=1;
+		HEARTS=2;
+		SPADES=3;
+		HIDDEN=4;
+	}
+}
+message Rank {
+	enum Enum {
+		TWO=0;
+		THREE=1;
+		FOUR=2;
+		FIVE=3;
+		SIX=4;
+		SEVEN=5;
+		EIGHT=6;
+		NINE=7;
+		TEN=8;
+		JACK=9;
+		QUEEN=10;
+		KING=11;
+		ACE=12;
+		HIDDEN=13;
+	}
+}
+message HandType {
+	enum Enum {
+		UNKNOWN=0;
+		HIGH_CARD=1;
+		PAIR=2;
+		TWO_PAIR=3;
+		THREE_OF_A_KIND=4;
+		STRAIGHT=5;
+		FLUSH=6;
+		FULL_HOUSE=7;
+		FOUR_OF_A_KIND=8;
+		STRAIGHT_FLUSH=9;
+		ROYAL_STRAIGHT_FLUSH=10;
+	}
+}
+message HandPhaseHoldem {
+	enum Enum {
+		PREFLOP=0;
+		FLOP=1;
+		TURN=2;
+		RIVER=3;
+	}
+}
+message HandPhase5card {
+	enum Enum {
+		BETTING=0;
+		THIRD_STREET=1;
+		FOURTH_STREET=2;
+		FIFTH_STREET=3;
+	}
+}
+message ActionType {
+	enum Enum {
+		SMALL_BLIND=0;
+		BIG_BLIND=1;
+		CALL=2;
+		CHECK=3;
+		BET=4;
+		RAISE=5;
+		FOLD=6;
+		DECLINE_ENTRY_BET=7;
+		ANTE=8;
+		BIG_BLIND_PLUS_DEAD_SMALL_BLIND=9;
+		DEAD_SMALL_BLIND=10;
+	}
+}
+message PotType {
+	enum Enum {
+		MAIN=0;
+		SIDE=1;
+	}
+}
+message PlayerTableStatus {
+	enum Enum {
+		SITIN=0;
+		SITOUT=1;
+	}
+}
+message BuyInResultCode {
+	enum Enum {
+		OK=0;
+		PENDING=1;
+		INSUFFICIENT_FUNDS_ERROR=2;
+		PARTNER_ERROR=3;
+		MAX_LIMIT_REACHED=4;
+		AMOUNT_TOO_HIGH=5;
+		UNSPECIFIED_ERROR=6;
+		SESSION_NOT_OPEN=7;
+	}
+}
+message BuyInInfoResultCode {
+	enum Enum {
+		OK=0;
+		MAX_LIMIT_REACHED=1;
+		UNSPECIFIED_ERROR=2;
+	}
+}
+message ErrorCode {
+	enum Enum {
+		UNSPECIFIED_ERROR=0;
+		TABLE_CLOSING=1;
+		TABLE_CLOSING_FORCED=2;
+		CLOSED_SESSION_DUE_TO_FATAL_ERROR=3;
+	}
+}
+
+
+message PlayerAction {
+    optional ActionType.Enum type = 1;
+    optional sint32 min_amount = 2;
+    optional sint32 max_amount = 3;
+}
+
+message ErrorPacket {
+    optional ErrorCode.Enum code = 1;
+    optional string reference_id = 2;
+}
+
+message FuturePlayerAction {
+    optional ActionType.Enum action = 1;
+}
+
+message GameCard {
+    optional sint32 card_id = 1;
+    optional Suit.Enum suit = 2;
+    optional Rank.Enum rank = 3;
+}
+
+message BestHand {
+    optional sint32 player = 1;
+    optional HandType.Enum hand_type = 2;
+    repeated GameCard cards = 3;
+}
+
+message PlayerState {
+    optional sint32 player = 1;
+    repeated GameCard cards = 2;
+    optional sint32 balance = 3;
+}
+
+message CardToDeal {
+    optional sint32 player = 1;
+    optional GameCard card = 2;
+}
+
+message RequestAction {
+    optional sint32 current_pot_size = 1;
+    optional sint32 seq = 2;
+    optional sint32 player = 3;
+    repeated PlayerAction allowed_actions = 4;
+    optional sint32 time_to_act = 5;
+}
+
+message InformFutureAllowedActions {
+    repeated FuturePlayerAction actions = 1;
+}
+
+message StartNewHand {
+    optional sint32 dealerSeatId = 1;
+    optional string handId = 2;
+}
+
+message DealerButton {
+    optional sint32 seat = 1;
+}
+
+message DealPublicCards {
+    repeated GameCard cards = 1;
+}
+
+message DealPrivateCards {
+    repeated CardToDeal cards = 1;
+}
+
+message ExposePrivateCards {
+    repeated CardToDeal cards = 1;
+}
+
+message HandEnd {
+    repeated sint32 player_id_reveal_order = 1;
+    repeated BestHand hands = 2;
+    optional PotTransfers pot_transfers = 3;
+}
+
+message HandCanceled {
+}
+
+message StartHandHistory {
+}
+
+message StopHandHistory {
+}
+
+message PerformAction {
+    optional sint32 seq = 1;
+    optional sint32 player = 2;
+    optional PlayerAction action = 3;
+    optional sint32 bet_amount = 4;
+    optional sint32 raise_amount = 5;
+    optional sint32 stack_amount = 6;
+    optional bool timeout = 7;
+}
+
+message TournamentOut {
+    optional sint32 player = 1;
+    optional sint32 position = 2;
+}
+
+message PlayerBalance {
+    optional sint32 balance = 1;
+    optional sint32 pendingBalance = 2;
+    optional sint32 player = 3;
+    optional sint32 players_contribution_to_pot = 4;
+}
+
+message BuyInInfoRequest {
+}
+
+message BuyInInfoResponse {
+    optional sint32 max_amount = 1;
+    optional sint32 min_amount = 2;
+    optional sint32 balance_in_wallet = 3;
+    optional sint32 balance_on_table = 4;
+    optional bool mandatory_buyin = 5;
+    optional BuyInInfoResultCode.Enum result_code = 6;
+}
+
+message BuyInRequest {
+    optional sint32 amount = 1;
+    optional bool sit_in_if_successful = 2;
+}
+
+message BuyInResponse {
+    optional sint32 balance = 1;
+    optional sint32 pending_balance = 2;
+    optional sint32 amount_brought_in = 3;
+    optional BuyInResultCode.Enum result_code = 4;
+}
+
+message Pot {
+    optional sint32 id = 1;
+    optional PotType.Enum type = 2;
+    optional sint32 amount = 3;
+}
+
+message PotTransfer {
+    optional sint32 pot_id = 1;
+    optional sint32 player_id = 2;
+    optional sint32 amount = 3;
+}
+
+message PotTransfers {
+    optional bool fromPlayerToPot = 1;
+    repeated PotTransfer transfers = 2;
+    repeated Pot pots = 3;
+}
+
+message TakeBackUncalledBet {
+    optional sint32 player_id = 1;
+    optional sint32 amount = 2;
+}
+
+message RakeInfo {
+    optional sint32 total_pot = 1;
+    optional sint32 total_rake = 2;
+}
+
+message PlayerPokerStatus {
+    optional sint32 player = 1;
+    optional PlayerTableStatus.Enum status = 2;
+    optional bool in_current_hand = 3;
+}
+
+message PlayerHandStartStatus {
+    optional sint32 player = 1;
+    optional PlayerTableStatus.Enum status = 2;
+}
+
+message PlayerSitinRequest {
+    optional sint32 player = 1;
+}
+
+message PlayerSitoutRequest {
+    optional sint32 player = 1;
+}
+
+message DeckInfo {
+    optional sint32 size = 1;
+    optional Rank.Enum rank_low = 2;
+}
+
+message ExternalSessionInfoPacket {
+    optional string external_table_reference = 1;
+    optional string external_table_session_reference = 2;
+}
+
+message PlayerDisconnectedPacket {
+    optional sint32 player_id = 1;
+    optional sint32 timebank = 2;
+}
+
+message PlayerReconnectedPacket {
+    optional sint32 player_id = 1;
+}
+
+message PingPacket {
+    optional sint32 identifier = 1;
+}
+
+message PongPacket {
+    optional sint32 identifier = 1;
+}
+
+

@@ -1,0 +1,7 @@
+{
+  "name": "Test Name",
+  "description": "This is a demo rule",
+  "priority": 99999,
+  "condition": "Test Condition",
+  "action": "Test Action"
+}

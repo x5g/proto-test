@@ -1,0 +1,41 @@
+// To create _pb2.py and _pb2_grpc.py files, run the command,
+// python -m grpc_tools.protoc -I=. --python_out=. --grpc_python_out=. skyspark.proto
+
+syntax = "proto3";
+package skyspark;
+
+// RPC definition.
+service skyspark {
+
+    // A simple RPC.
+    // An error is returned if there is no data for the given request.
+    rpc GetDataFromSkyspark (Request) returns (Reply) {}
+
+}
+
+// The request message containing the requested data from skyspark.
+message Request {
+
+    // Skyspark query
+    string query = 1;
+
+}
+
+message Data {
+
+    // Time
+    string time = 1;
+
+    // Queried data
+    float value = 2;
+
+}
+
+// The response message containing dataframe of skyspark data
+message Reply {
+
+    // Data object consisting of time and value
+    repeated Data data = 1;
+
+}
+

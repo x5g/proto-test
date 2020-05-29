@@ -1,0 +1,11 @@
+syntax="proto3";
+package com.bitcoin.proto3;
+
+import "PaymentV3.proto";
+
+message PaymentAck {
+  Payment payment     = 1;
+  string  memo        = 2;
+
+  uint64 responseTime =4;
+}

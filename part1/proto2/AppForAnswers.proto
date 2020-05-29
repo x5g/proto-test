@@ -1,0 +1,341 @@
+﻿syntax="proto3";
+
+import "google/protobuf/Timestamp.proto";
+
+enum A4APartyType
+{
+	Admin=0;
+	User=1;
+	Expert=2;
+	Company=3;
+}
+
+enum A4AMailboxType
+{
+	None=0;
+	Inbox=1;
+	Sent=2;
+	Trash=3;
+	Draft=4;
+}
+
+enum A4ASubscriptionType
+{
+	Empty = 0;
+	Profession = 1;
+	Category = 2;
+	SubCategory=3;
+	Location = 4;
+	Expert2 = 5;
+
+}
+
+message A4AAuthenticationAccount
+{
+	string Email =1;
+
+	int32 Code1 = 2;
+	int32 Code2 = 3;
+	int32 Code3 = 4;
+	int32 Code4 = 5;
+
+	A4APartyType UserType = 7;
+
+	string Name = 9;
+}
+
+message A4ACompany
+{
+	// this is the party identifier
+	string CompanyName = 1;
+	string Address1 = 10;
+	string Address2 = 11;
+	string Country = 12;
+	string Postcode = 13;
+	string Telephone = 15;
+	string Website=16;
+	string MainColour=17;
+	string SecondaryColour=18;
+	string TertiaryColour=19;
+	string Logo = 20;
+	
+}
+
+enum A4AUserStatus
+{
+	Active=0;
+	Suspended=1;
+}
+
+enum A4AAdminLevel
+{
+	Administrator=0;
+	Moderator=1;
+}
+
+enum A4AUserNameResolver
+{
+	ResolveNameToEmail = 0;
+	ResolveEmailToName = 1;
+}
+
+message A4AEmailService
+{
+	string ServiceName = 1;
+	string ApiUserName= 2;
+	string ApiPassword = 3;
+	string Uri = 4;
+	string Domain = 5;
+
+	int64 lastPollTime = 6;
+
+	int64 delayMilliseconds = 7;
+
+	// we look further back than our delay time
+	// in case we miss events need to discard repeated
+	int64 lookbackMilliseconds = 8;
+	
+}
+
+message A4AAdministrator
+{
+	string AdministratorName = 1;
+	string Email = 2;
+	A4AAdminLevel Level =3;
+}
+
+
+message A4AUser
+{
+	string UserName = 1;
+	string Email = 2;
+	A4AUserStatus Status = 3;
+}
+
+message A4AExpert
+{	
+	string ExpertName=1;
+	string FirstName=2;
+	string LastName=3;
+	string Email = 4;
+	string Mobile=7;
+	string CompanyName = 8;
+}
+
+message A4ASubscription
+{
+	string Subscription = 1;
+	string Profession = 2;
+	string Category=3;
+	string SubCategory = 4;
+	string Location = 5;
+	string ExpertName = 6;
+
+}
+
+message A4AProfession 
+{
+	string Profession =1;
+}
+
+message A4ACategory 
+{
+	string Category=1;
+	string Profession = 2;
+}
+
+message A4ASubCategory
+{
+	string SubCategory = 1;
+	string Category = 2;
+	string Profession= 3;
+}
+
+message A4ALocation
+{
+	string Location=1;
+	string SubCategory=2;
+	string Category=3;
+	string Profession = 4;
+
+}
+
+enum A4AEmailStatus
+{
+	senttoservice = 0;
+	accepted = 1;
+	rejected = 2;
+	delivered = 3;
+	failed = 4;
+	opened = 5;
+	clicked = 6;
+	unsubscribed = 7;
+	complained = 8;
+	stored = 9;
+}
+
+
+enum A4AEmailRecordType
+{
+	UserToExpert = 0;
+	ExpertToUser = 1;
+}
+
+message A4AEmailRecord
+{
+	string EmailRecordId = 1;
+	string MessageId = 2;
+	string RawFrom = 3;
+	string EmailFrom = 4;
+	string NameFrom = 5;
+	string EmailTo = 6;
+	string NameTo = 7;
+	string RawTo = 8;
+
+	A4AEmailStatus Status = 9;
+
+	string ServiceMessageId = 10;
+
+	string StatusMessage = 11;
+
+	google.protobuf.Timestamp Timestamp = 12;
+
+	string Url = 13;
+
+	string Subject = 14;
+
+	bool Read = 15;
+
+	bool Deleted = 16;
+
+	A4AEmailRecordType RecordType = 17;
+}
+
+message A4AMessage
+{
+	string MessageId=1;
+
+	string HtmlContent=2;
+
+	string TextContent=3;
+	
+	string EmailSender = 7;
+	
+	string Date = 8;
+
+	string Subject = 9;
+
+	string Topic = 10;
+
+}
+
+message AggregateParty
+{
+	string Email = 1;
+	string Name = 2;
+	A4APartyType PartyType = 3;
+	oneof Party
+	{
+		A4AExpert expert = 4;
+		A4AUser user = 5;
+		A4AAdministrator admin = 6;
+		A4ACompany company=7;
+	}
+}
+
+
+message AggregateMessage
+{
+	string NameFrom = 1;
+	string NameTo = 2;
+	string EmailFrom=3;
+	string EmailTo = 4;
+	string UpdatedTime = 5;
+	string Subject = 6;
+	string MessageId = 7;
+	string Content = 8;
+	string Topic = 9;
+	
+	
+}
+
+
+message MailboxView
+{
+	int32 Count = 1;
+
+	int32 Read = 2;
+
+	MailboxRequest request = 3;
+
+    repeated AggregateMessage Messages=4;
+
+	repeated AggregateParty Parties = 5;
+
+}
+
+message MailboxRequest
+{
+	int32 Start= 1;
+	int32 PageSize=2;
+	string Owner = 3;
+	A4APartyType UserType = 4;
+	A4AMailboxType MailboxType=5;
+}
+
+
+message SubscriptionRequest
+{
+}
+
+message SubscriptionNode
+{
+	string Name =3;
+	A4ASubscriptionType Type = 4;
+	repeated string Experts = 5;
+	repeated SubscriptionNode Children = 6;
+}
+
+message SubscriptionNode2
+{
+	int32 id = 1;
+	int32 pid = 2;
+	string Name =3;
+	A4ASubscriptionType Type = 4;
+	repeated string Experts = 5;
+}
+
+message SubscriptionResponse
+{
+	SubscriptionNode Root = 1;
+	repeated A4AExpert Parties = 6;
+}
+
+message SubscriptionResponseFlat
+{
+	repeated SubscriptionNode2 Subscriptions = 1;	
+	repeated A4AExpert Parties = 6;
+}
+
+
+message MailboxInfoRequest
+{
+	string Owner = 1;
+}
+
+message MailboxInfoResponse
+{
+	repeated MailboxInfo MailboxInfos = 1;
+	repeated AggregateParty Parties = 3;
+}
+	
+message MailboxInfo
+{
+	string Owner = 2;
+	A4AMailboxType MailboxType=3;
+	int32 Count = 4;
+	int32 Read = 5;
+}
+
+
+

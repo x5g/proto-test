@@ -1,0 +1,26 @@
+/*
+ * .proto file syntax
+ * This guide describes how to use the protocol buffer language to structure your protocol buffer data
+ * author: yy
+ * date: 20190714
+ */
+
+// The first line of the file specifies that you're using proto3 syntax: 
+// if you don't do this the protocol buffer compiler will assume you are using proto2. 
+// This must be the first non-empty, non-comment line of the file.
+syntax = "proto3";
+
+/*
+ * 1. keyword: message
+ * 2. message name : SearchRequest
+ * 3. message scope : {}
+ * 4. fields
+ *      4.1 field type : string
+ *      4.2 field name : query
+ *      4.3 field number : 1
+ */
+message SearchRequest {
+    string query = 1;
+    int32 page_number = 2;
+    int32 result_per_page = 3;
+  }

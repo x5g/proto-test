@@ -1,0 +1,672 @@
+syntax = "proto3";
+package protocol;
+
+message Cmd {
+  int32 cmd =1;
+  int64 timestamp  = 2;
+  string fromClientId =3;  //指令消息的来源。发送者的连接ID
+  string toClientId = 4;  //指令消息的接收者。发送给对应的客户端连接ID
+  bytes cmdData =5;  //对应指令的CmdData1的protobuf的message
+  string msgId=6;
+  int32 status=7;  //消息发送响应状态
+  string callbackMsg=8; //消息发送响应内容
+  string cmdkey=9;  //用于区分同一cmd多条指令的key 方便api调用针对同一指令不同回调的处理
+  int32 priority=10; //用于处理指令队列的优先级的权重值
+  int32 localId = 11; //用于手机本地数据库存储标志, 服务端不用管
+}
+
+//机器人注册socket连接的指令cmd1的cmdData格式 注册连接必须连接上马上发起。
+//API注册username必须是唯一值，要标识FromClientId==username就行
+message CmdData1 {
+	string tel =1;
+    string mobileSerial=2;  //手机编号
+    string nickname=3; //微信昵称
+    string username=4;  //微信ID
+    string vision=5;  //机器人apk版本
+    int32  channel=6; //注册连接的channel频道类型，1为apk机器人;2为api调用连接 方便广播使用
+    string apkUrl = 7; //新apk下载地址
+}
+
+//cmd=2时为心跳，cmdData=nil为空
+//心跳间际5-60秒之间
+
+
+
+//cmd==2002获取机器人微信的信息 如：性别 签名 地区等
+//发送指令时cmdData=null
+//接收cmd==2002响应发的送的数据格式
+message CmdData2002 {
+    string username=1;
+    string nickname=2;
+    string sex=4;
+    string signature=5;
+    string countryCode=6;
+    string provinceCode=7;
+    string provinceStr=8;
+    string cityCode=9;
+    string cityStr=10;
+}
+
+
+//cmd==2003发送文本消息,如果在群中可以添加@人的列表
+message CmdData2003 {
+    string toUser=1; //发送给好友或群的id
+    string content=2;  //发送内群。如果发送给群是有at人时要添加（ @xxx @xxx ... content文本，并且要与at人的wx_id列表顺序一致）
+    repeated string atuser=3; //at人的列表
+}
+
+//cmd==2004发送图片消息,
+message CmdData2004 {
+    string toUser=1; //发送给好友或群的id
+    repeated string imgpath=2; //要发送的图片url列表
+}
+
+
+//cmd==2005发送小程序
+message CmdData2005 {
+    string toUser=1; //发送给好友或群的id
+    string title=2; //小程序的title
+    string description=3; //小程序的description
+    string url=4; //小程序的url
+    string primeval=5; //小程序的原始ID
+    string appid=6; //小程序的appid
+    string smallIconUrl=7; //小程序的icon图片url
+    string imgUrl=8; //小程序的图片url
+}
+
+//cmd==2006发送公众号名片
+message CmdData2006 {
+    string toUser=1; //发送给好友或群的id
+    string primeval=2; //原始ID gh_7a5bf61e0315
+    string nickname=3; //公众号的全称
+    string alias=4; //公众号的微信号 服务号可以为空
+}
+
+//cmd==2007发送链接
+message CmdData2007 {
+    string toUser=1; //发送给好友或群的id
+    string title=2; //链接名称
+    string description=3; //链接详情
+    string url=4; //连接url
+    string imgUrl=5; //图片url
+}
+
+
+//cmd==2008删除聊天列表 deleteMsg  执行时间比较长，在空闲时间段执行
+//发送指令时cmdData=null
+message CmdData2008 {
+
+}
+
+//cmd==2009获取好友列表
+//发送指令时cmdData=null
+message CmdData2009 {
+	repeated Friend friendList = 1; //好友列表
+	int32 needGetAvatar = 2; //是否获取用户头像 1:获取 2:不获取
+}
+
+//cmd==2010获取保存到通讯录的群列表
+//发送指令时cmdData=null
+message CmdData2010 {
+	repeated RoomInfo roomList = 3; //群列表
+}
+
+//cmd==2011获取所有的群列表
+//发送指令时cmdData=null
+message CmdData2011 {
+	repeated RoomInfo roomList= 3; //群列表
+}
+
+
+//cmd==2012获取获取群信息
+
+message CmdData2012 {
+	string username = 1; //群id
+	string roomOwner = 2; //群主
+	string roomNotice = 3; //群公告
+	string noticeEditor = 4; //群公告发布人
+	repeated string memberWXNameList = 5; //群成员
+	repeated string memberWXIdList = 6; //群成员id
+	repeated MemberInfo memberList = 7; //群成员列表
+	string roomName=8; //群名称
+}
+
+//cmd==2014建群
+message CmdData2014 {
+	string username = 1; //群id
+	repeated string friendUsernameList = 2;  //建群时拉的人
+}
+
+//cmd==2015移除群成员
+
+message CmdData2015 {
+	string username = 1; //群id
+	repeated string memberIds = 2; //群成员id列表
+}
+
+//cmd==2016添加群成员
+
+message CmdData2016 {
+	string username = 1; //群id
+	repeated string memberIds = 2; //群成员id列表
+}
+
+
+//cmd==2017开启与停用群聊邀请确认，开启时会扫描二维码进群将同时停用
+
+message CmdData2017 {
+	string username = 1; //群id
+	int32 checkStatus = 2; // 启用或停用状态 2为启动。0为不启用
+}
+
+//cmd==2018 修改群名称
+
+message CmdData2018 {
+	string username = 1; //群id
+	string nickname = 2; //群昵称
+}
+
+//cmd==2019 修改机器人所在群的昵称
+message CmdData2019 {
+	string username = 1; //群id
+	string nickname = 2; //机器人昵称
+}
+
+//cmd==2020 获取群二维码
+message CmdData2020 {
+	string username = 1; //群id
+	bytes qrcode = 2; //群二维码数据
+}
+
+//cmd==2021 发送群公告
+message CmdData2021 {
+	string username = 1; //群id
+	string noticeContent = 2; //群公告
+}
+
+
+//cmd==2022 转群主
+message CmdData2022 {
+	string username = 1; //群id
+	string toUsername = 2; //新群主
+}
+
+
+//cmd==2023 把群添加到通讯录
+message CmdData2023 {
+	string username = 1; //群id
+}
+
+message CmdData2024 {
+	int64 msgId = 1;
+	string msgSvrId = 2;
+	string toUsername = 3; //群id
+	string imageId = 4; //图片id
+	bytes image = 5; //图片数据
+}
+
+//cmd==2025 退出群聊
+message CmdData2025 {
+	string username = 1; // 群id
+}
+
+//cmd==2026 同意好友请求
+message CmdData2026 {
+	string username = 1; //微信ID
+	string ticket = 2; //要通过获取的好友请求对象中解一个ＸＭＬ拿到v2_的加密串ticket
+}
+
+//cmd==2027 修改机器人昵称
+message CmdData2027 {
+	string nickname = 1; //昵称
+}
+
+//cmd==2028 修改机器人性别
+message CmdData2028 {
+	int32 sex = 1; //性别 1:男 2:女
+}
+
+//cmd==2029 修改机器人个性签名
+message CmdData2029 {
+	string signature = 1; //签名
+}
+
+//cmd==2030 修改机器人修改地区
+message CmdData2030 {
+	string countryCode = 1; //国家
+	string provinceCode = 2; //省
+	string cityCode = 3; //市
+}
+
+//cmd==2031 修改机器人个人头像
+message CmdData2031 {
+	string headImage = 1; //头像图片数据
+}
+
+//cmd==2032 获取机器人的二维码
+message CmdData2032 {
+	bytes qrcode = 1; //图片数据
+}
+
+
+//cmd==2036 获取好友信息
+
+message CmdData2036 {
+	string username = 1; //id
+	string sex = 2; //性别 1:男 2:女
+	string province = 3; //省
+	string city = 4; //市
+	string remark = 5; //备注
+	string labelIds = 6; //标签id
+	string labelNames = 7; //标签名称
+	string nickname = 8; //昵称
+	string signature = 9; //签名
+	bytes smallHeadImage = 10; //头像小图
+	bytes bigHeadImage = 11; //头像大图
+	string desc = 12; //描述
+	string tel = 13; //手机号
+	bytes attachPic = 14; //附加图片
+}
+
+//cmd==2037 通过查找好友的方式---搜索手机号码等方式加好友
+message CmdData2037 {
+	string username = 1; //微信号/手机号/QQ号//微信id
+	string roomId = 2; //群id
+	int32 type = 3; //1为搜索QQ号好友， username=v1; 3为搜索微信号，username=v1; 14添加群成员为好友username=wx_id; 15为搜手机号时添加好友(这时username为v1_的值,roomid="")
+	string verMsg = 4; //发送验证消息
+	string callbackId = 5; //好友微信id, 注意:如果是wxid开头的默认微信id, 可能不会带下划线'_', 即wxid_...
+}
+
+
+//cmd==2038 添加好友分类标签
+message CmdData2038 {
+	repeated string labels = 1; //标签列表
+}
+
+//cmd==2039 获取好友分类标签
+//发送指令时cmdData=null
+message CmdData2039 {
+	repeated string labels = 1; //标签列表
+}
+
+//cmd==2040 添加好友到标签进行分类
+message CmdData2040 {
+	string username = 1; //好友微信id
+	repeated string labels = 2; //标签列表
+}
+
+//cmd==2041 修改好友备注
+message CmdData2041 {
+	string username = 1; //好友微信id
+	string remark = 2; //备注
+}
+
+
+//cmd==2043 发送请求获取个人/好友朋友圈数据
+message CmdData2043 {
+	string username = 1; //好友/个人微信id
+	string lastSnsId = 2; //分页使用, 传入获取下一页朋友圈数据, 默认第一页为-1
+	repeated AlbumItem albumList = 3; //相册列表
+}
+
+//cmd==2044 发送请求获取朋友圈数据
+message CmdData2044 {
+	string lastSnsId = 1; //分页使用, 传入获取下一页朋友圈数据, 默认第一页为-1
+	repeated AlbumItem albumList = 2; //朋友圈列表
+}
+
+//cmd==2045 删除个人朋友圈相册
+message CmdData2045 {
+	string snsId = 1; //相册id
+}
+
+//cmd==2046 获取好友来源
+message CmdData2046 {
+	string username = 1; //好友微信id
+	string source = 2; //好友来源
+}
+
+//cmd==2047 删除好友之前先判断是否有该好友，否则删除就是异常操作,微信会记录非法操作。影响微信号的分值。
+message CmdData2047 {
+	string username = 1; // 好友微信id
+}
+
+//cmd==2048 发送朋友圈
+message CmdData2048 {
+	int32 type = 1; //1: 发送图片 2:发送文字 3:发送链接
+	string content = 2; //文字内容
+	string title = 3; //链接标题
+	string url = 4; //链接url
+	string imagePath = 5; //链接图片
+	repeated string pictureList = 6; //图片列表
+//	int32 canSeeType = 7; //1: 标签形式  2:微信id形式
+	int32 canSee = 7; //0: 可见(canSeeLabels & canSeeIds为空时为公开)  1:不可见 2: 私密
+	repeated string canSeeLabels = 8; //标签名称列表
+	repeated string canSeeIds = 9; //微信id 列表
+}
+
+//cmd==2049 发请求获取朋友圈的评论和点赞
+message CmdData2049 {
+	string snsId = 1; //朋友圈id
+	AlbumItem album = 2; //内容
+}
+
+//cmd==2050 评论朋友圈
+message CmdData2050 {
+	string snsId = 1; //相册id
+	int32 type = 2; //1: 点赞 2:评论
+	string comment = 3; //评论内容
+	Comment toComment = 4; //回复别人的评论
+}
+
+//cmd==2051 设置朋友圈封面
+//发送指令时cmdData=null
+message CmdData2051 {
+	string imageUrl = 1; //图片数据
+}
+
+//cmd==2052 群发助手文本消息
+message CmdData2052 {
+    string content = 1; //消息文本
+    repeated string toUsers = 2; //微信id列表
+}
+
+//cmd==2053 群发助手图片消息
+message CmdData2053 {
+    string imgUrl = 1; //消息图片路径
+    repeated string toUsers = 2; //微信id列表
+}
+
+//cmd==2054 打开红包
+message CmdData2054 {
+    string fromUsername = 1; //红包发送者 (如果是群红包, 这里需要填群id 即cmd1000里面的toUsername)
+    string nativeUrl = 2; //CmdData1000.RedPacket.nativeUrl
+    int64 totalMoney = 3; //红包金额
+    int64 receivedMoney = 4; //已领取金额
+    int32 totalCount = 5; //红包个数
+    int32 receivedCount = 6; // 已领取个数
+    string receiveMsg = 7; //领取提示文字
+    string payMsgId = 8; //对应红包消息id
+    repeated RedPacketReceive receiveUsers = 9;//领取详情(每个人领取的详情)
+
+}
+
+//cmd==2055 接收转账
+message CmdData2055 {
+    string senderUsername = 1; //红包发送者
+    string transcAtionId = 2; //TransferMoney.transcAtionId
+    string transferId = 3; //TransferMoney.transferId
+    string invalidTime = 4; //TransferMoney.invalidTime
+}
+
+//上传微信消息
+message CmdData1000 {
+	string type = 1; // 1: 文本消息 3: 图片消息 5: 链接 33: 小程序 34:语音消息 42:个人名片/公众号名片 47:表情包 48:红包消息 49:转账消息
+	string fromUsername = 2; //发送人微信id
+	string toUsername = 3; //群id
+	string content = 4; //内容
+	int64 msgId = 5;
+	string msgSvrId = 6;
+	string imgId = 7; //图片唯一标识
+	bytes bigImg = 8; //大图
+	bytes smallImg = 9; //缩略图
+	string title = 10; //小程序/链接标题
+	string descript = 11; //小程序/链接描述
+	string url = 12; //小程序/链接 链接地址
+	string sourceUsername = 13; //小程序原始id
+	string sourceDisplayName = 14; //小程序名称
+	string appid = 15; //小程序appid
+	Friend friendCard = 16; //个人名片 公众号名片
+	RedPacket redPacket = 17; //红包
+	TransferMoney transferMoney = 18; //转账
+	bytes voice = 19;//语音数据
+}
+
+//朋友圈点赞评论消息
+message CmdData1001 {
+	string snsId = 1; //朋友圈id
+	SnsMessageComment comment = 2; //评论
+	SnsMessageComment toComment = 3; //回复别人的评论
+}
+
+//接收加好友请求消息
+message CmdData1002 {
+    string fromUsername = 1; //微信id
+    string nickname = 2; //昵称
+    string verifyContent = 3; //留言内容
+    string scene = 4; //30: 扫描二维码 3: 搜索微信号 15: 手机号
+    string country = 5; //国家
+    string province = 6; //省
+    string city = 7; //市
+    string sign = 8; //签名
+    string sex = 9; //性别
+    string alias = 10; //微信号
+    string ticket = 11; //v2ticket 同意好友时需要传递给客户端使用
+    bytes headImg = 12; //头像
+}
+
+//特殊消息上传
+message CmdData1003 {
+    string type = 1; //1:系统聊天消息 2:移除群聊 3:邀请入群 4: 被邀请
+    string fromUsername = 2; //发送人微信id
+    string toUsername = 3; //群id
+    string msg = 4; //消息内容
+    Friend user = 5; //邀请人/移除人
+    repeated Friend userList = 6; //被邀请/被移除
+}
+
+//同意好友申请
+message CmdData1004 {
+	string username = 1; //id
+	string sex = 2; //性别 1:男 2:女
+	string province = 3; //省
+	string city = 4; //市
+	string remark = 5; //备注
+	string labelIds = 6; //标签id
+	string labelNames = 7; //标签名称
+	string nickname = 8; //昵称
+	string signature = 9; //签名
+	bytes smallHeadImage = 10; //头像小图
+	bytes bigHeadImage = 11; //头像大图
+}
+
+//修改好友备注信息上传
+message CmdData1005 {
+	string username = 1; //id
+	string remark = 2; //备注
+	string labelIds = 3; //标签id
+	string labelNames = 4; //标签名称
+	string desc = 5; //描述
+	string tel = 6; //手机号
+	bytes attachPic = 7; //附加图片
+	int32 type = 8; //0: 修改普通备注(备注,手机号, 描述),不包含图片  1:图片备注(只携带图片数据, 为空就是删除图片)
+}
+
+//手机发送/删除朋友圈监听上传
+message CmdData1006 {
+    int32 type = 1; //1:发送朋友圈 2:删除朋友圈
+    string snsId = 2; //id
+    AlbumItem album = 3; //朋友圈内容
+}
+
+//修改个人资料上传
+message CmdData1007 {
+	string username = 1; //id
+	string sex = 2; //性别 1:男 2:女
+	string province = 3; //省
+	string city = 4; //市
+	string nickname = 5; //昵称
+	string signature = 6; //签名
+	bytes headImage = 7; //头像
+	int32 type = 8; //1: 更新普通资料; 2: 更新头像
+}
+
+//转账消息
+message TransferMoney {
+    string title = 1;
+    string des = 2;
+    string action = 3;
+    string type = 4;
+    string content = 5;
+    string url = 6;
+    string thumbUrl = 7;
+    string lowUrl = 8;
+    string paySubType = 9; //1: 未收钱  3:已收钱
+    string feeDesc = 10; //费用
+    string transcAtionId = 11; //交易id
+    string transferId = 12;
+    string invalidTime = 13;
+    string beginTransferTime = 14;
+    string effectiveDate = 15;
+    string payMemo = 16;//转账说明
+}
+
+//红包
+message RedPacket {
+    string des = 1; //红包描述
+    string type = 2;
+    string title = 3;
+    string templateId = 4;
+    string url = 5;
+    string iconUrl = 6; //红包图标url
+    string receiverTitle = 7; //发送红包时的红包留言标题(展示在红包页面上)
+    string senderTitle = 8;
+    string sceneText = 9;
+    string senderDes = 10;
+    string receiverDes = 11;
+    string nativeUrl = 12;//打开红包用到
+    string sceneId = 13;
+    string innerType = 14;
+    string payMsgId = 15;
+    string invalidTime = 16; //时间戳
+}
+
+//朋友圈消息评论/点赞内容
+message SnsMessageComment {
+	string timestamp = 1; //时间戳(秒)
+	int32 type = 2; //1: 点赞  2:评论
+	string username = 3; //评论人微信id
+	string nickname = 4; //评论人昵称
+//	string toUsername = 5; //当前朋友圈所属微信id
+//	string toNickname = 6; //当前朋友圈所属微信昵称
+	string comment = 7; //评论内容
+	int32 id = 8; //id
+}
+
+//好友信息
+message Friend {
+	string alias = 1; //微信号
+	string username = 2; //微信id
+	string conRemark = 3; //备注
+	string nickname = 4; //昵称
+	string sex = 5; //性别 1:男 2:女
+	string province = 6; //省
+	string city = 7; //市
+	string labelIds = 8; //标签id
+	string labelNames = 9; //标签名称
+	string signature = 10; //签名
+	bytes headImage = 11; //头像小图
+	string v2Ticket = 12; //v2值(名片消息加好友使用)
+	string desc = 13; //描述
+	string tel = 14; //手机号
+    int32 certFlag = 15; //0: 好友 24:公众号
+}
+
+
+//群信息
+message RoomInfo {
+	string username = 1; //群id
+	string nickname = 2; //群昵称
+	string type = 3;
+}
+
+//群成员信息
+message MemberInfo {
+	string alias = 1; //微信号
+	string username = 2; //微信id
+	string nickname = 3; //昵称
+}
+
+//省/市/区
+message Region {
+	string code = 1; //代号
+	string name = 2; //名称
+}
+
+//相册item
+message AlbumItem {
+	string snsId = 1; //id
+	string username = 2; //微信id
+	string nickname = 3; //微信昵称
+	string contentText = 4; //文字内容
+	Share share = 5; //分享内容
+	repeated Album albumList = 6; //相册列表
+	repeated Comment likeList = 7; //点赞列表
+	repeated Comment commentList = 8; //评论列表
+	string timestamp = 9; //时间戳(秒)
+}
+
+//分享
+message Share {
+	string shareTitle = 1; //分享标题
+	string shareText = 2; //分享内容
+	string shreUrl = 3; //分享链接
+}
+
+//相册图片
+message Album {
+	string albumText = 1; //相册描述
+	string mediaId = 2; //mediaId
+	bytes src = 3; //大图
+	bytes small = 4; //小图
+}
+
+//相册评论
+message Comment {
+	string timestamp = 1; //时间戳(秒)
+	int32 type = 2; //1: 点赞  2:评论
+	string username = 3; //评论人微信id
+	string nickname = 4; //评论人昵称
+	string comment = 5; //评论内容, 点赞时为空字符
+	string toUser = 6; //可能是回复别人的评论
+	int32 id = 7; //id
+}
+
+//红包领取详情
+message RedPacketReceive {
+    string payMsgId = 1;
+    string username = 2;
+    string nickname = 3;
+    int64 timestamp = 4;
+    int64 money = 5;
+}
+
+
+//cmd3001 api获取当前所有的机器人列表
+//cmd3001发送指令时cmdData==null
+//接收数据据的cmdData的格式
+message CmdData3001 {
+     repeated RobotData robotList=1;  //机器人的列表数据
+}
+message RobotData{
+    int32 id=1;
+    string username=2; //对应的微信ID
+    string tel=3; //注册连接时的tel
+    string mobile_serial=4; //机器人的编号
+    string nickname=5; //机器人昵称
+    int32 room_num=6; //机器人创建群的数量
+    string active_time=7; //机器人的活跃时间
+    string ip=8; //机器人的ip
+    string vision=9; //机器人apk版本号
+    int32 robot_status=10;//机器人状态 0 未启用，10启用
+    string cpu=11;
+    string load1=12;
+    string load2=13;
+    string load3=14;
+    string memory=15;
+    string disk=16;
+    string chargeInfo=17; //是否在充电1充电,0未充电
+    string update_at=18; //手机状态更新时间
+    string is_wx_logout=19;
+    string created=20; //机器人创建时间
+}

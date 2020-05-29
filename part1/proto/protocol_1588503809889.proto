@@ -1,0 +1,67 @@
+syntax = "proto2";
+package me.serce.franky;
+
+// methods
+message MethodInfo {
+    required int64 jMethodId = 1;
+    required string name = 2;
+    required string sig = 3;
+    required string holder = 4;
+    required bool compiled = 5;
+    optional bool inlined = 6;
+}
+
+//
+
+message CallFrame {
+    optional int32 bci = 1;
+    optional int64 jMethodId = 2;
+
+}
+
+message CallTraceSampleInfo {
+    required int32 call_count = 1;
+//    required int32 num_frames = 2;
+    repeated CallFrame frame = 3;
+}
+
+//
+
+message MethodSampleInfo {
+    required int32 call_count = 1;
+    required int64 jMethodId = 2;
+}
+
+//
+
+message ProfilingInfo {
+    required int32 calls_total = 1;
+    required int32 calls_non_java = 2;
+    required int32 calls_gc = 3;
+    required int32 calls_deopt = 4;
+    required int32 calls_unknown = 5;
+    repeated MethodSampleInfo methods = 6;
+    repeated CallTraceSampleInfo samples = 7;
+    repeated MethodInfo methodInfos = 8;
+}
+
+message Response {
+    enum ResponseType {
+        INIT = 0;
+        PROF_INFO = 1;
+    }
+
+    required int32 id = 1;
+    required ResponseType type = 2;
+    optional ProfilingInfo prof_info = 3;
+}
+
+message Request {
+    enum RequestType {
+        START_PROFILING = 0;
+        STOP_PROFILING = 1;
+        DETACH = 2;
+    }
+
+    required RequestType type = 1;
+}

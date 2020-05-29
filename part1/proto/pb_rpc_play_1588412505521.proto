@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_enum.proto";
+
+message PB_PlayRpc2 {
+
+    message PB_RPC_playParam {
+        int64 MediaId = 1;
+        int32 UserId = 2;
+        repeated int32 phi = 4;
+        message PB_Media {
+            int64 MediaId = 1;
+            int32 UserId = 2;
+            int32 PostId = 3;
+        }
+    }
+
+    message PB_RPC_playRes {
+        int64 MediaId = 1;
+        int32 UserId = 2;
+        repeated int32 phi = 4;
+        message PB_Media {
+            int64 MediaId = 1;
+            int32 UserId = 2;
+            int32 PostId = 3;
+        }
+        PB_Media Hio = 555;
+    }
+
+    int64 PostId = 1;
+    int32 UserId = 2;
+    PostTypeEnum PostTypeEnum = 3;
+    string Text = 4;
+}
+
+
+service RPC_PlaySamp {
+    rpc RpPlayHow (PB_PlayRpc2.PB_RPC_playParam) returns (PB_PlayRpc2.PB_RPC_playRes);
+}

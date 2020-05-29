@@ -1,0 +1,29 @@
+syntax = "proto3";//指定你正在使用 proto3 语法
+
+message SearchRequest{
+    //赋值 1，2，3 定义了一个唯一的数值标签。标签 1–15 标识的字段编码仅占用 1 个字节
+    //定义字段的规则。 可重复（repeated）：该字段可以出现任意次（包含 0）
+    //单数（默认）：该字段可以出现 0 或 1 次（不能大于 1 次）。
+
+
+    string query = 1;
+    int32 page_number = 2;
+    int32 result_per_page = 3;
+
+    enum Corpus {
+          UNIVERSAL = 0;
+          WEB = 1;
+          IMAGES = 2;
+          LOCAL = 3;
+          NEWS = 4;
+          PRODUCTS = 5;
+          VIDEO = 6;
+      }
+
+      Corpus corpus = 4;
+}
+  //reserved 字段。注意不能同时在一条 reserved 语句中申明标签和名字
+//message Foo {
+//  reserved 2, 15, 9 to 11;
+//  reserved "foo", "bar";
+//}

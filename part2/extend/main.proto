@@ -1,0 +1,6 @@
+package xuetu;
+message base {
+    optional uint64 timestamp = 1;
+    repeated string owner = 2;
+    extensions 100 to 10000;
+}

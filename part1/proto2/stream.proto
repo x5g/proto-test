@@ -1,0 +1,81 @@
+package Protocol;
+
+
+//////////////
+// Request
+//////////////
+
+message SetPriorityRequest
+{
+    required string studyUid=1;
+	required string seriesUid=2;
+}
+
+message SetPrimaryIndexRequest
+{
+    required string studyUid=1;
+	required string seriesUid=2;
+	optional string instanceUid=3; //for multi-frame
+	required uint32 primaryIndex=4;
+}
+
+message FrameRequest 
+{
+	required string instanceUid=1;
+    required uint32 frameNumber=2;        // for multiframe
+}
+
+
+message FrameGroupRequest 
+{
+
+    required string studyUid=1;
+	required string seriesUid=2;
+	required string instanceUidPrefix=3;  //common part of sop instance uid string
+    repeated FrameRequest frames=4;
+  
+}
+
+//////////////
+// Response
+//////////////
+
+
+// one FrameResponse is sent, followed by many FrameFragments
+message FrameResponse 
+{
+	///////////////////////////////////////////////////////////
+	enum bitDepth
+	{
+			depthU8 = 0;    ///< unsigned integer, 1 byte
+			depthS8 = 1;    ///< signed integer, 1 byte
+			depthU16 = 2;   ///< unsigned integer, 2 bytes
+			depthS16 = 3;   ///< signed integer, 2 bytes
+			depthU32 = 4;   ///< unsigned integer, 4 bytes
+			depthS32 = 5;   ///< signed integer, 4 bytes
+	};
+
+	required uint32 totalBytes=1;	//compressed or uncompressed
+	required uint32 imageSizeX=2;
+	required uint32 imageSizeY=3;
+	required bitDepth depth=4;
+	required string colorSpace=5;
+	required string transferSyntax=6;
+	required uint32 channelsNumber=7;
+	required bool bInterleaved=8;
+	required bool b2Complement=9;
+	required uint32 allocatedBits=10;
+	required uint32 storedBits=11;
+	required uint32 highBit=12;
+
+    required string instanceUid=13;
+    required uint32 frameNumber=14;        // for multiframe
+};
+
+// raw pixels are streamed after FrameFragmentHeader
+message FrameFragmentHeader
+{
+    required string instanceUid=1;
+    required uint32 offset=2;
+    required uint32 size=3;
+};

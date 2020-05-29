@@ -1,0 +1,203 @@
+syntax = "proto3";
+
+// import "Org.OData.Core.V1.proto";
+
+message OData {
+
+  message Demo {
+
+    message Customer {
+      string ID = 1;
+      repeated .OData.Demo.Order Orders = 2;
+      string Name = 3;
+      string CompanyName = 4;
+      string BirthDate = 5;
+      string CountryName = 6;
+      repeated .OData.Demo.Sales Sales = 7;
+      string ContactName = 8;
+      string ContactTitle = 9;
+      string Fax = 10;
+      .OData.Demo.Address Address = 11;
+      repeated string EmailAddresses = 12;
+      .OData.Demo.PhoneNumber Phone = 13;
+    }
+
+    message Supplier {
+      string ID = 1;
+      repeated .OData.Demo.Product Products = 2;
+      string Name = 3;
+      repeated string EmailAddresses = 4;
+      repeated .OData.Demo.Address Addresses = 5;
+    }
+
+    message Product {
+      sint32 ID = 1;
+      .OData.Demo.Category Category = 2;
+      string Name = 3;
+      .OData.Demo.Supplier Supplier = 4;
+      string Description = 5;
+      string Thumbnail = 6;
+      repeated string Sizes = 7;
+      sint32 Rating = 8;
+      repeated .OData.Demo.OrderItem OrderItems = 9;
+      string ReleaseDate = 10;
+      string DiscontinuedDate = 11;
+      string LifeTime = 12;
+      string Color = 13;
+      string TaxRate = 14;
+      repeated .OData.Demo.Sales Sales = 15;
+    }
+
+    message Order {
+      sint32 ID = 1;
+      repeated .OData.Demo.OrderItem Items = 2;
+      bool Completed = 3;
+      .OData.Demo.Customer Customer = 4;
+      .OData.Demo.Address ShippingAddress = 5;
+    }
+
+    message VipCustomer {
+      string ID = 1;
+      repeated .OData.Demo.Order Orders = 2;
+      string Name = 3;
+      string CompanyName = 4;
+      string BirthDate = 5;
+      string CountryName = 6;
+      repeated .OData.Demo.Sales Sales = 7;
+      string ContactName = 8;
+      string ContactTitle = 9;
+      string Fax = 10;
+      .OData.Demo.Address Address = 11;
+      repeated string EmailAddresses = 12;
+      .OData.Demo.PhoneNumber Phone = 13;
+    }
+
+    message Category {
+      sint32 ID = 1;
+      string Amount = 2;
+      repeated .OData.Demo.Product Products = 3;
+      string Name = 4;
+      string Thumbnail = 5;
+    }
+
+    message OrderItem {
+      sint32 OrderID = 1;
+      string ItemID = 2;
+      .OData.Demo.Order Order = 3;
+      string Size = 4;
+      string Price = 5;
+      .OData.Demo.Product Product = 6;
+      .OData.Demo.Currency Currency = 7;
+    }
+
+    message Sales {
+      sint32 ID = 1;
+      string Amount = 2;
+      .OData.Demo.Time Time = 3;
+      .OData.Demo.Currency Currency = 4;
+      .OData.Demo.Customer Customer = 5;
+      .OData.Demo.SalesOrganization SalesOrganization = 6;
+      .OData.Demo.Product Product = 7;
+    }
+
+    message Employee {
+      string ID = 1;
+      string FirstName = 2;
+      string LastName = 3;
+      string Title = 4;
+      .OData.Demo.Manager Manager = 5;
+      repeated .OData.Demo.LeaveRequest LeaveRequests = 6;
+    }
+
+    message LeaveRequest {
+      sint32 ID = 1;
+      .OData.Demo.Manager Manager = 2;
+      .OData.Demo.Employee Employee = 3;
+    }
+
+    message Address {
+      string Street = 1;
+      .OData.Demo.Country Country = 2;
+      .OData.Demo.City City = 3;
+      string Region = 4;
+      string PostalCode = 5;
+    }
+
+    message AddressWithLocation {
+      string Location = 1;
+    }
+
+    message Country {
+      string Code = 1;
+      string Name = 2;
+      string Continent = 3;
+    }
+
+    message PreferredSupplier {
+      .OData.Demo.Employee AccountRepresentative = 1;
+      string EmployeeID = 2;
+      string ID = 3;
+      repeated .OData.Demo.Product Products = 4;
+      string Name = 5;
+      repeated string EmailAddresses = 6;
+      repeated .OData.Demo.Address Addresses = 7;
+    }
+
+    enum Pattern {
+      // NOTE: this is a Flags enum
+      NOTHING = 0;
+      Yellow = 1;
+      Solid = 2;
+    }
+
+    message Manager {
+      repeated .OData.Demo.Employee Employees = 1;
+      repeated .OData.Demo.LeaveRequest Inbox = 2;
+      string ID = 3;
+      string FirstName = 4;
+      string LastName = 5;
+      string Title = 6;
+      .OData.Demo.Manager Manager = 7;
+      repeated .OData.Demo.LeaveRequest LeaveRequests = 8;
+    }
+
+    message Time {
+      string Date = 1;
+      string Year = 2;
+      string Quarter = 3;
+      string Month = 4;
+      repeated .OData.Demo.Sales Sales = 5;
+    }
+
+    message SalesOrganization {
+      string ID = 1;
+      string Name = 2;
+      repeated .OData.Demo.Sales Sales = 3;
+      .OData.Demo.SalesOrganization Superordinate = 4;
+    }
+
+    message Currency {
+      string Code = 1;
+      string Name = 2;
+      repeated .OData.Demo.Sales Sales = 3;
+      string Symbol = 4;
+      sint32 FractionalDigits = 5;
+    }
+
+    message City {
+      string ID = 1;
+      string Name = 2;
+    }
+
+    message PhoneNumber {
+      string Number = 1;
+      string Type = 2;
+    }
+
+    message CellPhoneNumber {
+      string Carrier = 1;
+    }
+
+  }
+
+}

@@ -1,0 +1,123 @@
+import "protocol_base.proto";
+
+package Uqee.Protobufs.Server.Protocol;
+
+message C2S_CompetitionEnter {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_ENTER];
+        optional int64 role_id = 2;
+}
+
+message S2C_CompetitionEnter {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_ENTER];
+        optional int32 ret = 2;
+}
+
+message C2S_CompetitionExit {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_EXIT];
+        optional int64 role_id = 2;
+}
+
+message S2C_CompetitionExit {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_EXIT];
+        optional int32 ret = 2;
+}
+
+message C2S_CompetitionEnlist {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_ENLIST];
+        optional int32 competition_type = 2;
+        optional int32 cost_type = 3;
+}
+
+message S2C_CompetitionEnlist {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_ENLIST];
+        optional int32 ret = 2;
+        optional int32 competition_type = 3;
+}
+
+message C2S_CompetitionWithdraw {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_WITHDRAW];
+        optional int32 competition_type = 2;
+        optional int64 role_id = 3;
+}
+
+message S2C_CompetitionWithdraw {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_WITHDRAW];
+        optional int32 ret = 2;
+}
+
+message C2S_CompetitionEnlistCount {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_ENLIST_COUNT];
+}
+
+message S2C_CompetitionEnlistCount {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_ENLIST_COUNT];
+
+        message CompetitionInfo {
+                optional int32 type = 1;
+                optional int32 count = 2;
+        }
+
+        repeated CompetitionInfo infos = 2;
+}
+
+message S2C_CompetitionStart {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_START];
+        optional int64 room_id = 2;
+        optional int32 room_type = 3;
+}
+
+message C2S_CompetitionFinishOneTable {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_FINISH_ONE_TABLE];
+}
+
+message S2C_CompetitionFinishOneTable {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_FINISH_ONE_TABLE];
+        optional int32 competition_type = 2;
+        optional int32 remain_table_num = 3;
+        optional int32 ranking = 4;
+        optional int32 score = 5;
+        optional int32 promotion = 6;
+        optional int32 player_count = 7;
+}
+
+message S2C_CompetitionEnd {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_END];
+        optional int32 competition_type = 2;
+        optional int32 ranking = 3;
+        optional int32 score = 4;
+        optional int32 reward_type = 5;
+        optional int32 reward_num = 6;
+}
+
+message C2S_CompetitionRecord {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_RECORD];
+}
+
+message S2C_CompetitionRecord {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_RECORD];
+
+        message EachRecord {
+            optional int64 id = 1;
+            optional int32 type = 2;
+            optional int32 ranking = 3;
+            optional int32 time = 4;
+            optional int32 received = 5;
+            optional string role_name = 6;
+            optional string url_pic = 7;
+        }
+
+        repeated EachRecord records = 2;
+}
+
+message C2S_CompetitionReceiveReward {
+        optional ProtocolType type = 1 [default = C_2_S_COMPETITION_RECEIVE_REWARD];
+        optional int64 id = 2;
+        optional int32 flag = 3;
+}
+
+message S2C_CompetitionReceiveReward {
+        optional ProtocolType type = 1 [default = S_2_C_COMPETITION_RECEIVE_REWARD];
+        optional int64 id = 2;
+        optional int32 flag = 3;
+
+}

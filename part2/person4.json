@@ -1,0 +1,8 @@
+{
+  "name": "Tom",
+  "age": 32,
+  "socialMediaProfiles": {
+    "linkedin": "http://www.linkedin.com/users/tom-smith",
+    "twitter": "na"
+  }
+}

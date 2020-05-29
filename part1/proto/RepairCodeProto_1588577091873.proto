@@ -1,0 +1,62 @@
+syntax = "proto2";
+option java_package = "com.centling.protobuf";
+package bean;
+
+message CtnRepairCode {
+    repeated DctnBrokenCD brokencd = 1;
+    repeated DctnRepairCD repaircd = 2;
+    repeated DctnScdmtp scdmtp = 3;
+    repeated DCtnPartCD partcd = 4;
+    repeated DcoldCtnPartCD coldpartcd = 5;
+    repeated DcoldCtnRepairCD coldrepaircd = 6;
+    repeated DctnScdmtpNM scdmtpname = 7;
+}
+
+message DctnBrokenCD {
+    optional string brokencd = 1;
+}
+
+message DctnRepairCD {
+    optional string partcd = 1;
+    optional string dtprcd = 2;
+    optional string positioncd = 3;
+    optional string ifparm = 4;
+    optional string ctnope = 5;
+}
+
+message DctnScdmtp {
+    optional string ctnope = 1;
+    optional string scdmtp = 2;
+    optional string dtprcd = 3;
+    optional string ectntp = 4;
+    optional string datpcd = 5;
+    optional string acctcd = 6;
+    optional int32 len = 7;
+    optional int32 wid = 8;
+    optional int32 num = 9;
+}
+
+message DCtnPartCD {
+    optional string partcd = 1;
+    optional string ctnope = 2;
+    optional string position = 3;
+}
+
+message DcoldCtnPartCD {
+    optional string partcd = 1;
+    optional string ctnope = 2;
+}
+
+message DcoldCtnRepairCD {
+    optional string partcd = 1;
+    optional string dtprcd = 2;
+    optional string mater = 3;
+    optional string gsjffs = 4;
+    optional string cljffs = 5;
+    optional string ctnope = 6;
+}
+
+message DctnScdmtpNM {
+    optional string ctnope = 1;
+    optional string scdmtpname = 2;
+}

@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+import "core.proto";
+
+message ConnectionInitiationMessage {
+    enum Type {
+        QUERY = 0;
+        REQUEST = 1;
+        CONNECT = 2;
+        TERMINATE = 3;
+    };
+
+    required Type type = 1;
+}
+
+message ServiceQueryMessage {
+    required uint32 version = 1;
+}
+
+message ServiceQueryResult {
+    message Result {
+        required string name = 1;
+        required string category = 2;
+        required string type = 3;
+        required uint32 version = 4;
+        required string location = 5;
+        required uint32 port = 6;
+    }
+    optional ErrorMessage error = 1;
+    optional Result result = 2;
+}
+
+message SessionRequestMessage {
+    required uint32 version = 1;
+    required bytes parameters = 2;
+}
+
+message SessionRequestResult {
+    message Result {
+        required uint32 identifier = 1;
+        required CapabilityMessage cap = 2;
+    }
+    optional ErrorMessage error = 1;
+    optional Result result = 2;
+}
+
+message SessionConnectMessage {
+    required uint32 version = 1;
+    required uint32 identifier = 2;
+    required string service_type = 3;
+    required uint32 service_version = 4;
+    required CapabilityMessage capability = 5;
+}
+
+message SessionConnectResult {
+    message Result {
+        required bytes parameters = 1;
+    }
+    optional ErrorMessage error = 1;
+    optional Result result = 2;
+}
+
+message SessionTerminationMessage {
+    required uint32 version = 1;
+    required uint32 identifier = 2;
+    required CapabilityMessage capability = 3;
+}
+
+message SessionTerminationResult {
+    optional ErrorMessage error = 1;
+}

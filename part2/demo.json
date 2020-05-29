@@ -1,0 +1,9 @@
+{
+  "id": 1234,
+  "user": "username",
+  "password": "password",
+  "product": "product",
+  "amount": 12.34000015258789,
+  "account": "12345678",
+  "date": "43"
+}

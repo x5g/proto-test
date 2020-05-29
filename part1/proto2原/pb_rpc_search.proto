@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+message PB_SearchResponse_AddNewC {
+
+}
+service RPC_Search{
+    rpc SearchTags(PB_SearchResponse_AddNewC) returns (PB_SearchResponse_AddNewC);
+//    rpc SearchUsers (PB_SearchParam_AddNewComment) returns (PB_SearchResponse_AddNewComment);
+}

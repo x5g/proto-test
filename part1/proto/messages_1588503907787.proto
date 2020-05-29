@@ -1,0 +1,331 @@
+// Copyright © 2016-2017 VMware, Inc. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+// Use proto2 syntax because proto3 doesn't generate hasXXX methods in java, unlike proto2.
+syntax = "proto2";
+
+
+message ApiMsg {
+  oneof req_reply {
+    ApiRequest request = 1;
+    ApiResponse response = 2;
+  }
+}
+
+message ApiRequest {
+  oneof request {
+    bool get_namespaces = 1;
+    RegisterClient register_client = 2;
+    ConsensusRequest consensus_request = 3;
+  }
+}
+
+message RegisterClient {
+  required string client_id = 1;
+  required string namespace_id = 2;
+}
+
+message ApiPid {
+  required string name = 1;
+  required string group = 2;
+  required string node_name = 3;
+  required string node_addr = 4;
+}
+
+message ConsensusRequest {
+  required ApiPid to = 1;
+  required string client_id = 2;
+  required uint64 client_request_num = 3;
+  oneof op {
+    TreeOp tree_op = 4;
+    TreeCas tree_cas = 5;
+  }
+}
+
+message TreeOp {
+  oneof op {
+    CreateNode create_node = 1;
+    DeleteNode delete_node = 2;
+    ListKeys list_keys = 3;
+    BlobPut blob_put = 4;
+    BlobGet blob_get = 5;
+    BlobSize blob_size = 6;
+    QueuePush queue_push = 7;
+    QueuePop queue_pop = 8;
+    QueueFront queue_front = 9;
+    QueueBack queue_back = 10;
+    QueueLen queue_len = 11;
+    SetInsert set_insert = 12;
+    SetRemove set_remove = 13;
+    SetContains set_contains = 14;
+    SetUnion set_union = 15;
+    SetIntersection set_intersection = 16;
+    SetDifference set_difference = 17;
+    SetSymmetricDifference set_symmetric_difference = 18;
+    SetSubsetPath set_subset_path = 19;
+    SetSubsetSet set_subset_set = 20;
+    SetSupersetPath set_superset_path = 21;
+    SetSupersetSet set_superset_set = 22;
+  }
+}
+
+message TreeOpResult {
+  optional uint64 optional_version = 1;
+  oneof result {
+    bool ok = 2;
+    bool bool = 3;
+    bytes blob = 4;
+    uint64 int = 5;
+    Set set = 6;
+    Keys keys = 7;
+    bool empty = 8;
+  }
+}
+
+message TreeCasResult {
+  repeated TreeOpResult results = 1;
+}
+
+message Keys {
+  repeated Key keys = 1;
+}
+
+message Key {
+  required string name = 1;
+  required uint64 version = 2;
+}
+
+message Guard {
+  required string path = 1;
+  required uint64 version = 2;
+}
+
+message TreeCas {
+  repeated Guard guards = 1;
+  repeated TreeOp tree_ops = 2;
+}
+
+enum NodeType {
+  BLOB = 0;
+  QUEUE = 1;
+  SET = 2;
+  DIRECTORY = 3;
+}
+
+message CreateNode {
+  required string path = 1;
+  required NodeType node_type = 2;
+}
+
+message DeleteNode {
+  required string path = 1;
+}
+
+message ListKeys {
+  required string path = 1;
+}
+
+message BlobPut {
+  required string path = 1;
+  required bytes val = 2;
+}
+
+message BlobGet {
+  required string path = 1;
+}
+
+message BlobSize {
+  required string path = 1;
+}
+
+message QueuePush {
+  required string path = 1;
+  required bytes val = 2;
+}
+
+message QueuePop {
+  required string path = 1;
+}
+
+message QueueFront {
+  required string path = 1;
+}
+
+message QueueBack {
+  required string path = 1;
+}
+
+message QueueLen {
+  required string path = 1;
+}
+
+message SetInsert {
+  required string path = 1;
+  required bytes val = 2;
+}
+
+message SetRemove {
+  required string path = 1;
+  required bytes val = 2;
+}
+
+message SetContains {
+  required string path = 1;
+  required bytes val = 2;
+}
+
+message Set {
+  repeated bytes val = 1;
+}
+
+message SetUnion {
+  repeated string paths = 1;
+  repeated Set sets = 2;
+}
+
+message SetIntersection {
+  required string path1 = 1;
+  required string path2 = 2;
+}
+
+message SetDifference {
+  required string path1 = 1;
+  required string path2 = 2;
+}
+
+message SetSymmetricDifference {
+  required string path1 = 1;
+  required string path2 = 2;
+}
+
+message SetSubsetPath {
+  required string path1 = 1;
+  required string path2 = 2;
+}
+
+message SetSubsetSet {
+  required string path = 1;
+  required Set set = 2;
+}
+
+message SetSupersetPath {
+  required string path1 = 1;
+  required string path2 = 2;
+}
+
+message SetSupersetSet {
+  required string path = 1;
+  required Set set = 2;
+}
+
+message ApiResponse {
+  oneof response {
+    ConsensusReply consensus_reply = 1;
+    Namespaces namespaces = 2;
+    ClientRegistration client_registration = 3;
+    Redirect redirect = 4;
+    Retry retry = 5;
+    bool timeout = 6;
+    ApiError error = 7;
+    bool unknown_namespace = 8;
+  }
+}
+
+message Namespaces {
+  repeated string ids = 1;
+}
+
+message ConsensusReply {
+  required uint64 epoch = 1;
+  required uint64 view = 2;
+  required uint64 request_num = 3;
+  oneof value {
+    bool ok = 4;
+    TreeOpResult tree_op_result = 5;
+    TreeCasResult tree_cas_result = 6;
+    string path = 7;
+    ApiError error = 8;
+  }
+}
+
+message ClientRegistration {
+  required ApiPid primary = 1;
+  required bool new_registration = 2;
+}
+
+message Redirect {
+  required ApiPid primary = 1;
+  required string api_addr = 2;
+}
+
+message Retry {
+  required uint64 milliseconds = 1;
+}
+
+message ApiError {
+  oneof error {
+    NotFound not_found = 1;
+    AlreadyExists already_exists = 2;
+    DoesNotExist does_not_exist = 3;
+    WrongType wrong_type = 4;
+    PathMustEndInDirectory path_must_end_in_directory = 5;
+    PathMustBeAbsolute path_must_be_absolute = 6;
+    CasFailed cas_failed = 7;
+    BadFormat bad_format = 8;
+    Io io = 9;
+    EncodingError encoding = 10;
+    InvalidCas invalid_cas = 11;
+    string msg = 12;
+    bool cannot_delete_root = 13;
+    bool invalid_msg = 14;
+    bool timeout = 15;
+    bool not_enough_replicas = 16;
+    bool bad_epoch = 17;
+  }
+}
+
+message NotFound {
+  required string path = 1;
+}
+
+message AlreadyExists {
+  required string path = 1;
+}
+
+message DoesNotExist {
+  required string path = 1;
+}
+
+message WrongType {
+  required string path = 1;
+  required NodeType node_type = 2;
+}
+
+message PathMustEndInDirectory {
+  required string path = 1;
+}
+
+message PathMustBeAbsolute {
+  required string path = 1;
+}
+
+message CasFailed {
+  required string path = 1;
+  required uint64 expected = 2;
+  required uint64 actual = 3;
+}
+
+message BadFormat {
+  required string msg = 1;
+}
+
+message Io {
+  required string msg = 1;
+}
+
+message EncodingError {
+  required string msg = 1;
+}
+
+message InvalidCas {
+  required string msg = 1;
+}

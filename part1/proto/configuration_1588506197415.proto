@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package Beta;
+
+//message 
+
+message ConfigurationProto{
+   required int32 max_depth = 1 [default = 5]; // the maximum of depth
+   required int32 num_trees = 2 [default = 3]; // the number of trees;
+   required int32 mode = 3 [default = 2]; // train, test or detection
+   required float min_entropy = 4[default = 0.01]; // the mimimum of entropy used to split node
+   required int32 height = 5[default =64];
+   required int32 width = 6 [default = 64];
+   required int32 context_patch = 7 [default=50];
+   required int32 dim_features = 8 [default=100];
+   required int32 num_keypoints =9 [default=10];
+   required int32 num_classes = 10 [default=2];
+   required string file_list = 11 [default="train.txt"];
+   required string path = 12 [default=""];
+   required string neg_file_list = 13[default=""];
+   required int32 minimum_samples = 14[default=10];
+   required string save_path = 15 [default="tree.txt"];
+   
+}
+
+message StateProto{
+    required int32 x0 = 1[default = 0];
+    required int32 y0 = 2[default = 0];
+    required int32 x1 = 3[default = 0];
+    required int32 y1 = 4[default = 0];
+    required float t =  5[default = 0];
+    required int32 xc = 6[default = 0];
+    required int32 yc = 7[default = 0];
+
+}
+
+
+message PointProto{
+    required float x = 1;
+    required float y = 2;
+}
+message StatisticProto{
+    repeated float cls_statistic = 1 ;
+    repeated PointProto reg_statistic = 2;
+
+}
+
+message NodeProto{
+    required StateProto state = 1;
+    required int32 depth = 2 [default = 0];
+    required uint64 index = 3 [default = 1];
+    repeated int32 child = 4;
+}
+
+message TreeProto{
+    repeated NodeProto nodes =1;
+    required uint64 counter = 2;
+    
+
+
+}

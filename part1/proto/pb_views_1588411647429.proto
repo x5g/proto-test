@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_tables.proto";
+import "pb_enum.proto";
+
+message PB_PostView {
+    int64 PostId = 1;
+    int32 UserId = 2;
+    PostTypeEnum PostTypeEnum = 3;
+    string Text = 4;
+    string RichText = 5;
+    int32 MediaCount = 6;
+    int32 SharedTo = 7;
+    int32 DisableComment = 8;
+    int32 HasTag = 9;
+    int32 CommentsCount = 10;
+    int32 LikesCount = 11;
+    int32 ViewsCount = 12;
+    int32 EditedTime = 13;
+    int32 CreatedTime = 14;
+    int64 ReSharedPostId = 15;
+
+    //With me
+    bool DidILiked = 50;
+    bool DidIReShared = 51;
+
+    PB_UserView SenderUserView = 100;
+    PB_UserView ReSharedUserView = 101;
+    PB_MediaView MediaView = 102;
+    repeated PB_MediaView MediaViewList = 103;
+}
+
+message PB_MediaView {
+    int64 MediaId = 1;
+    int32 UserId = 2;
+    int32 PostId = 3;
+    int32 AlbumId = 4;
+    int32 MediaTypeEnum = 5;
+    int32 Width = 6;
+    int32 Height = 7;
+    int32 Size = 8;
+    int32 Duration = 9;
+    string Color = 10;
+    int32 CreatedTime = 11;
+}
+
+
+message PB_ActionView {
+    int64 ActionId = 1;
+    int32 ActorUserId = 2;
+    int32 ActionTypeEnum = 3;
+    int32 PeerUserId = 4;
+    int64 PostId = 5;
+    int64 CommentId = 6;
+    int64 Murmur64Hash = 7;
+    int32 CreatedTime = 8;
+
+    PB_UserView ActorUserView = 100;
+    PB_PostView PostView   = 101;
+    PB_CommentView CommentView = 102;
+    PB_UserView FollowedUserView = 103;
+    PB_UserView ContentOwenerUserView = 104;
+}
+
+message PB_NotifyView {
+    int64 NotifyId = 1;
+    int32 ForUserId = 2;
+    int32 ActorUserId = 3;
+    int32 NotiyTypeEnum = 4;
+    int64 PostId = 5;
+    int64 CommentId = 6;
+    int32 PeerUserId = 7;
+    int64 Murmur64Hash = 8;
+    int32 SeenStatus = 9;
+    int32 CreatedTime = 10;
+
+    PB_UserView ActorUserView = 100;
+    PB_PostView PostView = 101;
+    PB_CommentView CommentView = 102;
+}
+message PB_CommentView {
+    int64 CommentId = 1;
+    int32 UserId = 2;
+    int64 PostId = 3;
+    string Text = 4;
+    int32 LikesCount = 5;
+    int32 CreatedTime = 6;
+
+    PB_UserView SenderUserView = 15;
+}
+
+message PB_UserView {
+    int32 UserId = 1;
+    string UserName = 2;
+    string FirstName = 4;
+    string LastName = 5;
+    UserTypeEnum UserTypeEnum = 6;
+    UserLevelEnum UserLevelEnum = 7;
+    int64 AvatarId = 8;
+    int32 ProfilePrivacyEnum = 9;
+    int64 Phone = 10;
+    string About = 11;
+    //counters 100 - 200
+    int32 FollowersCount = 100;
+    int32 FollowingCount = 101;
+    int32 PostsCount = 102;
+    int32 MediaCount = 103;
+    int32 LikesCount = 104;
+    int32 ResharedCount = 105;
+
+    //last activities
+    UserOnlineStatusEnum UserOnlineStatusEnum = 200;
+    int32 LastActiveTime = 201;
+
+    //with me
+    FollowingEnum MyFollwing = 300;
+}
+
+message PB_TopProfileView {
+    PB_UserView User  = 1;
+
+}
+
+//used for list of users in like/followings/followers list
+message PB_UserViewRowify {
+    int64 Id = 1;
+    int32 CreatedTime = 2;
+    PB_UserView UserView = 10;
+}
+
+message PB_PostViewRowify {
+    int64 Id = 1;
+    PB_PostView PostView = 10;
+}
+
+//////////// Tags /////////////
+message PB_TagView {
+    int64 TagId = 1;
+    string Name = 2;
+    int32 Count = 3;
+    int32 TagStatusEnum = 4;
+    int32 CreatedTime = 5;
+}
+
+message PB_TopTagWithSamplePosts {
+    PB_TagView TagView = 1;
+    repeated PB_PostView PostViewList = 2;
+}
+
+///////////////// chats ////////////
+message PB_ChatView {
+    string ChatKey = 1;
+    string RoomKey = 2;
+    int32 RoomTypeEnum = 3;
+    int32 UserId = 4;
+    int32 PeerUserId = 5;
+    int64 GroupId = 6;
+    int32 CreatedTime = 7;
+    int32 Seq = 8;
+    int32 SeenSeq = 9;
+    int64 UpdatedMs = 10;
+
+    PB_UserView UserView = 200;
+    //seeting, notification, group,
+
+    PB_MessageView FirstUnreadMessage = 300;
+    PB_MessageView LastMessage = 301;
+}
+
+message PB_MessageView {
+    string ChatKey = 1;
+    int64 MessageId = 2;
+    string RoomKey = 3;
+    int32 UserId = 4;
+    int64 MessageFileId = 5;
+    int32 MessageTypeEnum = 6;
+    string Text = 7;
+    int32 CreatedTime = 8;
+    int32 Seq = 9;
+    int32 DeliviryStatusEnum = 10;
+   // bytes ExtraPB = 13;
+
+    PB_UserView UserView = 200;
+    PB_MessageFileView MessageFileView = 201;
+    //sticker, post,
+}
+
+message PB_MessageFileView {
+    int64 MessageFileId = 1;
+    int32 AccessHash = 8;
+    int32 FileTypeEnum = 2;
+    int32 Size = 3;
+    int32 Width = 4;
+    int32 Height = 5;
+    int32 Duration = 6;
+    string Extension = 7;
+}
+
+//just used on storage on server
+message PB_MessageTableExtra {
+    PB_MessageFileView MessageFileView = 1;
+}

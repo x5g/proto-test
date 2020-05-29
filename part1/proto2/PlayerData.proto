@@ -1,0 +1,39 @@
+package com.road.yishi.proto.player;
+option java_package = "com.road.yishi.pb.player";
+option java_outer_classname = "PlayerDataMsgProto";
+// 玩家登录状态
+message PlayerDataMsg {
+	optional bool user = 1;	    // 玩家信息
+	optional bool castle = 2;	// 登录状态
+	optional bool army=3;       // 部队
+	optional bool quest=4;      // 任务
+	optional bool build=5;      // 建筑
+	optional bool tree=6;       // 树
+	optional bool aas=7;		// 防沉迷
+	optional bool smith=8;      // 公式
+	optional bool bag=9;		// 背包
+	optional bool leed=10;		// 每日引导
+	optional bool star=11;		// 星格
+	optional bool friend=12;	// 好友
+	optional bool effect=13;    // 效果
+	optional bool sys=14;       // 系统
+	optional bool offline = 15;	// 离线奖励	
+	optional bool reward=16;    // 悬赏	
+	optional bool tower = 17;	// 无限塔	
+	optional bool shop=18;      // 商城主页
+	optional bool chall_reward=19; // 挑战赛奖励
+	optional bool sns_req =20;	// 好友信息
+	optional bool active=21;    // 活动
+	optional bool switches=22;    // 开关
+	optional bool sweep=23;		//扫荡信息
+	optional bool questionnarie = 24; //问卷
+	optional bool king_contract = 25; //魔王契约
+	optional bool rebate_charge = 26; //充值回馈
+	optional bool rebate_consum = 27; //消费回馈
+	optional bool sum_active = 28; //精彩活动
+	optional bool cross_score_reward = 29; // 跨服积分奖励
+	optional bool appell = 30;//称号数据
+	optional bool bottle = 31; //魔罐传递(海外先占用)
+	optional bool pet_challenge_reward = 32; //英灵挑战奖励
+}
+

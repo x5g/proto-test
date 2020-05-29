@@ -1,0 +1,39 @@
+
+syntax = "proto3";
+
+message NodeHandlePB {
+    oneof content {
+        bytes hash = 1;
+        NodePB node = 2;
+    }
+}
+
+message LeafPB {
+    bytes key = 1;
+    bytes value = 2;
+}
+
+message ExtensionPB {
+    bytes key = 1;
+    NodeHandlePB value = 2;
+}
+
+message BranchPB {
+    repeated NodeHandlePB key = 1;
+    bytes value = 2;
+}
+
+message NodePB {
+    enum name {
+        EMPTY = 0;
+        LEAF = 1;
+        EXTENSION = 2;
+        BRANCH = 3;
+    } 
+    oneof content {
+        bool Empty = 1;
+        LeafPB Leaf = 2;
+        ExtensionPB Extension = 3;
+        BranchPB Branch = 4;
+    }
+}

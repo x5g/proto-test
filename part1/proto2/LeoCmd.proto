@@ -1,0 +1,167 @@
+package com.leo.pb;
+
+enum enSubCmdID
+{
+	LOBBY_CS_OPEN_BANK_SUB_CMD							 = 1;	//请求打开保险箱界面
+	LOBBY_SC_BANK_ENTER_PASSWD_SUB_CMD					 = 2;	//请求打开保险箱的返回，返回绑定的银行信息
+	LOBBY_CS_BANK_OPERATE_SUB_CMD						 = 3;	//请求操作银行
+	LOBBY_SC_BANK_OPERATE_RESULT_SUB_CMD				 = 4;	//操作银行结果
+	LOBBY_CS_BANK_ENTER_PASSWD_SUB_CMD					 = 5;	//客户端请求输入银行密码
+	LOBBY_SC_BANK_ENTER_PASSWD_RESULT_SUB_CMD			 = 6;	//输入密码后返回
+
+	LOBBY_CS_BANK_FORGET_SET_PWD_SUB_CMD                             = 7;  // 客户端忘记密码 而设置密码
+
+	LOBBY_CS_SET_BANK_INFO_SUB_CMD                                   = 8;  // 客户端请求设置提现信息 帐号  姓名 支行
+	LOBBT_SC_SET_BANK_INFO_RESULT_SUB_CMD                            = 9;  // 设置提现信息结果
+	LOBBY_CS_GET_CASH_APPLY_SUB_CMD                                  = 10; // 客户端请求提现
+	LOBBY_SC_GET_CASH_APPLY_RESULT_SUB_CMD                           = 11; //客户端申请提现结果
+	CS_REQUEST_PAY_CASH_RECORD                                       = 12;  // 客户端请求提现记录
+	SC_RETURN_PAY_CASH_RECORD                                        = 13; // 返回客户端提现记录
+	CS_REQUEST_BANK_DETAIL_RECORD                                    = 14; // 请求保险箱详细记录
+	SC_RETURN_BANK_DETAIL_RECORD                                     = 15; // 回保险箱详细记录
+	CS_REQUEST_DRAWCASH_DETAIL_RECORD                                    = 16; // 请求提现兑换进度记录
+    SC_RETURN_DRAWCASH_DETAIL_RECORD                                     = 17; // 返回提现进度记录
+
+
+}
+
+//LOBBY_SC_BANK_ENTER_PASSWD_SUB_CMD
+message SC_Bank_Enter_Passwd
+{
+	optional int32 iNeedEnterPasswd						 = 1;	//是否需要输入银行密码 (1-需要打开输入密码界面 2-不需要直接打开银行界面 3-需要输入初始密码)
+	optional string bankcardno       = 2;
+	optional  string cardownername     =3;
+	optional string  bankinfo          = 4;
+	optional string  ownerNameCardNo             = 5; // 持卡人身份证
+}
+
+//LOBBY_CS_BANK_OPERATE_SUB_CMD
+message CS_Bank_Operate
+{
+	optional int32 iType								 = 1;	//操作类型 1-存钱 2-取钱
+	optional int64 lCount								 = 2;	//操作数量
+	optional string passwd								 = 3;	//密码
+}
+
+//LOBBY_SC_BANK_OPERATE_RESULT_SUB_CMD
+message SC_Bank_Operate_Result
+{
+	optional int32 iResult								 = 1;	//操作结果	(1-成功 2-失败)
+	optional string szDesc								 = 2;	//失败的原因
+}
+
+//LOBBY_CS_BANK_ENTER_PASSWD_SUB_CMD
+message CS_Bank_Enter_Passwd
+{
+	optional string szPasswd							 = 1;	//保险箱密码
+}
+
+//LOBBY_SC_BANK_ENTER_PASSWD_RESULT_SUB_CMD
+message SC_Bank_Enter_Passwd_Result
+{
+	optional int32 iResult								 = 1;	//1-设置密码成功 2-验证成功 3-密码验证失败 4 重设密码成功  5 重置密码有错
+	optional string bankcardno       = 2;
+	optional  string cardownername     =3;
+	optional string  bankinfo          = 4;
+	optional string  ownerNameCardNo             = 5; // 持卡人身份证
+	optional string msg 				= 6; //信息
+}
+
+//	LOBBY_CS_BANK_FORGET_SET_PWD_SUB_CMD                             = 7;  // 客户端忘记密码 而设置密码
+message CS_Bank_Forget_Set_Pwd
+{
+	required string szPasswd                               = 1;  // 密码
+	required string token                                  = 2;  // 验证码
+}
+
+//LOBBY_CS_SET_BANK_INFO_SUB_CMD                                   = 8;  // 客户端请求设置提现信息 帐号  姓名 支行
+message CS_SetBankInfo
+{
+	required string  cardNo                = 1; // 卡号
+	required string  ownerName              = 2; // 持卡人姓名
+	required string  bankInfo              =  3;// 银行信息
+	optional string  ownerNameCardNo             = 4; // 持卡人身份证
+}
+
+//LOBBT_SC_SET_BANK_INFO_RESULT_SUB_CMD                            = 9;  // 设置提现信息结果
+message CS_SetBankInfoResult
+{
+	required uint32  result             = 1 ; // 0 成功  其他失败
+}
+
+//LOBBY_CS_GET_CASH_APPLY_SUB_CMD                                  = 10; // 客户端请求提现
+message CS_GetCashApply
+{
+	required  uint32     money = 1;                                     // 提现金额  元为单位
+	required  string    token = 2;                                     // 保险箱密码
+}
+
+//LOBBY_SC_GET_CASH_APPLY_RESULT_SUB_CMD                           = 11; //客户端申请提现结果
+message SC_GetCashApplyResult
+{
+	required  uint32 result      = 1;                                        //0 申请提交成功  其他失败
+}
+
+//CS_REQUEST_PAY_CASH_RECORD                                              = 12;  // 客户端请求提现记录
+message CS_Request_Pay_Cash_Record
+{
+}
+
+//SC_RETURN_PAY_CASH_RECORD                                               = 13; // 返回客户端提现记录
+message PayCashRecord
+{
+
+	required  uint32 id                    = 1; // 请求提现金额
+	required  string bankcardno                    = 2; // 请求提现金额
+	required  string cardownername                   = 3; // 请求提现金额
+	required  string bankinfo                   = 4; // 请求提现金额
+	required  uint32 oldmoney                    = 5; // 请求提现金额
+	required  uint32 money                      = 6; // 请求提现金额
+	required  uint32 nowmoney                    = 7; // 请求提现金额
+	required  uint32  applydate                 = 8; //申请时间
+	required  uint32 state                     = 9; // 状态 0 申请中 1 成功提现 2 提现不满足要求
+}
+
+message SC_Return_Pay_Cash_Record
+{
+	repeated PayCashRecord record            = 1;
+}
+
+//CS_REQUEST_BANK_DETAIL_RECORD                                    = 14; // 请求保险箱详细记录
+message CS_Request_Bank_Detail
+{
+}
+
+
+//SC_RETURN_BANK_DETAIL_RECORD                                     = 15; // 回保险箱详细记录
+message BankDetail
+{
+	required uint32 date              = 1;  // 时间 时间戳 秒为单位
+	required int32 type              = 2; // 数量
+	required uint32 money             = 3; // 金额
+	required uint32 balance           = 4; // 余额
+}
+
+message CS_Return_Bank_Detail_Record
+{
+	repeated BankDetail detail = 1;
+}
+
+//CS_REQUEST_DRAWCASH_DETAIL_RECORD 请求提现兑换进度
+message CS_Request_Drawcash_Detail_Record
+{
+}
+
+//SC_RETURN_DRAWCASH_DETAIL_RECORD 返回提现兑换进度
+message DrawcashDetail
+{
+	required string bankcardno              = 1; // 银行账号
+	required uint32 money              = 2; // 提现金额
+	required uint32 applydate             = 3; // 提现日期
+	required uint32 paystate           = 4; // 提现状态
+}
+
+message SC_Return_Drawcash_Detail_Record
+{
+	repeated DrawcashDetail record = 1;
+}

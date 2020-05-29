@@ -1,0 +1,501 @@
+package google.protobuf;
+// package abm.protobuf;
+option java_package = "com.asiainfo.billing.db.natsclient.pbcodes";
+option java_outer_classname = "PbFileMsg";
+
+// descriptor.proto must be optimized for speed because reflection-based
+// algorithms don't work during bootstrapping.
+option optimize_for = SPEED;
+
+message PbFileAcctItemInfoHB {
+	required int64 m_lServID = 1; //用户ID
+	required int64 m_lAcctID = 2; //账户ID
+	required int64 m_lCharge = 3; //本金额
+	required int64 m_lCharge1 = 4; //未扣金额
+	required int64 m_lOfferInstID = 5;
+	required int32 m_iBillingCycleID = 6; //账期ID
+	required int32 m_iAcctItemTypeID = 7; //账目类型
+	required int32 m_iItemSourceID = 8; //帐目来源规则标识
+	required int64 m_lOfferID = 9;//产品标识
+	required bytes m_sAcctItemTypeName = 10; //账目名称
+	required int32 m_iBillingMode = 11;//账单标识 0.已经批扣过未知情况 1.后付费 2预付费 3OCS用户
+	optional string m_sAcctItemTypeCode = 12; //帐目CODE
+}
+
+message PbFileBalInfo {
+	required int64 m_lAcctBalanceID = 1;
+	required int64 m_lBalance = 2;
+	required int64 m_lCycleUpper = 3;
+	required int64 m_lCycleLower = 4;
+	required int64 m_lAcctID = 5;
+	required int64 m_lServID = 6;
+	required int32 m_iItemGroupID = 7;
+	required int32 m_iObjectTypeID = 8;
+	required int32 m_iBalanceTypeID = 9;
+	required int32 m_iCycleType = 10;
+	required int32 m_iStatusCD = 11;
+	required int32 m_iShareRuleFlag = 12;
+	required int32 m_iSpePaymentID = 13;
+	required string m_sEffDate = 14;
+	required string m_sExpDate = 15;
+}
+
+message PbFileBalanceInfoS {
+	required int64 m_lAcctBalanceID = 1; //账本标识
+	required int64 m_lAcctID = 2; //账户标识
+	required int64 m_lServID = 3; //用户标识
+	required int32 m_iItemGroupID = 4; //账目组标识
+	required int32 m_iBalanceTypeID = 5; //余额类型标识
+	required int64 m_lBalance = 6; //余额
+	required string m_sEffDate = 7; //生效时间
+	required string m_sExpDate = 8; //失效时间
+	required bytes m_sRemark = 9; //备注
+	required int32 m_iObjectTypeID = 10; //对象类型标识
+	required int32 m_iStatusCD = 11; //状态
+	required string m_sStatusDate = 12; //状态时间
+	required int64 m_lCycleUpper = 13; //余额上限
+	required int64 m_lCycleLower = 14; //余额下限
+	required int64 m_lCharge = 15; //余额已抵扣
+	required int32 m_iCycleType = 16; 
+	required int32 m_iShareRuleFlag = 17;
+	required int32 m_iSpePaymentID = 18; 
+	required int64 m_lReserveBalance = 19;
+}
+
+message PbFileBalanceInfoM {
+	required int64 m_lAcctBalanceID = 1; //账本标识
+	required int64 m_lAcctID = 2; //账户标识
+	required int64 m_lServID = 3; //用户标识
+	required int32 m_iItemGroupID = 4; //账目组标识
+	required int32 m_iBalanceTypeID = 5; //余额类型标识
+	required int64 m_lBalance = 6; //余额
+	required string m_sEffDate = 7; //生效时间
+	required string m_sExpDate = 8; //失效时间
+	required bytes m_sRemark = 9; //备注
+	required int32 m_iObjectTypeID = 10; //对象类型标识
+	required int32 m_iStatusCD = 11; //状态
+	required string m_sStatusDate = 12; //状态时间
+	required int64 m_lCycleUpper = 13; //余额上限
+	required int64 m_lCycleLower = 14; //余额下限
+	required int64 m_lCharge = 15; //余额已抵扣的实时费用
+	required bytes m_sBalanceTypeName = 16; //余额类型名称
+	required bytes m_sItemTypeName = 17; //账目组名称
+	required int32 m_iCycleType = 18; 
+	required int32 m_iShareRuleFlag = 19;
+	required int32 m_iSpePaymentID = 20; 
+	required int64 m_lReserveBalance = 21;
+}
+
+message PbFileBalanceInfoR {
+	required int64 m_lAcctBalanceID = 1; //账本标识
+	required int64 m_lBalance = 2; //余额
+	required int64 m_lCycleUpper = 3; //余额上限
+	required int64 m_lCycleLower = 4; //余额下限
+	required int64 m_lAcctID = 5; //账户id
+	required int64 m_lServID = 6; //用户标识
+	required int64 m_lCharge = 7; //余额已抵扣的实时费用
+	required int32 m_iBalanceTypeID = 8; //余额类型
+	required int32 m_iItemGroupID = 9; //账目组标识
+	required int32 m_iObjectTypeID = 10; //对象类型
+	required int32 m_iStatusCD = 11; //状态
+	required string m_sEffDate = 12; //生效时间
+	required string m_sExpDate = 13; //失效时间
+	required string m_sStatusDate = 14; //状态时间
+	required bytes m_sRemark = 15; //备注
+	required bytes m_sBalanceTypeName = 16; //余额类型名称
+	required bytes m_sItemTypeName = 17; //账目组名称
+	required int32 m_iCycleType = 18; 
+	required int32 m_iShareRuleFlag = 19;
+	required int32 m_iSpePaymentID = 20; 
+}
+
+message PbFileAcctItemDetailInfo01 {
+	required int64 m_lAcctBalanceID = 1; //账本标识（如果没有对应的，就填-1）
+	required int64 m_lServID = 2; //用户ID
+	required int64 m_lAcctID = 3; //账户ID
+	required int32 m_iBillingCycleID = 4; //账期ID
+	required int32 m_iAcctItemTypeID = 5; //账目类型
+	required int64 m_lCharge = 6; //本金额
+	required int64 m_lOfferInstID = 7;
+	required int32 m_iItemSourceID = 8; //帐目来源规则标识
+}
+
+message PbFileBalanceItemDetail01 {
+}
+
+message PbFilePoolOut {
+	required int64 m_lMonBal = 1; //池月总量（考虑用剩余量+使用量，这样用户不至于投诉）
+	required int64 m_lBalance = 2; //剩余量
+	required int64 m_lAmount = 3; //当月支出量值（直接从charge1/2里边取）
+}
+
+message PbFilePMList {
+	required string m_sAccNbr = 1; //成员号码
+	required int64 m_lPoolBal = 2; //池剩余量
+	required int64 m_lRating = 3; //成员分配额度
+	required int64 m_lAmount = 4;//支出量值
+	required int64 m_lpoolServId = 5; //流量池虚拟用户serv_id
+	required int32 m_iusageTypeId = 6; //量卡类型
+}
+
+message PbFileVHead {
+	required int64 m_lAcctID = 1; //账户标识
+	required int64 m_lSumCharge = 2; //使用总余额
+	required int64 m_lSumAmount = 3; //总账总费用
+	required int64 m_lSumBalance = 4; //退费金额
+	required int32 m_iBalNum = 5;
+	required int32 m_iItemNum = 6;
+	required int32 m_iRelaNum = 7;
+	optional int32 m_iMinusNum = 8;
+}
+
+message PbFileVBalInfo {
+	required int64 m_lAcctBalanceID = 1; //账本标识
+	required int64 m_lBalanceO = 2; //原值
+	required int64 m_lBalance = 3; //修改后的值
+	required int32 m_iFlag = 4; //标识 0.修改 1.新增
+}
+
+message PbFileVItemInfo {
+	required int64 m_lAcctItemID = 1; //账单标识
+	required int64 m_lServID = 2; //用户标识
+	required int64 m_lAmount = 3; //账单金额
+	required int64 m_lDealAmount = 4; //已抵扣金额
+	required int64 m_lOfferInstID = 5; //商品实例标识
+	required int64 m_lBillID = 6; //BILL表标识
+	required int64 m_lPaymentMethod = 7; //支付类型
+	required int64 m_lOriAcctItemID = 8; //拆分账单标识
+	required int32 m_iAcctItemTypeID = 9; //账目类型
+	required int32 m_iItemSourceID = 10; //来源标识
+	required int64 m_lOfferID = 11; //商品标识
+	required int32 m_iBillingCycleID = 12; //账期标识
+	required int32 m_iBillingMode = 13;//1: 后付费 2 预付费
+	required string m_sState = 14; //状态
+}
+
+message PbFileVRelaInfo {
+	required int64 m_lAcctItemID = 1; //账单标识
+	required int64 m_lAcctBalanceID = 2; //余额账本标识
+	required int64 m_lAmount = 3; //抵扣金额
+}
+
+message PbFileVMinusRela {
+	required int64 m_lAcctItemIDN = 1;//负账单标识
+	required int64 m_lAcctItemIDP = 2;//正账单标识
+	required int64 m_lAmount = 3;//正负抵扣的钱
+}
+
+message PbFileCardInfo {
+	required int64 m_lUsageBalID = 1; //量本流水号
+	required int64 m_lServID = 2; //用户标识
+	required int64 m_lAcctID = 3; //帐户标识
+	required int64 m_lOfferInstID = 4; //商品实例标识
+	required int32 m_iUsageTypeID = 5; //量本类型
+	required int32 m_iSourceTypeID = 6; //量本来源
+	required int32 m_iAccuTypeID = 7; //使用量类型
+	required int32 m_iMeasureUnit = 8; //度量单位
+	required int64 m_lBalDetailID = 9; //量本明细标识
+	required string m_sEffDate = 10; //生效时间
+	required string m_sCycleExpDate = 11; //周期失效时间
+	required string m_sExpDate = 12; //失效时间
+	required int64 m_lDepositBalS = 13; //单月充值量
+	required int64 m_lDepositBalD = 14; //双月充值量
+	required int64 m_lValueS = 15; //单月使用量
+	required int64 m_lValueD = 16; //双月使用量
+	required int64 m_lBalance = 17; //剩余量
+	required int64 m_lVersionID = 18; //版本号
+	required int32 m_iOrgID = 19; //本地网
+}
+
+message PbFileCardSrc {
+	required int64 m_lServID = 1;//用户标识
+	required int64 m_lAmount = 2;//充值金额
+	required string m_sCreatedDate = 3;//充值时间
+	required string m_sExpDate = 4;//充值前失效日期
+	required string m_sExpDate2 = 5;//充值后失效日期
+	required int32 m_iAccessType = 6;//充值渠道
+	required int32 m_iUsageTypeID = 7;//量本类型
+	required int32 m_iMeasureUnit = 8;//流量卡单位（时长：s,事件：条 流量：K）
+}
+
+message PbFileCardAggr {
+	required int64 m_lServID = 1;//用户标识
+	required int64 m_lUsageId = 2; //量本标识
+	required int64 m_lEarThisMonFlow = 3; //期初流量
+	required int64 m_lThisMonStore = 4; //本月存入
+	required int64 m_lThisMonSpend = 5; //本月支出
+	required int64 m_lAdjustmentVa = 6; //流量调整
+	required int64 m_lEndMonthVa = 7; // 末流量
+	required int32 m_iUsageTypeID = 8;//量本类型
+	required int32 m_iMeasureUnit = 9;//流量卡单位（时长：s,事件：条 流量：K）
+	required string m_sExpDate = 10;//失效时间
+}
+
+message PbFileCardErr {
+	required int64 m_lServID = 1;//用户标识
+	required string m_sCardID = 2;// 充值卡卡号
+	required string m_sCardArea = 3; //卡归属省(中文)
+	required string m_sCallingNbr = 4; // 主叫号码
+	required string m_sCallingArea = 5;// 主叫发起省(中文)
+	required string m_sDestNbr = 6;// 被充值号码
+	required string m_sAccessType = 7;//接入方式(中文)
+	required int64 m_lAmount = 8;//充值金额
+	required string m_sResult = 9;//充值结果信息
+	required string m_sStateDate = 10;//充值日期
+	required int32 m_iMeasureUnit = 11;//流量卡单位（时长：s,事件：条 流量：K）
+}
+
+message PbFileCardOutList {
+	required int64 m_lAggrDetailID = 1; //支出明细标识
+	required int64 m_lBalDetailID = 2; //量本明细标识
+	required int64 m_lUsageBalID = 3; //量本标识
+	required int64 m_lServID = 4; //用户标识
+	required int64 m_lOfferInstID = 5; //商品实例标识
+	required int64 m_lValue = 6; //使用量
+	required int32 m_iBillingCycleID = 7; //帐期标识
+	required int32 m_iAggrType = 8; //抵扣类型 1 话单类扣量，2 置换类扣量，3 转赠类扣量，4 套外类超量 5 失效未使用删除量
+	required int32 m_iMeasureUnit = 9; //度量单位
+	required string m_sEffDate = 10;
+	required string m_sExpDate = 11;
+	required int64 m_lVersionID = 12; //版本号
+}
+
+message PbFileCardSrcList {
+	required int64 m_lAmount = 1; //存入量值
+	required string m_sCreatedDate = 2; //存入时间
+	required int32 m_iAccessType = 3; //充值渠道
+}
+
+message PbFileCardAdjList {
+	required string m_sAdjType = 1; //调整方式 到期调整
+	required int64 m_lAmount = 2;//调整量值
+}
+
+message PbFileEventAccuData
+{
+    required int64 m_lAccuInstID = 1; //查询的主键
+    required int64 m_lOfferInstID = 2; //商品实例ID
+    required int64 m_lInstMemberID = 3; //成员明细ID
+    required int64 m_lServID = 4; //用户ID
+    required int32 m_iAccuTypeID = 5; //累积量类型ID
+    required int32 m_iBillingCycleID = 6; //默认打开，不再用宏控制(-1所有Where中不进行判断；其他精确匹配)
+    required int64 m_lCycleTypeID = 7; //周期类型ID
+    required int64 m_lCycleBeginTime = 8; //开始时间，格式：20100813153848
+    required int64 m_lCycleEndTime = 9; //结束时间，格式：20100813153848
+    required string m_sSplitBy = 10; //拆分依据('ALL' 所有Where中不进行判断；其他精确匹配)
+    required int64 m_lValue = 11; //累积量值
+    required int64 m_lABMKeyID = 12; //ABM的主键
+    required int64 m_lVersionID = 13; //版本ID
+    required int64 m_lTotalValue = 14; //累积量总量值
+}
+
+message PbFileDisctAccuData
+{
+    required int64 m_lItemDisctSeq = 1; //查询主健，
+    required int64 m_lOfferInstID = 2; //商品实例ID
+    required int32 m_iBillingCycleID = 3; //帐期ID
+    required int32 m_iOrgBillingCycleID = 4; //原帐期ID（-1代表所有，其余精确匹配））
+    required int32 m_iCombineID = 5; //定价组合ID（ -1代表所有，其余精确匹配）
+    required int32 m_iMeasureID = 6; //定价度量ID （-1代表所有，其余精确匹配）
+    required int32 m_iItemGroupID = 7; //计费帐目组ID
+    required int32 m_iInType = 8; //输入对象类型
+    required int64 m_lInValue = 9; //输入对象值
+    required int64 m_lValue = 10; //输入值
+    required int64 m_lDisctValue = 11; //优惠值
+    required int64 m_lABMKeyID = 12; //ABM的主键
+    required int64 m_lVersionID = 13; //版本ID
+    required int64 m_lTotalDisctValue = 14; //优惠总值
+}
+
+message PbFileLoadDetailAccuData
+{
+    required int64 m_lServID = 1; //用户ID
+    required int32 m_iBillingCycleID = 2; //帐期ID
+    required int32 m_iAcctItemTypeID = 3; //帐目类型ID
+    required int64 m_lValue = 4; //输入值
+    required int64 m_lDisctValue = 5; //优惠值
+    required int64 m_lABMKeyID = 6; //ABM的主键
+    required int64 m_lVersionID = 7; //版本ID
+    required int64 m_lItemDisctSeq = 8;
+}
+
+message PbFileAuditFlowDetailData
+{
+    required int64 lBalanceDetailId = 1;
+    required int64 lUsageBalanceId = 2;
+    required int64 lServId = 3;
+    required int64 lAcctId = 4;
+    required int64 lBalance = 5;
+    required int32 iBillingCycleId = 6;
+    required int32 iEventTypeId = 7;
+    required int32 iEventGroupId = 8;
+    required int32 iDataSource = 9;
+    required int32 iBalanceMoney = 10;
+    required string sBatchDate = 11;
+    required int64 m_lMServID = 12;
+}
+
+message PbFileAuditFlowDepositDetailData
+{
+    required string lUsageCardID = 1;
+    required string cOptDate = 2;
+    required int64 lChargeValue = 3;
+    required int64 lChargeAmount = 4;
+    required int64 lTrueAmount = 5;
+    required int64 lUsageSerialID = 6;
+    required int64 lServID = 7;
+    required int64 lAccessType = 8;
+}
+
+message PbFileFlowAccuDataNew{
+    required int64 m_lUsageBalanceID = 1; //量本流水号
+    required int64 m_lServID = 2; //用户标识
+    required int64 m_lAcctID = 3; //帐户标识
+    required int64 m_lOfferInstID = 4; //商品实例ID
+    required int32 m_iBalanceTypeID = 5; //量本类型，值取自量本类型定义表
+    required int32 m_iAccessType = 6; //量本来源
+    required int32 m_iAccuTypeID = 7; //使用量类型
+    required int32 m_iMeasureId = 8; //度量单位
+    required int32 m_iOrgID = 9; //量本归属地，本地网标识
+    required int32 m_iPayNum = 10; //纯量本条数
+    required string m_sOptDate = 11; //操作时间
+}
+
+message PbFileFlowDetailNewAccuData {
+    required int64 m_lUsageBalanceID = 1; //量本流水号
+    required int64 m_lUsageBalanceDetailID = 2; //量本明细标识
+    required int64 m_lBalance_S = 3; //单周期充值量
+    required int64 m_lBalance_D = 4; //双周期充值量
+    required int64 m_lVal1 = 5; //单周期使用量
+    required int64 m_lVal2 = 6; //双周期使用量
+    required int64 m_lBalance = 7; //剩余量
+    required int64 m_lVersionID = 8; //版本号，使用的版本信息
+    required string m_sOptDate = 9; //操作时间
+    required string m_sEffDate = 10; //量本生效时间
+    required string m_sCycleExpDate = 11; //量本周期失效时间
+    required string m_sExpDate = 12; //量本失效时间
+    required int32 m_iOrgID = 13; //量本归属地，本地网标识
+    required int32 m_iIdle = 14; //量本归属地，本地网标识
+}
+
+
+message PbFileFlowHistNewData{
+    required int64 m_lUsageBalanceID = 1; //量本标识
+    required int64 m_lServID = 2; //用户标识
+    required int64 m_lAcctID = 3; //帐户标识
+    required int64 m_lOfferInstID = 4; //商品实例ID
+    required int32 m_iBalanceTypeID = 5; //量本类型
+    required int32 m_iAccessType = 6; //量本来源
+    required int32 m_iMeasureId = 7; //度量单位
+    required int32 m_iBillingCycleId = 8; //账期标识
+    required int64 m_lPre_Balance = 9; //量本月初量
+    required int64 m_lIn_Balance = 10; //量本月充量
+    required int64 m_lUsed_Balance = 11; //量本使用量
+    required int64 m_lExp_Balance = 12; //量本失效量
+    required int64 m_lRemain_Balance = 13; //量本剩余量
+    required int64 m_lExceed_Balance = 14; //量本超出量
+    required int64 m_lVersionID = 15; //版本号，使用的版本信息
+    required int32 m_iOrgID = 16; //量本归属地，本地网标识
+    required int32 m_iAccuTypeId = 17; //累积量类型
+    required string m_sOptDate = 18; //操作时间
+}
+
+message PbFileFlowUseDetailNewData{
+    required int64 m_lUsageBalanceDetailID = 1; //量本明细标识
+    required int64 m_lBalUseDetailID = 2; //量本使用明细标识
+    required int64 m_lServID = 3; //用户标识
+    required int64 m_lOfferInstID = 4; //商品实例ID
+    required int64 m_lValue = 5; //使用量
+    required int64 m_lVersionID = 6; //版本号，使用的版本信息
+    required string m_sExpDate = 7; //失效时间
+    required string m_sEffDate = 8; //生效时间
+    required int32 m_iBalanceTypeID = 9; //量本类型
+    required int32 m_iMeasureId = 10; //度量单位
+    required int32 m_lBillingCycleId = 11; //账期标识
+    required int32 m_iIdle = 12;
+}
+
+//江苏云化 只捞取 aggr 文件信息
+message PbFileAcctItemAggrInfo
+{
+    required int64 lAggrid = 1;
+    required int64 lHbid = 2;
+    required int64 lServID =3; //用户ID
+    required int64 lAcctID =4; //账户ID
+    required int64 lAmount =5; //本金额
+    required int64 lOfferInstID =6;
+    required int32 iBillingCycleID =7; //账期ID
+    required int32 iAcctItemTypeID =8; //账目类型
+    required int32 iItemSourceID =9; //帐目来源规则标识
+    required int64 lOfferID =10;//产品标识
+    required bytes sAcctItemTypeName =11; //账目名称
+    required int32  iBillingMode =12;//账单标识 0.已经批扣过未知情况 1.后付费 2预付费 3OCS用户
+    required string sAcctItemTypeCode =13;  //帐目CODE
+    required int64 lAcctItemid = 14;
+
+}
+
+message PbFileMessage {
+	repeated PbFileAcctItemInfoHB AcctItemInfoHB = 1;
+
+	repeated PbFileBalInfo BalInfo = 2;
+
+	repeated PbFileBalanceInfoS BalanceInfoS = 3;
+
+	repeated PbFileBalanceInfoM BalanceInfoM = 4;
+
+	repeated PbFileBalanceInfoR BalanceInfoR = 5;
+
+	repeated PbFileAcctItemDetailInfo01 AcctItemDetailInfo01 = 6;
+
+	repeated PbFileBalanceItemDetail01 alanceItemDetail01 = 7;
+
+	repeated PbFilePoolOut PoolOut = 8;
+
+	repeated PbFilePMList PMList = 9;
+
+	repeated PbFileVHead VHead = 10;
+
+	repeated PbFileVBalInfo VBalInfo = 11;
+
+	repeated PbFileVItemInfo VItemInfo = 12;
+
+	repeated PbFileVRelaInfo VRelaInfo = 13;
+
+	repeated PbFileVMinusRela VMinusRela = 14;
+
+	repeated PbFileCardInfo CardInfo = 15;
+
+	repeated PbFileCardSrc CardSrc = 16;
+
+	repeated PbFileCardAggr CardAggr = 17;
+
+	repeated PbFileCardErr CardErr = 18;
+
+	repeated PbFileCardOutList CardOutList = 19;
+
+	repeated PbFileCardSrcList CardSrcList = 20;
+
+	repeated PbFileCardAdjList CardAdjList = 21;
+
+	repeated PbFileEventAccuData EventAccuData = 22;
+
+	repeated PbFileDisctAccuData DisctAccuData = 23;
+
+	repeated PbFileLoadDetailAccuData LoadDetailAccuData = 24;
+
+	repeated PbFileAuditFlowDetailData AuditFlowDetailData = 25;
+
+	repeated PbFileAuditFlowDepositDetailData AuditFlowDepositDetailData = 26;
+
+	repeated PbFileFlowAccuDataNew FlowAccuDataNew = 27;
+
+	repeated PbFileFlowDetailNewAccuData FlowDetailNewAccuData = 28;
+
+	repeated PbFileFlowHistNewData FlowHistNewData = 29;
+
+	repeated PbFileFlowUseDetailNewData FlowUseDetailNewData = 30;
+
+	repeated PbFileAcctItemAggrInfo AcctAggrInfo = 31;  //江苏云化 出账优化 aggr 文件
+}
+

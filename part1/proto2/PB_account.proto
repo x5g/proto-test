@@ -1,0 +1,191 @@
+package protos;
+import "PB_error_code.proto";
+
+enum AccountType 
+{
+	Tourist = 1;		// 游客
+	WeiXin 	= 2;		// 微信
+	Mobile	= 3;		// 手机号
+}
+
+enum OsType
+{
+	Ios 	= 1;
+	Android = 2;
+}
+
+message PB_AndroidIdentity
+{
+	required string mac 				= 1;	// mac地址(安卓)
+	required string imei 				= 2;	// 手机序列号(安卓)
+	required string imsi 				= 3;	// 运营商序列号(安卓)
+}
+
+message PB_IOSIdentity
+{
+	required string uuid 				= 1;	// uuid(苹果)
+}
+
+// 账号登录
+message PB_AccountLogin
+{
+	required AccountType account_type  			= 1;	// 帐号类型
+	required OsType	os_type 					= 2;	// 系统类型			
+	optional PB_IOSIdentity ios_id				= 3;	// ios身份
+	optional PB_AndroidIdentity android_id		= 4;	// 安卓身份
+	optional int64 weixin						= 5;	// 微信号
+	optional string weixin_name					= 6;	// 微信昵称
+	optional int64 mobile						= 7;	// 手机号
+	optional string loginip 					= 8;	// 客户端ip(服务器自用字段)
+	optional string channel						= 9;	// 渠道号
+	optional string phone_model					= 10;   // 手机型号
+	optional string phone_os_ver				= 11; 	// 手机系统版本
+	optional string game_ver					= 12;	// 游戏版本号
+	optional string icon_url					= 13;	// 头像url
+	optional int64 communiid 					= 14;	// 服务器用字段
+}
+
+message PB_AccountLoginReturn 
+{
+	required PB_ErrorCode code 			= 1;
+	optional int64 playerid 			= 2;	// 玩家id
+	optional string name 				= 3;	// 昵称
+	optional int64 gold 				= 4;	// 金币
+	optional int64 diamond 				= 5;	// 钻石
+	optional int32 vip					= 6;	// vip等级
+	optional string block_desc			= 7;	// 封号原因
+	optional string ip					= 8;	// 客户端ip
+	optional string location			= 9;	// 客户端所在地
+	optional string ps					= 10;	// 个人宣言
+	optional int64	mobile				= 11;	// 绑定的手机号
+	optional int64	weixin 				= 12;	// 绑定的微信号
+	optional string zhifubao			= 13;	// 绑定的支付宝账号
+	optional int64  weixinzhifu			= 14;	// 绑定的微信支付
+	optional int32  sex 				= 15;	// 性别
+	optional int64  charm 				= 16;	// 魅力值
+	optional int64  coupon 				= 17;	// 兑换券
+	optional int64  other_communiid 	= 18;	// 服务器用字段
+}
+
+// 用户数据修改
+message PB_UsrDataModify
+{
+	required int64 playerid				= 1;
+	optional string name 				= 2;	// 更改昵称
+	optional int32 sex					= 3;	// 更改性别
+	optional string ps  				= 4;	// 更改个人宣言
+}
+
+message PB_UsrDataModifyReturn
+{
+	required PB_ErrorCode code 			= 1;
+}
+
+// 其他设备登录通知
+message PB_OtherDeviceLoginNotify 
+{
+}
+
+
+// 资源更新通知
+message PB_ResourceUpdateNotify
+{
+	optional int64 gold 		= 1;	// 当前金币 
+	optional int64 diamond 		= 2;	// 当前钻石
+	optional int64 charm 		= 3;	// 当前魅力值
+	optional int64 coupon		= 4;	// 当前兑换券数量
+	optional int64 deposit 		= 5; 	// 当前存款
+}
+
+// 个人资料 
+message PB_PersonalData
+{
+	required int64 playerid = 1;
+}
+
+message Gift {
+	optional int32 id   = 1;		// 礼物id
+	optional int32 num  = 2;		// 礼物数量
+}
+
+message PB_PersonalDataReturn
+{
+	optional int32	glevel 		= 1;		// 游戏等级
+	optional int32  gexp   		= 2;		// 游戏经验
+	optional int32  victory 	= 3;		// 胜局
+	optional int32  defeat  	= 4;		// 负局
+	repeated Gift   gifts   	= 5;		// 礼物
+	optional float  progress 	= 6;		// 进度
+}
+
+// 他人资料
+message PB_OtherPersonalData
+{
+	required int64 playerid 	= 1;
+	required int64 targetid 	= 2;
+}
+
+message PB_OtherPersonalDataReturn
+{
+	optional int32	glevel 		= 1;		// 游戏等级
+	optional int32  gexp   		= 2;		// 游戏经验
+	optional int32  victory 	= 3;		// 胜局
+	optional int32  defeat  	= 4;		// 负局
+	repeated Gift   gifts   	= 5;		// 礼物
+	optional float  progress 	= 6;		// 进度
+	optional string name		= 7;		// 昵称
+	optional string ps 			= 8;		// 个人宣言
+	optional string	icon 		= 9;		// icon url
+	optional bool 	isfriend	= 10;		// 是否是好友
+	optional int64	playerid 	= 11;
+	optional int32	vip 		= 12;		// vip等级
+	optional int32	sex 		= 13;
+	optional int64 gold 		= 14;		// 金币 
+	optional int64 diamond 		= 15;		// 钻石
+	optional int64 charm 		= 16;		// 魅力值
+	optional int64 coupon		= 17;		// 兑换券
+}
+
+// 破产补助通知
+message PB_PochanBuzhuNotify
+{
+	required int32 gold     	= 1;
+	required int32 buzhu_count 	= 2;    // 剩余补助次数
+	required int32 all_count 	= 3;	// 补助总次数
+}
+
+// 大喇叭消息
+message PB_DalabaMessage
+{
+	enum PB_MsgType {
+		MsgType_None			= 0;
+		MsgType_Vip				= 1;	// vip
+		MsgType_NoVip			= 2;	// 非vip
+		MsgType_Sys				= 3;	// 系统
+		MsgType_Announcement 	= 4;	// 公告
+	}
+
+	required PB_MsgType type 	= 1;
+	optional int64 playerid		= 2;
+	optional int32	vip 		= 3;	// vip等级
+	optional string data 		= 4;
+	optional int32	itemid 		= 5;	// 大喇叭id
+}
+
+message PB_DalabaMessageReturn
+{
+	required PB_ErrorCode code = 1;
+}
+
+// 银行操作
+message PB_BankOperate
+{
+	optional int64 opt_gold = 1;	// + 存款 - 取款
+	required int64 playerid = 2;
+}
+
+message PB_BankOperateReturn
+{
+	required PB_ErrorCode code = 1;
+}
+

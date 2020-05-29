@@ -1,0 +1,114 @@
+package pb;
+
+message Tick
+{
+	required string sym = 1 ;
+	required int64 time = 2 ;
+	required string szWindCode = 3 ;
+	required int32 nActionDay = 4 ;
+	required int32 nTime = 5 ;
+	required int32 nStatus = 6 ;
+	required int32 nPreClose = 7 ;
+	required int32 nOpen = 8 ;
+	required int32 nHigh = 9 ;
+	required int32 nLow = 10 ;
+	required int32 nMatch = 11 ;
+	required int32 nAskPrice1 = 12 ;
+	required int32 nAskPrice2 = 13 ;
+	required int32 nAskPrice3 = 14 ;
+	required int32 nAskPrice4 = 15 ;
+	required int32 nAskPrice5 = 16 ;
+	required int32 nAskPrice6 = 17 ;
+	required int32 nAskPrice7 = 18 ;
+	required int32 nAskPrice8 = 19 ;
+	required int32 nAskPrice9 = 20 ;
+	required int32 nAskPrice10 = 21 ;
+	required int32 nAskVol1 = 22 ;
+	required int32 nAskVol2 = 23 ;
+	required int32 nAskVol3 = 24 ;
+	required int32 nAskVol4 = 25 ;
+	required int32 nAskVol5 = 26 ;
+	required int32 nAskVol6 = 27 ;
+	required int32 nAskVol7 = 28 ;
+	required int32 nAskVol8 = 29 ;
+	required int32 nAskVol9 = 30 ;
+	required int32 nAskVol10 = 31 ;
+	required int32 nBidPrice1 = 32 ;
+	required int32 nBidPrice2 = 33 ;
+	required int32 nBidPrice3 = 34 ;
+	required int32 nBidPrice4 = 35 ;
+	required int32 nBidPrice5 = 36 ;
+	required int32 nBidPrice6 = 37 ;
+	required int32 nBidPrice7 = 38 ;
+	required int32 nBidPrice8 = 39 ;
+	required int32 nBidPrice9 = 40 ;
+	required int32 nBidPrice10 = 41 ;
+	required int32 nBidVol1 = 42 ;
+	required int32 nBidVol2 = 43 ;
+	required int32 nBidVol3 = 44 ;
+	required int32 nBidVol4 = 45 ;
+	required int32 nBidVol5 = 46 ;
+	required int32 nBidVol6 = 47 ;
+	required int32 nBidVol7 = 48 ;
+	required int32 nBidVol8 = 49 ;
+	required int32 nBidVol9 = 50 ;
+	required int32 nBidVol10 = 51 ;
+	required int32 nNumTrades = 52 ;
+	required int32 iVolume = 53 ;
+	required int32 iTurnover = 54 ;
+	required int32 nTotalBidVol = 55 ;
+	required int32 nTotalAskVol = 56 ;
+	required int32 nWeightedAvgBidPrice = 57 ;
+	required int32 nWeightedAvgAskPrice = 58 ;
+	required int32 nIOPV = 59 ;
+	required int32 nYieldToMaturity = 60 ;
+	required int32 nHighLimited = 61 ;
+	required int32 nLowLimited = 62 ;
+	required int32 nSyl1 = 63 ;
+	required int32 nSyl2 = 64 ;
+	required int32 nSD2 = 65 ;
+}
+
+
+
+
+message Transaction
+{
+	required string sym = 1 ;
+	required int64 time = 2 ;
+	required string szWindCode = 3 ;
+	required int32 nActionDay = 4 ;
+	required int32 nTime = 5 ;
+	required int32 nIndex = 6 ;
+	required int32 nPrice = 7 ;
+	required int32 nVolume = 8 ;
+	required int32 nTurnover = 9 ;
+	required int32 nBSFlag = 10 ;
+	required string chOrderKind = 11 ;
+	required string chFunctionCode = 12 ;
+	required int32 nAskOrder = 13 ;
+	required int32 nBidOrder = 14 ;
+
+
+}
+
+message Index
+{
+	required string sym=1;
+	required int64 time=2;
+	required string szWindCode=3;
+	required string nActionDay=4;
+	required string nTime=5;
+	required string nOpenIndex=6;
+	required string nHighIndex=7;
+	required string nLowIndex=8;
+	required string nLastIndex=9;
+	required string iTotalVolume=10;
+	required string iTurnover=11;
+	required string nPreCloseIndex=12;
+
+}
+
+
+
+

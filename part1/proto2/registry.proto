@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package buckhx.safari.registry;
+option go_package = "pbf";
+
+import "google/api/annotations.proto";
+import "pokedex.proto";
+import "msg.proto";
+
+// Registry is a service to register trainers
+service Registry {
+	// Register makes a creates a new trainer in the safari
+	//
+	// Trainer name, password, age & gender are required. 
+	// Any other supplied fields will be ignored
+	rpc Register (Trainer) returns (Trainer) {
+		option (google.api.http) = {
+			post: "/trainer"
+			body: "*"
+		};
+	}
+
+	// Get fetchs a trainer
+	//
+	// The populated fields will depend on the auth scope of the token
+	rpc GetTrainer (Trainer) returns (Trainer) {
+		option (google.api.http) = {
+			get: "/trainer/{uid}"
+		};
+	}
+
+	// Get fetchs a trainer
+	//
+	// The populated fields will depend on the auth scope of the token
+	rpc UpdateTrainer (Trainer) returns (Trainer) {
+		option (google.api.http) = {
+			put: "/trainer/{uid}"
+		};
+	}
+
+	// Enter authenticates a user to retrieve a an access token to authorize requests for a safari
+	//
+	// HTTPS required w/ HTTP basic access authentication via a header
+	// Authorization: Basic BASE64({user:pass})
+	rpc Enter (Trainer) returns (Token) {
+		option (google.api.http) = {
+			get: "/trainer/{uid}/auth"
+		};
+	}
+
+	// Access retrieves an access token from a token's key/secret combo
+	//
+	// HTTPS required. Only key/secret will be honored
+	// Authorization: Basic BASE64({key:secret})
+	rpc Access (Token) returns (Token) {
+		option (google.api.http) = {
+			post: "/access"
+			body: "*"
+		};
+	}
+
+	// Certificate returns the cert used to verify token signatures
+	//
+	// The cert is in JWK form as described in https://tools.ietf.org/html/rfc7517
+	rpc Certificate (Trainer) returns (Cert) {
+		option (google.api.http) = {
+			get: "/cert"
+		};
+	}
+}
+
+message Trainer {
+	string uid = 1;
+	string name = 2;
+	string password = 3;
+	int32 age = 4;
+	Gender gender = 5;
+	msg.Timestamp start = 6;
+	pokedex.Pokemon.Collection pc = 7;
+	repeated string scope = 8;
+	
+	enum Gender {
+		BOY = 0;
+		GIRL = 1;
+	}
+}
+
+message Token {
+	string access = 1;
+	string key = 2;
+	string secret = 3;
+	repeated string scope = 4;
+}
+
+message Cert {
+	bytes jwk = 1;
+}

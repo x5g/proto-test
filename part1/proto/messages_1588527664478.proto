@@ -1,0 +1,101 @@
+package worldbox;
+
+message Vec3 {
+  required double x = 1;
+  required double y = 2;
+  required double z = 3;
+}
+
+//
+// Message category 0: Paperwork. (stats, auth, global settings, etc.)
+//
+
+// Message type 0x00 01
+// c->s: Sent on connection.
+// s->c: Sent to acknowledge connection & welcome client.
+message Hello {
+  required int32 version = 1;
+}
+
+// Message type 0x00 02
+// c->s: Set global world settings.
+message GlobalWorldSettings {
+  optional Vec3 physics_gravity = 1;
+}
+
+//
+// Message category 1: Message passing.
+//
+
+// Message type 0x01 01
+// c->s: Broadcast string message to channel.
+// s->c: Message was broadcasted, and we were subscribed to that channel.
+// If channel is not specified, then the message is broadcast everywhere.
+message MsgBroadcast {
+  optional string channel = 1;
+  required string json = 2;
+}
+
+// Message type 0x01 02
+// c->s: Subscribe (or unsubscribe) the client from the given message channel
+message MsgSubscribe {
+  required string channel = 1;
+  optional bool unsubscribe = 2 [default = false];
+}
+
+//
+// Message category 2: Entities.
+//
+
+// Message type 0x02 01
+// c->s: Request that a new entity be spawned.
+message SpawnEntity {
+  oneof oneof_config {
+    string cfg_filename = 1; // The filename of a JSON file
+    string cfg_json = 2; // An actual JSON string
+  }
+  optional Vec3 start_position = 3; // Default is (0,0,0)
+  optional int64 id = 4; // A custom ID for the entity
+  optional string config_string = 5; // Passed to the new entity on creation
+}
+
+// s->c: Notify that a new entity has spawned.
+message EntitySpawned {
+  required int64 id = 1;
+  required string entity_type = 2;
+  optional Vec3 position = 3;
+}
+
+// Message type 0x02 02
+// c->s: Notify the server that we want location updates
+message GetEntityLocation {
+  required int64 id = 1;
+  optional bool recurring = 2 [default=true];
+  optional float period = 3 [default=0.0]; // How often...
+  optional bool include_position = 4 [default=true];
+  optional bool include_rotation = 5 [default=true];
+}
+
+// s->c: An entity location update
+message EntityLocation {
+  required int64 id = 1;
+  optional Vec3 position = 2;
+  optional Vec3 rotation = 3;
+}
+
+// Message type 0x02 03
+// c->s: Set a control
+message SetControlValue {
+  required int64 entity_id = 1;
+  required string control_id = 2;
+  oneof value {
+    double val_double = 3;
+    int32 val_int32 = 4;
+  }
+}
+// Message type 0x02 04
+// c->s: Request entity be removed.
+// s->c: Entity destroyed.
+message RemoveEntity {
+  required int64 entity_id = 1;
+}

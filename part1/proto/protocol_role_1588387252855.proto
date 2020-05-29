@@ -1,0 +1,144 @@
+import "protocol_base.proto";
+
+package Uqee.Protobufs.Server.Protocol;
+
+message S2C_RoleEnconomy {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_ENCONOMY];
+        required int32 level = 2;
+        required int32 vip_lvl = 3;
+        required int32 diamond = 4;
+        required int32 money = 5;
+        required int32 room_card = 6;
+        required int32 rotor_num = 7;
+        required int32 competition_ticket = 8;
+        required float valid_cash = 9;
+        required int32 stamp = 10;
+}
+
+message S2C_RoleForceValue {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_FORCE_VALUE];
+        optional int32 force_value = 2;
+}
+
+message S2C_RoleAttribute {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_ATTRIBUTE];
+        optional int32 cur_exp = 2;
+        optional int32 level = 3;
+        optional int32 cur_hp = 4;
+        optional int32 force_val = 5;
+        repeated double attrs = 6;
+}
+
+message C2S_RoleLoadMaxRecord {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_LOAD_MAX_RECORD];
+        optional int64 role_id = 2;
+}
+
+message S2C_RoleLoadMaxRecord {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_LOAD_MAX_RECORD];
+        optional int64 role_id = 2;
+        optional int32 total_round = 3;
+        optional int32 total_win = 4;
+        optional int32 max_consective_win = 5;
+        optional int32 max_hu_num = 6;
+        optional int32 max_tai_num = 7;
+        optional int32 max_hu_type = 8;
+
+        message Group {
+            repeated int32 pais = 1;
+        }
+
+        repeated Group groups = 9;
+        repeated int32 pais = 10;
+}
+
+message C2S_RoleUpdateUID {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_UPDATE_UID];
+        optional string uid = 2;
+}
+
+message S2C_RoleUpdateUID {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_UPDATE_UID];
+        optional int32 ret = 2;
+}
+
+message C2S_RoleQueryUID {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_QUERY_UID];
+        optional int64 role_id = 2;
+}
+
+message S2C_RoleQueryUID {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_QUERY_UID];
+        optional int32 ret = 2;
+        optional int64 role_id = 3;
+        optional string uid = 4;
+}
+
+message S2C_RoleChargeInfo {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_CHARGE_INFO];
+        optional string order_id = 2;
+        optional int32 pay_id = 3;
+        optional int32 charged_cash = 4;
+        optional int32 diamond = 5;
+}
+
+message C2S_RoleDrawInfo {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_DRAW_INFO];
+}
+
+message S2C_RoleDrawInfo {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_DRAW_INFO];
+        optional int32 load_draw = 2;
+        optional int32 share_draw = 3;
+        optional int32 ad_hall_count = 4;
+        optional int32 ad_comp_count = 5;
+}
+
+message C2S_RoleDrawTicket {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_DRAW_TICKET];
+        optional int32 draw_type = 2;
+}
+
+message S2C_RoleDrawTicket {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_DRAW_TICKET];
+        optional int32 ret = 2;
+}
+
+message C2S_RoleShare {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_SHARE];
+}
+
+message S2C_RoleShare {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_SHARE];
+        optional int32 count = 2;
+}
+
+message C2S_RoleDrawGolden {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_DRAW_GOLDEN];
+}
+
+message S2C_RoleDrawGolden {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_DRAW_GOLDEN];
+        optional int32 count = 2;
+        optional int32 num = 3;
+}
+
+message C2S_RoleAttentionGold {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_ATTENTION_GOLD];
+}
+
+message S2C_RoleAttentionGold {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_ATTENTION_GOLD];
+        optional int32 money = 2;
+}
+
+message C2S_RoleADDraw {
+        optional ProtocolType type = 1 [default = C_2_S_ROLE_AD_DRAW];
+        optional int32 ad_type = 2;
+}
+
+message S2C_RoleADDraw {
+        optional ProtocolType type = 1 [default = S_2_C_ROLE_AD_DRAW];
+        optional int32 ad_type = 2;
+        optional int32 count = 3;
+}

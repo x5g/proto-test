@@ -1,0 +1,34 @@
+// Syntax for file proto3
+syntax = "proto3";
+
+/**************************************************
+Make use of comments to be clear on the following:
+1. Specify what this value represents.
+2. What the value default or boundries are, if any?
+**************************************************/
+
+/*
+Person is used to identify users from a sign up form
+*/
+// Scalar types
+message Person {
+  int32 age = 1;
+  string first_name = 2;
+  string last_name = 3;
+  bytes small_picture = 4; // represents a small .jpg file
+  bool is_profile_verified = 5;
+  float height = 6; // height of person in cms
+
+  // Repeated fields: a list/array of phone numbers which is optional
+  repeated string phone_numbers = 7;
+
+  // We currently only consider 3 eye colours using enum type
+  enum EyeColour {
+    UNKNOWN_EYE_COLOUR = 0;
+    EYE_GREEN = 1;
+    EYE_BLUE = 2;
+    EYE_BROWN = 3;
+  }
+
+  EyeColour eye_colour = 8;
+}

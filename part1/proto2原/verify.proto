@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+import "Server/proto/common/common.proto";
+
+package verify;
+
+service Verify{
+     rpc GetPhoneCode(CodeRequest) returns (VerifyReply) {}
+     rpc Login(LoginRequest) returns (LoginReply) {}
+     rpc BackLogin(LoginRequest) returns (LoginReply) {}
+     rpc Register(RegisterRequest) returns (RegisterReply) {}
+     rpc Logout(LogoutRequest) returns (common.CommReply) {}
+     rpc CheckToken(TokenRequest) returns (common.CommReply) {}
+     rpc AutoLogin(AutoRequest) returns (RegisterReply) {}
+     rpc WxMpLogin(LoginRequest) returns (LoginReply) {}
+     rpc UnionLogin(LoginRequest) returns (LoginReply) {}
+     rpc GetWxTicket(TicketRequest) returns (TicketReply) {}
+     rpc GetCheckCode(PortalLoginRequest) returns (common.CommReply) {}
+     rpc PortalLogin(PortalLoginRequest) returns (PortalLoginReply) {}
+     rpc UnifyLogin(PortalLoginRequest) returns (PortalLoginReply) {}
+     rpc WifiAccess(AccessRequest) returns (common.CommReply) {}
+     rpc checkLogin(AccessRequest) returns (CheckReply) {}
+     rpc oneClickLogin(AccessRequest) returns (PortalLoginReply) {}
+     rpc checkSubscribe(SubscribeRequest) returns (CheckReply) {}
+     rpc RecordWxConn(WxConnRequest) returns (common.CommReply) {}
+}
+
+message TokenRequest {
+    common.Head head = 1;
+    string token = 2;
+    int64 type = 3;
+}
+
+message CodeRequest {
+    common.Head head = 1;
+    string phone = 2;
+    int64 ctype = 3;
+}
+
+message LoginRequest {
+    common.Head head = 1;
+    string username = 2;
+    string password = 3;
+    string model = 4;
+    string udid = 5;
+    string code = 6;
+    string unionid = 7;
+}
+
+message LoginReply {
+    common.Head head = 1;
+    string token = 2;
+    string privdata = 3;
+    int64 expire = 4;
+    string wifipass = 5;
+    string expiretime = 6;
+    int64 role = 7;
+    string openid = 8;
+}
+
+message PortalLoginReply {
+    common.Head head = 1;
+    string token = 2;
+    string portaldir = 3;
+    string live = 4;
+    int64 adtype = 5;
+    int64 portaltype = 6;
+    string cover = 7;
+    string dst = 8;
+}
+
+message VerifyReply {
+    common.Head head = 1;
+    bool result = 2;
+}
+
+message ClientInfo {
+    string model = 1;
+    string udid = 2;
+    string channel = 3;
+    string regip = 4;
+    int64 version = 5;
+    int64 term = 6;
+}
+
+message RegisterRequest {
+    common.Head head = 1;
+    string username = 2;
+    string password = 3;
+    ClientInfo client = 4;
+    string code = 5;
+}
+
+message RegisterReply {
+    common.Head head = 1;
+    string token = 2;
+    string privdata = 3;
+    int64 expire = 4;
+    string expiretime = 5;
+    string headurl = 6;
+    string nickname = 7;
+    int64 pushtest = 8;
+}
+
+message LogoutRequest {
+    common.Head head = 1;
+    string token = 2;
+}
+
+message AutoRequest {
+    common.Head head = 1;
+    string token = 2;
+    string privdata = 3;
+}
+
+message TicketRequest {
+    common.Head head = 1;
+    int64 type = 2;
+}
+
+message TicketReply {
+    common.Head head = 1;
+    string token = 2;
+    string ticket = 3;
+}
+
+message PortalInfo {
+    string acname = 1;
+    string acip = 2;
+    string userip = 3;
+    string usermac = 4;
+    string phone = 5;
+    string code = 6;
+    string apmac = 7;
+    string ssid = 8;
+}
+
+message PortalLoginRequest {
+    common.Head head = 1;
+    PortalInfo info = 2;
+}
+
+message AccessRequest {
+    common.Head head = 1;
+    PortalInfo info = 2;
+}
+
+message AdBanner {
+    int64 id = 1;
+    string img = 2;
+}
+
+message CheckReply {
+    common.Head head = 1;
+    int64 autologin = 2;
+    bool subscribe = 3;
+    string img = 4;
+    string dst = 5;
+    string wxappid = 6;
+    string wxsecret = 7;
+    string wxshopid = 8;
+    string wxauthurl = 9;
+    int64 taobao = 10;
+    string cover = 11;
+    repeated AdBanner ads = 12;
+    int64 logintype = 13;
+}
+
+message SubscribeRequest {
+    common.Head head = 1;
+    string openid = 2;
+    int64 type = 3;
+}
+
+message WxConnRequest {
+    common.Head head = 1;
+    string openid = 2;
+    string acname = 3;
+    string acip = 4;
+    string usermac = 5;
+    string userip = 6;
+    string apmac = 7;
+    string tid = 8;
+    string appid = 9;
+}

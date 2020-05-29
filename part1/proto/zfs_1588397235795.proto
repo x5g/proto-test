@@ -1,0 +1,546 @@
+//Proof of concept zlomekFS protocol implementation by Protocol Buffers
+//author: Ales Snuparek
+//binary format of this protocol is not compatible with zlomekFS original protocol
+
+package zlomekfs;
+
+enum ftype
+{
+	FT_BAD = 0;
+	FT_REG = 1;
+	FT_DIR = 2;
+	FT_LNK = 3;
+	FT_BLK = 4;
+	FT_CHR = 5;
+	FT_SOCK = 6;
+	FT_FIFO = 7;
+	FT_LAST_AND_UNUSED = 8;
+}
+
+enum connection_speed
+{
+	CONNECTION_SPEED_NONE = 0;
+	CONNECTION_SPEED_SLOW = 1;
+	CONNECTION_SPEED_FAST = 2;
+	CONNECTION_SPEED_LAST_AND_UNUSED = 3;
+}
+
+message message_len
+{
+	required uint32 len = 1;
+}
+
+
+message zfs_time
+{
+	required uint32 time = 1;
+}
+
+message data_buffer
+{
+	required uint32 len = 1;
+	required bytes buf = 2;
+}
+
+message zfs_string
+{
+	required uint32 len = 1;
+	required bytes str = 2;
+}
+
+message zfs_path
+{
+	required zfs_string path = 1;
+}
+
+message zfs_filename
+{
+	required zfs_string name = 1;
+}
+
+message zfs_nodename
+{
+	required zfs_string name = 1;
+}
+
+message zfs_fh
+{
+	required uint32 sid = 1;
+	required uint32 vid = 2;
+	required uint32 dev = 3;
+	required uint32 ino = 4;
+	required uint32 gen = 5;
+}
+
+message zfs_fattr
+{
+	required uint32 dev = 1;
+	required uint32 ino = 2;
+	required uint64 version = 3;
+	required ftype type = 4;
+	required uint32 mode = 5;
+	required uint32 nlink = 6;
+	required uint32 uid = 7;
+	required uint32 gid = 8;
+	required uint32 rdev = 9;
+	required uint64 size = 10;
+	required uint64 blocks = 11;
+	required uint32 blksize = 12;
+	required zfs_time atime = 13;
+	required zfs_time mtime = 14;
+	required zfs_time ctime = 15;
+}
+
+message zfs_sattr
+{
+	required uint32 mode = 1;
+	required uint32 uid = 2;
+	required uint32 gid = 3;
+	required uint64 size = 4;
+	required zfs_time atime = 5;
+	required zfs_time mtime = 6;
+}
+
+message zfs_void
+{
+}
+
+message dir_op_res
+{
+	required zfs_fh file = 1;
+	required zfs_fattr attr = 2;
+}
+
+message dirop_args
+{
+	required zfs_fh dir = 1;
+	required zfs_filename name = 2;
+}
+
+message dirop_res
+{
+	required zfs_fh file = 1;
+	required zfs_fattr attr = 2;
+}
+
+message zfs_cap
+{
+	required zfs_fh fh = 1;
+	required uint32 flags = 2;
+	required bytes verify = 3;
+}
+
+message dir_list
+{
+	required uint32 n = 1;
+	required bool eof = 2;
+	required bytes buffer = 3;
+}
+
+message dir_op_args
+{
+	required zfs_fh dir = 1;
+	required zfs_filename name = 2;
+}
+
+message read_link_res
+{
+	required zfs_path path = 1;
+}
+
+message zfs_error
+{
+	required int32 error = 1;
+}
+
+
+
+// zlomekfs service arguments defintion
+message ping_args
+{
+	required data_buffer buffer = 1;
+}
+
+message ping_res
+{
+	required zfs_error result = 1;
+	required data_buffer buffer = 2;
+}
+
+message root_args
+{
+	required zfs_void void = 1;
+}
+
+message root_res
+{
+	required zfs_error result = 1;
+	required zfs_fh fh = 2;
+}
+
+message volume_root_args
+{
+	required uint32 vid = 1;
+}
+
+message volume_root_res
+{
+	required zfs_error result = 1;
+	required dir_op_res dir = 2;
+}
+
+message getattr_args
+{
+	required zfs_fh fh = 1;
+}
+
+message getattr_res
+{
+	 required zfs_error result = 1;
+	 required zfs_fattr fattr = 2;
+}
+
+message setattr_args
+{
+	required zfs_fh file = 1;
+	required zfs_sattr attr = 2;
+}
+
+message setattr_res
+{
+	 required zfs_error result = 1;
+	 required zfs_fattr fattr = 2;
+}
+
+message lookup_args
+{
+	required dir_op_args dir = 1;
+}
+
+message lookup_res
+{
+	 required zfs_error result = 1;
+	 required dir_op_res dir = 2;
+}
+
+message create_args
+{
+	required dir_op_args where = 1;
+	required uint32 flags = 2;
+	required zfs_sattr attr = 3;
+}
+
+message create_res
+{
+	 required zfs_error result = 1;
+}
+
+message open_args
+{
+	required zfs_fh file = 1;
+	required uint32 flags = 2;
+}
+
+message open_res
+{
+	 required zfs_error result = 1;
+	 required zfs_cap cap = 2;
+}
+
+message close_args
+{
+	 required zfs_cap cap = 1;
+}
+
+message close_res
+{
+	 required zfs_error result = 1;
+}
+
+message readdir_args
+{
+	required zfs_cap cap = 1;
+	required int32 cookie = 2;
+	required uint32 count = 3;
+}
+
+message readdir_res
+{
+	 required zfs_error result = 1;
+	 required dir_list list = 2;
+}
+
+message mkdir_args
+{
+	required dir_op_args where = 1;
+	required zfs_sattr attr = 2;
+}
+
+message mkdir_res
+{
+	 required zfs_error result = 1;
+	 required dir_op_res dir = 2;
+}
+
+message rmdir_args
+{
+	required dir_op_args dir = 1;
+}
+
+message rmdir_res
+{
+	 required zfs_error result = 1;
+}
+
+message rename_args
+{
+	required dir_op_args from = 1;
+	required dir_op_args to = 2;
+}
+
+message rename_res
+{
+	 required zfs_error result = 1;
+}
+
+message link_args
+{
+	required zfs_fh from = 1;
+	required dir_op_args to = 2;
+}
+
+message link_res
+{
+	 required zfs_error result = 1;
+}
+
+message unlink_args
+{
+	required dir_op_args dir = 1;
+}
+
+message unlink_res
+{
+	 required zfs_error result = 1;
+}
+
+message read_args
+{
+	required zfs_cap cap = 1;
+	required uint64 offset = 2;
+	required uint32 count = 3;
+}
+
+message read_res
+{
+	required zfs_error result = 1;
+	required data_buffer data = 2;
+	required uint64 version = 3;
+}
+
+message write_args
+{
+	required zfs_cap cap = 1;
+	required uint64 offset = 2;
+	required data_buffer data = 3;
+	required bool remote = 4;
+}
+
+message write_res
+{
+	required zfs_error result = 1;
+	required uint32 written = 2;
+	required uint64 version = 3;
+}
+
+message readlink_args
+{
+	required zfs_fh fh = 1;
+}
+
+message readlink_res
+{
+	 required zfs_error result = 1;
+}
+
+message symlink_args
+{
+	required dir_op_args from = 1;
+	required zfs_path to = 2;
+	required zfs_sattr attr = 3;
+}
+
+message symlink_res
+{
+	 required zfs_error result = 1;
+	 required dir_op_res dir = 2;
+}
+
+message mknod_args
+{
+	required dir_op_args from = 1;
+	required zfs_path to = 2;
+	required zfs_sattr attr = 3;
+}
+
+message mknod_res
+{
+	 required zfs_error result = 1;
+	 required dir_op_res dir = 2;
+}
+
+message auth_stage1_args
+{
+	required zfs_nodename node = 1;
+}
+
+message auth_stage1_res
+{
+	 required zfs_error result = 1;
+	required zfs_nodename node = 2;
+}
+
+message auth_stage2_args
+{
+	required connection_speed speed = 1;
+}
+
+message auth_stage2_res
+{
+	 required zfs_error result = 1;
+}
+
+message md5sum_args
+{
+	required zfs_cap cap = 1;
+	required uint32 count = 2;
+	required bool ignore_changes = 3;
+	required uint64 offset  = 4; // [ZFS_MAX_MD5_CHUNKS]
+	required uint32 length = 5; // [ZFS_MAX_MD5_CHUNKS]
+}
+
+message md5sum_res
+{
+	required zfs_error result = 1;
+	required uint32 count = 2;
+	required uint32 padding0 = 3;
+	required uint64 size = 4;
+	required uint64 version = 5;
+	required uint64 offset = 6;
+	required uint32 length = 7;
+	required bytes md5sum = 8; //[ZFS_MAX_MD5_CHUNKS][MD5_SIZE]
+}
+
+message file_info_args
+{
+	required zfs_fh fh = 1;
+}
+
+message file_info_res
+{
+	 required zfs_error result = 1;
+	 required zfs_path path = 2;
+}
+
+message reread_config_args
+{
+	required zfs_path path = 1;
+}
+
+message reread_config_res
+{
+	 required zfs_error result = 1;
+}
+
+message reintegrate_args
+{
+	required zfs_fh fh = 1;
+	required bool status = 2;
+}
+
+message reintegrate_res
+{
+	 required zfs_error result = 1;
+}
+
+message reintegrate_add_args
+{
+	required zfs_fh fh = 1;
+	required zfs_fh dir = 2;
+	required zfs_filename name = 3;
+}
+
+message reintegrate_add_res
+{
+	 required zfs_error result = 1;
+}
+
+message reintegrate_del_args
+{
+	required zfs_fh fh =  1;
+	required zfs_fh dir = 2;
+	required zfs_filename name = 3;
+	required bool destroy_p = 4;
+}
+
+message reintegrate_del_res
+{
+	 required zfs_error result = 1;
+}
+
+message reintegrate_ver_args
+{
+	required zfs_fh fh = 1;
+	required uint64 version_inc = 2;
+}
+
+message reintegrate_ver_res
+{
+	 required zfs_error result = 1;
+}
+
+message invalidate_args
+{
+	required zfs_fh fh = 1;
+}
+
+message invalidate_res
+{
+	 required zfs_error result = 1;
+}
+
+// zlomekfs service definition
+service zfsd
+{
+	rpc ping(ping_args) returns(ping_res);
+	rpc root(root_args) returns(root_res);
+	rpc volume_root(volume_root_args) returns(volume_root_res);
+	rpc getattr(getattr_args) returns(getattr_res);
+	rpc setattr(setattr_args) returns(setattr_res);
+	rpc lookup(lookup_args) returns(lookup_res);
+	rpc create(create_args) returns(create_res);
+	rpc open(open_args) returns(open_res);
+	rpc close(close_args) returns(close_res);
+	rpc readdir(readdir_args) returns(readdir_res);
+	rpc mkdir(mkdir_args) returns(mkdir_res);
+	rpc rmdir(rmdir_args) returns(rmdir_res);
+	rpc rename(rename_args) returns(rename_res);
+	rpc link(link_args) returns(link_res);
+	rpc unlink(unlink_args) returns(unlink_res);
+	rpc read(read_args) returns(read_res);
+	rpc write(write_args) returns(write_res);
+	rpc readlink(readlink_args) returns(read_link_res);
+	rpc symlink(symlink_args) returns(symlink_res);
+	rpc mknod(mknod_args) returns(mknod_res);
+	rpc auth_stage1(auth_stage1_args) returns(auth_stage1_res);
+	rpc auth_stage2(auth_stage2_args) returns(auth_stage2_res);
+	rpc md5sum(md5sum_args) returns(md5sum_res);
+	rpc file_info(file_info_args) returns(file_info_res);
+	rpc reread_config(reread_config_args) returns(reread_config_res);
+	rpc reintegrate(reintegrate_args) returns(reintegrate_res);
+	rpc reintegrate_add(reintegrate_add_args) returns(reintegrate_add_res);
+	rpc reintegrate_del(reintegrate_del_args) returns(reintegrate_del_res);
+	rpc reintegrate_ver(reintegrate_ver_args) returns(reintegrate_ver_res);
+	rpc invalidate(invalidate_args) returns(invalidate_res);
+}
+

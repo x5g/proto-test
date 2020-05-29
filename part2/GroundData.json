@@ -1,0 +1,17 @@
+{
+  "id": 1,
+  "timestamp": 1570402900,
+  "gpsLocation": {
+    "latitude": 488679,
+    "longitude": 240093
+  },
+  "sensorDatas": [
+    {
+      "value": 35
+    },
+    {
+      "sensorType": "TEMPERATURE",
+      "value": 14
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+syntax = "proto3";
+package core;
+
+import "google/protobuf/timestamp.proto";
+import "user.proto";
+import "comment.proto";
+import "service.proto";
+import "history.proto";
+import "status.proto";
+import "common.proto";
+
+message CreateOrderRequest {
+    string serviceId = 1;
+    string staffId = 2;
+    string companyId = 10;
+    string duration = 4;
+    string destination = 5;
+    string additionDetails = 6;
+    string timeStart = 9;
+    string dateStart = 12;
+    string apartmentNo = 13;
+    string buildingName = 14;
+}
+
+
+message OrderForMobile {
+    string residentId = 1;
+    string residentName = 2;
+    google.protobuf.Timestamp dateStart = 3;
+    string timeStart = 4;
+    string apartmentNo = 5;
+    string buildingName = 6;
+    string type = 7;
+}
+
+message StaffOrderForMobile {
+    string orderId = 7;
+    string residentId = 1;
+    string residentName = 2;
+    string date = 3;
+    string apartmentName = 4;
+    string type = 5;
+    string time = 6;
+    bool flagNotification = 8;
+}
+message ListStatusOrderForMobile {
+    string name = 1;
+    int32 total = 2;
+}
+message ListOrderForMobile {
+    repeated ListStatusOrderForMobile totalStatus = 1;
+    repeated StaffOrderForMobile list = 2;
+    repeated string listDate = 3;
+}
+message GetOrdersByStaffId {
+    string status = 1;
+    string dateStart = 2;
+    string dateEnd = 3;
+}
+
+
+message GetOrderByIdRequest {
+    string id = 1;
+}
+
+message GetOrdersByCompanyId {
+    string companyId = 1;
+}
+
+message UpdateOrder {
+    string id = 1;
+    google.protobuf.Timestamp dateStart = 8;
+    string timeStart = 9;
+}
+
+message OrderDetail {
+    string code = 1;
+    string duration = 2;
+    string destination = 3;
+    string additionDetails = 4;
+    float totalCost = 5;
+    float extraCost = 6;
+    string state = 7;
+    google.protobuf.Timestamp dateStart = 8;
+    string timeStart = 9;
+    google.protobuf.Timestamp createdAt = 10;
+    google.protobuf.Timestamp updatedAt = 11;
+    string apartmentNo = 12;
+    string buildingName = 13;
+}
+
+message OrderResponse {
+    string id = 1;
+    OrderDetail detail = 2;
+    UserResponse staff = 3;
+    UserResponse resident = 4;
+    ServiceResponse service = 5;
+    CompanyResponse company = 6;
+}
+
+message ListOrder {
+    repeated OrderResponse data = 1;
+    int32 totalItem = 2;
+}
+
+message GettingAppointmentHistoryRequest {
+    string filterStatus = 1;
+    string startDate = 2;
+    string endDate = 3;
+    Pagination pagination = 4;
+    string companyId = 5;
+    string sortColumn = 6;
+    string sortType = 7;
+}
+
+message GettingAppointmentHistoryResponse {
+    repeated AppointmentHistoryInfo appointmentHistoryInfo = 1;
+    int32 totalItems = 2;
+}
+
+message AppointmentHistoryInfo {
+    string date = 1;
+    string staffName = 2;
+    string buildingName = 3;
+    float earning = 4;
+    string state = 5;
+    string avatar = 6;
+    string orderId = 7;
+}
+
+message OrderRequestListStaff {
+    string categoryId = 1;
+    Pagination Paging = 2;
+}
+message OrderResponseListStaff {
+    repeated OrderResponseStaff listStaff = 1;
+    Pagination Paging = 2;
+    int32 totalItem = 3;
+}
+
+message OrderResponseStaff {
+    string staffId = 1;
+    string staffName = 2;
+    string staffAvatar = 3;
+    string staffDesc = 4;
+    int32 staffStatus = 5;
+    string companyId = 6;
+    string companyName = 7;
+    float rating = 8;
+    int32 categoryId = 9;
+    string categoryName = 10;
+}
+
+
+message StaffDescriptionRequest {
+    string staffId = 1;
+    string companyId = 2;
+    int32 categoryId = 3;
+}
+message ListServiceForPreview {
+    string id = 1;
+    string name = 2;
+    string description = 4;
+    PriceModel fee = 3;
+}
+message StaffDescriptionResponse {
+    string staffId = 1;
+    string staffName = 2;
+    string staffAvatar = 3;
+    string staffSplash = 4;
+    int32 staffStatus = 5;
+    string companyId = 6;
+    string companyName = 7;
+    string description = 8;
+    float rating = 9;
+    repeated ListServiceForPreview services = 10;
+}
+
+message GetOrderByStaffId {
+    string staffId = 1;
+}
+
+message GetOrderByResident {
+    Pagination Paging = 2;
+}
+
+message ListOrderForResident {
+    repeated OrderForResident data = 1;
+    int32 totalItem = 2;
+}
+
+message OrderForResident {
+    string id = 10;
+    string code = 11;
+    string staffId = 1;
+    string staffName = 2;
+    google.protobuf.Timestamp dateStart = 3;
+    string timeStart = 4;
+    string apartmentNo = 5;
+    string buildingName = 6;
+    string type = 7;
+    string companyId = 8;
+    string companyName = 9;
+}
+
+message StaffChangeStateOrderRequest {
+    string orderId = 1;
+    string state = 2;
+}
+
+message StaffChangeStateOrderResponse {
+    string orderId = 1;
+    string state = 2;
+}
+
+
+message StaffGetListHistoryOrderRequest {
+    Pagination Paging = 1;
+}
+message StaffGetListHistoryOrderResponse {
+    repeated StaffGetHistoryOrderResponse data = 1;
+}
+message StaffGetHistoryOrderResponse {
+    string orderId = 1;
+    string code = 7;
+    string residentId = 2;
+    string residentName = 3;
+    string dateStart = 4;
+    string timeStart = 5;
+    string apartmentName = 6;
+}
+
+message StaffGetOrderByIdRequest {
+    string orderId = 1;
+}
+message StaffGetOrderByIdResponse {
+    string orderId = 1;
+    string code = 2;
+    string date = 3;
+    string time = 4;
+    string state = 5;
+    float total = 6;
+    ResidentInformationForStaffGetOrderById resident = 7;
+    repeated ListServicesForStaffGetOrderById services = 8;
+
+}
+message ResidentInformationForStaffGetOrderById {
+    string residentId = 1;
+    string name = 2;
+    string address = 3;
+    string phone = 4;
+    string email = 5;
+}
+message ListServicesForStaffGetOrderById {
+    string serviceId = 1;
+    string name = 2;
+    float cost = 3;
+}
+
+message GetOrderChangesHistoryRequest {
+    string orderId = 1;
+}
+
+message OrderChange {
+    string username = 1;
+    string contentType = 2;
+    string oldValue = 3;
+    string currentValue = 4;
+    string dateTime = 5;
+}
+message GetOrderChangesHistoryResponse {
+    string orderId = 1;
+    repeated OrderChange histories = 2;
+}
+
+message NotificationOrder {
+    string state = 1;
+    bool flagNotification = 2;
+}
+
+message ListNotificationOrder {
+    repeated NotificationOrder data = 1;
+}

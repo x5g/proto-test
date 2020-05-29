@@ -1,0 +1,164 @@
+package q2;
+
+message RemoteCommand {
+  enum Type {
+    /* Remote control */
+    AttachSession = 1;
+    /* Session */
+    GetNetworkList = 100;
+    /* Network */
+    Connect = 200;
+    JoinChannel = 202;
+    SendPrivmsg = 203;
+    GetBufferList = 204;
+    Disconnect = 205;
+    GetNetworkConfiguration = 206;
+    SetNetworkConfiguration = 207;
+    /* Buffer */
+    GetMessageRange = 300;
+  };
+
+  required Type packet_type = 1;
+
+  optional uint64 network_id = 2;
+  optional uint64 buffer_id = 3;
+  optional uint64 tag = 4;
+
+  optional AttachSessionT attach_session = 5;
+  optional JoinChannelT join_channel = 7;
+  optional SendPrivmsgT send_privmsg = 8;
+  optional SetNetworkConfigurationT set_network_configuration = 9;
+  optional GetMessageRangeT get_message_range = 10;
+}
+
+message AttachSessionT {
+  required uint64 session_id = 1;
+}
+
+message RegisterT {
+  required string nickname = 2;
+}
+
+message JoinChannelT {
+  required string channel = 2;
+}
+
+message SendPrivmsgT {
+  required string target = 2;
+  required string msg = 3;
+}
+
+message SetNetworkConfigurationT {
+  required string server = 1;
+  required string nickname = 2;
+}
+
+message GetMessageRangeT {
+  required uint32 count = 1;
+  optional uint64 before_id = 2;
+}
+
+message RemoteMessage {
+  enum Type {
+    /* Remote control */
+    Error = 1;
+    Success = 2;
+    /* Session */
+    NetworkList = 100;
+    /* Network */
+    Connected = 201;
+    Disconnected = 202;
+    BufferList = 203;
+    NewBuffer = 204;
+    NetworkConfiguration = 205;
+    /* Buffer */
+    Information = 305;
+    Join = 306;
+    Privmsg = 307;
+    MessageRange = 308;
+  };
+
+  required Type packet_type = 1;
+
+  optional uint64 network_id = 2;
+  optional uint64 buffer_id = 3;
+  optional uint64 message_id = 4;
+  optional uint64 message_time = 5;
+  optional uint64 tag = 6;
+
+  repeated NetworkListT network_list = 7;
+  optional DisconnectedT disconnected = 8;
+  repeated BufferListT buffer_list = 9;
+  optional NewBufferT new_buffer = 10;
+  optional InformationT information = 11;
+  optional ErrorT error = 12;
+  optional JoinT join = 13;
+  optional PrivmsgT privmsg = 14;
+  optional NetworkConfigurationT network_configuration = 15;
+  repeated MessageRangeT message_range = 16;
+}
+
+message NetworkListT {
+  enum NetworkState {
+    NetworkDisconnected = 0;
+    NetworkConnecting = 1;
+    NetworkConnected = 2;
+  }
+  required uint64 id = 1;
+  required NetworkState state = 2;
+}
+
+message DisconnectedT {
+  required string reason = 1;
+}
+
+message BufferRole {
+  enum Type {
+    Status = 1;
+    Channel = 2;
+    Query = 3;
+  }
+  required Type buffer_type = 1;
+  required string name = 2;
+}
+
+message BufferListT {
+  required uint64 id = 1;
+  required BufferRole role = 2;
+  required uint64 stored_messages = 3;
+}
+
+message NewBufferT {
+  required uint64 id = 1;
+  required BufferRole role = 2;
+}
+
+message InformationT {
+  required string msg = 1;
+}
+
+message ErrorT {
+  required string msg = 1;
+}
+
+message JoinT {
+  required string who = 1;
+}
+
+message PrivmsgT {
+  required string who = 1;
+  required string msg = 2;
+}
+
+message NetworkConfigurationT {
+  required string server = 1;
+  required string nickname = 2;
+}
+
+message MessageRangeT {
+  required uint64 id = 1;
+  required uint64 time = 2;
+  optional InformationT information = 3;
+  optional JoinT join = 4;
+  optional PrivmsgT privmsg = 5;
+}

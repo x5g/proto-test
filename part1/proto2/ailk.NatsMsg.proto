@@ -1,0 +1,115 @@
+
+//required：一个格式良好的消息一定要含有1个这种字段。表示该值是必须要设置的。
+//optional：消息格式中该字段可以有0个或1个值（不超过1个）。
+//repeated：在一个格式良好的消息中，这种字段可以重复任意多次（包括0次）。
+//			重复的值的顺序会被保留。表示该值可以重复，相当于java中list。
+
+package ailk;
+
+message NatsMsg_pb
+{
+    required  uint32 iMsgId = 1;
+    required  bytes  bNatsMsgPb = 2;
+    required  uint64 lNatsMsgLen = 3;
+};
+
+//############################################
+
+//总控模块向业务模块查询当前处理的Partition信息
+message CurrentPartitionRequest_pb
+{
+    required  uint32 iFlowId=1;     //流程id
+    required  uint32 iProcessId=2;  //进程id
+    required  uint32 iInstanceId=3; //实例id
+};
+
+//业务模块返回给总控模块当前处理的Partition
+message CurrentPartitionResponse_pb
+{
+    required  uint32 iProcessId=1;   //进程id
+    required  uint32 iInstanceId=2;  //实例id
+    required  uint32 iFlowId=3;      //流程id
+    repeated  uint32 iPartitions=4;  //分配的partition
+};
+
+//############################################
+
+//总控模块向业务模块下发的Partition信息
+message DispatchPartitionRequest_pb
+{
+    required  uint32 iProcessId=1;      //进程id
+    required  uint32 iInstanceId=2;     //实例id
+    required  uint32 iFlowId=3;         //流程id
+
+    required  bytes  sBroke=4;          //Broke信息
+    required  bytes  sTopicRecv=5;      //Topic信息
+    required  bytes  sTopicSend=6;      //Topic信息
+
+    required  uint32 iPartitionType=7;  //下发partition类型，1--减少 2--增加
+    repeated  uint32 iPartitions=8;     //分配的partition
+};
+
+//业务模块响应总控模块的Partition下发消息
+message DispatchPartitionResponse_pb
+{
+    required  uint32 iProcessId=1;  //进程id
+    required  uint32 iInstanceId=2; //实例id
+    required  uint32 iFlowId=3;     //流程id
+    required  uint32 iResult=4;     //处理结果，1-更新成功，0-更新失败
+};
+
+//总控模块向业务模块下发Partition确认信息
+message DispatchPartitionConfirm_pb
+{
+    required  uint32 iProcessId=1;  //进程id
+    required  uint32 iInstanceId=2; //实例id
+    required  uint32 iFlowId=3;     //流程id
+    required  uint32 iConfirm=4;    //Partition确认信息，1-生效，0-不生效
+};
+
+//############################################
+
+//业务模块向总控模块请求待处理的Partition
+message QueryPartitionRequest_pb
+{
+    required  uint32 iProcessId=1;  //进程id
+    required  uint32 iInstanceId=2; //实例id
+    required  uint32 iFlowId=3;     //流程id
+};
+
+//总控模块返回给业务模块待处理的Partition
+message QueryPartitionResponse_pb
+{
+    required  uint32 iProcessId=1;      //进程id
+    required  uint32 iInstanceId=2;     //实例id
+    required  uint32 iFlowId=3;         //流程id
+
+    required  bytes  sBroke=4;          //Broke信息
+    required  bytes  sTopicRecv=5;          //Topic信息
+    required  bytes  sTopicSend=6;          //Topic信息
+
+    repeated  uint32 iPartitions=7;     //分配的partition
+};
+
+//############################################
+
+//后端节点向总控发送的处理反馈消息
+message ProcessFeedbackRequest_pb
+{
+};
+//总控返回给后端节点的反馈响应消息
+message ProcessFeedbackForwardResponse_pb
+{
+};
+
+//总控向前端节点转发的处理反馈消息
+message ProcessFeedbackForwardRequest_pb
+{
+};
+//前段节点返回给总控的反馈响应消息
+message ProcessFeedbackResponse_pb
+{
+};
+
+//############################################
+

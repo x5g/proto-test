@@ -1,0 +1,341 @@
+package Sanguo.protocol.union;
+
+import "common.proto";
+import "battle.proto";
+import "world.proto";
+
+// 一个工会
+message UnionBasicInformation {
+    required int32 id = 1;
+    required string name = 2;
+    required string bulletin = 3;
+    required int32 level = 4;
+    required int32 contribute_points = 5;        // 贡献度
+    required int32 next_contribute_points = 6;   // 升级到下一级所需贡献度
+    required int32 rank = 7;
+
+    required int32 current_member_amount = 8;
+    required int32 max_member_amount = 9;
+}
+
+message UnionNotify {
+    message UnionMember {
+        required Sanguo.protocol.common.CharacterInfomation char = 1;
+        required int32 position = 2;    // 职务
+        required int32 contribute_points = 3;   // 贡献度
+    }
+
+
+    required bytes session = 1;
+    required bool in_union = 2;     // 是否在工会中
+    optional UnionBasicInformation union = 3;
+    optional int32 leader = 4;
+    repeated UnionMember members = 5; // 会员
+}
+
+// 工会申请者列表
+message UnionApplyListNotify {
+    required bytes session = 1;
+    repeated Sanguo.protocol.common.CharacterInfomation chars = 2;
+}
+
+
+// 工会个人信息
+message UnionPersonalInformationNotify {
+    required bytes session = 1;
+    required int32 union_coin = 2;
+    required int32 checkin_total_amount = 3;
+    required int32 checkin_current_amount = 4;
+}
+
+
+
+// 创建工会
+message UnionCreateRequest {
+    required bytes session = 1;
+    required string name = 2;
+}
+
+message UnionCreateResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+
+// 工会列表
+message UnionListNotify {
+    message UnionApplyStatus {
+        required UnionBasicInformation union = 1;
+        required bool applied = 2;     // 是否申请过
+    }
+
+    required bytes session = 1;
+    repeated UnionApplyStatus unions = 2;
+}
+
+message UnionListRequest {
+    required bytes session = 1;
+}
+
+message UnionListResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 加入工会
+message UnionApplyRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message UnionApplyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 批准加入
+message UnionAgreeRequest {
+    required bytes session = 1;
+    required int32 char_id = 2;
+}
+
+message UnionAgreeResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 拒绝加入
+message UnionRefuseRequest {
+    required bytes session = 1;
+    required int32 char_id = 2;
+}
+
+message UnionRefuseResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 修改工会信息
+message UnionModifyRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+    required string bulletin = 3;
+}
+
+message UnionModifyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 主动退出工会
+message UnionQuitRequest {
+    required bytes session = 1;
+}
+
+message UnionQuitResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 会长管理成员
+message UnionMemberManageRequest {
+    enum UnionManageAction {
+        KICKOUT = 1;    // 踢人
+        TRANSFER = 2;   // 转让会长
+    }
+
+    required bytes session = 1;
+    required UnionManageAction action = 2;
+    required int32 member_id = 3;
+}
+
+
+message UnionMemberManageResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 工会签到
+message UnionCheckinRequest {
+    required bytes session = 1;
+}
+
+message UnionCheckinResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Sanguo.protocol.world.Attachment drop = 3;
+}
+
+
+// 工会商店
+message UnionStoreNotify {
+    message BuyBuffTimes {
+        required int32 id = 1;
+        required int32 max_times = 2;
+        required int32 cur_times = 3;
+        required int32 add_value = 4;
+        required int32 cost = 5;        // 消耗工会币
+    }
+
+    required bytes session = 1;
+    repeated BuyBuffTimes buffs = 2;
+}
+
+message UnionStoreBuyRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message UnionStoreBuyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 工会战
+message UnionBattleNotify {
+    required bytes session = 1;
+    required int32 order = 2;   // 排名
+    required int32 score = 3;   // 积分
+    required int32 in_battle_members = 4;   // 可参战成员数量
+    required int32 remained_battle_times = 5;   // 剩余挑战次数
+}
+
+// 工会战排名列表
+message UnionBattleBoardRequest {
+    required bytes session = 1;
+}
+
+message UnionBattleBoardResponse {
+    message UnionBoard {
+        required int32 order = 1;   // 排名
+        required int32 score = 2;   // 积分
+        required string name = 3;   // 名字
+        required int32 level = 4;   // 等级
+        required string leader_name = 5;  // 会长名称
+        required int32 leader_avatar = 6; // 会长头像 hero id
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated UnionBoard union = 3; 
+
+}
+
+
+
+// 工会站战报
+message UnionBattleRecord {
+    message UnionBattleLog {
+        required string my_name = 1;
+        required string rival_name = 2;
+        required bool win = 3;
+        required int32 hp = 4;
+    }
+
+    required string rival_name = 1; // 对方工会名称
+    required bool initiative = 2;   // 是否主动挑战
+    required bool win = 3;          // 自己是否胜利
+    required int32 timestamp = 4;   // 战斗发生时间戳 UTC seconds
+    required int32 score = 5;       // 有正负
+
+    repeated UnionBattleLog logs = 6;
+}
+
+message UnionBattleStartRequest {
+    required bytes session = 1;
+}
+
+message UnionBattleStartResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional UnionBattleRecord record = 3;
+}
+
+// 获取战报
+message UnionBattleRecordGetRequest {
+    required bytes session = 1;
+}
+
+message UnionBattleRecordGetResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated UnionBattleRecord records = 3;
+}
+
+
+
+// BOSS
+message UnionBossRequest {
+    required bytes session = 1;
+}
+
+
+message UnionBossResponse {
+    message Boss {
+        enum Status {
+            INACTIVE = 1;
+            ACTIVE = 2;
+            DEAD = 3;
+        }
+        required int32 id = 1;
+        required Status status = 2;
+        required int32 hp = 3;
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 remained_times = 3;   // 剩余挑战次数
+    repeated Boss bosses = 4;
+}
+
+message UnionBossGetLogRequest {
+    required bytes session = 1;
+    required int32 boss_id = 2;
+}
+
+message UnionBossGetLogResponse {
+    message BossLog {
+        required int32 char_id = 1;
+        required string char_name = 2;
+        required int32 damage = 3;
+        required int32 precent = 4;
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 boss_id = 3;
+    optional BossLog killer = 4;  // 最后一击
+    repeated BossLog logs = 5;
+}
+
+message UnionBossStartRequest {
+    required bytes session = 1;
+    required int32 boss_id = 2;
+}
+
+
+message UnionBossStartResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+message UnionBossBattleRequest {
+    required bytes session = 1;
+    required int32 boss_id = 2;
+}
+
+message UnionBossBattleResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Sanguo.protocol.battle.Battle battle = 3;
+    optional Sanguo.protocol.world.Attachment drop = 4;
+}
+
+
+

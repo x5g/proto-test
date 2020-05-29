@@ -1,0 +1,36 @@
+syntax="proto3";
+option optimize_for= SPEED; //加快解析
+option java_package="com.w.netty.demo2.test_002_protubuf";
+option java_outer_classname="MyProtoBean";
+
+
+//protoBuf 可以 使用 message 管理其他的message
+
+message  MyMessage{
+
+  //定义枚举类型
+  enum DataType{
+    studentType=0;//从0开始   proto3 开始 要求枚举从0开始
+    workerType=1;
+  }
+  //用data_type 来标识 传的是哪一个枚举类型
+  DataType data_type=1;
+
+  //标识 每次枚举类型最多只能出现其中的一个 节省空间  二选一
+  oneof dataBody{
+    Student student=2;
+    Worker worker=3;
+  }
+
+}
+
+message Student{
+  int32 id=1;
+  string name= 2;
+}
+
+
+message Worker{
+  int32 wName=1;
+  string wAge= 2;
+}

@@ -1,0 +1,90 @@
+import "protocol_base.proto";
+
+package Uqee.Protobufs.Server.Protocol;
+
+message FriendInfo {
+        optional int64 id = 1;
+        optional string name = 2;
+        optional int32 is_online = 3;
+        optional string url_pic = 4;
+}
+
+message C2S_FriendList {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_LIST];
+        optional int64 role_id = 2;
+}
+
+message S2C_FriendList {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_LIST];
+        repeated FriendInfo friend_info = 2;
+}
+
+message C2S_FriendSearch {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_SEARCH];
+        optional string key = 2;
+}
+
+message S2C_FriendSearch {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_SEARCH];
+        repeated FriendInfo friend_info = 2;
+}
+
+message C2S_FriendRequestAdd {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_REQUEST_ADD];
+        optional int64 request_id = 2;
+        optional int64 respond_id = 3;
+}
+
+message S2C_FriendRequestAdd {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_REQUEST_ADD];
+        optional int32 ret = 2;
+}
+
+message S2C_FriendRequestAddNotify {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_REQUEST_ADD_NOTIFY];
+        optional int64 request_id = 2;
+        optional string request_name = 3;
+}
+
+message C2S_FriendRespondAdd {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_RESPOND_ADD];
+        optional int32 ret = 2;
+        optional int64 respond_id = 3;
+        optional int64 request_id = 4;
+}
+
+message S2C_FriendRespondAdd {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_RESPOND_ADD];
+        optional int32 ret = 2;
+}
+
+message S2C_FriendRespondAddNotify {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_RESPOND_ADD_NOTIFY];
+        optional int32 ret = 2;
+        optional int64 respond_id = 3;
+        optional string respond_name = 4;
+        optional string respond_url_pic = 5;
+}
+
+message C2S_FriendChatMessage {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_CHAT_MESSAGE];
+        optional int64 receive_role_id = 2;
+        optional string message = 3;
+}
+
+message S2C_FriendChatMessage {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_CHAT_MESSAGE];
+        optional int64 send_role_id = 2;
+        optional int64 receive_role_id = 3;
+        optional string message = 4;
+}
+
+message C2S_FriendDel {
+        optional ProtocolType type = 1 [default = C_2_S_FRIEND_DEL];
+        optional int64 role_id = 2;
+}
+
+message S2C_FriendDel {
+        optional ProtocolType type = 1 [default = S_2_C_FRIEND_DEL];
+        optional int32 ret = 2;
+}

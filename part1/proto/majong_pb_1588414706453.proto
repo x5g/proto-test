@@ -1,0 +1,374 @@
+message pb_player
+{
+    optional string name = 1;
+    required int32 uid = 2;
+    optional int32 coins = 3;
+    optional string logo = 4;
+    optional int32 owner = 5;    //如果是房主此项为1
+    optional int32 index = 6;
+    repeated pb_unit pai = 7;
+    optional int32 delta = 8;     //返回得分变化值
+}
+
+message pb_room_info
+{
+    required int32 room_id = 1;
+    required int32 owner = 2;   //房主uid
+    required int32 round = 3;   //局数
+    required int32 pay = 4;    // 1 : 房主支付 2 : aa支付
+    required int32 banker = 5;  //庄家模式  1: 抢庄 2: 轮庄 3: 随机庄 4: 固定庄
+    required int32 special = 6;  //特殊牌型 1 : 开 2 : 关
+    required int32 type = 7;    //1: 暗牌 2: 明牌
+}
+
+message pb_unit
+{
+    required int32 type = 1;   //1: 黑桃 2: 红桃 3: 梅花 4: 方片
+    required int32 num = 2;    // 1-13
+}
+
+//group : 0  cmd : 0
+message req_heart
+{
+}
+
+message rsp_heart
+{
+    required int32 time = 1;
+}
+
+//group : 1 cmd : 1
+message req_login
+{
+    optional string code = 1;
+    optional int32 channel = 2; //1 : android 2 : ios 3 : 游客
+    optional int32 user_id = 3;
+}
+
+message rsp_login
+{
+    required sint32 status = 1;    // status 0 : 登录成功  < 0 : 登录失败
+    optional int32 coins = 2;
+    optional int32 gems = 3;
+    optional int32 uid = 4;
+    optional string name = 5;
+    optional string logo = 6;
+}
+
+//group : 1 cmd : 2
+message req_pub
+{
+}
+
+message rsp_pub
+{
+    required sint32 status = 1;
+    optional string pub = 2;
+}
+
+// group : 2 cmd : 1
+message req_create_room
+{
+    required int32 round = 1;   //局数
+    required int32 pay = 2;    // 1 : 房主支付 2 : aa支付
+    required int32 banker = 3;  //庄家模式  1: 抢庄 2: 轮庄 3: 随机庄 4: 固定庄
+    required int32 special = 4;  //特殊牌型 1 : 开 2 : 关
+    required int32 type = 5;    //1: 暗牌 2: 明牌
+}
+
+message rsp_create_room
+{
+    required sint32 status = 1;    // <0 建房失败
+    optional int32 room_id = 2;
+    optional int32 coins = 3; //返回剩余金币
+}
+
+// group : 2 cmd : 2
+message req_join
+{
+    required int32 id = 1;   //房间id
+}
+
+message rsp_join
+{
+    required sint32 status = 1;
+    repeated pb_player players = 2;
+    optional pb_room_info room_info = 3;
+}
+// group : 2 cmd : 3 广播新玩家加入
+message rsp_new_player
+{
+    required pb_player player = 1;
+}
+// group : 2 cmd : 4  玩家退出房间
+message req_leave
+{
+    required int32 uid = 1;
+}
+
+message rsp_leave
+{
+    required sint32 status = 1;
+}
+// group : 2 cmd : 5 广播用户离开
+message rsp_player_leave
+{
+    required int32 uid = 1;
+}
+//group : 2 cmd : 6 玩家准备
+message req_ready
+{
+    required int32 type = 1;  //type 1 : 准备 2 : 取消
+}
+
+message rsp_ready
+{
+    required sint32 status = 1;
+}
+//group : 2 cmd : 7 广播玩家准备
+message rsp_player_ready
+{
+    required int32 uid = 1;
+    required int32 type = 2;
+}
+//group : 2 cmd : 8
+message req_start
+{
+}
+
+message rsp_start
+{
+    required sint32 status = 1;
+}
+//group : 2 cmd : 9
+message rsp_game_start
+{
+    optional int32 uid = 1; //如果不是抢庄则广播当前回合庄家id
+    required int32 round = 2; //广播当前局数
+    repeated pb_unit cards = 3;
+}
+//group : 2 cmd : 10     抢庄玩家发送此协议 
+message req_zhuang
+{
+    required sint32 base = 1;   //抢庄基数（倍数）
+}
+message rsp_zhuang
+{
+    required sint32 status = 1;
+}
+//group : 2 cmd : 11   广播抢庄玩家uid
+message rsp_player_zhuang
+{
+    required int32 uid = 1;
+    required sint32 base = 2;
+}
+//group : 2 cmd : 12  抢庄结束，开始选倍数
+message rsp_zhuang_end
+{
+    required int32 uid = 1; //庄家uid
+    required sint32 base = 2;
+}
+//group : 2 cmd : 13  选则倍数   金币场中倍数*5不能超过身上金币数
+message req_score
+{
+    required int32 score = 1;
+}
+message rsp_score
+{
+    required int32 status = 1;
+}
+//group : 2 cmd : 14
+message rsp_player_score
+{
+    required int32 uid = 1;
+    required int32 score = 2;
+    required int32 delta = 3;
+}
+//group : 2 cmd : 15  发牌，同时返回结果
+message rsp_result
+{
+    repeated pb_player players = 1;
+}
+
+//group : 2 cmd : 16  聊天
+message req_chat
+{
+    optional string msg = 1;
+    repeated bytes voice = 2;
+}
+message rsp_chat
+{
+    required int32 status = 1;
+}
+//group : 2 cmd : 17  通知聊天
+message rsp_player_chat
+{
+    optional string msg = 1;
+    optional string url = 2;
+    required int32 uid = 3;
+}
+
+//group : 2 cmd : 18  亮牌
+message req_show
+{
+}
+
+message rsp_show
+{
+    required int32 status = 1;
+}
+
+//group : 2 cmd : 19
+message notify_show
+{
+    required int32 uid = 1;
+}
+
+//group : 2 cmd : 20
+message notify_all_show
+{
+}
+
+//group : 2 cmd : 21
+message req_dismiss
+{
+}
+
+message rsp_dismiss
+{
+    required int32 status = 1;
+}
+
+//group : 2 cmd : 22
+message notify_dismiss
+{
+}
+
+
+message pb_task
+{
+    required int32 id = 1;  //id
+    required int32 num = 2;  //已完成几次
+    required int32 recive = 3;  //是否已领取 0 : 未领
+}
+
+// group : 3 cmd : 1
+message req_task
+{
+}
+
+message rsp_task
+{
+    repeated pb_task tasks = 1;
+}
+
+//group : 3 cmd : 2   领奖
+message req_task_claim
+{
+    required int32 id = 1;
+}
+
+message rsp_task_claim
+{
+    required int32 status = 1;
+}
+
+// group : 4 cmd : 1
+message req_content
+{
+    required string weixin = 1;
+    required string text = 2;
+}
+
+message rsp_content
+{
+    required int32 status = 1;
+}
+
+// group : 5 cmd : 1
+message req_pay
+{
+    required int32 rmb = 1;
+}
+message rsp_pay
+{
+    required int32 status = 1;
+    optional int32 coins = 2;
+    optional string nonce_str = 3;
+    optional string sign = 4;
+    optional string err_code_des = 5;
+    optional string trade_type = 6;
+    optional string prepay_id = 7;
+    optional string order_id = 8;
+}
+
+//group : 5 cmd : 2
+message res_check_pay
+{
+    required string order_id = 1;
+}
+
+message rsp_check_pay
+{
+    required int32 status = 1; // 0 : 订单校验通过
+    required string order_id = 2;
+    optional int32 coins = 3;
+}
+
+//group : 5 cmd : 3
+message req_buy_gem
+{
+    required int32 coins = 1;
+}
+
+message rsp_buy_gem
+{
+    required int32 status = 1;
+    optional int32 gems = 2;
+}
+
+message pb_rank_player
+{
+    required string name = 1;
+    required string logo = 2;
+    required int32 num = 3;
+}
+
+//group : 6 cmd : 1
+message req_coins_rank
+{
+}
+
+message rsp_coins_rank
+{
+    repeated pb_rank_player players = 1;
+}
+//group : 6 cmd : 2
+message req_gem_rank
+{
+}
+
+message rsp_gem_rank
+{
+    repeated pb_rank_player players = 1;
+}
+
+//group : 100 cmd : 1
+message req_save_data
+{
+    required string data = 1;
+}
+
+message rsp_save_data
+{
+    required int32 status = 1;
+}
+//group : 100 cmd : 2
+message req_get_data
+{
+}
+
+message rsp_get_data
+{
+    required string data = 1;
+}

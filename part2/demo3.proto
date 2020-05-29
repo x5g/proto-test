@@ -1,0 +1,67 @@
+syntax = "proto3";
+// 生成的包名
+option java_package = "com.demo.protobuf";
+// 生成的类名
+option java_outer_classname = "DemoProtoBuf";
+
+message Demo{
+    // 每个字段必须要有编号，并且不允许重复
+
+    /*
+      字段修饰符(proto2)
+      1 required 该字段必须设置(即初始化一条消息的时候，该字段必须赋值，不设置会报错)
+      2 optional 该字段是可选设置(可以设置默认值[default = xxx设置])，如果没有显示的设置默认值
+      并且该字段没有设置值，则会使用该默认值
+      3 repeate  表示该字段可以 有多个值，一般会被编译为集合类或者数组
+     字段修饰符(proto3)proto3 里面取消了 required 修饰符，并且将optional 改名为singular
+      1 singular  字段可以出现0 次或者1次。最多不能超过1 次
+      2 repeated 可以重复任意次数包括0
+    */
+
+    // 默认就是singular  最多出现1次
+    int32 id = 1;
+
+    string value = 2;
+
+    // 可以 出现 0 次 1 次 多次
+    repeated string likes = 3;
+
+    // 枚举类字段编号必须以0开头
+    //    enum Sex  {
+    //    MAN = 0;
+    //    WOMAN = 1;
+    //    }
+
+    // 枚举的 allow_alias（允许别名）
+    // 即允许两个不同枚举的名字，表示同一个东西。他们只是名字不同，实际代表的是用一个东西。
+    //    enum Animal{
+    //       option allow_alias = true;
+    //        PIG = 0;
+    //        DOG = 1;
+    //        BIGDOG = 1;
+    //    }
+
+    // 保留值
+    // 功能:设置一些不可以被定义的值，即保留不允许被使用 （reserved）
+    // 1 指定 保留字段编号
+    // 2 指定 保留字段名
+    enum Color{
+        // 保留字段 BLACK  WHITE 不允许被再定义
+        reserved "BLACK","WHITE";
+        // 保留编号  3 4 5 不允许再被定义
+        reserved 3,4,5;
+
+        RED = 0;
+        // 字段编号4 和 BLACK 已经被reserved 不能再被定义，编译报错(reserved 的作用)
+        // BLUE = 4;
+        // BLACK = 8;
+        BLUE = 7;
+    }
+    // 枚举类一般配合其它消息类型使用
+    //  message 里面的字段不能从0开始,
+    //并且proto3 里面舍弃了default，即不能设置default
+    message DemoMessage{
+        Color color = 1;
+        int32 messageData = 2;
+    }
+}

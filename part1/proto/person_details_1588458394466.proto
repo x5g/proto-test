@@ -1,0 +1,42 @@
+/*
+* This line specifies that proto3 syntax is being used while defining the
+* structure of the information. If this line is not used the compiler assumes
+* proto2 syntax is being used.
+*/
+syntax = "proto3";
+
+// The package specifier is used to prevent clashes between protocol buffer messages of same name.
+package com.data.model;
+
+// import a protobuf file into another
+import "address_details.proto";
+
+// Used to define the package in which the java classes will be generated.
+option java_package = "com.data.model.person";
+// Used to define the outer java class name.
+option java_outer_classname = "PersonDetailsMessage";
+
+message Person {
+    // Scalar Value Type : https://developers.google.com/protocol-buffers/docs/proto3#scalar
+    string name = 1;
+    int32 id = 2;
+    string email = 3;
+    // Other message Type : https://developers.google.com/protocol-buffers/docs/proto3#other
+    repeated PhoneNumber contact_numbers = 4;
+    // Defining a map in the data definition : https://developers.google.com/protocol-buffers/docs/proto3#maps
+    map<string, Address> address_list = 5;
+    string pan_number = 6 [deprecated=true];
+    string ssn = 7;
+}
+
+// Enumerations : Ensure that the field having type PhoneType will have only predefined list of values
+enum PhoneType {
+    MOBILE = 0; // Default value for enums
+    HOME = 1;
+    WORK = 2;
+}
+
+message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+}

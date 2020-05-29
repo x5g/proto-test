@@ -1,0 +1,153 @@
+syntax = "proto2";
+
+package ru.acapella.db.grpc;
+
+import "google/protobuf/empty.proto";
+
+option java_package = "ru.acapella.db.grpc";
+option java_multiple_files = true;
+
+message SqlVariantPb {
+    oneof value {
+        bool vBoolean = 1;
+        int32 vByte = 2;
+        int32 vShort = 3;
+        int32 vInt = 4;
+        int64 vLong = 5;
+        float vFloat = 6;
+        double vDouble = 7;
+        string vString = 8;
+        bytes vBytes = 9;
+        string vDecimal = 10;
+        int64 vDate = 11;
+        int64 vTime = 12;
+        int64 vTimestamp = 13;
+    }
+}
+
+message SqlRowPb {
+    repeated SqlVariantPb fields = 1;
+}
+
+message SqlDatabaseMetadataPb {
+    required string databaseProductVersion = 1;
+    required string databaseProductName = 2;
+    required int32 jdbcMajorVersion = 3;
+    required int32 jdbcMinorVersion = 4;
+}
+
+message SqlPrepareRequestPb {
+    optional string database = 1;
+    required string sql = 2;
+}
+
+message SqlParameterMetaPb {
+    required int32 type = 2;
+}
+
+message SqlColumnMetaPb {
+    required string schema = 1;
+    required string table = 2;
+    required string name = 3;
+    required string label = 4;
+    required int32 type = 5;
+    required uint32 displaySize = 6;
+}
+
+message SqlPrepareResponsePb {
+    repeated SqlParameterMetaPb parameters = 1;
+    repeated SqlColumnMetaPb columns = 2;
+}
+
+message SqlQueryMessagePb {
+    oneof messages {
+        SqlQueryRequestPb request = 1;
+        SqlQueryFetchPb fetch = 2;
+    }
+}
+
+message SqlQueryRequestPb {
+    optional bytes transaction = 1;
+    optional string database = 2;
+    required string sql = 3;
+    optional uint32 fetchSize = 4;
+    repeated SqlVariantPb parameters = 5;
+}
+
+message SqlQueryFetchPb {
+    optional uint32 fetchSize = 1;
+    optional bool close = 2;
+}
+
+message SqlResultSetPb {
+    repeated SqlColumnMetaPb columns = 1;
+    repeated SqlRowPb rows = 2;
+    required bool hasMore = 3;
+}
+
+message SqlExecuteRequestPb {
+    optional bytes transaction = 1;
+    optional string database = 2;
+    required string sql = 3;
+    repeated SqlVariantPb parameters = 4;
+}
+
+message SqlExecuteResponsePb {
+    oneof results {
+        uint64 rowsCount = 1;
+        SqlResultSetPb resultSet = 2;
+    }
+}
+
+message SqlTablesMetaRequestPb {
+    optional string catalog = 1;
+    optional string schemaPattern = 2;
+    optional string tableNamePattern = 3;
+    repeated string types = 4;
+}
+
+message SqlTableTypesMetaRequestPb {
+    // todo
+}
+
+message SqlColumnsMetaRequestPb {
+    optional string catalog = 1;
+    optional string schemaPattern = 2;
+    optional string tableNamePattern = 3;
+    optional string columnNamePattern = 4;
+}
+
+message SqlPrimaryKeysMetaRequestPb {
+    optional string catalog = 1;
+    optional string schema = 2;
+    optional string table = 3;
+}
+
+message SqlTableMetaRequestPb {
+    // todo
+}
+
+message LoginRequest {
+    required string userName = 1;
+    required string password = 2;
+}
+
+message LoginResponse {
+    required string token = 1;
+}
+
+service Sql {
+    rpc Login (LoginRequest) returns (LoginResponse);
+
+    rpc TablesMetadata(SqlTablesMetaRequestPb) returns (SqlResultSetPb);
+    rpc TableTypesMetadata(SqlTableTypesMetaRequestPb) returns (SqlResultSetPb);
+    rpc ColumnsMetadata(SqlColumnsMetaRequestPb) returns (SqlResultSetPb);
+    rpc PrimaryKeysMetadata(SqlPrimaryKeysMetaRequestPb) returns (SqlResultSetPb);
+    rpc IndexesMetadata(SqlTableMetaRequestPb) returns (SqlResultSetPb);
+
+    rpc Metadata(google.protobuf.Empty) returns (SqlDatabaseMetadataPb);
+    rpc Prepare(SqlPrepareRequestPb) returns (SqlPrepareResponsePb);
+    rpc QueryStream(stream SqlQueryMessagePb) returns (stream SqlResultSetPb);
+    rpc Query(SqlQueryRequestPb) returns (SqlResultSetPb);
+    rpc Execute(SqlExecuteRequestPb) returns (SqlExecuteResponsePb);
+}

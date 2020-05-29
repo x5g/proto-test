@@ -1,0 +1,51 @@
+syntax = "proto2";
+package pb;
+
+
+//仓位记录basePosition
+message BasePosition{
+   required int64 Time=1;
+   required int64 TraderID=2;
+   required int64 FundAccountID=3;
+   required double Price=4;
+   required int64 PositionQty=5;
+   required int64 TradingAccountID=6;
+   required string Code=7;
+}
+
+
+message BaseProfit{
+    required int64 TraderID=1;
+    required int64 TradingAccountID=2;
+    required int64 FundAccountID=3;
+    required double Profit=4;
+    required string Code=5;
+    required int64 Qty=6;
+    required double TurnOver=7;
+    required double Fee=8;
+    required int64 Count=9;
+}
+
+
+message FloatProfit{
+    required BasePosition position=1;
+    required double FloatProfit=2;
+}
+
+message CommPosition{
+    required int64 Time=1;
+    required int64 sym=2;
+    required double Price=3;
+    required int64 PositionQty=4;
+    required string Code=5;
+}
+
+
+message SumProfit{
+    required int64 sym=1;
+    required double Profit=2;
+    required double Fee=3;
+    required double TurnOver=4;
+    required int64 Qty=5;
+    required int64 Count=6;
+}

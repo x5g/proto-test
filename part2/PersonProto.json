@@ -1,0 +1,12 @@
+{
+  "firstName": "Jake",
+  "lastName": "Partusch",
+  "emailAddress": "jakepartusch@abc.com",
+  "homeAddress": "123 Seasame Street",
+  "phoneNumbers": [
+    {
+      "areaCode": 123,
+      "phoneNumber": 1234567
+    }
+  ]
+}

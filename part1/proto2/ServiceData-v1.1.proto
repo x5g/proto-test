@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+//地理位置坐标结构，表示一个地理坐标
+message PositionPb {
+	//经度
+	double lng = 1;
+	//纬度
+	double lat = 2;
+	//高度
+	float height = 3;
+}
+
+//配色及形状参数结构，用于信息叠加时线条或者图标的表示
+message LineStylePb {
+	//管线颜色，RGBA编码，字符串表示，格式例如"100,100,100,0.2"。
+	string color = 1;
+	//管线线条粗细，单位：px
+	int32 width = 2;
+	//线形, 0：实线，1：虚线
+	int32 type = 3;
+}
+
+//普通区域结构，只包含各个顶点坐标信息
+message SimpleRegionPb {
+	 //坐标列表
+	 repeated PositionPb positions = 1;
+}
+
+//关注区域结构，带配色和形状
+message RegionPb {
+	 //坐标列表
+	 repeated PositionPb positions = 1;
+	 //标记信息，文字，比如 "西南警戒区"
+	 string markinfo = 2;
+	 //配色及形状参数
+	 LineStylePb lineStyle = 3;
+}
+
+//关注目标结构，带配色和形状
+message TargetPb {
+	//目标坐标
+	PositionPb position = 1;
+	//目标标记信息，文字，比如 "灯塔"
+	string markType = 2;
+	//配色及形状参数
+	LineStylePb lineStyle = 3;
+}
+
+//管线数据结构，用于信息叠加，将管线以自定义线条形式叠加的视频流中
+message PipeData {
+	//坐标列表
+	repeated PositionPb positions = 1;
+	//配色及形状参数
+	LineStylePb lineStyle = 2;
+}
+
+//管线附近警戒线数据结构，用于信息叠加，将多条警戒线以自定义线条形式叠加到视频流中
+message CordonData {
+	//警戒距离
+	float distance= 1;
+	//配色及形状参数
+	LineStylePb lineStyle = 2;
+}
+
+//关注区域和目标列表信息结构，整合关注区域和目标，用于信息叠加，在视频中将这些区域和目标进行叠加
+message FocusData {
+	//关注区域列表
+	repeated RegionPb regions = 1;
+	//关注目标列表
+	repeated TargetPb targets = 2;
+}
+
+//单个目标检测结果结构
+message TargetDetectResult {
+
+	//目标类别中文名，例如 "车辆"
+	string targetName = 1;
+	
+	//目标概率，比如0.8
+	float targetProbability = 2;
+	
+	//目标的地理位置
+	SimpleRegionPb region = 3;
+}
+
+//吊舱参数
+message DemoParam{
+ 
+	//水平像素元数量
+	int32 m_nPixelNum_w = 1;
+
+	//垂直像素元数量
+	int32 m_nPixelNum_h = 2;
+
+	//有效芯片尺寸-宽度  (mm)
+	float m_fChipSize_w = 3;
+
+	//有效芯片尺寸-高度  (mm)     
+	float m_fChipSize_h = 4;
+
+	//基础焦距 (mm)                   
+	float m_fFocal_min = 5;  
+
+	//俯仰偏移(°)
+	float m_fPitch_Offset = 6;
+				   
+	//航向偏移(°)
+	float m_fHeading_Offset = 7; 
+
+	//放大倍数-传输值列表
+	repeated  int32 m_vValueList = 8;
+
+	//放大倍数-实际倍数列表      
+	repeated  int32 m_vZoomList = 9;
+}
+
+//图片扩展数据
+message ImageExtendData {
+
+	//任务id
+	int32 tid = 1;
+	
+	//图片帧编号
+	int32 number = 2;
+	
+	//该视频帧相对于视频起点的时间差，单位毫秒
+	int32 timeDiff = 3;
+	
+	//图片类型，1表示视频流原始图片，2表示变化检测标注后的图片，3表示目标检测标注后的图片
+	int32 type = 4;
+	
+	//图片格式，1表示.jpg，其它待定
+	int32 format = 5;
+	
+	//该图片帧SEI中解析出的GPS信息即飞机当前的地理坐标
+	PositionPb location = 6;
+	
+	//图片对应的视场数据，包含左上、左下、右上、右下、中心
+	repeated PositionPb viewFild = 7;
+	
+	//图片二进制数据
+	bytes imageData = 8;
+}
+
+//历史图片结构，包括图片GPS信息、视场数据和访问URL
+message HistoryImage {
+
+	//该图片帧SEI中解析出的GPS信息
+	PositionPb location = 1;
+	
+	//图片对应的视场数据，包含左上、左下、右上、右下、中心地理位置
+	repeated PositionPb viewFild = 2;
+	
+	//图片访问url
+	string url = 3;
+}
+
+///////////////////////////////////////以下为实际使用的一级结构体////////////////////////////////
+
+//任务数据
+message TaskData {
+
+	//任务id
+	int32 tid = 1;
+	
+	//吊舱参数，用于视频解算
+	DemoParam demoParam = 2;
+	
+	//图片帧处理间隔，单位为秒，比如2表示每2秒处理一帧图片，0表示每一帧都处理
+	int32 interval = 3;
+	
+	//目标编号列表，比如要检测人物、车辆等，用于目标检测算法
+	repeated int32 targetNumbers = 4;
+	
+	//管线数据，用于信息叠加算法
+	PipeData pipeData = 5;
+
+	//警戒线列表，用于信息叠加算法和变化检测算法，变化检测算法目前只检测警戒区域内的变化
+	repeated CordonData cordonDatas = 6;
+
+	//关注区域（目标）数据，用于信息叠加算法
+	FocusData focusData = 7;
+	
+	//解码算法要处理的历史视频url，用于解码算法
+	string historyVideoUrl = 8;
+	
+	//历史图片列表，用于变化检测算法作为对比模板
+	repeated HistoryImage historyImages = 9;
+}
+
+//变化检测输出结果
+message ChangeDetectResults {
+
+	//当前图片帧中检测到的变化区域列表
+	repeated SimpleRegionPb regions = 1;
+
+	//投影（变换）矩阵,长度为9
+	repeated double transMatrix = 2;
+	
+	//变化检测结果图片，包含原始图片和变化标注后的图片
+	repeated ImageExtendData images = 3;
+}
+
+//目标检测输出结果
+message TargetDetectResults {
+
+	//当前图片帧中检测到的目标列表
+	repeated TargetDetectResult results = 1;
+
+	//目标检测结果图片，包含原始图片和目标标注后的图片
+	repeated ImageExtendData images = 2;
+}

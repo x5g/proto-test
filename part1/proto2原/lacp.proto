@@ -1,0 +1,85 @@
+/*
+Copyright (C) 2010 Srivats P.
+
+This file is part of "Ostinato"
+
+This is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+import "protocol.proto";
+
+package OstProto;
+
+// Lacp Protocol
+
+message Lacp {    
+          
+    optional uint32    proto_subtype = 1 [default = 1];
+    optional uint32    proto_ver_num = 2 [default = 1];
+    optional uint32    proto_TLV_typeA = 3 [default =1];
+    optional uint32    proto_Act_info_len=4 [default = 20];
+    optional uint32    proto_Act_sys_prior = 5;
+    optional uint64    proto_Asys = 6;
+    optional uint32    proto_Akey = 7;
+    optional uint32    proto_Aport_prior = 8;
+    optional uint32    proto_Aport = 9;
+    optional uint32    proto_Astate = 10;
+    optional uint32    proto_Areserved = 11 [default = 0];
+
+    optional uint32    proto_TLV_typeP = 12 [default = 2];
+    optional uint32    proto_Par_info_len=13 [default = 20];
+    optional uint32    proto_Pstate = 14;
+    optional uint32    proto_Par_sys_prior = 15; 
+    optional uint64    proto_Psys = 16;
+    optional uint32    proto_Pkey = 17;
+    optional uint32    proto_Pport_prior = 18;
+    optional uint32    proto_Pport = 19;
+    optional uint32    proto_Preserved = 20 [default = 0];
+
+    optional uint32    proto_TLV_typeC = 21 [default = 3];
+    optional uint32    proto_Coll_info_len= 22 [default = 16];
+    optional uint32    proto_CollMaxDelay = 23;
+    optional uint64    proto_Creserved0 = 24 [default = 0];
+    optional uint64    proto_Creserved1 = 25 [default = 0];
+
+    optional uint32    proto_TLV_typeTerm = 26 [default = 0];
+    optional uint32    proto_Term_len = 27 [default = 0];
+    optional uint64    proto_reserved0 = 28 [default = 0];
+    optional uint64    proto_reserved1 = 29 [default = 0];
+    optional uint64    proto_reserved2 = 30 [default = 0];
+    optional uint64    proto_reserved3 = 31 [default = 0];
+    optional uint64    proto_reserved4 = 32 [default = 0];
+    optional uint64    proto_reserved5 = 33 [default = 0];
+    optional uint64    proto_reserved6 = 34 [default = 0];
+
+
+    optional uint64    proto_FCS = 35 [default = 0];   
+    
+   //Meta
+    optional bool    proto_is_subtype = 36 ; 
+    optional bool    proto_is_version = 37 ;
+    optional bool    proto_is_tlv_a = 38 ;
+    optional bool    proto_is_actor_info = 39 ;
+    optional bool    proto_is_tlv_p = 40 ;
+    optional bool    proto_is_partner_info = 41 ;
+    optional bool    proto_is_tlv_c = 42 ;
+    optional bool    proto_is_collector_info = 43 ;
+    optional bool    proto_is_tlv_t = 44 ;
+    optional bool    proto_is_terminator_len = 45 ;
+   
+}
+
+extend Protocol {
+    optional Lacp lacp = 299;
+}

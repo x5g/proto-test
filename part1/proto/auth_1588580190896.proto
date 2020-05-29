@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package api;
+
+message AuthRequest {
+  oneof r {
+    Auth1Request auth = 1;
+    Auth1GuestRequest auth_guest = 2; // used for spectating and creating accounts
+    Auth2Request auth2 = 3;
+    RefreshTokenRequest refresh_token = 4;
+    RevokeSessionsRequest revoke_sessions = 5;
+    RevokeKeysRequest revoke_keys = 6;
+    CreateAccountRequest create_account = 7;
+    ListKeys list_keys = 8;
+    ListSessions list_sessions = 9;
+  }
+}
+
+message AuthResponse {
+  oneof r {
+    Auth1Response auth = 1;
+    Auth1GuestResponse auth_guest = 2;
+    Auth2Response auth2 = 3;
+    RefreshTokenResponse refresh_token = 4;
+    RevokeSessionsResponse revoke_sessions = 5;
+    RevokeKeysResponse revoke_keys = 6;
+    CreateAccountResponse create_account = 7;
+    KeyList list_keys = 8;
+    SessionList list_sessions = 9;
+  }
+}
+
+message CreateAccountRequest {
+  string user_id = 1;
+  string password = 2;
+}
+
+message CreateAccountResponse {
+  bool success = 1;
+  enum Error {
+    NO_ERROR = 0;
+    USER_NAME_ALREADY_USED = 1;
+    NOT_ENCRYPTED = 2;
+  }
+  Error error = 2;
+}
+
+message Auth1Request {
+  string user_id = 1;
+  message Password {
+    bytes client_nonce = 1;
+  }
+  message PubKey {
+    bytes ecc_pub = 1;
+  }
+  oneof a {
+    Password password = 2;
+    PubKey pub_key = 3;
+  }
+  bytes device_type = 4;
+}
+
+message Auth1Response {
+  // new session token used to identify this session
+  bytes token = 1;
+  message Password {
+    bytes server_nonce = 1;
+    bytes salt = 2;
+  }
+  message PubKey {
+    bytes ecc_pub = 1;
+  }
+  // info used to authenticate this session
+  oneof a {
+    Password password = 2;
+    PubKey pub_key = 3;
+  }
+}
+
+message Auth1GuestRequest {
+  bytes guest_pub = 1;
+  bytes guest_nonce = 2;
+}
+
+message Auth1GuestResponse {
+  bytes server_pub = 1;
+  bytes server_nonce = 2;
+  bytes session_token = 3;
+}
+
+// second set of messages to ensure credentials are good
+message Auth2Request {
+  bool enable_encryption = 1;
+}
+
+message Auth2Response {
+  bool encryption_enabled = 1;
+  uint64 token_expiry = 2; // time of token expiration in Unix time
+}
+
+// generate a new token with new secret credentials
+message RefreshTokenRequest {
+  bytes client_input = 1;
+}
+
+message RefreshTokenResponse {
+  bytes token = 1;
+  bytes server_input = 2;
+  uint64 token_expiry = 3;
+}
+
+message RevokeSessionsRequest {
+  repeated bytes sessions = 1;
+}
+
+message RevokeSessionsResponse {
+  repeated bytes sessions = 1;
+  repeated bool success = 2;
+}
+
+message RevokeKeysRequest {
+  repeated bytes keys = 1;
+}
+
+message RevokeKeysResponse {
+  repeated bytes keys = 1;
+  repeated bool success = 2;
+}
+
+message ListKeys {}
+
+message KeyList {
+  repeated bytes keys = 1;
+  repeated bytes device_type = 2;
+}
+
+message ListSessions {}
+
+message SessionList {
+  repeated bytes sessions = 1;
+  repeated bytes device_type = 2;
+  repeated uint64 expiration = 3;
+}

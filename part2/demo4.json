@@ -1,0 +1,25 @@
+{
+  "name": "\u4e09\u5e74\u7ea723\u73ed",
+  "stu": [
+    {
+      "age": 19,
+      "name": "demo",
+      "grade": 134
+    },
+    {
+      "age": 19,
+      "name": "google",
+      "grade": 134
+    }
+  ],
+  "teacher": [
+    {
+      "name": "tom",
+      "work": {
+        "isworker": true,
+        "isjiaban": true
+      },
+      "age": 17
+    }
+  ]
+}

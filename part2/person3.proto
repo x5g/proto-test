@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message Person {
+    string name = 1;
+    string nickname = 2;
+    enum Gender {
+        FEMALE = 0;
+        MALE = 1;
+        OTHER = 2;
+    };
+    Gender gender = 3;
+    repeated string friends = 4;
+}

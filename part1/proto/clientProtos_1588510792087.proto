@@ -1,0 +1,271 @@
+// 网关登入
+"gate.gateHandler.queryEntry": {
+	"required string code": 1
+}
+
+resp = {
+	code: consts.Login.OK,
+	host: res.clientHost,
+	port: res.clientPort
+}
+
+============================
+
+// 游戏服登入
+"connector.entryHandler.enter": {
+	"required string code": 1,
+	"message UserInfo": {
+		"required string name": 1,
+		"required string avatarUrl": 2,
+		"required uInt32 gender": 3
+	},
+	"required UserInfo userInfo": 2,
+	"required string platform": 3
+}
+
+resp1 = {
+	code: consts.Login.OK,
+	info: {
+        openid: this.openid,
+		uid: this.uid,
+        id: this.id,
+        name: this.name,
+        gender: this.gender,
+        avatarUrl: this.avatarUrl,
+        coins: this.coins,
+		gems: this.gems,
+		roomid: this.roomid
+    }
+}
+//不在同一个进程，告诉客户端重连
+resp2 = {
+	code: consts.Login.RELAY,
+	uuid: code,
+	host: conector.clientHost,
+	port: conector.clientPort
+}
+
+================================
+
+//创建房间
+"connector.lobbyHandler.createRoom": {
+	"message RoomCfg": {
+		"required uInt32 playerCount": 1
+	},
+	"required RoomCfg roomCfg": 1
+}
+
+//加入房间
+"connector.lobbyHandler.joinRoom": {
+	"required uInt32 roomid": 1
+}
+
+resp = {
+	code: consts.RoomCode.OK,
+	roomInfo: {
+		roomid: roomid,
+		creator: this.entity.id,
+		createTime: Math.ceil(Date.now()/1000),
+		status: consts.TableStatus.INIT,
+		dissolveTime: 0,
+		roomCfg: roomCfg,
+		players[] = {
+			id: this.entity.id,
+			name: this.entity.name,
+			gender: this.entity.gender,
+			avatarUrl: this.entity.avatarUrl,
+			coins: this.entity.coins,
+			gems: this.entity.gems,
+			chairID: chairID,
+			dissolveState: consts.DissolveState.Diss_Init,
+			readyState: consts.ReadyState.Ready_No
+		},
+		cardInfo:{
+			handCardData: [],   		//手牌
+			cardCount: [0, 0, 0],      	//手牌数量
+			currentUser: 0,     		//当前出牌用户
+			turnCardCount: 0,   		//上回合出牌张数
+			turnCardData:[],    		//上回合出牌数据
+			turnUser: consts.InvalUser, 	//上回合用户
+			bUserWarn: [false, false, false] //是否报警
+		},
+	}
+}
+
+// 向房间其它人推送玩家加入消息
+"onUserEntryRoom": {
+	"required string id": 1,
+	"required string name": 2,
+	"required uInt32 gender": 3,
+	"required string avatarUrl": 4,
+	"required uInt32 coins": 5,
+	"required uInt32 gems": 6,
+	"required uInt32 chairID": 7,
+	"required uInt32 readyState": 8,
+	"optional uInt32 dissolveState": 9,
+	"optional string preSid": 10,
+	"optional uInt32 autoState": 11
+}
+
+============================
+
+// 退出房间(游戏开始前)
+"table.tableHandler.leaveRoom": {
+}
+
+resp = {code: consts.LeaveRoomCode.OK}
+
+"onLeaveRoom": {
+	"required uInt32 uid": 1
+}
+
+================================
+
+// 游戏准备
+"table.tableHandler.readyGame": {
+}
+
+resp = {code: consts.ReadyGameCode.OK}
+
+"onReadyGame": {
+	"required uInt32 wChairID": 1
+}
+
+"onStartGame": {
+	"required uInt32 wCurrentUser": 1,
+	"repeated uInt32 cbCardData": 2,
+	"required uInt32 wChairID": 3
+}
+
+==================================
+
+// 解散房间(游戏开始后)
+"table.tableHandler.dissolveGame": {
+	"required uInt32 dissolveType": 1
+}
+
+resp = {code: consts.DissolveCode.OK}
+
+"onDissolveRoom": {
+	"message DissolveInfo": {
+		"required uInt32 id": 1,
+		"required string name": 2,
+		"required uInt32 chairID": 3,
+		"required uInt32 dissolveState": 4
+	},
+	"required DissolveInfo dissolveData": 1,
+	"required uInt32 autoRemainTime": 2
+}
+
+==================================
+
+// 出牌
+"table.tableHandler.playCard": {
+	"repeated uInt32 bCardData": 1,
+	"required uInt32 bCardCount": 2
+}
+
+resp = {
+	code: consts.PlayCardCode.OK,
+}
+
+// 玩家手牌
+"onHandCardUser": {
+	"required uInt32 wChairID": 1,
+	"repeated uInt32 handCardData": 2
+}
+
+// 报单
+"onWarnUser": {
+	"required uInt32 wWarnUser": 1
+}
+
+// 出的牌
+"onOutCard": {
+	"required uInt32 outcardUser": 1,
+	"repeated uInt32 cardData": 2,
+	"required uInt32 cardCount": 3,
+	"required sInt32 currentUser": 4
+}
+
+// 要不起
+"onPassCard": {
+	"required uInt32 wPassUser": 1,
+	"required uInt32 wCurrentUser": 2
+},
+
+// 结算
+"onSettlement": {
+	"required uInt32 winUser": 1
+}
+
+========================================
+
+//托管
+"table.tableHandler.autoCard": {
+	"required uInt32 bAuto": 1
+}
+
+resp = {
+	code: consts.OK,
+}
+
+"onAutoCard": {
+	"required uInt32 wAutoUser": 1,
+	"required uInt32 bAuto": 2
+}
+
+=========================================
+
+// 获取金币场大厅信息
+"connector.matchHandler.getMatchInfo": {
+	"required uInt32 gameType": 1
+}
+
+resp = {
+	code: consts.MatchCode.OK,
+	gameInfo = [0,0,0]
+}
+
+========================================
+
+// 进入金币场
+"connector.matchHandler.enterGoldRoom": {
+	"required uInt32 gameType": 1,
+	"required uInt32 stage": 2
+}
+
+resp = {
+	code: consts.RoomCode.OK,
+	roomInfo: {
+		roomid: this.id,
+		creator: usrInfo.id,
+		createTime: Math.ceil(Date.now()/1000),
+		status: consts.TableStatus.INIT,
+		gameType: consts.GameType.PDK_15,
+		stage: stage,
+		players[] = {
+			id: usrInfo.id,
+			name: usrInfo.name,
+			gender: usrInfo.gender,
+			avatarUrl: usrInfo.avatarUrl,
+			coins: usrInfo.coins,
+			gems: usrInfo.gems,
+			chairID: chairID,
+			readyState: consts.ReadyState.Ready_No,
+			preSid: usrInfo.preSid,
+			autoState: consts.AutoState.AutoNo
+		},
+
+		//游戏开始卡牌信息
+		cardInfo:{
+			handCardData: [0, 0, 0],   	//手牌
+			cardCount: [0, 0, 0],      	//手牌数量
+			currentUser: 0,     		//当前出牌用户
+			turnCardCount: 0,   		//上回合出牌张数
+			turnCardData:[],    		//上回合出牌数据
+			turnUser: consts.InvalUser, 	//上回合用户
+			bUserWarn: [false, false, false] //是否报警
+		},
+	}
+}

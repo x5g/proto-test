@@ -1,0 +1,58 @@
+// See README.txt for information and build instructions.
+//
+// Note: START and END tags are used in comments to define sections used in
+// tutorials.  They are not part of the syntax for Protocol Buffers.
+//
+// To get an in-depth walkthrough of this file and the related examples, see:
+// https://developers.google.com/protocol-buffers/docs/tutorials
+
+// [START declaration]
+syntax = "proto3";
+// package tutorial;
+// [END declaration]
+
+// [START java_declaration]
+option java_package = "fileTreeBrowser.model.protocol";
+option java_outer_classname = "Protocol";
+// [END java_declaration]
+
+// [START messages]
+message FileItemBuffer {
+  string name = 1;
+  bool is_show = 2;
+  bool is_exist = 3;
+  bool is_dir = 4;
+  bool can_write = 5;
+  bool can_read = 6;
+  int64 length = 7;
+  int64 last_modified = 8;
+  string path_string = 9;
+
+  // optional fields
+  // since in Proto3 fields are "optional" by default, explicit 'optional' labels are disallowed in the Proto3 syntax.
+  // notice that Required fields (explicit 'required' labels) are not allowed in proto3.
+
+  // attachment type enum
+  enum AttachmentType {
+    NONE = 0;
+    FILE_CONTENT = 1;
+    STRING_INFO = 2;
+    STRING_ARRAY_INFO = 3;
+    SEVEN_ZIP_LIST_COMMAND_OUTPUT = 4;
+  }
+
+  AttachmentType attachmentType = 16;
+  bytes attachment = 17;
+}
+
+message FileTreeNodeBuffer {
+  int32 nodeId = 1;
+  FileItemBuffer item = 2;
+  repeated int32 childrenNodeIds = 3;
+}
+
+message FileTreeModelBuffer {
+  repeated FileTreeNodeBuffer nodes = 1;
+}
+
+// [END messages]

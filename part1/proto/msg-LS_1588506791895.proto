@@ -1,0 +1,161 @@
+package transMsg;
+
+message	LS_BoardGapInfo
+{
+	required	int64	ItemID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int64	BoardID = 5;
+	required	int32	GapIndex = 6;
+	required	int32	GapShape = 7;
+	required	double	XLen = 8;
+	required	double	YLen = 9;
+	required	double	Square = 10;
+	required	double	XOffset = 11;
+	required	double	YOffset = 12;
+	required	double	ZOffset = 13;
+	required	string	OrderCode = 14;
+	required	string	OldTableName = 15;
+	required	int32	OldID = 16;
+}
+
+message	LS_BoardInfo
+{
+	required	int64	ItemID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int32	BoardType = 5;
+	required	int64	ObjectID = 6;
+	required	int32	MaterialID = 7;
+	required	int64	CabinetID = 8;
+	required	int32	Grain = 9;
+	required	bool	IsUserAdd = 10;
+	required	double	XLength = 11;
+	required	double	YLength = 12;
+	required	double	ZLength = 13;
+	required	double	Square = 14;
+	required	double	CutXLength = 15;
+	required	double	CutYLength = 16;
+	required	string	OrderCode = 17;
+	required	string	Name = 18;
+	required	string	ObjectName = 19;
+	required	string	ObjectCode = 20;
+	required	string	MaterialName = 21;
+	required	string	CabinetName = 22;
+	required	string	CabinetCode = 23;
+	required	string	OldTableName = 24;
+	required	int32	OldID = 25;
+}
+
+message	LS_BoardSealInfo
+{
+	required	int64	ItemID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int64	BoardID = 5;
+	required	int32	SealIndex = 6;
+	required	int32	MaterialID = 7;
+	required	double	PreMill = 8;
+	required	string	OrderCode = 9;
+	required	string	MaterialCode = 10;
+	required	string	MaterialName = 11;
+	required	string	OldTableName = 12;
+	required	int32	OldID = 13;
+}
+
+message	LS_Objects
+{
+	required	int64	ItemID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int32	ObjectType = 5;
+	required	int64	ParentID = 6;
+	required	int32	GType = 7;
+	required	double	XLength = 8;
+	required	double	YLength = 9;
+	required	double	ZLength = 10;
+	required	double	ShapeXLength = 11;
+	required	double	ShapeZLength = 12;
+	required	double	GapXLength = 13;
+	required	double	GapYLength = 14;
+	required	double	GapZLength = 15;
+	required	double	Amount = 16;
+	required	bool	IsStandard = 17;
+	required	bool	IsUserAdd = 18;
+	required	int32	MaterialPlanID = 19;
+	required	int32	CabGapType = 20;
+	required	int32	CabShape = 21;
+	required	string	OrderCode = 22;
+	required	string	Name = 23;
+	required	string	Code = 24;
+	required	string	MaterialPlanName = 25;
+	required	string	BarCode = 26;
+	required	string	Remarks = 27;
+	required	string	OldTableName = 28;
+	required	int32	OldID = 29;
+}
+
+message	LS_OrderInfo
+{
+	required	int64	ItemID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int64	ParentID = 4;
+	required	int32	OrderType = 5;
+	required	int32	OrderIndex = 6;
+	required	int32	FactoryID = 7;
+	required	int64	VerCode = 8;
+	required	int32	ShopID = 9;
+	required	int32	PreSurveyorID = 10;
+	required	int32	ReSurveyorID = 11;
+	required	int32	DesignerID = 12;
+	required	int32	SellerID = 13;
+	required	int32	AuditorID = 14;
+	required	double	Square = 15;
+	required	int64	CreateTime = 16;
+	required	int64	PreSurveyTime = 17;
+	required	int64	ReSurveyTime = 18;
+	required	int64	OrderTime = 19;
+	required	int64	DeliveryTime = 20;
+	required	int64	InstallTime = 21;
+	required	string	ShopName = 22;
+	required	string	ShopCode = 23;
+	required	string	OrderCode = 24;
+	required	string	DesignerName = 25;
+	required	string	DesignerUserCode = 26;
+	required	string	PreSurveyorName = 27;
+	required	string	PreSurveyorCode = 28;
+	required	string	ReSurveyorName = 29;
+	required	string	ReSurveyorCode = 30;
+	required	string	SellerName = 31;
+	required	string	SellerUserCode = 32;
+	required	string	AuditorName = 33;
+	required	string	AuditorUserCode = 34;
+	required	string	GeoCode = 35;
+	required	string	GeoName = 36;
+	required	string	OrderTitle = 37;
+	required	string	CustomerName = 38;
+	required	string	CustomerTel = 39;
+	required	string	CustomerPostCode = 40;
+	required	string	CustomerQQ = 41;
+	required	string	CustomerEmail = 42;
+	required	string	InstallAddress = 43;
+	required	string	OrderRemarks = 44;
+	required	string	PlanName = 45;
+	required	string	PlanRemarks = 46;
+	required	string	AttachFilePath = 47;
+}
+
+message LS_Table
+{
+	repeated	LS_BoardGapInfo	LS_BoardGapInfo = 1;
+	repeated	LS_BoardInfo	LS_BoardInfo = 2;
+	repeated	LS_BoardSealInfo	LS_BoardSealInfo = 3;
+	repeated	LS_Objects	LS_Objects = 4;
+	repeated	LS_OrderInfo	LS_OrderInfo = 5;
+}
+

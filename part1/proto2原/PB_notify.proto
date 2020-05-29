@@ -1,0 +1,79 @@
+
+import "PB_base_data.proto";
+
+message PB_Bankruptcy
+{
+ 	required int64 playerid = 1;	
+}
+
+message PB_NewEmail
+{
+	required PB_Email email = 1;
+}
+
+message PB_ResChange
+{
+	message PB_Res {
+		optional string res = 1; 			// "coin", "diamond", "player_level"
+		optional int32 add = 2;
+		optional int32 cur_num = 3;
+		optional int32 cur_exp = 4;
+	}
+	required string uid = 1;
+	optional string reason = 2; 			// "player_level_up"
+	repeated PB_Res res = 3;
+}
+
+// 玩家属性改变(经验,等级等， 之后有时间全部改为用这个接口)
+message PB_AttributeChange
+{
+	optional int64 playerid = 1;
+	repeated PB_Attr attrs  = 2;
+	optional OptReason reason = 3;
+}
+
+// 资源改变 (item 配置表里的物品, 之后有时间全部改为用这个接口)
+message PB_ResourceChange
+{
+	optional int64 playerid = 1;
+	repeated PB_Item items  = 2;
+	optional OptReason reason = 3;
+}
+
+message PB_PlayerVip
+{
+	optional int32 vip = 1;
+	optional int32 exp = 2;
+	optional bool  is_can_reward = 3;
+}
+
+message PB_Shutdown
+{
+	optional string desc = 1;
+}
+
+message PB_DrawDataUpdate
+{
+	repeated PB_DrawData datas = 1;
+}
+
+message PB_HallNotify 
+{
+	optional PB_Bankruptcy 		bk_notify 		= 2;	// 破产通知
+	optional PB_NewEmail 		new_email 		= 3;	// 新邮件通知
+	optional PB_ResChange 		res_modify 		= 4;	// 玩家资源属性下推
+	optional PB_BuyGoods 		buy_notify  	= 5;	// 购买成功通知
+	optional PB_PlayerVip		player_vip 		= 6;	// 玩家vip信息改变
+	optional PB_Shutdown		shutdown 		= 7;	// 客户端收到该通知后, 主动断开链接
+	optional PB_VipBroadcast	vip_bc   		= 8;	// 系统广播
+	optional PB_GoldBroadcast	gold_bc  		= 9;	// 系统广播
+	optional PB_YuquanBroadcast	yuquan_bc   	= 10;	// 系统广播
+	optional PB_ItemBroadcast	item_bc   		= 11;	// 系统广播
+	optional PB_PhpBroadcast	php_bc   		= 12;	// 系统广播
+	optional PB_DrawDataUpdate 	draw_notify 	= 13;	// 抽奖通知
+	optional PB_ResourceChange  res_changed 	= 14;	// 资源改变	由客户端主动刷新本地数据
+	optional PB_AttributeChange attr_change 	= 15;	// 属性改变	由客户端主动刷新本地数据
+	optional string				cfg_changed		= 16;	// 配置更改
+	optional bool 				cs_new_msg 		= 17;	// 有客服新消息 
+	optional bool 				little_game_update = 18;	// 小游戏开关更新
+};

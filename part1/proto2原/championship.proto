@@ -1,0 +1,174 @@
+package Dianjing.protocol;
+
+import "common.proto";
+import "plunder.proto";
+import "formation.proto";
+
+// 阵型
+message ChampionFormationNotify {
+    required bytes session = 1;
+    repeated PlunderFormation formation = 2;
+    repeated SkillSequence skill_sequence = 3;
+}
+
+message ChampionFormationSetStaffRequest {
+    required bytes session = 1;
+    required int32 way = 2;
+    required int32 slot_id = 3;
+    required string staff_id = 4;
+}
+
+message ChampionFormationSetStaffResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message ChampionFormationSetUnitRequest {
+    required bytes session = 1;
+    required int32 way = 2;
+    required int32 slot_id = 3;
+    required int32 unit_id = 4;
+}
+
+message ChampionFormationSetUnitResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message ChampionFormationSetPositionRequest {
+    required bytes session  =1;
+    required int32 way = 2;
+    repeated SyncFormationSlot slots = 3;
+}
+
+message ChampionFormationSetPositionResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message ChampionSkillSequenceSetStaffRequest {
+    required bytes session = 1;
+    required int32 way = 2;
+    required int32 seq_id = 3;
+    required int32 index = 4;    // 0,1,2
+    required string staff_id = 5;
+}
+
+message ChampionSkillSequenceSetStaffResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message ChampionClub {
+    required string id = 1;
+    required string name = 2;
+    required int32 flag = 3;
+    optional int32 rank = 4;    // 小组赛中排名
+    optional int32 score = 5;   // 小组赛中分数
+}
+
+enum ChampionLevel {
+    CHAMPION_LEVEL_16 = 16; // 16强
+    CHAMPION_LEVEL_8 = 8;   // 8强
+    CHAMPION_LEVEL_4 = 4;   // 4强
+    CHAMPION_LEVEL_2 = 2;   // 冠亚军
+    CHAMPION_LEVEL_1 = 1;   // 冠军
+}
+
+// 基本信息
+message ChampionNotify {
+    message Bet {
+        required ChampionLevel level = 1;
+        optional string bet_for = 2;
+        optional int32 bet_id = 3;
+    }
+
+    required bytes session = 1;
+    required bool applied = 2;
+    repeated Bet bet = 3;
+    // 历史前四
+    repeated ChampionClub top_clubs = 4;
+}
+
+// 小组赛
+message ChampionGroupNotify {
+    message Log {
+        required int64 timestamp = 1;
+        required string target_name = 2;
+        required int32 got_score = 3;
+        repeated int32 way_wins = 4;    // 1 表示胜利，0表示失败
+        repeated string match_record_ids = 5;   // 战斗录像id列表
+    }
+
+    required bytes session = 1;
+    repeated ChampionClub clubs = 2;
+    required int32 my_score = 3;
+    required int32 my_rank = 4;
+    repeated Log logs = 5;
+    
+    optional ChampionClub next_target = 6;  // 不填充表示打完了
+    optional int64 next_match_at = 7;   // 下次战斗时间戳
+}
+
+
+message ChampionLevelNotify {
+    message Level {
+        message _Club {
+            required string id = 1;
+            repeated int32 way_wins = 2;    // 1 表示胜利，0表示失败
+            repeated string match_record_ids = 3;
+        }
+        required ChampionLevel level = 1;
+        repeated _Club clubs = 2;
+        optional int64 match_at = 3;
+    }
+
+    required bytes session = 1;
+    required Action act = 2;
+    // 16强俱乐部，update的时候 不发
+    repeated ChampionClub clubs = 3;
+    repeated Level levels = 4;
+}
+
+// 同步
+message ChampionGroupSyncRequest {
+    required bytes session = 1;
+}
+
+message ChampionGroupSyncResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message ChampionLevelSyncRequest {
+    required bytes session = 1;
+}
+
+message ChampionLevelSyncResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 报名
+message ChampionApplyRequest {
+    required bytes session = 1;
+}
+
+message ChampionApplyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 下注
+message ChampionBetRequest {
+    required bytes session = 1;
+    required string club_id = 2;
+    required int32 bet_id = 3;
+}
+
+message ChampionBetResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+

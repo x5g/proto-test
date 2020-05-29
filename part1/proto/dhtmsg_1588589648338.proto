@@ -1,0 +1,256 @@
+/*
+ *  Copyright (C) 2017 gyee authors
+ *
+ *  This file is part of the gyee library.
+ *
+ *  the gyee library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  the gyee library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with the gyee library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+//
+// The definition about DHT Protocol messages in form of protobuf
+// specification.
+//
+
+syntax = "proto2";
+package dhtmsg.pb;
+
+
+//
+// Protocol identities
+//
+
+enum ProtocolId {
+    PID_DHT = 0;        // dht internal
+    PID_EXT = 0xff;     // external, for dht users
+}
+
+//
+// The package for all messages
+//
+
+message DhtPackage {
+
+    //
+    // a pb package would be, the payload is determined how to be handled
+    // by protocol identity "Pid".
+    //
+
+    required ProtocolId Pid         = 1;    // protocol identity
+    required uint32 PayloadLength   = 2;    // payload length
+    optional bytes Payload          = 3;    // payload buffer
+}
+
+//
+// DHT message
+//
+
+message DhtMessage {
+
+    enum MessageType {
+        MID_HANDSHAKE           = 0;
+        MID_FINDNODE            = 1;
+        MID_NEIGHBORS           = 2;
+        MID_PUTVALUE            = 3;
+        MID_GETVALUE_REQ        = 4;
+        MID_GETVALUE_RSP        = 5;
+        MID_PUTPROVIDER         = 6;
+        MID_GETPROVIDER_REQ     = 7;
+        MID_GETPROVIDER_RSP     = 8;
+        MID_PING                = 9;
+        MID_PONG                = 10;
+    }
+
+    enum ConnectionType {
+        CONT_NO                 = 0;
+        CONT_YES                = 1;
+        CONT_MAY                = 2;
+        CONT_FAILED             = 3;
+    }
+
+    message Node {
+        required bytes          IP              = 1;    // ip address
+        required uint32         UDP             = 2;    // udp port number
+        required uint32         TCP             = 3;    // tcp port number
+        required bytes          NodeId          = 4;    // node identity
+        required ConnectionType ConnType        = 5;    // connection type
+    }
+
+    message Value {
+        required bytes          Key             = 1;    // key
+        required bytes          Val             = 2;    // val
+        optional bytes          Extra           = 3;    // extra information, like access control ...
+    }
+
+    message Provider {
+        required bytes          Key             = 1;    // key
+        repeated Node           Nodes           = 2;    // provider node
+        optional bytes          Extra           = 3;    // extra information, like access control ...
+    }
+
+    message Protocol {
+        required ProtocolId     Pid             = 1;    // protocol identity
+        required bytes          Ver             = 2;    // protocol version: M.m0.m1.m2
+    }
+
+    message Handshake {
+        required uint32         ChainId         = 1;    // chain identity
+        required int32          Dir             = 2;    // direction
+        required bytes          NodeId          = 3;    // node identity
+        required bytes          IP              = 4;    // ip address
+        required uint32         UDP             = 5;    // udp port number
+        required uint32         TCP             = 6;    // tcp port number
+        required uint32         ProtoNum        = 7;    // number of protocols
+        repeated Protocol       Protocols       = 8;    // protocol table
+        required uint64         Id              = 9;    // message identity
+        optional bytes          Extra           = 10;    // extra info, reserved
+    }
+    message FindNode {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required bytes          Target          = 3;    // target
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message Neighbors {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        repeated Node           Nodes           = 3;    // neighbors
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message PutValue {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        repeated Value          Values          = 3;    // values to be put
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message GetValueReq {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required bytes          Key             = 3;    // keys for values wanted to get
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message GetValueRsp {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        optional Value          Value           = 3;    // values to responsed
+        optional Node           Nodes           = 4;    // neighbors
+        required uint64         Id              = 5;    // message identity
+        optional bytes          Extra           = 6;    // extra info
+    }
+
+    message PutProvider {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required Provider       Provider        = 3;    // providers to be put
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message GetProviderReq {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required bytes          Key             = 3;    // key for value be requested
+        required uint64         Id              = 4;    // message identity
+        optional bytes          Extra           = 5;    // extra info
+    }
+
+    message GetProviderRsp {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required Provider       Provider        = 3;    // providers found
+        required bytes          Key             = 4;
+        repeated Node           Nodes           = 5;    // neighbors
+        required uint64         Id              = 6;    // message identity
+        optional bytes          Extra           = 7;    // extra info
+    }
+
+    message Ping {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required uint64         Seq             = 3;    // sequence number
+        optional bytes          Extra           = 4;    // extra info
+    }
+
+    message Pong {
+        required Node           From            = 1;    // from whom
+        required Node           To              = 2;    // to whom
+        required uint64         Seq             = 3;    // sequence number
+        optional bytes          Extra           = 4;    // extra info
+    }
+
+    //
+    // a pb message would be, the optional message body is determined by the
+    // message type "msgType".
+    //
+
+    required MessageType        msgType         = 1;
+
+    optional Handshake          handshake       = 2;
+    optional FindNode           findNode        = 3;
+    optional Neighbors          neighbors       = 4;
+    optional PutValue           putValue        = 5;
+    optional GetValueReq        getValueReq     = 6;
+    optional GetValueRsp        getValueRsp     = 7;
+    optional PutProvider        putProvider     = 8;
+    optional GetProviderReq     getProviderReq  = 9;
+    optional GetProviderRsp     getProviderRsp  = 10;
+    optional Ping               ping            = 11;
+    optional Pong               pong            = 12;
+}
+
+//
+// DHT common(key, value) record. It's a key-value pair, and DHT module would
+// never try to interprete this pair, it's the duty of the application, means
+// that, the "key" and "value" might have some "structs" in application's view
+// but which not cared by DHT.
+//
+
+message DhtRecord {
+    required bytes              key             = 1;    // key
+    required bytes              value           = 2;    // value
+    optional bytes              Extra           = 3;    // extra info
+}
+
+//
+// DHT provider record
+//
+
+message DhtProviderRecord {
+
+    message Node {
+        required bytes          IP              = 1;    // ip address
+        required uint32         UDP             = 2;    // udp port number
+        required uint32         TCP             = 3;    // tcp port number
+        required bytes          NodeId          = 4;    // node identity
+        optional bytes          Extra           = 5;    // extra information, like access control ...
+    }
+
+    message Provider {
+        required Node           Node            = 1;    // provider node
+        optional bytes          Extra           = 2;    // extra information, like access control ...
+    }
+
+    required bytes              key             = 1;    // key for what provided
+    repeated Provider           providers       = 2;    // providers
+    optional bytes              Extra           = 3;    // extra information, like access control ...
+}

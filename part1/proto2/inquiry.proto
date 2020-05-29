@@ -1,0 +1,248 @@
+syntax = "proto3";
+
+import "Server/proto/common/common.proto";
+
+package inquiry;
+
+service Inquiry {
+    rpc SubmitCode(CodeRequest) returns (LoginReply) {}
+    rpc Login(LoginRequest) returns (LoginReply) {}
+    rpc CheckToken(TokenRequest) returns (common.CommReply) {}
+    rpc GetPhoneCode(PhoneRequest) returns (common.CommReply) {}
+    rpc CheckPhoneCode(PhoneCodeRequest) returns (common.CommReply) {}
+    rpc BindPhone(PhoneCodeRequest) returns (RoleReply) {}
+    rpc GetDoctorInfo(common.CommRequest) returns (DoctorInfoReply) {}
+    rpc SetFee(FeeRequest) returns (common.CommReply) {}
+    rpc GetPatientInfo(common.CommRequest) returns (PatientInfoReply) {}
+    rpc BindOp(common.CommRequest) returns (common.CommReply) {}
+    rpc GetPatients(common.CommRequest) returns (PatientsReply) {}
+    rpc AddPatient(PatientRequest) returns (common.CommReply) {}
+    rpc ModPatient(PatientRequest) returns (common.CommReply) {}
+    rpc AddInquiry(InquiryRequest) returns (common.CommReply) {}
+    rpc SendChat(ChatRequest) returns (common.CommReply) {}
+    rpc GetChat(common.CommRequest) returns (ChatReply) {}
+    rpc GetChatSession(common.CommRequest) returns (ChatSessionReply) {}
+    rpc GetDoctors(common.CommRequest) returns (DoctorsReply) {}
+    rpc GetWallet(common.CommRequest) returns (WalletReply) {}
+    rpc ApplyDraw(DrawRequest) returns (common.CommReply) {}
+    rpc FinInquiry(FinInquiryRequest) returns (common.CommReply) {}
+    rpc GetQRCode(QRCodeRequest) returns (QRCodeReply) {}
+    rpc Feedback(FeedRequest) returns (common.CommReply) {}
+    rpc SetDrawPasswd(PasswdRequest) returns (common.CommReply) {}
+    rpc CheckDrawPasswd(PasswdRequest) returns (common.CommReply) {}
+    rpc DelUser(PhoneRequest) returns (common.CommReply) {}
+    rpc SetDoctor(PhoneRequest) returns (common.CommReply) {}
+    rpc ApplyRefund(RefundRequest) returns (common.CommReply) {}
+    rpc CancelRefund(common.CommRequest) returns (common.CommReply) {}
+}
+
+message RefundRequest {
+    common.Head head = 1;
+    int64 doctor = 2;
+    int64 interval = 3;
+}
+
+message CodeRequest {
+    common.Head head = 1;
+    string code = 2;
+    string appid = 3;
+}
+
+message LoginReply {
+    common.Head head = 1;
+    int64 uid = 2;
+    string token = 3;
+    int64 flag = 4;
+    int64 hasphone = 5;
+    string sid = 6;
+    int64 role = 7;
+    int64 hasrelation = 8;
+    int64 haspatient = 9;
+    int64 haspasswd = 10;
+    string phone = 11;
+}
+
+message LoginRequest {
+    common.Head head = 1;
+    string rawdata = 2;
+    string signature = 3;
+    string encrypteddata = 4;
+    string iv = 5;
+    string sid = 6;
+}
+
+message TokenRequest {
+    common.Head head = 1;
+    int64 type = 2;
+    string token = 3;
+}
+
+message PhoneRequest {
+    common.Head head = 1;
+    string phone = 2;
+}
+
+message PhoneCodeRequest {
+    common.Head head = 1;
+    string phone = 2;
+    int64 code = 3;
+    int64 tuid = 4;
+}
+
+message RoleReply {
+    common.Head head = 1;
+    int64 role = 2;
+}
+
+message DoctorInfo {
+    int64 id = 1;
+    string name = 2;
+    string headurl = 3;
+    string title = 4;
+    string hospital = 5;
+    string department = 6;
+    int64 fee = 7;
+}
+
+message DoctorInfoReply {
+    common.Head head = 1;
+    DoctorInfo info = 2;
+}
+
+message FeeRequest {
+    common.Head head = 1;
+    int64 fee = 2;
+}
+
+message PatientInfo {
+    int64 id = 1;
+    string name = 2;
+    string mcard = 3;
+    string phone = 4;
+    int64 deleted = 5;
+    int64 gender = 6;
+    int64 age = 7;
+}
+
+message PatientInfoReply {
+    common.Head head = 1;
+    PatientInfo info = 2;
+}
+
+message PatientsReply {
+    common.Head head = 1;
+    repeated PatientInfo infos = 2;
+}
+
+message PatientRequest {
+    common.Head head = 1;
+    PatientInfo info = 2;
+}
+
+message InquiryRequest {
+    common.Head head = 1;
+    int64 doctor = 2;
+    int64 pid = 3;
+    int64 fee = 4;
+    string formid = 5;
+}
+
+message ChatRequest {
+    common.Head head = 1;
+    int64 tuid = 2;
+    int64 type = 3;
+    string content = 4;
+}
+
+message ChatInfo {
+    int64 id = 1;
+    int64 seq = 2;
+    int64 uid = 3;
+    int64 tuid = 4;
+    int64 type = 5;
+    string content = 6;
+    string ctime = 7;
+}
+
+message ChatReply {
+    common.Head head = 1;
+    repeated ChatInfo infos = 2;
+    int64 status = 3;
+    int64 rflag = 4;
+}
+
+message ChatSessionInfo {
+    int64 id = 1;
+    int64 seq = 2;
+    int64 uid = 3;
+    string nickname = 4;
+    string headurl = 5;
+    string content = 6;
+    string ctime = 7;
+    int64 reddot = 8;
+    int64 cid = 9;
+    int64 type = 10;
+    int64 status = 11;
+}
+
+message ChatSessionReply {
+    common.Head head = 1;
+    repeated ChatSessionInfo infos = 2;
+    int64 hasmore = 3;
+}
+
+message Doctor {
+    int64 id = 1;
+    int64 seq = 2;
+    int64 uid = 3;
+    DoctorInfo doctor = 4;
+    int64 flag = 5;
+    ChatInfo chat = 6;
+    int64 status = 7;
+}
+
+message DoctorsReply {
+    common.Head head = 1;
+    repeated Doctor infos = 2;
+    int64 hasmore = 3;
+}
+
+message WalletReply {
+    common.Head head = 1;
+    int64 balance = 2;
+    int64 total = 3;
+    int64 draw = 4;
+    int64 totaldraw = 5;
+    int64 mindraw = 6;
+}
+
+message DrawRequest {
+    common.Head head = 1;
+    int64 fee = 2;
+}
+
+message FinInquiryRequest {
+    common.Head head = 1;
+    int64 tuid = 2;
+}
+
+message QRCodeRequest {
+    common.Head head = 1;
+    string path = 2;
+    int64 width = 3;
+}
+
+message QRCodeReply {
+    common.Head head = 1;
+    string url = 2;
+}
+
+message FeedRequest {
+    common.Head head = 1;
+    string content = 2;
+}
+
+message PasswdRequest {
+    common.Head head = 1;
+    string passwd = 2;
+}

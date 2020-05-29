@@ -1,0 +1,367 @@
+
+
+syntax = "proto2";
+
+package com.proto.video;
+import "YouMai.Basic.proto";
+
+
+message RoomMemberItem{
+	optional string                         member_id = 1;        // 成员id
+	optional uint32                         member_role = 2;    //群成员角色(1-管理员，2-普通成员) 
+	optional bool                           open_camera=3;
+	optional bool                           open_voice=4;
+	optional bool                           anchor=5;
+	
+	optional string                         avator=6;
+	optional string                         nickname=7;
+}
+
+enum VideoType{
+	CONFERENCE=1;
+	TRAIN=2;
+}
+//==========================================================
+//创建连麦房间
+//==========================================================
+message  RoomCreateReq{
+	optional string                         user_id=1;  
+	optional bool                           group=2;//是否基于群创建
+	optional uint32                         group_id=3;
+	optional string                         topic=4;
+	optional VideoType                      type=5;
+	
+	optional string                         avator=6;
+	optional string                         nickname=7;
+	
+}
+
+message  RoomCreateRsp{           
+	optional string                         room_name = 1; 
+	optional bool                           group=2;//是否基于群创建
+	optional uint32                         group_id=3;
+	optional string                         token=4;
+	optional string                         topic=5;
+	optional VideoType                      type=6;
+	optional com.proto.basic.ResultCode     result=20; 
+}
+
+//==========================================================
+//连麦成员操作
+//==========================================================
+//默认都是普通权限(除了发起者外）且麦克风视频关闭
+
+//用户加入(主动申请、被邀请）
+message  MemberApplyReq{
+	optional string                         member_id=1;   
+	optional string                         room_name = 2; 
+	optional string                         nickname=3;
+	optional string                         avator=4;
+}
+
+message   MemberApplyRsp{
+	optional string                         member_id=1;  
+	optional string                         room_name = 2;
+	optional com.proto.basic.ResultCode     result=20; 
+}
+
+//通知管理员
+message   MemberApplyNotify{
+	optional string                         admin_id=1;   
+	optional string                         room_name = 2;  
+	optional string                         member_id=3;
+	optional string                         nickname=4;
+	optional string                         avator=5;
+}
+
+//管理员响应
+message   MemberApplyResponseReq{
+	optional string                         admin_id=1;     
+	optional string                         room_name = 2;  
+	optional string                         member_id=3;  
+	optional bool                           agree=4;     //(同意：true)
+}
+
+message   MemberApplyResponseRsp{   
+	optional string                         room_name = 1;  
+	optional string                         member_id=2;    
+	optional bool                           agree=3;     //(同意：true)
+	optional com.proto.basic.ResultCode      result=20; 
+}
+
+//通知用户
+message   MemberApplyResponseNotify{
+	optional string                         room_name = 1;  
+	optional string                         admin_id=2;    
+	optional bool                           agree=3;     //(同意：true)
+	optional string                         token=4;
+	optional string                         member_id=5;//被通告用户id
+	
+}
+
+//邀请
+message  MemberInviteReq{
+	optional string                         admin_id=1;   
+	optional string                         room_name = 2; 
+	repeated RoomMemberItem                 member_list=3; //被邀请的用户
+	
+	//admin user info
+	optional string                         nickname=4;
+	optional string                         avator=5;
+	optional uint32                         group_id=6;
+	optional string                         info=7;
+	optional VideoType                      type=8;
+	optional string                         username=9;
+}
+
+message   MemberInviteRsp{
+	optional string                         admin_id=1;  
+	optional string                         room_name = 2;
+	optional com.proto.basic.ResultCode                     result=20; 
+}
+
+//通知用户
+message   MemberInviteNotify{
+	optional string                         admin_id=1;    
+	optional string                         room_name = 2;  
+	optional RoomMemberItem                 member=3;
+	
+	//admin user info
+	optional string                         nickname=4;
+	optional string                         avator=5;
+	optional uint32                         group_id=6;
+	optional string                         info=7;
+	
+	optional  bool                          valid=8;
+	optional VideoType                      type=9;
+	optional int32                          time=10;
+	optional string                         username=11;
+	
+}
+
+//用户响应
+message   MemberInviteResponseReq{
+	optional string                         member_id=1;     
+	optional string                         room_name = 2;    
+	optional bool                           agree=3;     //(同意：true)
+	optional string                         admin_id=4;  
+}
+
+message   MemberInviteResponseRsp{   
+	optional string                         room_name = 1;  
+	optional string                         member_id=2;    
+	optional bool                           agree=3;     //(同意：true)
+	optional string                         token=4;
+	optional com.proto.basic.ResultCode      result=20; 
+}
+
+//通知管理员
+message   MemberInviteResponseNotify{
+	optional string                         room_name = 1;  
+	optional string                         member_id=2;    
+	optional bool                           agree=3;     //(同意：true)
+	optional string                         admin_id=4;
+	
+}
+
+//移除  
+message  MemberDeleteReq{
+	optional string                         user_id=1;     
+	optional string                         room_name = 2;    
+		
+	repeated string                          member_list=3; 
+}
+
+message  MemberDeleteRsp{
+	optional string                         room_name = 1;    
+	repeated string                          member_list=2; 
+	optional com.proto.basic.ResultCode      result=20; 
+}
+
+
+//广播
+message  MemberModifyBroadcast{   
+	optional string                         room_name = 1;    
+	optional RoomMemberItem                 member=2; 	
+	optional uint32                         type=3;  //（增加：1，删除：2）
+	optional string                         notify_id=4;//通知用户
+}
+
+//==========================================================
+//获取连麦房间信息         用户进入房间获取房间用户列表 订阅所有用户流
+//==========================================================
+message RoomInfoReq{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;  
+}
+
+message RoomInfoRsp{
+	repeated RoomMemberItem                         member_list = 1;   
+	optional string                                 room_name=2;
+	optional bool                                   group=3;//是否基于群创建
+	optional uint32                                 group_id=4;
+	optional string                                 topic=5;
+	optional VideoType                              type=6;
+	optional com.proto.basic.ResultCode             result=20; 
+}
+
+//==========================================================
+//连麦设置
+//==========================================================
+
+//管理员设置
+message VideoSettingReq{
+	optional string                         admin_id = 1;       
+	repeated RoomMemberItem                 member_list = 2;  
+	optional string                         room_name=3;
+	
+	optional bool                           reply=4;//主动设置还是答复
+	optional bool                           agree=5;
+}
+
+message VideoSettingRsp{
+	optional string                         admin_id = 1;    
+	repeated RoomMemberItem                 member_list = 2; 
+	optional bool                           reply=3;//主动设置还是答复
+	optional bool                           agree=4;
+	
+	optional com.proto.basic.ResultCode     result=20; 
+}
+
+message VideoSettingNotify{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;  
+	optional bool                           open_camera=3;
+	optional bool                           open_voice=4;
+	
+	optional bool                           reply=5;//主动设置还是答复
+	optional bool                           agree=6;
+}
+
+//用户申请
+message VideoSettingApplyReq{
+	optional string                         user_id = 1;       
+	optional bool                           open_camera=2;
+	optional bool                           open_voice=3; 
+	optional string                         room_name=4;
+	optional string                         admin_id = 5; 
+	optional string                         nickname=6;
+}
+
+message VideoSettingApplyRsp{
+	optional string                         user_id = 1;       
+	optional bool                           open_camera=2;
+	optional bool                           open_voice=3;   
+	optional string                         room_name=4;
+	optional string                         admin_id = 5; 
+	optional string                         nickname=6;
+	optional com.proto.basic.ResultCode     result=20; 
+}
+
+message VideoSettingApplyNotify{
+	optional string                         user_id = 1;       
+	optional bool                           open_camera=2;
+	optional bool                           open_voice=3;   
+	optional string                         room_name=4;
+	optional string                         admin_id = 5; 
+	optional string                         nickname=6;
+}
+
+//==========================================================
+//权限转让
+//==========================================================
+
+message PermissionSettingReq{
+	optional string                         admin_id = 1;    
+	optional string                         room_name = 2;  
+	optional string                         new_admin_id = 3;   
+}
+
+message PermissionSettingRsp{
+	optional string                         admin_id = 1;    
+	optional string                         room_name = 2;  
+	optional string                         new_admin_id = 3; 
+	optional com.proto.basic.ResultCode      result=20; 
+}
+
+message PermissionSettingNotify{
+	optional string                         admin_id = 1;    
+	optional string                         room_name = 2;  
+	optional string                         new_admin_id = 3; //新管理员
+}
+
+
+//==========================================================
+//视频状态通知  通知给群所有人
+//==========================================================
+message StateBroadcast{
+	optional uint32                         group_id = 1;    
+	optional bool                           state = 2;    //会话状态（正在进行：true,结束：false）
+	optional uint32                         num = 3;      //通话人数 
+	optional string                         room_name = 4;
+	optional string                         info=5;
+}
+
+message VideoStateReq{
+	optional string                         member_id = 1;   
+	optional uint32                         group_id = 2;
+}
+
+message VideoStateRsp{
+	optional uint32                         group_id = 1;    
+	optional bool                           state = 2;    //会话状态（正在进行：true,结束：false）
+	optional uint32                         num = 3;      //通话人数 
+	optional string                         room_name = 4;
+	optional string                         info=5;
+	optional bool                           member=6;  //是否在房间
+	optional string                         token=7; 
+	optional VideoType                      type=8;
+	optional com.proto.basic.ResultCode     result=20; 
+}
+
+//用户退出房间
+message ExitRoomReq{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;     
+}
+
+message ExitRoomRsp{
+	optional string                                          user_id = 1;    
+	optional string                                          room_name = 2;   
+    optional com.proto.basic.ResultCode                      result=20; 	
+}
+
+message ExitRoomBroadcast{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;   
+    optional string                         notify_id = 3; 
+}
+
+//结束视频
+message DestroyRoomReq{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;     
+}
+
+message DestroyRoomRsp{
+	optional string                                         user_id = 1;    
+	optional string                                         room_name = 2;   
+    optional com.proto.basic.ResultCode                     result=20; 	
+}
+
+message DestroyRoomBroadcast{
+	optional string                         user_id = 1;    
+	optional string                         room_name = 2;   
+    optional string                         notify_id = 3; 
+}
+
+message Ping{
+	optional string                         member_id = 1;   
+	optional string                         room_name = 2;
+}
+
+message Pong{
+	optional string                         member_id = 1;   
+	optional string                         room_name = 2;
+	optional com.proto.basic.ResultCode     result=20; 
+}

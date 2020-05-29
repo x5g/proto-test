@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package proto3.VO;
+
+option optimize_for = SPEED;
+option java_package = "proto3.VO";
+option java_outer_classname = "DataBodyVO";
+
+// 是否生成多文件
+option java_multiple_files = true;
+
+service DataBodyService {
+    rpc getResponse (Request) returns (Response) {
+    };
+
+    rpc getPig (PigRequest) returns (stream PigResponse) {
+    }
+
+    rpc getDog (stream DogRequest) returns (DogResponseList) {
+    }
+
+    rpc getCat (stream CatRequest) returns (stream CatResponse) {
+    }
+}
+
+// 1.
+message Request {
+    string requestCode = 1;
+}
+
+message Response {
+    string responseCode = 1;
+}
+
+// 2. 响应流
+message PigRequest {
+    int32 age = 1;
+}
+
+message PigResponse {
+    int32 age = 1;
+    string name = 2;
+}
+
+// 2.2 请求流
+message DogRequest {
+    int32 age = 1;
+}
+
+message DogResponse {
+    int32 age = 1;
+    string name = 2;
+}
+
+message DogResponseList {
+    // 集合 list
+    repeated DogResponse dogResponse = 1;
+}
+
+// 2.3 请求/响应 流
+message CatRequest {
+    string catRequestCode = 1;
+}
+
+message CatResponse {
+    string catResponseCode = 1;
+}

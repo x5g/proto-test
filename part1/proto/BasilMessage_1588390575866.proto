@@ -1,0 +1,115 @@
+// Basic Basil message.
+
+// This message definition relys heavily on the ProtoBuf feature that
+//    fields are not packed into the message if they do not have values.
+//    Refer to the specific operation defintions on which values are expected.
+
+syntax = "proto3";
+
+package BasilMessage;
+
+option csharp_namespace = "org.herbal3d.basil.protocol.Message";
+
+// The operations
+enum BasilMessageOps {
+  UnknownReq                  = 0;
+  CreateItemReq               = 101;
+  CreateItemResp              = 102;
+  DeleteItemReq               = 103;
+  DeleteItemResp              = 104;
+  AddAbilityReq               = 105;
+  AddAbilityResp              = 106;
+  RemoveAbilityReq            = 107;
+  RemoveAbilityResp           = 108;
+  RequestPropertiesReq        = 109;
+  RequestPropertiesResp       = 110;
+  UpdatePropertiesReq         = 111;
+  UpdatePropertiesResp        = 112;
+
+  OpenSessionReq              = 201;
+  OpenSessionResp             = 202;
+  CloseSessionReq             = 203;
+  CloseSessionResp            = 204;
+  MakeConnectionReq           = 205;
+  MakeConnectionResp          = 206;
+
+  AliveCheckReq               = 301;
+  AliveCheckResp              = 302;
+}
+
+// ========================== Data packaging
+// Specifying a position.
+enum CoordSystem {
+  WGS86         = 0;    // WGS84 earth coordinates
+  CAMERA        = 1;    // Coordinates relative to camera position (-1..1 range, zero center)
+  CAMERAABS     = 2;    // Absolute coordinates relative to the camera position (zero center)
+  VIRTUAL       = 3;    // Zero based un-rooted coordinates
+  MOON          = 4;    // Earth-moon coordinates
+  MARS          = 5;    // Mars coordinates
+  REL1          = 6;    // Mutually agreed base coordinates
+  REL2          = 7;
+  REL3          = 8;
+}
+enum RotationSystem {
+  WORLDR        = 0;    // rotation is relative to world coordinates
+  LOCALR        = 1;    // rotation is relative to referenced object
+  FORR          = 2;    // rotation is relative to current frame of reference
+  CAMERAR       = 3;    // rotation is relative to the camera direction
+}
+// Used both for specifying a single position or repeated as update for multiple items
+// Used to specify position and possibly future path.
+message PositionBlock {
+  repeated double Pos             = 1;  // three doubles for a position
+  repeated double Rot             = 2;  // four doubles for a quaternion rotation
+  CoordSystem PosRef              = 3;
+  RotationSystem RotRef           = 4;
+  // More complex position properties
+  repeated double Vel             = 5;  // three doubles for world vel vector
+  repeated double Path            = 6;  // pairs of pos/rot defining path
+  // Sometimes PositionBlock is repeated to apply to many Item/Components
+  uint32 ItemIdN                  = 10; // item being operated on (by session assigned number)
+  string ItemId                   = 11; // item being operated on
+  string SessionAuth              = 12; // authorization to make request
+  string ItemAuth                 = 13; // per item authorization
+}
+// A block of parameters.
+// Can be used for a Ability property setting
+message ParamBlock {
+  string Ability                  = 1;
+  map<string,string> Props        = 2;
+}
+
+// ========================== Message sent between Basil and a SpaceServer
+// Bi-directional and used like a syncronization protocol
+message BasilMessage {
+  // header for tracking and response (RPC) linkage
+  uint32 ResponseCode             = 1;    // unique code to tie response to request
+  string ResponseKey              = 20;   // optional key to verify response
+  uint32 StreamId                 = 3;    // if there are multiple streams in the connection
+  uint32 ProtocolVersion          = 4;    // versioning info
+
+  // Change ordering
+  uint64 ChangeSeq                = 30;   // sequence number of change
+  uint64 ChangeTime               = 31;   // time code for change
+
+  // Preformance/metrics
+  uint32 QueueTime                = 40;   // when request was queued
+  uint32 SendTime                 = 41;   // when request was sent
+  uint32 TransportClass           = 42;   // prioritization
+
+  // Operation and operation parameters
+  uint32 Op                       = 5;    // operation to perform
+  string SessionAuth              = 6;    // authorization to make request
+  uint32 ItemIdN                  = 7;    // item being operated on (by session assigned number)
+  string ItemId                   = 8;    // item being operated on
+  string ItemAuth                 = 21;   // per item authorization
+  map<string,string> IProps       = 9;    // properties to update on item
+  repeated ParamBlock AProps      = 10;   // Abilities and their properties
+
+  repeated PositionBlock Positions = 11;  // Some messages are just pos updates
+
+  // Responses can report errors
+  string Exception                = 12;   // error message if present
+  map<string,string> ExceptionHints = 22; // more information about the error
+}
+

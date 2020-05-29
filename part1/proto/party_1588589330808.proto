@@ -1,0 +1,164 @@
+package Dianjing.protocol;
+
+import "common.proto";
+
+enum PartyMessageType {
+    PARTY_MESSAGE_TYPE_CHAT = 1;
+    PARTY_MESSAGE_TYPE_BUY = 2;
+    PARTY_MESSAGE_TYPE_JOIN = 3;
+    PARTY_MESSAGE_TYPE_LEAVE = 4;
+}
+
+message PartyNotify {
+    required bytes session = 1;
+    repeated TimeRange time_range = 2;
+
+    required int32 talent_id = 3;
+    required int64 talent_end_at = 4; 
+    required int32 remained_create_times = 5;
+    required int32 remained_join_times = 6;
+}
+
+message PartyMessageNotify {
+    message PartyMessage {
+        required PartyMessageType tp = 1;
+        repeated string args = 2;
+    }
+
+    required bytes session = 1;
+    required Action act = 2;
+    repeated PartyMessage messages = 3;
+}
+
+message PartyInfo {
+    message PartyMember {
+        message BuyInfo {
+            required int32 buy_id = 1;
+            required int32 buy_times = 2;   // 已经购买的次数
+        }
+
+        required string id = 1;
+        required int32 flag = 2;
+        required string name = 3;
+        required int32 seat_id = 4;     // 座位ID， 1, 2, 3
+        repeated BuyInfo buy_info = 5;  // 只发送购买过的商品
+    }
+    
+    required int32 level = 1;
+    required int64 end_at = 2;  // 没有start， end_at 为0
+    repeated PartyMember members = 3;   // 座位ID为1的是房主
+}
+
+message PartyInfoNotify {
+    required bytes session = 1;
+    required int32 talent_id = 2;
+    required int64 talent_end_at = 3; 
+    required int32 remained_create_times = 4;
+    required int32 remained_join_times = 5;
+    optional PartyInfo info = 6;
+}
+
+// 获取房间列表
+message PartyRoomRequest {
+    required bytes session = 1;
+}
+
+message PartyRoomResponse {
+    message PartyRoom {
+        required string owner_id = 1;
+        required string owner_name = 2;
+        required int32 level = 3;
+        required int32 current_amount = 4;
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated PartyRoom rooms = 3;
+}
+
+// 建立
+message PartyCreateRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message PartyCreateResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 加入
+message PartyJoinRequest {
+    required bytes session = 1;
+    required string owner_id = 2;
+}
+
+message PartyJoinResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 退出
+message PartyQuitRequest {
+    required bytes session = 1;
+}
+
+message PartyQuitResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 踢人
+message PartyKickRequest {
+    required bytes session = 1;
+    required string id = 2;
+}
+
+message PartyKickResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 聊天
+message PartyChatRequest {
+    required bytes session = 1;
+    required string text = 2;
+}
+
+message PartyChatResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 购买
+message PartyBuyRequest {
+    required bytes session = 1;
+    required int32 buy_id = 2;
+}
+
+message PartyBuyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 开始
+message PartyStartRequest {
+    required bytes session = 1;
+}
+
+message PartyStartResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 解散
+message PartyDismissRequest {
+    required bytes session = 1;
+}
+
+message PartyDismissResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+

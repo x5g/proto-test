@@ -1,0 +1,68 @@
+/* netty proto */
+syntax = "proto3";
+package test;
+/*包名*/ 
+option java_package = "com.highfly029.packet";
+/*类名*/
+option java_outer_classname = "PbCommon";
+
+enum ConnectType{
+	Null = 0;//默认
+	Client = 1;//客户端封包发出的
+	Scene = 2;//scene封包发出的
+	Center = 3;//center封包发出的
+	Gate = 4;//gate封包发出的
+}
+
+//连接建立后发送连接类型请求
+message ConnectTypeReq{
+	ConnectType type = 1;//包的类型
+}
+//返回请求
+message ConnectTypeResp{
+	ConnectType type = 1;//包的类型	
+}
+
+
+message Request {
+ 	int32 id = 1;
+  	string req = 2;
+}
+
+message Response {
+  	int32 id = 1;
+  	string resp = 2;
+}
+
+//向量
+message PbVector {
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+//实体
+message PbEntity {
+	int64 entityID = 1;
+	int32 type = 2;
+	string name = 3;
+	PbVector curPos = 4;
+	PbVector direction = 5;
+}
+
+//键值对
+message PbKeyValue {
+	int32 intKey = 1;
+	int32 intValue = 2;
+	bool boolValue = 3;
+}
+
+//buffData
+message PbBuffData {
+	int32 instanceID = 1;
+	int32 buffID = 2;
+	int32 level = 3;
+	int32 duration = 4;
+	int32 useCnt = 5;
+	int32 floorNum = 6;
+}

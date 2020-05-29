@@ -1,0 +1,147 @@
+package wire;
+
+// -------
+// Account Management
+// -------
+
+// Register Message alerts a DAP server that a user
+// wants to register themselves with a new account.
+message Register {
+	repeated Data keys = 1;
+}
+
+// Unregister message alerts a DAP server that a user
+// wants to leave a server completely.
+message Unregister {
+	repeated Data keys = 1;
+}
+
+// Enable Link informs a DAP server to allow link requests
+// for a specific account.
+message EnableLink {}
+
+// Link Request starts a link request for an account on the
+// DAP server
+message LinkData {
+    // payload is encrypted with the public key of the link
+    // requestee in order to hide the verification details
+    // from a Chess Grandmaster attacker
+
+    // The payload should be an AirDispatch Message encrypted
+    // for the requestee
+    required bytes payload = 1;
+
+    optional string for    = 2;
+}
+
+// Link Rqeust Payload is the encrypted portion of the 
+// "Link Request".
+message LinkRequestPayload {
+    // key is the public key of the link requester
+    // the private key of the link requestee will be
+    // encrypted with this
+    required bytes  encrypting   = 1;
+    required bytes  signing      = 2;        
+
+    // verification is a string of 6 numerals (0-9)
+    // that are displayed to the user on both devices
+    // in order to confirm device identity
+    required string verification = 3;
+}
+
+// Link Key Payload is the encrypted portion of LinkData
+// that contains the identity of the transfering party.
+message LinkKeyPayload {
+    required bytes identity = 1;
+}
+
+// Link Transfer is a request to the server to transfer a 
+// particular piece of data.
+message LinkTransfer {
+    // If request is true, then the server must transfer the
+    // LinkRequestPayload sent to the account of the "From" address
+    optional bool request  = 1;
+
+    // If approved is true, then the server must transfer the 
+    // LinkKeyPayload sent to the account of the "From" address
+    optional bool approved = 2;
+}
+
+// -------
+// Message Management
+// -------
+
+// Download Messages will return a list of all message
+// descriptions reived after `since`.
+message DownloadMessages {
+	optional uint64 since = 1;
+	optional bool context = 2;
+    optional bool sent    = 3;
+}
+
+// Publish Message will create a new message on the server
+// the server must send an alert to the addresses in the `To`
+// field if the `alert` field is `true`.
+message PublishMessage {
+	required bytes data        = 1;
+	repeated string to         = 2;
+	required string name       = 3;
+	optional bool alert        = 4;
+}
+
+// Update Message will update a message with name `name`, to
+// `data`.
+message UpdateMessage {
+	required string name = 1;
+	required bytes data  = 2;
+}
+
+// ---------
+// AD Data Messages
+// ---------
+
+// PublishDataMessage will take an encrypted data header, some metadata about
+// the data message, and publish it on the server.
+message PublishDataMessage {
+	required bytes  header = 1;
+	repeated string to     = 2;
+	required string name   = 3;
+	required uint64 length = 4;
+	required bytes  hash   = 5;
+}
+
+// ---------
+// Arbitrary Data Store
+// ---------
+
+// Data will alert the server to store `data` under the name
+// `key`.
+message Data {
+	required string key = 1;
+	required bytes data = 2;
+}
+
+// Get Data will return the data stored under `key`.
+message GetData {
+	required string key = 1;
+}
+
+// ------
+// Server Responses
+// ------
+
+// A response from the server. Must include a response code,
+// may include a message, and a length (number of additional
+// messages the client must download).
+message Response {
+	required uint32 code    = 1;
+	optional string message = 2;
+	optional uint64 length  = 3;
+	optional bytes data     = 4;
+}
+
+// An encapsulated message that includes its context.
+message ResponseMessage {
+	required bytes data   = 1;
+	repeated Data context = 2;
+}

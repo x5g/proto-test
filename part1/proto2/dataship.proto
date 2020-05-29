@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+
+option java_multiple_files = false;
+option java_package = "org.dataship.rpc";
+option java_outer_classname = "Rpc";
+
+enum OpCode {
+    OP_SUCCESS = 0;
+    OP_FAIL = 1;
+}
+
+message OpResult {
+    OpCode code = 1;
+}
+
+message PbAddr {
+    string iface = 1;
+    string ip = 2;
+    uint32 mask = 3;
+}
+
+message PbRoute {
+    string dstNet = 1;
+    uint32 dstMask = 2;
+    string iface = 3;
+    string gateway = 4;
+}
+
+enum RuleType {
+    TCP = 0;
+    HTTP = 1;
+    UDP = 128;
+};
+
+message PbRule {
+    uint32 id = 1;
+    RuleType type = 2;
+    string listenAddr = 3;
+    uint32 listenPort = 4;
+    string dstAddr = 5;
+    uint32 dstPort = 6;
+    string sendAddr = 7;
+}
+
+message PbAddrMod {
+    PbAddr old = 1;
+    PbAddr new = 2;
+};
+
+message PbRouteMod {
+    PbRoute old = 1;
+    PbRoute new = 2;
+}
+
+service Dataship {
+    // AddRule adds to Dataship
+    rpc AddRule (PbRule) returns (OpResult) {
+    }
+    // DelRule deletes a Rule on Dataship
+    rpc DelRule (PbRule) returns (OpResult) {
+    }
+
+    rpc AddAddr (PbAddr) returns (OpResult) {
+    }
+    rpc DelAddr (PbAddr) returns (OpResult) {
+    }
+
+    rpc ModAddr (PbAddrMod) returns (OpResult) {
+    }
+
+    rpc AddRoute (PbRoute) returns (OpResult) {
+    }
+    rpc DelRoute (PbRoute) returns (OpResult) {
+    }
+    rpc ModRoute (PbRouteMod) returns (OpResult) {
+    }
+}

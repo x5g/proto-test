@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_tables.proto";
+import "pb_enum.proto";
+
+message PB_Play {
+
+    message PB_MaView {
+        int64 MediaId = 1;
+        int32 UserId = 2;
+        repeated int32 phi = 4;
+        message PB_Media {
+            int64 MediaId = 1;
+            int32 UserId = 2;
+            int32 PostId = 3;
+        }
+    }
+
+    int64 PostId = 1;
+    int32 UserId = 2;
+    PostTypeEnum PostTypeEnum = 3;
+    string Text = 4;
+
+
+    enum FplayEnum {
+        FOLLOWING_NONE = 0;
+        FOLLOWING = 1;
+        REQUESTED = 2;
+        BLOCKED = 3;
+    }
+
+    repeated PB_MaView MediaViewList = 103;
+}

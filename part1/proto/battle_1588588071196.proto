@@ -1,0 +1,402 @@
+package Sanguo.protocol.battle;
+
+import "world.proto";
+import "common.proto";
+
+
+
+message Stage {
+    required int32 id = 1;
+    required bool star = 2;
+}
+
+message AlreadyStageNotify {
+    required bytes session = 1;
+    repeated Stage stages = 2;
+}
+
+message CurrentStageNotify {
+    required bytes session = 1;
+    required Stage stage = 2;
+    repeated Sanguo.protocol.world.FunctionType funcs = 3;
+}
+
+message NewStageNotify {
+    required bytes session = 1;
+    required Stage stage = 2;
+}
+
+
+// 精英关卡总剩余次数
+message EliteStageTimesNotify {
+    required bytes session = 1;
+    required int32 max_free_times = 2;
+    required int32 cur_free_times = 3;
+    required int32 total_reset_cost = 4;    // 重置总次数花费
+    required int32 cicle_max_times = 5;        // 循环最大次数
+    required int32 cicle_current_times = 6;    // 循环当前次数
+}
+
+// 已经开启的精英关卡
+message EliteStage {
+    required int32 id = 1;
+    required int32 current_times = 2;   // 已经打过的次数
+    required int32 reset_cost = 3;      // 重置花费
+}
+
+
+message EliteStageNotify {
+    required bytes session = 1;
+    repeated EliteStage stages = 2;
+}
+
+message NewEliteStageNotify {
+    required bytes session = 1;
+    required EliteStage stage = 2;
+}
+
+message UpdateEliteStageNotify {
+    required bytes session = 1;
+    required EliteStage stage = 2;
+}
+
+
+message ElitePVERequest {
+    required bytes session = 1;
+    required int32 stage_id = 2;
+}
+
+message ElitePVEResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 stage_id = 3;
+    optional Battle battle = 4;
+    optional Sanguo.protocol.world.Attachment drop = 5;
+}
+
+message EliteStageResetRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message EliteStageResetResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+message EliteStageResetTotalRequest {
+    required bytes session = 1;
+}
+
+message EliteStageResetTotalResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+
+// 活动关卡
+message ActivityStageRemainedTimesNotify {
+    message Times {
+        required int32 tp = 1;
+        required int32 times = 2;
+    }
+
+    required bytes session = 1;
+    repeated Times remained_times = 2;
+}
+
+// 已经开启的活动关卡
+message ActivityStageNotify {
+    required bytes session = 1;
+    repeated int32 ids = 2;
+}
+
+// 新开启
+message NewActivityStageNotify {
+    required bytes session = 1;
+    repeated int32 ids = 2;
+}
+
+message ActivityStagePVERequest {
+    required bytes session = 1;
+    required int32 stage_id = 2;
+}
+
+message ActivityStagePVEResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 stage_id = 3;
+    optional Battle battle = 4;
+    optional Sanguo.protocol.world.Attachment drop = 5;
+}
+
+
+
+message BattleHero {
+    enum HeroType {
+        HERO = 1;
+        MONSTER = 2;
+        UNION_BOSS = 3;
+        }
+
+    required int32 id = 1;
+    required int32 original_id = 2;
+    required int32 hp = 3;
+    required int32 anger = 4;
+    required int32 max_hp = 5;
+    required int32 max_anger = 6;
+    required HeroType ht = 7;       // 是玩家的英雄还是关卡的怪物
+}
+
+
+
+message Step {
+	message Action {
+		message Target {
+			required int32 target_id = 1;
+			required bool is_crit = 2;
+		}
+		required int32 skill_id = 1;
+		repeated Target targets = 2;
+	}
+
+    message HeroNotify {
+		message Buff{
+			required int32 id = 1;
+			optional int32 value = 2;
+		}
+        required int32 target_id = 1;
+        required int32 hp = 2;
+        required int32 anger = 3;
+        repeated Buff adds = 4;
+        repeated int32 removes = 5;
+        optional sint32 value = 6;           // 引起hp变化的value
+    }
+	required int32 id = 1;                  // 发起行动的英雄ID
+    optional Action action = 2;
+    repeated HeroNotify hero_notify = 3;
+    repeated int32 dead_ids = 4;            // 死亡
+
+}
+
+message Ground {
+    // 一军
+    repeated BattleHero self_heros = 1;     //
+    repeated BattleHero rival_heros = 2;    //
+    required bool self_win = 3;             //
+
+    repeated Step steps = 4;            // 每次行动
+}
+
+message Battle {
+    required int32 self_power = 1;          // 已方总战力
+    required int32 rival_power = 2;         // 对方总战力
+    required string self_name = 3;
+    required string rival_name = 4;
+    required Ground first_ground = 5;       // 前军
+    required Ground second_ground = 6;      // 中军
+    required Ground third_ground = 7;       // 后军
+    required bool self_win = 8;             // 自己是否胜利
+}
+
+
+message PVERequest {
+    required bytes session = 1;
+    required int32 stage_id = 2;
+}
+
+message PVEResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 stage_id = 3;
+    optional Battle battle = 4;
+    optional Sanguo.protocol.world.Attachment drop = 5;
+}
+
+
+
+// 掠夺
+message PlunderNotify {
+    required bytes session = 1;
+    required int32 current_times = 2;           // 当前剩余次数
+    required int32 max_times = 3;               // 最大次数
+    required int32 success_times_weekly = 4;    // 周成功掠夺次数
+}
+
+message Plunder {
+    required Sanguo.protocol.common.CharacterInfomation char = 1;
+    required int32 gold = 2;    // 从此人能获得的银币
+}
+
+
+message PlunderRefreshRequest {
+    required bytes session = 1;
+    required int32 city_id = 2;
+}
+
+message PlunderRefreshResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Plunder plunder = 3;
+}
+
+
+message PlunderRequest {
+    required bytes session = 1;
+}
+
+message PlunderResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Battle battle = 3;
+    optional Sanguo.protocol.world.Attachment drop = 4;
+}
+
+
+
+// 战俘
+message Prisoner {
+    required int32 id = 1;      // 战俘ID
+    required int32 oid = 2;     // 原始ID
+
+    required int32 prob = 3;    // 当前劝降几率
+    required bool active = 4;   // 是否可劝降
+}
+
+
+message PrisonerListNotify {
+    required bytes session = 1;
+    repeated Prisoner prisoner = 2;
+}
+
+message UpdatePrisonerNotify {
+    required bytes session = 1;
+    repeated Prisoner prisoner = 2;
+}
+
+message NewPrisonerNotify {
+    required bytes session = 1;
+    repeated Prisoner prisoner = 2;
+}
+
+message RemovePrisonerNotify {
+    required bytes session = 1;
+    repeated int32 ids = 2;
+}
+
+
+message PrisonerGetRequest {
+    required bytes session = 1;
+    required int32 id = 2;      // 战俘ID
+    repeated int32 treasure_ids = 3;    // 宝物ID列表
+}
+
+message PrisonerGetResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional bool success = 3;  // 是否成功
+}
+
+
+message PrisonerReleaseRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message PrisonerReleaseResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Sanguo.protocol.world.Attachment reward = 3;
+}
+
+
+message PrisonerKillRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+}
+
+message PrisonerKillResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Sanguo.protocol.world.Attachment reward = 3;
+}
+
+
+message ArenaNotify {
+    required bytes session = 1;
+    required int32 score = 2;
+    required int32 rank = 3;
+    required int32 remained_free_times = 4;  // 剩余免费次数
+    required int32 remained_sycee_times = 5; // 剩余的元宝购买次数
+    required int32 arena_cost = 6; // 超过免费次数后，每次比武需要花费的金币
+}
+
+
+message ArenaPanelRequest {
+    required bytes session = 1;
+}
+
+message ArenaPanelResponse {
+    message ArenaBoard {
+        // 竞技场排行榜角色
+        required Sanguo.protocol.common.CharacterInfomation char = 1;
+        required int32 score = 2;
+        required int32 rank = 3;
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated ArenaBoard boards = 3; // 排行榜
+}
+
+
+
+message ArenaRequest {
+    required bytes session = 1;
+}
+
+message ArenaResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Battle battle = 3;
+    optional Sanguo.protocol.world.Attachment drop = 4;
+}
+
+
+message TeamBattle {
+    enum TeamBattleStatus {
+        DOING = 2;       // 战斗中
+        REWARD = 3;      // 可以领奖
+    }
+    required int32 id = 1;
+    required int32 boss_id = 2;             // boss id
+    required int32 boss_power = 3;          // boss战斗力
+    required int32 self_power = 4;
+
+    required int32 start_at = 5;            // 开始时间戳
+    required float step_progress = 6;       // 每秒增加百分比
+
+    required TeamBattleStatus status = 7;
+
+    optional Sanguo.protocol.world.Attachment reward = 9;
+}
+
+
+message TeamBattleNotify {
+    required bytes session = 1;
+    optional TeamBattle team_battle = 2;
+}
+
+
+message TeamBattleStartRequest {
+    required bytes session = 1;
+    required int32 id = 2;
+    repeated int32 friend_ids = 3;
+}
+
+message TeamBattleStartResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+

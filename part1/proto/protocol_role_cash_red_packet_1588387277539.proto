@@ -1,0 +1,61 @@
+import "protocol_base.proto";
+
+package Uqee.Protobufs.Server.Protocol;
+
+message CashRedPacketItem {
+    optional int64 id = 1;
+    optional float num = 2;
+    optional int32 type = 3;
+    optional int32 draw_time = 4;
+}
+
+message C2S_CashRedPacketLoad {
+    optional ProtocolType type = 1 [default = C_2_S_CASH_RED_PACKET_LOAD];
+}
+
+message S2C_CashRedPacketLoad {
+    optional ProtocolType type = 1 [default = S_2_C_CASH_RED_PACKET_LOAD];
+    optional float total_cash = 2;
+    optional float valid_cash = 3;
+    optional float valid_num = 4;
+    repeated CashRedPacketItem items = 5;
+}
+
+message C2S_CashRedPacketValidNum {
+    optional ProtocolType type = 1 [default = C_2_S_CASH_RED_PACKET_VALID_NUM];
+}
+
+message S2C_CashRedPacketValidNum {
+    optional ProtocolType type = 1 [default = S_2_C_CASH_RED_PACKET_VALID_NUM];
+    optional float num = 2;
+}
+
+message C2S_CashRedPacketOpen {
+    optional ProtocolType type = 1 [default = C_2_S_CASH_RED_PACKET_OPEN];
+}
+
+message S2C_CashRedPacketOpen {
+    optional ProtocolType type = 1 [default = S_2_C_CASH_RED_PACKET_OPEN];
+    optional int32 ret = 2;
+    optional CashRedPacketItem item = 3;
+}
+
+message C2S_CashRedPacketHistory {
+    optional ProtocolType type = 1 [default = C_2_S_CASH_RED_PACKET_HISTORY];
+    optional int32 ts = 2;
+}
+
+message S2C_CashRedPacketHistory {
+    optional ProtocolType type = 1 [default = S_2_C_CASH_RED_PACKET_HISTORY];
+    repeated CashRedPacketItem items = 2;
+}
+
+message C2S_CashRedPacketDrawCash {
+    optional ProtocolType type = 1 [default = C_2_S_CASH_RED_PACKET_DRAW_CASH];
+    optional int32 cash = 2;
+}
+
+message S2C_CashRedPacketDrawCash {
+    optional ProtocolType type = 1 [default = S_2_C_CASH_RED_PACKET_DRAW_CASH];
+    optional int32 ret = 2;
+}

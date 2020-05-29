@@ -1,0 +1,321 @@
+syntax = "proto3";
+package textsecure;
+option csharp_namespace = "libsignalservice.push";
+option java_package = "org.whispersystems.textsecure.internal.push";
+option java_outer_classname = "SignalServiceProtos";
+
+message Envelope {
+  enum Type {
+    UNKNOWN             = 0;
+    CIPHERTEXT          = 1;
+    KEY_EXCHANGE        = 2;
+    PREKEY_BUNDLE       = 3;
+    RECEIPT             = 5;
+    UNIDENTIFIED_SENDER = 6;
+  }
+
+  oneof type_oneof						{ Type   type          = 1; }
+  oneof source_oneof					{ string source        = 2; }
+  oneof sourceDevice_oneof				{ uint32 sourceDevice  = 7; }
+  oneof relay_oneof						{ string relay         = 3; }
+  oneof timestamp_oneof					{ uint64 timestamp     = 5; }
+  oneof legacyMessage_oneof				{ bytes  legacyMessage = 6; } // Contains an encrypted DataMessage
+  oneof content_oneof					{ bytes  content       = 8; } // Contains an encrypted Content
+  oneof serverGUid_oneof                { string serverGuid      = 9; }
+  oneof serverTimestamp_oneof           { uint64 serverTimestamp = 10; }
+}
+
+message Content {
+  oneof dataMessage_oneof				{ DataMessage dataMessage     = 1; }
+  oneof syncMessage_oneof				{ SyncMessage syncMessage     = 2; }
+  oneof callMessage_oneof               { CallMessage callMessage     = 3; }
+  oneof nullMessage_oneof       { NullMessage nullMessage = 4; }
+  oneof receiptMessage_oneof { ReceiptMessage receiptMessage = 5; }
+}
+
+message CallMessage {
+  message Offer {
+    oneof id_oneof                      { uint64 id                   = 1; }
+    oneof description_oneof             { string description          = 2; }
+  }
+
+  message Answer {
+    oneof id_oneof                      { uint64 id                   = 1; }
+    oneof description_oneof             { string description          = 2; }
+  }
+
+  message IceUpdate {
+    oneof id_oneof                      { uint64 id                   = 1; }
+    oneof sdpMid_oneof                  { string sdpMid               = 2; }
+    oneof sdpMLineIndex_oneof           { uint32 sdpMLineIndex        = 3; }
+    oneof sdp_oneof                     { string sdp                  = 4; }
+  }
+
+  message Busy {
+    oneof id_oneof                      { uint64 id                   = 1; }
+  }
+
+  message Hangup {
+    oneof id_oneof                      { uint64 id                   = 1; }
+  }
+
+
+  oneof offer_oneof                     { Offer offer                 = 1; }
+  oneof answer_oneof                    { Answer answer               = 2; }
+  repeated IceUpdate                      iceUpdate                   = 3;
+  oneof hangup_oneof                    { Hangup hangup               = 4; }
+  oneof busy_oneof                      { Busy busy                   = 5; }
+}
+
+message DataMessage {
+  enum Flags {
+    ZERO_PLACEHOLDER = 0;
+    END_SESSION = 1;
+    EXPIRATION_TIMER_UPDATE = 2;
+	PROFILE_KEY_UPDATE = 4;
+  }
+
+  message Quote {
+    message QuotedAttachment {
+	  oneof contentType_oneof { string contentType = 1; }
+	  oneof fileName_oneof { string fileName = 2;}
+	  oneof thumbnail_oneof { AttachmentPointer thumbnail = 3; }
+	}
+    oneof id_oneof { uint64 id = 1; }
+	oneof author_oneof { string author = 2; }
+	oneof text_oneof { string text = 3; }
+	repeated QuotedAttachment attachments = 4;
+  }
+
+  message Contact {
+    message Name {
+      oneof givenName_oneof             { string givenName   = 1; }
+      oneof familyName_oneof            { string familyName  = 2; }
+      oneof prefix_oneof                { string prefix      = 3; }
+      oneof suffix_oneof                { string suffix      = 4; }
+      oneof middleName_oneof            { string middleName  = 5; }
+      oneof displayName_oneof           { string displayName = 6; }
+    }
+
+    message Phone {
+      enum Type {
+        ZERO_PLACEHOLDER = 0;
+        HOME   = 1;
+        MOBILE = 2;
+        WORK   = 3;
+        CUSTOM = 4;
+      }
+
+      oneof value_oneof                 { string value = 1; }
+      oneof type_oneof                  { Type   type  = 2; }
+      oneof label_oneof                 { string label = 3; }
+    }
+
+    message Email {
+      enum Type {
+        ZERO_PLACEHOLDER = 0;
+        HOME   = 1;
+        MOBILE = 2;
+        WORK   = 3;
+        CUSTOM = 4;
+      }
+
+      oneof value_oneof                 { string value = 1; }
+      oneof type_oneof                  { Type   type  = 2; }
+      oneof label_oneof                 { string label = 3; }
+    }
+
+    message PostalAddress {
+      enum Type {
+        ZERO_PLACEHOLDER = 0;
+        HOME   = 1;
+        WORK   = 2;
+        CUSTOM = 3;
+      }
+
+      oneof type_oneof                  { Type   type         = 1; }
+      oneof label_oneof                 { string label        = 2; }
+      oneof street_oneof                { string street       = 3; }
+      oneof pobox_oneof                 { string pobox        = 4; }
+      oneof neighborhood_oneof          { string neighborhood = 5; }
+      oneof city_oneof                  { string city         = 6; }
+      oneof region_oneof                { string region       = 7; }
+      oneof postcode_oneof              { string postcode     = 8; }
+      oneof country_oneof               { string country      = 9; }
+    }
+
+    message Avatar {
+      oneof avatar_oneof                { AttachmentPointer avatar    = 1; }
+      oneof isProfile_oneof             { bool              isProfile = 2; }
+    }
+
+    oneof name_oneof                    { Name              name            = 1; }
+    repeated Phone             number          = 3;
+    repeated Email             email           = 4;
+    repeated PostalAddress     address         = 5;
+    oneof avatar_oneof                  { Avatar            avatar          = 6; }
+    oneof organization_oneof            { string            organization    = 7; }
+  }
+
+  oneof body_oneof						{ string             body        = 1; }
+  repeated AttachmentPointer attachments = 2;
+  oneof group_oneof						{ GroupContext       group       = 3; }
+  oneof flags_oneof						{ uint32             flags       = 4; }
+  oneof expireTimer_oneof				{ uint32             expireTimer = 5; }
+  oneof profileKey_oneof                { bytes              profileKey  = 6; }
+  oneof timestamp_oneof                 { uint64             timestamp   = 7; }
+  oneof quote_oneof                     { Quote              quote       = 8; }
+  repeated Contact            contact     = 9;
+}
+
+message NullMessage {
+  oneof padding_oneof { bytes padding = 1; }
+}
+
+message ReceiptMessage {
+	enum Type {
+		DELIVERY = 0;
+		READ = 1;
+	}
+
+	oneof type_oneof { Type type = 1; }
+	repeated uint64 timestamp = 2;
+}
+
+message Verified {
+  enum State {
+    DEFAULT = 0;
+    VERIFIED = 1;
+    UNVERIFIED = 2;
+  }
+
+  oneof destination_oneof { string destination = 1; }
+  oneof identityKey_oneof { bytes identityKey = 2; }
+  oneof state_oneof { State state = 3; }
+  oneof nullMessage_oneof { bytes nullMessage = 4; }
+}
+
+message SyncMessage {
+  message Sent {
+    message UnidentifiedDeliveryStatus {
+      oneof destination_oneof               { string destination  = 1; }
+      oneof unidentified_oneof              { bool   unidentified = 2; }
+    }
+    oneof destination_oneof					{ string      destination              = 1; }
+    oneof timestamp_oneof					{ uint64      timestamp                = 2; }
+    oneof message_oneof						{ DataMessage message                  = 3; }
+    oneof expirationStartTimestamp_oneof	{ uint64	     expirationStartTimestamp = 4; }
+    repeated UnidentifiedDeliveryStatus unidentifiedStatus       = 5;
+  }
+
+  message Contacts {
+    oneof blob_oneof						{ AttachmentPointer blob = 1; }
+	oneof complete_oneof					{ bool complete = 2; }
+  }
+
+  message Groups {
+    oneof blob_oneof						{ AttachmentPointer blob = 1; }
+  }
+
+  message Blocked {
+    repeated string numbers = 1;
+    repeated bytes groupIds = 2;
+  }
+
+  message Request {
+    enum Type {
+      UNKNOWN  = 0;
+      CONTACTS = 1;
+      GROUPS   = 2;
+	  BLOCKED  = 3;
+	  CONFIGURATION = 4;
+    }
+
+    oneof type_oneof						{ Type type = 1; }
+  }
+
+  message Read {
+	oneof sender_oneof						{ string sender    = 1; }
+	oneof timestamp_oneof					{ uint64 timestamp = 2; }
+  }
+
+  message Configuration {
+    oneof readReceipts_oneof { bool readReceipts = 1; }
+    oneof unidentifiedDeliveryIndicators_oneof { bool unidentifiedDeliveryIndicators = 2; }
+  }
+
+  oneof sent_oneof							{ Sent     sent     = 1; }
+  oneof contacts_oneof						{ Contacts contacts = 2; }
+  oneof groups_oneof						{ Groups   groups   = 3; }
+  oneof request_oneof						{ Request  request  = 4; }
+  repeated Read read = 5;
+  oneof blocked_oneof						{ Blocked  blocked  = 6; }
+  oneof verified_oneof          { Verified verified = 7; }
+  oneof configuration_oneof { Configuration configuration = 9; }
+  oneof padding_oneof           { bytes padding = 8; }
+}
+
+message AttachmentPointer {
+  enum Flags {
+    ZERO_PLACEHOLDER = 0;
+    VOICE_MESSAGE = 1;
+  }
+
+  oneof id_oneof							{ fixed64 id          = 1; }
+  oneof contentType_oneof					{ string  contentType = 2; }
+  oneof key_oneof							{ bytes   key         = 3; }
+  oneof size_oneof							{ uint32  size		  = 4; }
+  oneof thumbnail_oneof						{ bytes   thumbnail   = 5; }
+  oneof digest_oneof						{ bytes   digest      = 6; }
+  oneof fileName_oneof						{ string  fileName    = 7; }
+  oneof flags_oneof							{ uint32 flags        = 8; }
+  oneof width_oneof { uint32 width = 9; }
+  oneof height_oneof { uint32 height = 10; }
+}
+
+message GroupContext {
+  enum Type {
+    UNKNOWN      = 0;
+    UPDATE       = 1;
+    DELIVER      = 2;
+    QUIT         = 3;
+	REQUEST_INFO = 4;
+  }
+  oneof id_oneof					{ bytes             id      = 1; }
+  oneof type_oneof					{ Type              type    = 2; }
+  oneof name_oneof					{ string            name    = 3; }
+  repeated string members = 4;
+  oneof avatar_oneof				{ AttachmentPointer avatar  = 5; }
+}
+
+message ContactDetails {
+  message Avatar {
+    oneof contentType_oneof				{ string contentType = 1; }
+    oneof length_oneof					{ uint32 length      = 2; }
+  }
+
+  oneof number_oneof				{ string number     = 1; }
+  oneof name_oneof					{ string name       = 2; }
+  oneof avatar_oneof				{ Avatar avatar     = 3; }
+  oneof color_oneof					{ string color      = 4; }
+  oneof verified_oneof              { Verified verified = 5; }
+  oneof profileKey_oneof            { bytes profileKey  = 6; }
+  oneof blocked_oneof { bool blocked = 7; }
+  oneof expireTimer_oneof { uint32 expireTimer = 8; }
+}
+
+message GroupDetails {
+  message Avatar {
+    oneof contentType_oneof				{ string contentType = 1; }
+    oneof length_oneof					{ uint32 length      = 2; }
+  }
+
+  oneof id_oneof					{ bytes  id      = 1; }
+  oneof name_oneof					{ string name    = 2; }
+  repeated string members = 3;
+  oneof avatar_oneof				{ Avatar avatar  = 4; }
+  oneof active_oneof				{ bool   active  = 5; } //[default = true] ### }
+  oneof expireTimer_oneof           { uint32 expireTimer = 6; }
+  oneof color_oneof                 { string color = 7; }
+  oneof blocked_oneof               { bool blocked = 8; }
+}

@@ -1,0 +1,115 @@
+// Copyright 2018 The OpenPitrix Authors. All rights reserved.
+// Use of this source code is governed by a Apache license
+// that can be found in the LICENSE file.
+
+syntax = "proto3";
+package openpitrix;
+
+// set go package name to pb
+option go_package = "pb";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+message GetAttachmentsRequest {
+	// required, attachment ids
+	repeated string attachment_id = 1;
+	// filename, attachment contain one more file
+	repeated string filename = 2;
+	// ignore the attachment file content, return the filenames directly
+	bool ignore_content = 3;
+}
+message GetAttachmentsResponse {
+	// attachment_id map to Attachment
+	map<string, Attachment> attachments = 1;
+}
+message Attachment {
+	// attachment id
+	string attachment_id = 1;
+	// filename map to content
+	map<string, bytes> attachment_content = 2;
+	// the time attachment create
+	google.protobuf.Timestamp create_time = 3;
+}
+message CreateAttachmentRequest {
+	// required, filename map to content
+	map<string, bytes> attachment_content = 1;
+}
+message CreateAttachmentResponse {
+	// attachment id
+	string attachment_id = 1;
+	// file name
+	repeated string filename = 2;
+}
+message AppendAttachmentRequest {
+	// required, attachment id
+	string attachment_id = 1;
+	// filename map to content
+	map<string, bytes> attachment_content = 2;
+}
+message AppendAttachmentResponse {
+	// attachment id
+	string attachment_id = 1;
+	// filename, attachment contain one more file
+	repeated string filename = 2;
+}
+message ReplaceAttachmentRequest {
+	// required, id of attachment to replace
+	string attachment_id = 1;
+	// filename map to content
+	map<string, bytes> attachment_content = 2;
+}
+message ReplaceAttachmentResponse {
+	// id of attachment replaced
+	string attachment_id = 1;
+	// filename, attachment contain one more file
+	repeated string filename = 2;
+}
+message DeleteAttachmentsRequest {
+	// required, ids of attachment to delete
+	repeated string attachment_id = 1;
+	// filename, attachment contain one more file
+	repeated string filename = 2;
+}
+message DeleteAttachmentsResponse {
+	// ids of attachment deleted
+	repeated string attachment_id = 1;
+	// filename, attachment contain one more file
+	repeated string filename = 2;
+}
+
+// internal service
+service AttachmentManager {
+	rpc CreateAttachment(CreateAttachmentRequest) returns (CreateAttachmentResponse);
+	rpc AppendAttachment(AppendAttachmentRequest) returns (AppendAttachmentResponse);
+	rpc ReplaceAttachment(ReplaceAttachmentRequest) returns (ReplaceAttachmentResponse);
+	rpc GetAttachments(GetAttachmentsRequest) returns (GetAttachmentsResponse);
+	rpc DeleteAttachments(DeleteAttachmentsRequest) returns (DeleteAttachmentsResponse);
+}
+
+
+message GetAttachmentRequest {
+	// required, use attachment id to get attachment
+	string attachment_id = 1;
+	// filename, attachment contain one more file
+	string filename = 2;
+}
+message GetAttachmentResponse {
+	// file content of attachment
+	bytes content = 1;
+	// tell server to pack file
+	string etag = 2;
+}
+// public service
+service AttachmentService {
+	// Get attachment, use attachment id to get attachment
+	rpc GetAttachment(GetAttachmentRequest) returns (GetAttachmentResponse) {
+		option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+			summary: "Get attachment, use attachment id to get attachment"
+		};
+		option (google.api.http) = {
+			get: "/v1/attachments"
+		};
+	};
+}

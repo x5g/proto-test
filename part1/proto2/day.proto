@@ -1,0 +1,40 @@
+// Syntax should always be "proto3".
+syntax = "proto3";
+
+// A message of Birthday.
+message Birthday {
+  uint32 id = 1;
+  DayOfTheWeek day = 2;
+  MonthOfTheYear month = 3;
+  uint32 year = 4;
+}
+
+// An enum of Month Of The Year.
+enum MonthOfTheYear {
+  MONTH_OF_THE_YEAR_INVALID = 0;
+  JAN = 1;
+  FAB = 2;
+  MAR = 3;
+  APR = 4;
+  MAY = 5;
+  JUN = 6;
+  JUL = 7;
+  AUG = 8;
+  SEP = 9;
+  OCT = 10;
+  NOV = 11;
+  DEC = 12;
+}
+
+// An enum of Day Of The Week.
+enum DayOfTheWeek {
+  DAY_OF_THE_WEEK_INVALID = 0;
+  DAY_OF_THE_WEEK_UNSET = 1;
+  MON = 2;
+  TUE = 3;
+  WES = 4;
+  THR = 5;
+  FRI = 6;
+  SAT = 7;
+  SUN = 8;
+}

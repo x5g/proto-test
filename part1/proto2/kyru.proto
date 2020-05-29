@@ -1,0 +1,136 @@
+package Messages;
+
+// Protocol version 2
+// (only increased for backwards incompatible changes)
+
+// The first byte of UDP messages indicates the protocol version.
+// The first byte sent by the receiver of a TCP connection indicates the protocol version.
+
+// Kyru objects
+
+message KyruObject {
+	// KyruObject is a base type; either the User or Chunk field must be present
+	optional User user = 1;
+	optional Chunk chunk = 2;
+}
+message Chunk {
+	required bytes data = 1;
+}
+message User {
+	repeated UserFile files = 1;
+	repeated DeletedFile deleted_files = 2;
+	required bytes public_key = 3;
+}
+message UserFile {
+	required bytes signature = 1;
+	required uint64 file_id = 2;
+	required bytes encrypted_key = 3;
+	required bytes file_IV = 4;
+	required bytes name_IV = 5;
+	required bytes encrypted_file_name = 6;
+	required bytes hash = 7;
+	repeated bytes chunks = 8;
+}
+message DeletedFile {
+	required bytes signature = 1;
+	required uint64 file_id = 2;
+}
+
+// TCP messages
+
+message ServerHandshake {
+	required bytes node_id = 1;
+}
+message ClientHandshake {
+	// Either the GetObjectRequest or StoreObjectRequest field must be present
+	required bytes node_id = 1;
+	required uint32 port = 4;
+	optional GetObjectRequest get_object_request = 2;
+	optional StoreObjectRequest store_object_request = 3;
+}
+message GetObjectRequest {
+	required bytes object_id = 1;
+}
+message StoreObjectRequest {
+	required bytes Object_id = 1;
+	required bytes hash = 2;
+	required uint32 length = 3;
+}
+message GetObjectResponse {
+	required Error error = 1;
+	required uint32 length = 2;
+}
+message StoreObjectResponse {
+	required Error error = 1;
+}
+
+enum Error {
+	SUCCESS = 1;
+	NOT_FOUND = 2;
+	OBJECT_ALREADY_STORED = 3;
+	STORE_REJECTED = 4;
+}
+
+// UDP messages
+
+message UdpMessage {
+	// At most one of the request or response fields may be present.
+	// If any response field is present, ResponseId must also be present.
+	// Additionally, if any response field is present, PingRequest may also be present.
+	required bytes sender_node_id = 1;
+	required uint64 request_id = 2;
+	optional uint64 response_id = 3;
+	optional PingRequest ping_request = 4;
+	optional FindNodeRequest find_node_request = 5;
+	optional FindNodeResponse find_node_response = 6;
+	optional FindValueRequest find_value_request = 7;
+	optional FindValueResponse find_value_response = 8;
+	optional StoreRequest store_request = 9;
+	optional StoreResponse store_response = 10;
+	optional KeepObjectRequest keep_object_request = 11;
+	optional KeepObjectResponse keep_object_response = 12;
+}
+
+message FindNodeRequest {
+	required bytes node_id = 1;
+}
+message FindNodeResponse {
+	repeated NodeInformation nodes = 1;
+}
+message FindValueRequest {
+	required bytes object_id = 1;
+}
+message FindValueResponse {
+	// The nodes and data fields may not be present at the same time.
+	repeated NodeInformation nodes = 1;
+	repeated ObjectMetadata data = 2;
+}
+message KeepObjectRequest {
+	required bytes object_id = 1;
+}
+message KeepObjectResponse {
+	optional bool has_object = 1;
+}
+message PingRequest {
+}
+message StoreRequest {
+	required bytes object_id = 1;
+	repeated ObjectMetadata data = 2;
+}
+message StoreResponse {
+	repeated ObjectMetadata data = 1;
+}
+
+// TODO: IPv6, multiple addresses
+message NodeInformation {
+	required bytes node_id = 1;
+	required uint32 ip_address = 2;
+	required uint32 port = 3;
+}
+message ObjectMetadata {
+	required bytes node_id = 1;
+	required uint32 ip_address = 2;
+	required uint32 port = 3;
+	required uint32 timestamp = 4;
+}
+

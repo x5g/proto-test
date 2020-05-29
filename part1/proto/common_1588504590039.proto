@@ -1,0 +1,87 @@
+package message;
+
+message MsgIntPair
+{
+	required int64 number_1 = 1;
+	required int64 number_2 = 2;
+}
+
+message MsgIntBoolPair
+{
+	required int32 number = 1;
+	required bool valid = 2;
+}
+
+message MsgWatchRecordInfo
+{
+	required int64 movie_id = 1;
+	required int64 video_id = 2;
+	required int32 Progress = 3;
+	required int64 time = 4;
+}
+
+message MsgVideo
+{
+	required string path = 1;
+	required string describe = 2;
+	required int32 rank = 3;
+	required int64 video_id = 4;
+	required string name = 5;
+}
+
+enum VideoType
+{
+	VideoType_Video = 0;
+	VideoType_Movie = 1;
+}
+
+
+
+message MsgMovieExternal
+{
+	required int64 movie_id = 1;
+	required string describe = 2;
+	required VideoType type = 3[default = VideoType_Video];
+	required string name = 4;	
+	required string poster_path = 5;
+	required string path = 6;
+}
+
+message MsgMovie
+{
+	required MsgMovieExternal external = 1;
+	repeated MsgVideo videos = 2;
+}
+
+enum MovieType
+{
+
+    MovieType_RecentlyPlay = 0;
+    MovieType_MyFavourite = 1;
+    MovieType_DerivativeShop = 2;
+    MovieType_Festival = 3;
+    MovieType_Rank = 4;
+    MovieType_Feature = 5;
+	MovieType_CartoonRecommendation = 6;
+	MovieType_EarlyEducationRecommendation = 7;
+	MovieType_New = 8;
+	MovieType_Normal = 9;
+	
+}
+
+message MsgMovieThemeExternal
+{
+	required string name = 1;
+	required string describe = 2;	
+	required MovieType type = 3 [default = MovieType_MyFavourite];
+	required int64 id = 4;
+
+}
+
+
+message MsgMovieTheme
+{
+	required MsgMovieThemeExternal theme_external = 1;	
+	repeated MsgMovieExternal movies_externals = 2;		
+	repeated MsgIntPair movie_ratting = 3;
+}

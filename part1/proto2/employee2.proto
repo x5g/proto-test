@@ -1,0 +1,9 @@
+syntax = "proto3";
+package main;
+
+message Employee {
+    int32 EmployeeId = 1;
+    string FirstName = 2;
+    string LastName = 3;
+    int32 Age = 4;
+}

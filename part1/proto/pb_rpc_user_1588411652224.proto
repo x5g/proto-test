@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+option java_package = "ir.ms.pb";
+//option java_outer_classname = "PB2";
+option java_multiple_files = true;
+option optimize_for = LITE_RUNTIME; //CODE_SIZE;
+
+option go_package = "x";
+
+import "pb_enum.proto";
+
+//////////////////////////// User //////////////////////////////////
+
+// BlockUser
+message PB_UserParam_BlockUser {
+    int32 UserId = 1;
+    string UserName = 2;
+}
+message PB_UserResponse_BlockUser {
+    int32 ByUserId = 1;
+    int32 TargetUserId = 2;
+    string TargetUserName = 3;
+}
+
+// UnBlockUser
+message PB_UserParam_UnBlockUser {
+    int32 Offset = 1;
+    int32 Limit = 2;
+}
+message PB_UserResponse_UnBlockUser {
+    repeated UserView Users  = 1;
+}
+
+//
+message PB_UserParam_BlockedList {
+    int32 UserId = 1;
+    string UserName = 2;
+}
+message PB_UserResponse_BlockedList {
+    int32 ByUserId = 1;
+    int32 TargetUserId = 2;
+    string TargetUserName = 3;
+}
+
+//UpdateAbout
+message PB_UserParam_UpdateAbout {
+    string NewAbout = 1;
+}
+message PB_UserResponse_UpdateAbout {
+    int32 UserId = 1;
+    string NewAbout = 2;
+}
+
+//
+message PB_UserParam_UpdateUserName {
+    string NewUserName = 1;
+}
+message PB_UserResponse_UpdateUserName {
+    int32 UserId = 1;
+    string NewUserName = 2;
+}
+
+
+message PB_UserParam_ChangeAvatar {
+    bool None = 1;
+    bytes ImageData2 = 2;
+}
+message PB_UserResponse_ChangeAvatar {
+
+}
+
+//
+message PB_UserParam_ChangePrivacy {
+    ProfilePrivacyLevelEnum Level = 1;
+}
+message PB_UserResponseOffline_ChangePrivacy {
+
+}
+//
+message PB_UserParam_CheckUserName {
+    ProfilePrivacyLevelEnum Level = 1;
+}
+message PB_UserResponse_CheckUserName {
+
+}
+
+/////////////////////////////// Extract from herer /////////////////////////////
+message UserView {
+
+}
+
+service RPC_User {
+    rpc BlockUser (PB_UserParam_BlockUser) returns (PB_UserResponse_BlockUser);
+    rpc UnBlockUser (PB_UserParam_UnBlockUser) returns (PB_UserResponse_UnBlockUser);
+    rpc GetBlockedList (PB_UserParam_BlockedList) returns (PB_UserResponse_BlockedList);
+    rpc UpdateAbout (PB_UserParam_UpdateAbout) returns (PB_UserResponse_UpdateAbout);
+    rpc UpdateUserName (PB_UserParam_UpdateUserName) returns (PB_UserResponse_UpdateUserName);
+    rpc ChangePrivacy (PB_UserParam_ChangePrivacy) returns (PB_UserResponseOffline_ChangePrivacy);
+    rpc ChangeAvatar (PB_UserParam_ChangeAvatar) returns (PB_UserResponse_ChangeAvatar);
+    rpc CheckUserName (PB_UserParam_CheckUserName) returns (PB_UserResponse_CheckUserName);
+}

@@ -1,0 +1,106 @@
+syntax = 'proto3';
+
+option java_package = 'acmcsus.debugjudge.proto';
+option java_outer_classname = 'WebSocket';
+
+package acmcsus.debugjudge;
+
+import "competition.proto";
+
+import "profile/team.proto";
+import "profile/judge.proto";
+import "profile/admin.proto";
+import "profile/auto_judge.proto";
+import "profile/balloon_runner.proto";
+import "profile/registrar.proto";
+
+message C2SMessage {
+
+  oneof value {
+    T2SMessage t2sMessage = 1;
+    J2SMessage j2sMessage = 2;
+    A2SMessage a2sMessage = 3;
+    AJ2SMessage aj2sMessage = 4;
+    B2SMessage b2sMessage = 5;
+    R2SMessage rj2sMessage = 6;
+
+    LoginMessage loginMessage = 10;
+
+  }
+
+  message LoginMessage {
+    string nonce = 1;
+    int32 id = 2;
+    string pass = 3;
+  }
+}
+
+message S2CMessage {
+
+  oneof value {
+    S2TMessage s2tMessage = 1;
+    S2JMessage s2jMessage = 2;
+    S2AMessage s2aMessage = 3;
+    S2AJMessage s2ajMessage = 4;
+
+    DebugMessage debugMessage = 17;
+    AlertMessage alertMessage = 18;
+    LoginResultMessage loginResultMessage = 19;
+    NotificationMessage notificationMessage = 20;
+    CompetitionStateChangedMessage competitionStateChangedMessage = 21;
+    ScoreboardUpdateMessage scoreboardUpdateMessage = 22;
+    ReloadSubmissionMessage reloadSubmissionMessage = 23;
+    ReloadSubmissionsMessage reloadSubmissionsMessage = 24;
+    ReloadProblemsMessage reloadProblemsMessage = 25;
+  }
+
+  message DebugMessage {
+    string message = 1;
+  }
+  message AlertMessage {
+    string message = 1;
+  }
+  message LoginResultMessage {
+    LoginResult value = 1;
+    Profile profile = 2;
+
+    enum LoginResult {
+      UNKNOWN = 0;
+      SUCCESS = 1;
+      FAILURE = 2;
+    }
+  }
+  message NotificationMessage {
+    string message = 1;
+    string icon = 2;
+
+    enum NotificationLevel {
+      DEFAULT = 0;
+      SUCCESS = 1;
+      FAILURE = 2;
+      WARNING = 3;
+    }
+  }
+  message CompetitionStateChangedMessage {
+    int64 time_millis = 1;
+    CompetitionState state = 2;
+  }
+
+  message ScoreboardUpdateMessage {
+    Scoreboard scoreboard = 1;
+  }
+
+  message ReloadProblemsMessage {
+    Problem.List problems = 1;
+  }
+
+  // Make known creation/changes to one submission
+  message ReloadSubmissionMessage {
+    Submission submission = 1;
+  }
+
+  // Make known creation/changes to all submissions
+  message ReloadSubmissionsMessage {
+    Submission.List submissions = 1;
+  }
+}

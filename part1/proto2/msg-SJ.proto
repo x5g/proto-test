@@ -1,0 +1,1360 @@
+package transMsg;
+
+message	SJ_CabBoardGapInfo
+{
+	required	int32	CabBoardGapID = 1;
+	required	int32	CabBoardID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	CabStructBoardID = 8;
+	required	int32	CabStructBoardGapID = 9;
+	required	int32	GapPos = 10;
+	required	int32	GapIndex = 11;
+	required	int32	GapType = 12;
+	required	int32	GapShape = 13;
+	required	double	XLen = 14;
+	required	double	YLen = 15;
+	required	double	XOffsetLen = 16;
+	required	double	YOffsetLen = 17;
+	required	double	ZOffsetLen = 18;
+	required	int32	CreatorID = 19;
+	required	int32	UpdaterID = 20;
+	required	int64	CreateTime = 21;
+	required	int64	UpdateTime = 22;
+}
+
+message	SJ_CabBoardInfo
+{
+	required	int32	CabBoardID = 1;
+	required	int32	CabID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	CabinetSizeID = 8;
+	required	int32	CabStructBoardID = 9;
+	required	int32	CabinetSizeBoardID = 10;
+	required	int32	CabMatPlanID = 11;
+	required	int32	MatID = 12;
+	required	int32	MatGType = 13;
+	required	int32	SkinDirection = 14;
+	required	int32	SealRuleID = 15;
+	required	double	XLen = 16;
+	required	double	YLen = 17;
+	required	double	ZLen = 18;
+	required	double	XOffsetLen = 19;
+	required	double	YOffsetLen = 20;
+	required	double	ZOffsetLen = 21;
+	required	int32	XDock = 22;
+	required	int32	YDock = 23;
+	required	int32	ZDock = 24;
+	required	bool	IsChangedOffset = 25;
+	required	bool	IsFakeDel = 26;
+	required	int32	CreatorID = 27;
+	required	int32	UpdaterID = 28;
+	required	int64	CreateTime = 29;
+	required	int64	UpdateTime = 30;
+	required	string	CabBoardName = 31;
+}
+
+message	SJ_CabBoardSealInfo
+{
+	required	int32	CabBoardSealID = 1;
+	required	int32	CabBoardID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	CabStructBoardSealID = 6;
+	required	int32	CabStructBoardID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	SealType = 10;
+	required	int32	SealIndex = 11;
+	required	int32	MaterialID = 12;
+	required	double	PreMill = 13;
+}
+
+message	SJ_CabDoorBoardGapInfo
+{
+	required	int32	CabDoorBoardGapID = 1;
+	required	int32	CabDoorBoardID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DoorBoardGapID = 6;
+	required	int32	DoorBoardID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	GapPos = 10;
+	required	int32	GapIndex = 11;
+	required	int32	GapType = 12;
+	required	int32	GapShape = 13;
+	required	double	XLen = 14;
+	required	double	YLen = 15;
+	required	double	XOffsetLen = 16;
+	required	double	YOffsetLen = 17;
+	required	double	ZOffsetLen = 18;
+	required	int32	CreatorID = 19;
+	required	int32	UpdaterID = 20;
+	required	int64	CreateTime = 21;
+	required	int64	UpdateTime = 22;
+}
+
+message	SJ_CabDoorBoardInfo
+{
+	required	int32	CabDoorBoardID = 1;
+	required	int32	CabDoorID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DoorBoardID = 6;
+	required	int32	DoorID = 7;
+	required	int32	DoorBoardIndex = 8;
+	required	int32	FactoryID = 9;
+	required	int64	VerCode = 10;
+	required	int32	DoorMatPlanID = 11;
+	required	int32	MatID = 12;
+	required	int32	MatGType = 13;
+	required	int32	SkinDirection = 14;
+	required	int32	SealRuleID = 15;
+	required	int32	ModelID = 16;
+	required	int32	XDock = 17;
+	required	int32	YDock = 18;
+	required	int32	ZDock = 19;
+	required	double	XLen = 20;
+	required	double	YLen = 21;
+	required	double	ZLen = 22;
+	required	double	XOffsetLen = 23;
+	required	double	YOffsetLen = 24;
+	required	double	ZOffsetLen = 25;
+	required	int32	CreatorID = 26;
+	required	int32	UpdaterID = 27;
+	required	int64	CreateTime = 28;
+	required	int64	UpdateTime = 29;
+}
+
+message	SJ_CabDoorBoardSealInfo
+{
+	required	int32	CabDoorBoardSealID = 1;
+	required	int32	CabDoorBoardID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DoorBoardID = 6;
+	required	int32	SealIndex = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	SealType = 10;
+	required	int32	MaterialID = 11;
+	required	double	PreMill = 12;
+}
+
+message	SJ_CabDoorHWFInfo
+{
+	required	int32	CabDoorHWFID = 1;
+	required	int32	CabDoorRegionID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	HWFittingID = 6;
+	required	int32	FactoryID = 7;
+	required	int64	VerCode = 8;
+	required	int32	SupplyType = 9;
+	required	int32	GTypeID = 10;
+	required	int32	SettingCountRuleID = 11;
+	required	int32	UseCount = 12;
+	required	int32	CreatorID = 13;
+	required	int32	UpdaterID = 14;
+	required	int64	CreateTime = 15;
+	required	int64	UpdateTime = 16;
+}
+
+message	SJ_CabDoorHandleInfo
+{
+	required	int32	CabDoorHandleID = 1;
+	required	int32	CabParentID = 2;
+	required	int32	ParentType = 3;
+	required	int32	OrderCate = 4;
+	required	int64	OrderID = 5;
+	required	int32	DesignPlanID = 6;
+	required	int32	CabDesignDoorRegionID = 7;
+	required	int32	CabDesignDoorRegionHandleID = 8;
+	required	int32	OwnerID = 9;
+	required	int32	DoorMatPlanID = 10;
+	required	int32	HandleID = 11;
+	required	int32	FactoryID = 12;
+	required	int64	VerCode = 13;
+	required	int32	MatchType = 14;
+	required	bool	IsChangedOffset = 15;
+	required	int32	SupplyType = 16;
+	required	int32	GTypeID = 17;
+	required	int32	XDock = 18;
+	required	int32	YDock = 19;
+	required	int32	ZDock = 20;
+	required	double	XLen = 21;
+	required	double	YLen = 22;
+	required	double	ZLen = 23;
+	required	double	RealXLen = 24;
+	required	double	RealYLen = 25;
+	required	double	RealZLen = 26;
+	required	double	XOffsetLen = 27;
+	required	double	YOffsetLen = 28;
+	required	double	ZOffsetLen = 29;
+	required	double	ArcZ = 30;
+	required	int32	CreatorID = 31;
+	required	int32	UpdaterID = 32;
+	required	int64	CreateTime = 33;
+	required	int64	UpdateTime = 34;
+}
+
+message	SJ_CabDoorInfo
+{
+	required	int32	CabDoorID = 1;
+	required	int32	CabParentID = 2;
+	required	int32	ParentType = 3;
+	required	int32	OrderCate = 4;
+	required	int64	OrderID = 5;
+	required	int32	DesignPlanID = 6;
+	required	int32	OwnerID = 7;
+	required	int32	DoorMatPlanID = 8;
+	required	int32	DoorID = 9;
+	required	int32	FactoryID = 10;
+	required	int64	VerCode = 11;
+	required	double	XLen = 12;
+	required	double	YLen = 13;
+	required	double	ZLen = 14;
+	required	int32	CreatorID = 15;
+	required	int32	UpdaterID = 16;
+	required	int64	CreateTime = 17;
+	required	int64	UpdateTime = 18;
+}
+
+message	SJ_CabDoorRegionInfo
+{
+	required	int32	CabDoorRegionID = 1;
+	required	int32	CabDoorSystemID = 2;
+	required	int32	ParentCabRegionID = 3;
+	required	int32	OrderCate = 4;
+	required	int64	OrderID = 5;
+	required	int32	DesignPlanID = 6;
+	required	int32	DoorSystemRegionID = 7;
+	required	int32	DoorSystemID = 8;
+	required	int32	CabDesignDoorRegionID = 9;
+	required	int32	CabDesignDoorSystemID = 10;
+	required	int32	CabDesignID = 11;
+	required	int32	FactoryID = 12;
+	required	int64	VerCode = 13;
+	required	bool	IsUserDefineSize = 14;
+	required	bool	IsUserDefinePos = 15;
+	required	int32	XDock = 16;
+	required	int32	YDock = 17;
+	required	int32	ZDock = 18;
+	required	double	XLen = 19;
+	required	double	YLen = 20;
+	required	double	ZLen = 21;
+	required	double	XAdjustLen = 22;
+	required	double	YAdjustLen = 23;
+	required	double	RealXLen = 24;
+	required	double	RealYLen = 25;
+	required	double	RealZLen = 26;
+	required	double	CutXLen = 27;
+	required	double	CutYLen = 28;
+	required	double	XOffsetLen = 29;
+	required	double	YOffsetLen = 30;
+	required	double	ZOffsetLen = 31;
+	required	double	RealXOffsetLen = 32;
+	required	double	RealYOffsetLen = 33;
+	required	double	RealZOffsetLen = 34;
+	required	int32	CreatorID = 35;
+	required	int32	UpdaterID = 36;
+	required	int64	CreateTime = 37;
+	required	int64	UpdateTime = 38;
+}
+
+message	SJ_CabDoorSlideInfo
+{
+	required	int32	CabDoorSlideID = 1;
+	required	int32	CabDoorRegionID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DoorSystemRegionID = 6;
+	required	int32	SlideID = 7;
+	required	int32	GTypeID = 8;
+	required	int32	FactoryID = 9;
+	required	int64	VerCode = 10;
+	required	int32	SlidePosition = 11;
+	required	int32	SupplyType = 12;
+	required	double	XLen = 13;
+	required	double	YLen = 14;
+	required	double	ZLen = 15;
+	required	double	RealXLen = 16;
+	required	double	RealYLen = 17;
+	required	double	RealZLen = 18;
+	required	double	XOffsetLen = 19;
+	required	double	YOffsetLen = 20;
+	required	double	ZOffsetLen = 21;
+	required	int32	CreatorID = 22;
+	required	int32	UpdaterID = 23;
+	required	int64	CreateTime = 24;
+	required	int64	UpdateTime = 25;
+}
+
+message	SJ_CabDoorSystemInfo
+{
+	required	int32	CabDoorSystemID = 1;
+	required	int32	CabID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	CabDesignDoorSystemID = 6;
+	required	int32	CabDesignID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	DoorSystemID = 10;
+	required	int32	DoorMatPlanID = 11;
+	required	int32	SupplyType = 12;
+	required	bool	IsFakeDel = 13;
+	required	int32	XDock = 14;
+	required	int32	YDock = 15;
+	required	int32	ZDock = 16;
+	required	double	XLen = 17;
+	required	double	YLen = 18;
+	required	double	ZLen = 19;
+	required	double	XAdjustLen = 20;
+	required	double	YAdjustLen = 21;
+	required	double	RealXLen = 22;
+	required	double	RealYLen = 23;
+	required	double	RealZLen = 24;
+	required	double	XOffsetLen = 25;
+	required	double	YOffsetLen = 26;
+	required	double	ZOffsetLen = 27;
+	required	double	RealXOffsetLen = 28;
+	required	double	RealYOffsetLen = 29;
+	required	double	RealZOffsetLen = 30;
+	required	int32	CreatorID = 31;
+	required	int32	UpdaterID = 32;
+	required	int64	CreateTime = 33;
+	required	int64	UpdateTime = 34;
+}
+
+message	SJ_CabFNFHWFInfo
+{
+	required	int32	CabFNFHWFID = 1;
+	required	int32	CabFNFID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FNFittingID = 6;
+	required	int32	HWFittingID = 7;
+	required	int32	FittingType = 8;
+	required	int32	FactoryID = 9;
+	required	int64	VerCode = 10;
+	required	int32	IsFakeDel = 11;
+	required	int32	UseCount = 12;
+	required	int32	CreatorID = 13;
+	required	int32	UpdaterID = 14;
+	required	int64	CreateTime = 15;
+	required	int64	UpdateTime = 16;
+}
+
+message	SJ_CabFNFHoleInfo
+{
+	required	int32	CabFNFHoleID = 1;
+	required	int32	CabFNFID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	HoleID = 6;
+	required	int32	FNFittingID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	HoleTypeID = 10;
+	required	int32	HolePicID = 11;
+	required	double	XLen = 12;
+	required	double	YLen = 13;
+	required	double	OverHeight = 14;
+	required	double	MinXDistance = 15;
+	required	double	MinZDistance = 16;
+}
+
+message	SJ_CabFNFInfo
+{
+	required	int32	CabFNFID = 1;
+	required	int32	DesignOwnerID = 2;
+	required	int32	DesignOwnerGTypeID = 3;
+	required	int32	OrderCate = 4;
+	required	int32	DesignPlanID = 5;
+	required	int64	OrderID = 6;
+	required	int32	ContainerID = 7;
+	required	int32	ContainerGTypeID = 8;
+	required	int32	CabDesignFNFittingID = 9;
+	required	int32	FNFittingID = 10;
+	required	int32	FactoryID = 11;
+	required	int64	VerCode = 12;
+	required	int32	DockObjID = 13;
+	required	int32	DockObjType = 14;
+	required	double	DockXPos = 15;
+	required	double	DockYPos = 16;
+	required	bool	HasMark = 17;
+	required	bool	IsFakeDel = 18;
+	required	bool	IsVisible = 19;
+	required	bool	IsLocked = 20;
+	required	int32	MaterialID = 21;
+	required	int32	SupplyType = 22;
+	required	int32	GTypeID = 23;
+	required	int32	XDock = 24;
+	required	int32	YDock = 25;
+	required	int32	ZDock = 26;
+	required	double	XLen = 27;
+	required	double	YLen = 28;
+	required	double	ZLen = 29;
+	required	double	RealXLen = 30;
+	required	double	RealYLen = 31;
+	required	double	RealZLen = 32;
+	required	double	XOffsetLen = 33;
+	required	double	YOffsetLen = 34;
+	required	double	ZOffsetLen = 35;
+	required	double	YPos = 36;
+	required	int32	CreatorID = 37;
+	required	int32	UpdaterID = 38;
+	required	int64	CreateTime = 39;
+	required	int64	UpdateTime = 40;
+	required	string	UserMemo = 41;
+}
+
+message	SJ_CabFNFPartInfo
+{
+	required	int32	CabFNFPartID = 1;
+	required	int32	CabFNFID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FNFittingPartID = 6;
+	required	int32	FNFittingID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	HWFittingID = 10;
+	required	int32	MaterialID = 11;
+	required	int32	SealRuleID = 12;
+	required	int32	PartType = 13;
+	required	int32	SupplyType = 14;
+	required	int32	GTypeID = 15;
+	required	int32	ModelID = 16;
+	required	double	XLen = 17;
+	required	double	YLen = 18;
+	required	double	ZLen = 19;
+	required	double	RealXLen = 20;
+	required	double	RealYLen = 21;
+	required	double	RealZLen = 22;
+	required	double	XOffsetLen = 23;
+	required	double	YOffsetLen = 24;
+	required	double	ZOffsetLen = 25;
+	required	int32	CreatorID = 26;
+	required	int32	UpdaterID = 27;
+	required	int64	CreateTime = 28;
+	required	int64	UpdateTime = 29;
+}
+
+message	SJ_CabFNFPartSealInfo
+{
+	required	int32	CabFNFPartSealID = 1;
+	required	int32	CabFNFPartID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	FNFittingPartID = 8;
+	required	int32	SealType = 9;
+	required	int32	SealIndex = 10;
+	required	int32	MaterialID = 11;
+	required	double	PreMill = 12;
+}
+
+message	SJ_CabInfo
+{
+	required	int32	CabID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	CabDesignID = 5;
+	required	int32	CabinetSizeID = 6;
+	required	int32	CabStructID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	CabMatPlanID = 10;
+	required	int32	SealRuleID = 11;
+	required	int32	DockObjID = 12;
+	required	int32	DockObjType = 13;
+	required	double	DockXPos = 14;
+	required	double	DockYPos = 15;
+	required	double	XLen = 16;
+	required	double	YLen = 17;
+	required	double	ZLen = 18;
+	required	double	ShapeXLen = 19;
+	required	double	ShapeZLen = 20;
+	required	double	GapXLen = 21;
+	required	double	GapYLen = 22;
+	required	double	GapZLen = 23;
+	required	double	YPos = 24;
+	required	int32	FootID = 25;
+	required	int32	FootCount = 26;
+	required	double	FootYLen = 27;
+	required	bool	IsStandard = 28;
+	required	bool	HasMark = 29;
+	required	bool	IsVisible = 30;
+	required	bool	IsLocked = 31;
+	required	int32	CreatorID = 32;
+	required	int32	UpdaterID = 33;
+	required	int64	CreateTime = 34;
+	required	int64	UpdateTime = 35;
+}
+
+message	SJ_DecorBoardInfo
+{
+	required	int32	DesignDecorBoardID = 1;
+	required	int32	DesignPlanID = 2;
+	required	int32	DesignParentID = 3;
+	required	int32	OrderCate = 4;
+	required	int64	OrderID = 5;
+	required	int32	DecorBoardID = 6;
+	required	int32	DecorParentID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	GroupID = 10;
+	required	int32	GroupIndex = 11;
+	required	int32	GTypeID = 12;
+	required	bool	IsAutoFit = 13;
+	required	bool	HasMark = 14;
+	required	bool	IsVisible = 15;
+	required	bool	IsLocked = 16;
+	required	bool	IsChangedSize = 17;
+	required	bool	IsDragIn = 18;
+	required	int32	DoorMatPlanID = 19;
+	required	int32	CabMatPlanID = 20;
+	required	int32	DoorID = 21;
+	required	int32	TargetType = 22;
+	required	int32	DockObjID = 23;
+	required	int32	DockObjType = 24;
+	required	double	DockXPos = 25;
+	required	double	DockYPos = 26;
+	required	int32	MatID = 27;
+	required	int32	MatGType = 28;
+	required	int32	SupplyType = 29;
+	required	int32	ModelID = 30;
+	required	double	YPos = 31;
+	required	double	XLen = 32;
+	required	double	YLen = 33;
+	required	double	ZLen = 34;
+	required	double	XOffsetLen = 35;
+	required	double	YOffsetLen = 36;
+	required	double	ZOffsetLen = 37;
+	required	int32	CreatorID = 38;
+	required	int32	UpdaterID = 39;
+	required	int64	CreateTime = 40;
+	required	int64	UpdateTime = 41;
+}
+
+message	SJ_DecorBoardUnitInfo
+{
+	required	int32	DesignDecorBoardUnitID = 1;
+	required	int32	DesignDecorBoardID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DecorBoardUnitID = 6;
+	required	int32	DecorBoardID = 7;
+	required	int32	DecorBoardUnitIndex = 8;
+	required	int32	FactoryID = 9;
+	required	int64	VerCode = 10;
+	required	bool	IsUseDoor = 11;
+	required	int32	DoorMatPlanID = 12;
+	required	int32	CabMatPlanID = 13;
+	required	int32	DoorID = 14;
+	required	int32	TargetType = 15;
+	required	int32	MatID = 16;
+	required	int32	MatGType = 17;
+	required	int32	SupplyType = 18;
+	required	int32	SealRuleID = 19;
+	required	int32	ModelID = 20;
+	required	double	XLen = 21;
+	required	double	YLen = 22;
+	required	double	ZLen = 23;
+	required	double	XOffsetLen = 24;
+	required	double	YOffsetLen = 25;
+	required	double	ZOffsetLen = 26;
+	required	int32	CreatorID = 27;
+	required	int32	UpdaterID = 28;
+	required	int64	CreateTime = 29;
+	required	int64	UpdateTime = 30;
+}
+
+message	SJ_DecorBoardUnitSealInfo
+{
+	required	int32	DesignDecorBoardUnitSealID = 1;
+	required	int32	DesignDecorBoardUnitID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	DecorBoardUnitID = 8;
+	required	int32	DecorBoardUnitSealID = 9;
+	required	int32	SealIndex = 10;
+	required	int32	SealType = 11;
+	required	int32	MaterialID = 12;
+	required	double	PreMill = 13;
+}
+
+message	SJ_DecorInfo
+{
+	required	int32	DesignDecorID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DecorID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	bool	HasMark = 8;
+	required	bool	IsVisible = 9;
+	required	bool	IsLocked = 10;
+	required	int32	SupplyType = 11;
+	required	int32	GTypeID = 12;
+	required	int32	DockObjID = 13;
+	required	int32	DockObjType = 14;
+	required	double	DockXPos = 15;
+	required	double	DockYPos = 16;
+	required	double	XLen = 17;
+	required	double	YLen = 18;
+	required	double	ZLen = 19;
+	required	double	YPos = 20;
+	required	int32	CreatorID = 21;
+	required	int32	UpdaterID = 22;
+	required	int64	CreateTime = 23;
+	required	int64	UpdateTime = 24;
+}
+
+message	SJ_DecorLineInfo
+{
+	required	int32	DesignDecorLineID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DecorLineID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	GTypeID = 8;
+	required	int32	DockObjID = 9;
+	required	int32	DockObjType = 10;
+	required	double	DockXPos = 11;
+	required	double	DockYPos = 12;
+	required	int32	MaterialID = 13;
+	required	bool	HasMark = 14;
+	required	bool	IsVisible = 15;
+	required	bool	IsLocked = 16;
+	required	double	XLen = 17;
+	required	double	YLen = 18;
+	required	double	ZLen = 19;
+	required	int32	CreatorID = 20;
+	required	int32	UpdaterID = 21;
+	required	int64	CreateTime = 22;
+	required	int64	UpdateTime = 23;
+}
+
+message	SJ_DesignPlanInfo
+{
+	required	int32	DesignPlanID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int64	VerCode = 5;
+	required	double	CurScale = 6;
+	required	bool	IsActive = 7;
+	required	int32	SkyDecorID = 8;
+	required	int32	FloorDecorID = 9;
+	required	int32	WallDecorID = 10;
+	required	int32	DesignerID = 11;
+	required	int32	UpdaterID = 12;
+	required	int64	CreateTime = 13;
+	required	int64	UpdateTime = 14;
+	required	string	DesignPlanName = 15;
+	required	string	DesignPlanMemo = 16;
+}
+
+message	SJ_FittingInfo
+{
+	required	int32	DesignFittingID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	FactoryID = 5;
+	required	int64	VerCode = 6;
+	required	int32	FittingID = 7;
+	required	int32	GTypeID = 8;
+	required	int32	SupplyType = 9;
+	required	int32	FittingCount = 10;
+	required	int32	CreatorID = 11;
+	required	int32	UpdaterID = 12;
+	required	int64	CreateTime = 13;
+	required	int64	UpdateTime = 14;
+}
+
+message	SJ_HWFInfo
+{
+	required	int32	DesignHWFID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	HWFittingID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	SupplyType = 8;
+	required	int32	GTypeID = 9;
+	required	int32	UseCount = 10;
+	required	int32	CreatorID = 11;
+	required	int32	UpdaterID = 12;
+	required	int64	CreateTime = 13;
+	required	int64	UpdateTime = 14;
+}
+
+message	SJ_MarkInfo
+{
+	required	int32	DesignMarkID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPrintID = 5;
+	required	int32	PrintID = 6;
+	required	int32	ViewType = 7;
+	required	int32	DockObjID = 8;
+	required	int32	DockObjType = 9;
+	required	int32	MarkType = 10;
+	required	int32	FontSize = 11;
+	required	double	StartX = 12;
+	required	double	StartY = 13;
+	required	double	OffsetX = 14;
+	required	double	OffsetY = 15;
+	required	double	StopX = 16;
+	required	double	StopY = 17;
+	required	double	TopLeftX = 18;
+	required	double	TopLeftY = 19;
+	required	double	Width = 20;
+	required	double	Height = 21;
+	required	bool	IsVisible = 22;
+	required	bool	IsLocked = 23;
+	required	bool	EditSign = 24;
+	required	bool	StrickOut = 25;
+	required	bool	UnderLine = 26;
+	required	bool	Italic = 27;
+	required	bool	Bold = 28;
+	required	int64	BGColor = 29;
+	required	int64	FontColor = 30;
+	required	int32	CreatorID = 31;
+	required	int32	UpdaterID = 32;
+	required	int64	CreateTime = 33;
+	required	int64	UpdateTime = 34;
+	required	string	FaceName = 35;
+	required	string	RemarkText = 36;
+}
+
+message	SJ_MatrixInfo
+{
+	required	int64	OrderID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int32	FactoryID = 4;
+	required	int64	VerCode = 5;
+	required	int64	TransObjID = 6;
+	required	int32	TransObjType = 7;
+	required	int32	MajorCurSel = 8;
+	required	int32	MinorCurSel = 9;
+	required	int32	MatCurIndex = 10;
+	required	int32	CabMatPlanID = 11;
+	required	double	M11 = 12;
+	required	double	M12 = 13;
+	required	double	M13 = 14;
+	required	double	M21 = 15;
+	required	double	M22 = 16;
+	required	double	M23 = 17;
+	required	double	M31 = 18;
+	required	double	M32 = 19;
+	required	double	M33 = 20;
+	required	double	M41 = 21;
+	required	double	M42 = 22;
+	required	double	M43 = 23;
+	required	double	M44 = 24;
+}
+
+message	SJ_OrderAddedInfo
+{
+	required	int32	OrderAddedID = 1;
+	required	int64	OrderID = 2;
+	required	int32	OrderCate = 3;
+	required	int32	FactoryID = 4;
+	required	int32	UseCount = 5;
+	required	double	UnitPrice = 6;
+	required	int64	CreateTime = 7;
+	required	int64	UpdateTime = 8;
+	required	string	AddedName = 9;
+	required	string	MatName = 10;
+	required	string	UnitName = 11;
+	required	string	SpecName = 12;
+	required	string	AttachFileName = 13;
+}
+
+message	SJ_OrderDataInfo
+{
+	required	int64	OrderID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	FactoryID = 3;
+	required	int32	ShopID = 4;
+	required	int32	MaxMetaID = 5;
+	required	int32	DesignerID = 6;
+	required	int32	SellerID = 7;
+	required	int32	PreSurveyorID = 8;
+	required	int32	ReSurveyorID = 9;
+	required	bool	IsNew = 10;
+	required	bool	IsShare = 11;
+	required	bool	IsUpload = 12;
+	required	int64	CreateTime = 13;
+	required	int64	PreSurveyTime = 14;
+	required	int64	ReSurveyTime = 15;
+	required	int64	OrderTime = 16;
+	required	int64	DeliveryTime = 17;
+	required	int64	InstallTime = 18;
+	required	string	GeoCode = 19;
+	required	string	OrderTitle = 20;
+	required	string	CustomerName = 21;
+	required	string	CustomerTel = 22;
+	required	string	CustomerPostcode = 23;
+	required	string	CustomerQQ = 24;
+	required	string	CustomerEmail = 25;
+	required	string	InstallAddress = 26;
+	required	string	OrderMemo = 27;
+	required	string	AttachFilePath = 28;
+}
+
+message	SJ_PackInfo
+{
+	required	int32	DesignPackID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	FittingPackID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	bool	IsSeparate = 8;
+	required	int32	UseCount = 9;
+	required	int32	CreatorID = 10;
+	required	int32	UpdaterID = 11;
+	required	int64	CreateTime = 12;
+	required	int64	UpdateTime = 13;
+}
+
+message	SJ_PointInfo
+{
+	required	int32	DesignPlanID = 1;
+	required	int32	OrderCate = 2;
+	required	int64	OrderID = 3;
+	required	int32	FactoryID = 4;
+	required	int64	VerCode = 5;
+	required	int32	TransObjID = 6;
+	required	int32	TransObjType = 7;
+	required	int32	PointIndex = 8;
+	required	double	CoordX = 9;
+	required	double	CoordY = 10;
+	required	double	CoordZ = 11;
+}
+
+message	SJ_PrintElementInfo
+{
+	required	int32	DesignPrintElementID = 1;
+	required	int32	DesignPrintGroupID = 2;
+	required	int32	DesignPrintID = 3;
+	required	int32	OrderCate = 4;
+	required	int32	DesignPlanID = 5;
+	required	int64	OrderID = 6;
+	required	int32	ObjType = 7;
+	required	int32	ObjID = 8;
+	required	int32	PrintGroupID = 9;
+	required	int32	ViewType = 10;
+	required	bool	IsVisible = 11;
+	required	bool	IsLocked = 12;
+	required	int32	CreatorID = 13;
+	required	int32	UpdaterID = 14;
+	required	int64	CreateTime = 15;
+	required	int64	UpdateTime = 16;
+}
+
+message	SJ_PrintGroupInfo
+{
+	required	int32	DesignPrintGroupID = 1;
+	required	int32	DesignPrintID = 2;
+	required	int32	OrderCate = 3;
+	required	int32	DesignPlanID = 4;
+	required	int64	OrderID = 5;
+	required	int32	PrintID = 6;
+	required	int32	PrintGroupID = 7;
+	required	bool	ManyViewPort = 8;
+	required	int32	FrameStyle = 9;
+	required	int32	FrameColorR = 10;
+	required	int32	FrameColorG = 11;
+	required	int32	FrameColorB = 12;
+	required	int32	FrameColorA = 13;
+	required	double	FrameWidth = 14;
+	required	double	LeftX = 15;
+	required	double	RightY = 16;
+	required	double	ScaleX = 17;
+	required	double	ScaleY = 18;
+	required	double	ScaleOffsetX = 19;
+	required	double	ScaleOffsetY = 20;
+	required	double	ScaleFactor = 21;
+	required	bool	IsVisible = 22;
+	required	bool	IsLocked = 23;
+	required	int32	CreatorID = 24;
+	required	int32	UpdaterID = 25;
+	required	int64	CreateTime = 26;
+	required	int64	UpdateTime = 27;
+}
+
+message	SJ_PrintInfo
+{
+	required	int32	DesignPrintID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	PrintID = 5;
+	required	int32	PageBorderStyle = 6;
+	required	int64	PageBorderColor = 7;
+	required	double	PageBorderWidth = 8;
+	required	double	ShaderPicTopX = 9;
+	required	double	ShaderPicTopY = 10;
+	required	double	ShaderPicHeight = 11;
+	required	double	ShaderPicWidth = 12;
+	required	int32	CreatorID = 13;
+	required	int32	UpdaterID = 14;
+	required	int64	CreateTime = 15;
+	required	int64	UpdateTime = 16;
+	required	string	PrintName = 17;
+	required	string	ShaderPicPath = 18;
+}
+
+message	SJ_PrintTableInfo
+{
+	required	int32	DesignPrintTableID = 1;
+	required	int32	DesignPrintID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	TableSign = 6;
+	required	int32	WhichLine = 7;
+	required	int32	Align = 8;
+	required	int32	LogoSign = 9;
+	required	int32	TextPos = 10;
+	required	bool	SetLine = 11;
+	required	bool	HasLogo = 12;
+	required	bool	IsSelected = 13;
+	required	bool	LineUp = 14;
+	required	bool	LineDown = 15;
+	required	bool	LineLeft = 16;
+	required	bool	LineRight = 17;
+	required	int32	LineUpSign = 18;
+	required	int32	LineDownSign = 19;
+	required	int32	LineLeftSign = 20;
+	required	int32	LineRightSign = 21;
+	required	double	LineWidth = 22;
+	required	double	LeftTopX = 23;
+	required	double	LeftTopY = 24;
+	required	double	XLen = 25;
+	required	double	YLen = 26;
+	required	double	LineUpWidth = 27;
+	required	double	LineDownWidth = 28;
+	required	double	LineRightWidth = 29;
+	required	double	LineLeftWidth = 30;
+	required	string	FaceName = 31;
+	required	string	LogoPath = 32;
+	required	string	SerialPath = 33;
+	required	string	TextValue = 34;
+}
+
+message	SJ_PrintTableRowColInfo
+{
+	required	int32	DesignPrintTableRowColID = 1;
+	required	int32	DesignPrintTableRowID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	TableSign = 6;
+	required	int32	RowNumber = 7;
+	required	int32	ColNumber = 8;
+	required	int32	WhichLine = 9;
+	required	int32	Align = 10;
+	required	int32	LogoSign = 11;
+	required	int32	TextPos = 12;
+	required	bool	SetLine = 13;
+	required	bool	HasLogo = 14;
+	required	bool	IsSelected = 15;
+	required	bool	LineUp = 16;
+	required	bool	LineDown = 17;
+	required	bool	LineLeft = 18;
+	required	bool	LineRight = 19;
+	required	int32	LineUpSign = 20;
+	required	int32	LineDownSign = 21;
+	required	int32	LineLeftSign = 22;
+	required	int32	LineRightSign = 23;
+	required	double	LineWidth = 24;
+	required	double	LeftTopX = 25;
+	required	double	LeftTopY = 26;
+	required	double	XLen = 27;
+	required	double	YLen = 28;
+	required	double	LineUpWidth = 29;
+	required	double	LineDownWidth = 30;
+	required	double	LineRightWidth = 31;
+	required	double	LineLeftWidth = 32;
+	required	string	FaceName = 33;
+	required	string	LogoPath = 34;
+	required	string	SerialPath = 35;
+	required	string	TextValue = 36;
+}
+
+message	SJ_PrintTableRowInfo
+{
+	required	int32	DesignPrintTableRowID = 1;
+	required	int32	DesignPrintTableID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	TableSign = 6;
+	required	int32	RowNumber = 7;
+	required	int32	WhichLine = 8;
+	required	int32	Align = 9;
+	required	int32	LogoSign = 10;
+	required	int32	TextPos = 11;
+	required	bool	SetLine = 12;
+	required	bool	HasLogo = 13;
+	required	bool	IsSelected = 14;
+	required	bool	LineUp = 15;
+	required	bool	LineDown = 16;
+	required	bool	LineLeft = 17;
+	required	bool	LineRight = 18;
+	required	int32	LineUpSign = 19;
+	required	int32	LineDownSign = 20;
+	required	int32	LineLeftSign = 21;
+	required	int32	LineRightSign = 22;
+	required	double	LineWidth = 23;
+	required	double	LeftTopX = 24;
+	required	double	LeftTopY = 25;
+	required	double	XLen = 26;
+	required	double	YLen = 27;
+	required	double	LineUpWidth = 28;
+	required	double	LineDownWidth = 29;
+	required	double	LineRightWidth = 30;
+	required	double	LineLeftWidth = 31;
+	required	string	FaceName = 32;
+	required	string	LogoPath = 33;
+	required	string	SerialPath = 34;
+	required	string	TextValue = 35;
+}
+
+message	SJ_ProductInfo
+{
+	required	int32	DesignProductID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	ProductID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	bool	HasMark = 8;
+	required	bool	IsVisible = 9;
+	required	bool	IsLocked = 10;
+	required	int32	SupplyType = 11;
+	required	int32	GTypeID = 12;
+	required	int32	DockObjID = 13;
+	required	int32	DockObjType = 14;
+	required	double	DockXPos = 15;
+	required	double	DockYPos = 16;
+	required	double	XLen = 17;
+	required	double	YLen = 18;
+	required	double	ZLen = 19;
+	required	double	YPos = 20;
+	required	int32	CreatorID = 21;
+	required	int32	UpdaterID = 22;
+	required	int64	CreateTime = 23;
+	required	int64	UpdateTime = 24;
+}
+
+message	SJ_RemarkInfo
+{
+	required	int32	DesignRemarkID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPrintID = 5;
+	required	int32	PrintID = 6;
+	required	int32	ViewType = 7;
+	required	int64	BGColor = 8;
+	required	int64	ForeColor = 9;
+	required	int32	FontSize = 10;
+	required	int32	FontStyle = 11;
+	required	int32	LineSpace = 12;
+	required	int32	ArrowID = 13;
+	required	int32	ArrowStyle = 14;
+	required	int32	FrameStyle = 15;
+	required	int64	FrameColor = 16;
+	required	int32	DirectLine = 17;
+	required	int32	DirectStyle = 18;
+	required	int32	DirectLineStyle = 19;
+	required	int32	CommentFrameStyle = 20;
+	required	bool	IsSingleMode = 21;
+	required	bool	IsVisible = 22;
+	required	bool	IsLocked = 23;
+	required	bool	StrickOut = 24;
+	required	bool	UnderLine = 25;
+	required	bool	Italic = 26;
+	required	bool	Bold = 27;
+	required	double	FrameWidth = 28;
+	required	double	ArrowX = 29;
+	required	double	ArrowY = 30;
+	required	double	StartX = 31;
+	required	double	StartY = 32;
+	required	int32	CreatorID = 33;
+	required	int32	UpdaterID = 34;
+	required	int64	CreateTime = 35;
+	required	int64	UpdateTime = 36;
+	required	string	FaceName = 37;
+	required	string	RemarkText = 38;
+}
+
+message	SJ_ShapeInfo
+{
+	required	int32	DesignShapeID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPrintID = 5;
+	required	int32	PrintID = 6;
+	required	int32	ViewType = 7;
+	required	int32	ShapeType = 8;
+	required	int32	LineWidth = 9;
+	required	int32	LineStyle = 10;
+	required	double	StartX = 11;
+	required	double	StartY = 12;
+	required	double	StopX = 13;
+	required	double	StopY = 14;
+	required	bool	IsVisible = 15;
+	required	bool	IsLocked = 16;
+	required	int32	CreatorID = 17;
+	required	int32	UpdaterID = 18;
+	required	int64	CreateTime = 19;
+	required	int64	UpdateTime = 20;
+	required	string	AttachFilePath = 21;
+}
+
+message	SJ_SkinInfo
+{
+	required	int32	DesignSkinID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	DecorID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	GTypeID = 8;
+	required	bool	HasMark = 9;
+	required	bool	IsVisible = 10;
+	required	bool	IsLocked = 11;
+	required	double	XLen = 12;
+	required	double	YLen = 13;
+	required	double	ZLen = 14;
+	required	double	GroundLen = 15;
+	required	int32	CreatorID = 16;
+	required	int32	UpdaterID = 17;
+	required	int64	CreateTime = 18;
+	required	int64	UpdateTime = 19;
+}
+
+message	SJ_TableInfo
+{
+	required	int32	DesignTableID = 1;
+	required	int32	OrderCate = 2;
+	required	int32	DesignPlanID = 3;
+	required	int64	OrderID = 4;
+	required	int32	TableID = 5;
+	required	int32	FactoryID = 6;
+	required	int64	VerCode = 7;
+	required	int32	TableIndex = 8;
+	required	bool	HasMark = 9;
+	required	bool	IsVisible = 10;
+	required	bool	IsLocked = 11;
+	required	int32	SupplyType = 12;
+	required	int32	GTypeID = 13;
+	required	double	ZLen = 14;
+	required	double	YPos = 15;
+	required	int32	CreatorID = 16;
+	required	int32	UpdaterID = 17;
+	required	int64	CreateTime = 18;
+	required	int64	UpdateTime = 19;
+}
+
+message	SJ_TablePartInfo
+{
+	required	int32	DesignTablePartID = 1;
+	required	int32	DesignTableID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DecorLineID = 6;
+	required	int32	FactoryID = 7;
+	required	int64	VerCode = 8;
+	required	int32	TableSideIndex = 9;
+	required	bool	IsUserSetYLen = 10;
+	required	int32	GTypeID = 11;
+	required	int32	MaterialID = 12;
+	required	int32	ModelID = 13;
+	required	double	XLen = 14;
+	required	double	YLen = 15;
+	required	double	ZLen = 16;
+	required	int32	DefaultYLen = 17;
+	required	int32	CreatorID = 18;
+	required	int32	UpdaterID = 19;
+	required	int64	CreateTime = 20;
+	required	int64	UpdateTime = 21;
+}
+
+message	SJ_TableSideInfo
+{
+	required	int32	DesignTableSideID = 1;
+	required	int32	DesignTableID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	TableTopID = 6;
+	required	int32	TableTopSideID = 7;
+	required	int32	FactoryID = 8;
+	required	int64	VerCode = 9;
+	required	int32	TableSideIndex = 10;
+	required	bool	IsUseTableMat = 11;
+	required	int32	MaterialID = 12;
+	required	int32	CreatorID = 13;
+	required	int32	UpdaterID = 14;
+	required	int64	CreateTime = 15;
+	required	int64	UpdateTime = 16;
+}
+
+message	SJ_WallDecorInfo
+{
+	required	int32	DesignWallDecorID = 1;
+	required	int32	DesignWallID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	DesignPlanID = 5;
+	required	int32	DecorID = 6;
+	required	int32	FactoryID = 7;
+	required	int64	VerCode = 8;
+	required	bool	IsModelRevers = 9;
+	required	bool	IsVisible = 10;
+	required	bool	IsLocked = 11;
+	required	int32	SupplyType = 12;
+	required	int32	GTypeID = 13;
+	required	double	XLen = 14;
+	required	double	YLen = 15;
+	required	double	ZLen = 16;
+	required	double	OffsetXLen = 17;
+	required	double	OffsetYLen = 18;
+	required	double	OffsetZLen = 19;
+	required	int32	CreatorID = 20;
+	required	int32	UpdaterID = 21;
+	required	int64	CreateTime = 22;
+	required	int64	UpdateTime = 23;
+}
+
+message	SJ_WallInfo
+{
+	required	int32	DesignWallID = 1;
+	required	int32	DesignPlanID = 2;
+	required	int32	OrderCate = 3;
+	required	int64	OrderID = 4;
+	required	int32	FactoryID = 5;
+	required	int64	VerCode = 6;
+	required	int32	WallType = 7;
+	required	int32	WallIndex = 8;
+	required	int32	GroupID = 9;
+	required	int32	DockObjID = 10;
+	required	double	DockXPos = 11;
+	required	double	DockYPos = 12;
+	required	int32	DecorID = 13;
+	required	int32	GridStyle = 14;
+	required	bool	HasMark = 15;
+	required	bool	IsVisible = 16;
+	required	bool	IsLocked = 17;
+	required	double	StartX = 18;
+	required	double	StartY = 19;
+	required	double	EndX = 20;
+	required	double	EndY = 21;
+	required	double	XLen = 22;
+	required	double	YLen = 23;
+	required	double	ZLen = 24;
+	required	double	GroundLen = 25;
+	required	int32	CreatorID = 26;
+	required	int32	UpdaterID = 27;
+	required	int64	CreateTime = 28;
+	required	int64	UpdateTime = 29;
+}
+
+message SJ_Table
+{
+	repeated	SJ_CabBoardGapInfo	SJ_CabBoardGapInfo = 1;
+	repeated	SJ_CabBoardInfo	SJ_CabBoardInfo = 2;
+	repeated	SJ_CabBoardSealInfo	SJ_CabBoardSealInfo = 3;
+	repeated	SJ_CabDoorBoardGapInfo	SJ_CabDoorBoardGapInfo = 4;
+	repeated	SJ_CabDoorBoardInfo	SJ_CabDoorBoardInfo = 5;
+	repeated	SJ_CabDoorBoardSealInfo	SJ_CabDoorBoardSealInfo = 6;
+	repeated	SJ_CabDoorHWFInfo	SJ_CabDoorHWFInfo = 7;
+	repeated	SJ_CabDoorHandleInfo	SJ_CabDoorHandleInfo = 8;
+	repeated	SJ_CabDoorInfo	SJ_CabDoorInfo = 9;
+	repeated	SJ_CabDoorRegionInfo	SJ_CabDoorRegionInfo = 10;
+	repeated	SJ_CabDoorSlideInfo	SJ_CabDoorSlideInfo = 11;
+	repeated	SJ_CabDoorSystemInfo	SJ_CabDoorSystemInfo = 12;
+	repeated	SJ_CabFNFHWFInfo	SJ_CabFNFHWFInfo = 13;
+	repeated	SJ_CabFNFHoleInfo	SJ_CabFNFHoleInfo = 14;
+	repeated	SJ_CabFNFInfo	SJ_CabFNFInfo = 15;
+	repeated	SJ_CabFNFPartInfo	SJ_CabFNFPartInfo = 16;
+	repeated	SJ_CabFNFPartSealInfo	SJ_CabFNFPartSealInfo = 17;
+	repeated	SJ_CabInfo	SJ_CabInfo = 18;
+	repeated	SJ_DecorBoardInfo	SJ_DecorBoardInfo = 19;
+	repeated	SJ_DecorBoardUnitInfo	SJ_DecorBoardUnitInfo = 20;
+	repeated	SJ_DecorBoardUnitSealInfo	SJ_DecorBoardUnitSealInfo = 21;
+	repeated	SJ_DecorInfo	SJ_DecorInfo = 22;
+	repeated	SJ_DecorLineInfo	SJ_DecorLineInfo = 23;
+	repeated	SJ_DesignPlanInfo	SJ_DesignPlanInfo = 24;
+	repeated	SJ_FittingInfo	SJ_FittingInfo = 25;
+	repeated	SJ_HWFInfo	SJ_HWFInfo = 26;
+	repeated	SJ_MarkInfo	SJ_MarkInfo = 27;
+	repeated	SJ_MatrixInfo	SJ_MatrixInfo = 28;
+	repeated	SJ_OrderAddedInfo	SJ_OrderAddedInfo = 29;
+	repeated	SJ_OrderDataInfo	SJ_OrderDataInfo = 30;
+	repeated	SJ_PackInfo	SJ_PackInfo = 31;
+	repeated	SJ_PointInfo	SJ_PointInfo = 32;
+	repeated	SJ_PrintElementInfo	SJ_PrintElementInfo = 33;
+	repeated	SJ_PrintGroupInfo	SJ_PrintGroupInfo = 34;
+	repeated	SJ_PrintInfo	SJ_PrintInfo = 35;
+	repeated	SJ_PrintTableInfo	SJ_PrintTableInfo = 36;
+	repeated	SJ_PrintTableRowColInfo	SJ_PrintTableRowColInfo = 37;
+	repeated	SJ_PrintTableRowInfo	SJ_PrintTableRowInfo = 38;
+	repeated	SJ_ProductInfo	SJ_ProductInfo = 39;
+	repeated	SJ_RemarkInfo	SJ_RemarkInfo = 40;
+	repeated	SJ_ShapeInfo	SJ_ShapeInfo = 41;
+	repeated	SJ_SkinInfo	SJ_SkinInfo = 42;
+	repeated	SJ_TableInfo	SJ_TableInfo = 43;
+	repeated	SJ_TablePartInfo	SJ_TablePartInfo = 44;
+	repeated	SJ_TableSideInfo	SJ_TableSideInfo = 45;
+	repeated	SJ_WallDecorInfo	SJ_WallDecorInfo = 46;
+	repeated	SJ_WallInfo	SJ_WallInfo = 47;
+}
+

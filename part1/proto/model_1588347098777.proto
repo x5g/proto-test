@@ -1,0 +1,261 @@
+syntax = "proto3";
+
+option java_package = "ml.shifu.model.proto";
+
+package shifu_model_spec;
+
+message ModelProto {
+  repeated ModelNodeProto node = 1;
+  ModelStructureProto     structure = 2;
+  ModelInfoProto          info = 3;
+}
+
+/*
+ The Model Information segment, basically it has
+ 1. the name of the model
+ 2. the version of model
+ 3. the input and output
+ 4. the model description
+*/
+message ModelInfoProto {
+  string          model_name        = 1;
+  int32           model_version     = 2;
+  repeated string model_input       = 3;
+  repeated string model_output      = 4;
+  string          model_description = 5;
+}
+
+/*
+ The model structure segment,
+ 1. execution plan
+ 2. the DAG (plan)
+*/
+message ModelStructureProto {
+  // it's the id to name to layer map
+  map<int32, sint32> structure = 1;
+}
+
+/*
+ The node defination segment
+ 1. each node have an id(unique)
+ 2. the name of node
+ 3. the node input and output
+ 4. operator and its attribute
+*/
+message ModelNodeProto {
+  int32 node_id           = 1;
+  string name             = 2;
+  repeated string input   = 3;
+  repeated string output  = 4;
+  Operator operator       = 5;
+  oneof Attribute {
+    WOEAttributeProto        woe = 6;
+    MapAttributeProto        map = 7;
+    NormAttributeProto       norm = 8;
+    RegressionAttributeProto regression = 9;
+    FCAttributeProto         fc = 10;
+    ConcatAttributeProto     concat = 11;
+    NullifyAttributeProto    nullify = 12;
+    FilesAttributeProto      files   = 13;
+    GroupAttributeProto      group = 14;
+    TreeAttributeProto       tree = 15;
+    BatchNormAttributeProto  batch_norm = 16;
+    FunctionAttributeProto   function = 17;
+    ConstantAttributeProto   contant  = 18;
+
+    SimpleAttributeProto     simple = 99;
+ }
+}
+
+enum Operator {
+  WOE        = 0;
+  MAP        = 1;
+  NORM       = 2;
+  REGRESSION = 3;
+  FC         = 4;
+  CONCAT     = 5;
+  NULLIFY    = 6;
+  FILES      = 7;
+  GROUP      = 8;
+  TREE       = 9;
+  BATCHNORM  = 10;
+  FUNCTION   = 11;
+  CONSTANT   = 12;
+
+  SIMPLE     = 99;
+}
+
+message SimpleAttributeProto {
+  ActivationFunction function = 1;
+}
+
+message BatchNormAttributeProto {
+  repeated double mean = 1;
+  repeated double variance = 2;
+  repeated double gamma = 3;
+  repeated double beta = 4;
+  double epsilon = 5;
+}
+
+message ConcatAttributeProto {
+  string delimiter = 1;
+  bool include_name = 2;
+}
+
+message FCAttributeProto {
+  repeated double kernel = 1;
+  repeated int32 dim = 2;
+  repeated double bias = 3;
+  ActivationFunction function = 4;
+  double lambda = 5;
+}
+
+message ConstantAttributeProto {
+  repeated double doubles  = 1;
+  repeated float  floats   = 2;
+  repeated int32  ints     = 3;
+  repeated string strings  = 4;
+
+  //data dimension
+  repeated int32  dim      = 99;
+}
+
+message FilesAttributeProto {
+  int32 score_index = 1;
+  map<string, bytes> files = 2;
+  string type = 3;
+}
+
+message FunctionAttributeProto {
+  Function function = 1;
+}
+
+message GroupAttributeProto {
+  message CategoryIndexMapProto {
+    map<string, int32> categories_index = 1;
+  }
+  map<int32, CategoryIndexMapProto> map = 1;
+}
+
+message MapAttributeProto {
+  double default_value = 1;
+  double missing_value = 2;
+  map<string, double> dict = 3;
+}
+
+message NormAttributeProto {
+  double default_value = 1;
+  double missing_value = 2;
+
+  message NormUnitProto {
+    double value = 1;
+    double cutoff = 2;
+  }
+
+  repeated NormUnitProto units = 3;
+
+  enum OutlierTreat {
+    as_missing = 0;
+    as_is = 1;
+    as_extreme = 2;
+  }
+  OutlierTreat treat = 4;
+}
+
+message NullifyAttributeProto {
+  repeated string set = 1;
+}
+
+message RegressionAttributeProto {
+  repeated double weights = 1;
+  repeated int32 exponents = 2;
+  double bias = 3;
+  ActivationFunction function = 4;
+}
+
+message TreeAttributeProto {
+  // the numeric tree node and its operator
+  message NumericTreeNodeAttributeProto {
+    double threshold = 1;
+    double default_value = 2;
+    enum TreeOperator {
+      LessThan = 0;
+      LessOrEqual = 1;
+      GreaterThan = 2;
+      GreaterOrEqual = 3;
+    }
+    TreeOperator operator = 3;
+  }
+  // a bit set of tree node
+  message BitSetTreeNodeAttributeProto {
+    repeated int64 bits = 1;
+  }
+  // a categories of tree node
+  message CategoriesTreeNodeAttributeProto {
+    repeated string categories = 1;
+  }
+  // final value of tree node
+  message ValueTreeNodeAttributeProto {
+    double value = 1;
+  }
+  // a tree node
+  message TreeNodeAttributeProto {
+    int32 node_id = 1;
+    int32 left_node_id = 2;
+    int32 right_node_id = 3;
+    oneof TreeType {
+      NumericTreeNodeAttributeProto numeric = 4;
+      BitSetTreeNodeAttributeProto bitset = 5;
+      CategoriesTreeNodeAttributeProto categories = 6;
+      ValueTreeNodeAttributeProto value = 7;
+    }
+  }
+  repeated TreeNodeAttributeProto tree_nodes = 1;
+  int32 root_id = 2;
+}
+
+message WOEAttributeProto {
+
+  enum Closure {
+    openopen = 0;
+    openclosed = 1;
+    closedopen = 2;
+    closedclosed = 3;
+  }
+
+  message IntervalBinProto {
+    double left = 1;
+    double right = 2;
+    double value = 3;
+    Closure closure = 4;
+  }
+
+  double default_value = 1;
+  double missing_value = 2;
+  repeated IntervalBinProto bins = 3;
+}
+
+enum ActivationFunction {
+  none = 0;
+  sigmoid = 1;
+  tanh = 2;
+  softmax = 3;
+  relu = 4;
+  leakyRelu = 5;
+}
+
+enum Function {
+  // f(x)
+  round = 0;
+  floor = 1;
+  ceil  = 2;
+  log   = 3;
+  log10 = 4;
+  exp   = 5;
+  // aggregation f(x1, x2, x3...)
+  min   = 6;
+  max   = 7;
+  avg   = 8;
+  product = 9;
+  sum   = 10;
+}

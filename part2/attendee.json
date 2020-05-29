@@ -1,0 +1,9 @@
+{
+  "firstName": "John Json",
+  "lastName": "Doe",
+  "address": {
+    "city": "Bristol",
+    "street": "Canon's Road",
+    "number": 1
+  }
+}

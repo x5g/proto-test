@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.sdp;
+
+option java_package = "com.fagp.basics.core.protobuf.sdp"; //java  语言包
+option java_outer_classname = "SdpProtocol";
+
+
+//登录Response
+message SdpProtoBuf {
+   int32 state = 1; //状态码 200 表示成功
+   string message = 2; // 消息
+   string dpJson = 3; //json
+}
+
+//传输格式
+// 第一位分隔符 short 2位
+//第二位 cmd int
+// 第三位 包长度 int
+// 第四位  携带的数据
+
+

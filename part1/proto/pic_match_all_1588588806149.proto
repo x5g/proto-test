@@ -1,0 +1,536 @@
+syntax = "proto3";
+import "common.proto";
+
+package kedacom;
+/////////////////////////////////////////////////////////////////
+// 公共服务
+enum LogType{
+  LogType_Nop = 0;
+  LogType_Add = 1;
+  LogType_Del = 2;
+  LogType_Update = 3;
+  LogType_AddBatch = 4;
+  LogType_DelByLib = 5;
+  LogType_DelByTime = 6;
+  LogType_Clear = 7;
+  LogType_DelAll = 8;
+}
+// base db
+service ServiceDB {
+  rpc Add (AddRequest) returns (AddReply) {}
+  rpc Del (DelRequest) returns (DelReply) {}
+  rpc Update (UpdateRequest) returns (UpdateReply) {}
+  rpc AddBatch(AddBatchRequest) returns (AddBatchReply) {}
+  rpc DelBatch(DelBatchRequest) returns (DelBatchReply) {}
+  rpc GetLogs(LogRequest) returns (stream LogReply) {}
+  rpc Query(QueryRequest) returns (QueryReply){}
+  //check record exist
+  rpc Check(CheckRequest) returns (CheckReply){}
+  // update all
+  rpc DumpShard(DumpShardRequest) returns (stream DumpShardReply) {}
+  // defense, enrol supported
+  rpc DelByLib(DelLibRequest) returns(DelLibReply) {}
+  rpc DelByLibSelf(DelLibRequest) returns(DelLibReply) {}
+  // snap supported
+  rpc DelByTime(DelTimeRequest) returns(DelTimeReply) {}
+  rpc DelByTimeSelf(DelTimeRequest) returns(DelTimeReply) {}
+  //clear all lib
+  rpc Clear(ClearRequest) returns (ClearReply) {}
+  rpc ClearSelf(ClearRequest) returns (ClearReply) {}
+}
+// 数据库增加记录
+message AddRequest {
+  // libid+objid必须唯一
+  bytes libid = 1;          //libid必须不能包含“:”
+  bytes objid = 2;          //objid必须不能包含“:”
+  // 对象属性字段，该字段依赖不同的服务
+  // Defense服务：DefenseAddRequest
+  // PersonSnap服务：PersonSnapAddRequest
+  // PersonEnrol服务：PersonEnrolAddRequest
+  // VehicleSnap服务：VehicleSnapAddRequest
+  bytes props = 3;
+}
+message AddReply {
+  bytes message = 1;
+}
+
+message AddBatchRequest {
+  repeated AddRequest requests = 1;
+}
+message AddBatchReply {
+  message ErrorItem {
+    bytes libid = 1;
+    bytes objid = 2;
+  }
+  repeated ErrorItem items = 1;
+}
+message DelRequest {
+  bytes libid = 1;
+  bytes objid = 2;
+}
+message DelReply {
+  bytes message = 1;
+}
+message DelBatchRequest {
+  repeated DelRequest del_batch_req = 1;
+}
+message DelBatchReply {
+
+}
+message UpdateRequest {
+  // libid+objid必须唯一
+  bytes libid = 1;
+  bytes objid = 2;
+  // 对象属性字段，该字段依赖不同的服务
+  // Defense服务：DefenseAddRequest
+  // PersonSnap服务：PersonSnapProp
+  // PersonEnrol服务：PersonEnrolAddRequest
+  // VehicleSnap服务：VehicleSnapProp
+  bytes props = 3;
+}
+message UpdateReply {
+  bytes message = 1;
+}
+message LogRequest {
+  int64 mylog_id = 1;
+  // for shard key
+  bytes url = 2;
+  int32 shard_id = 3;
+}
+message LogReply {
+  int64 log_id = 1;
+  LogType log_type = 2;
+  bytes log_content = 3;
+}
+message QueryRequest {
+  bytes libid = 1;
+  bytes objid = 2;
+}
+// 内容同AddRequest
+message QueryReply {
+  bytes libid = 1;
+  bytes objid = 2;
+  // 对象属性字段
+  bytes props = 3;
+}
+// 内容同QueryRequest
+message CheckRequest{
+  bytes libid = 1;
+  bytes objid = 2;
+}
+message CheckReply{
+}
+message DelLibRequest {
+  bytes libid = 1;
+}
+message DelLibReply {
+}
+message DelTimeRequest {
+  // 时间范围[0, time)
+  int64 time = 1;
+  bytes libid = 2;
+}
+message DelTimeReply {
+}
+// 比对公共结构体
+message LibParam{
+  bytes libid = 1;
+  repeated int32 thresh = 2;//告警灵敏度 
+}
+
+// 待匹配设备型号公共结构体
+message Dev_list {
+  bytes dev = 1;     //对于结构化系统，传入的devid可能为 taskid+childtaskid 的形式
+  int32 dev_mode = 2;//默认全字匹配，该字段不使用
+}
+// 匹配公共结构体
+message MatchItem {
+  bytes libid = 1;
+  bytes objid = 2;
+  float sim = 3;
+  // 图片类型
+  PersonAnaPicSrcType pic_type = 4;
+  bytes picid = 5;
+}
+message DumpShardRequest{
+  int32 shard_id = 1;
+}
+message DumpShardReply {
+  repeated bytes keys = 1;
+  repeated bytes vals = 2;
+}
+
+//清空名单库请求
+message ClearRequest{
+}
+
+//清空名单库回应
+message ClearReply{
+}
+///////////////////////////////////////////////////////////////////////
+// defense service
+service ServiceDefense {
+  rpc Match(DefenseRequest) returns (DefenseReply) {}             // 单个图片布控
+  rpc MatchBatch(MatchBatchRequest) returns (MatchBatchReply) {}  // 一人多张布控
+  rpc MatchSelf(DefenseSelfRequest) returns (DefenseReply) {}
+  rpc GetDefenseLib(GetDefenseLibRequest) returns (GetDefenseLibReply) {}        //获取布防库参数
+  rpc GetDefenseLibSelf(GetDefenseLibRequest) returns (GetDefenseLibReply) {}    //获取布防库参数
+  rpc SetLibThresh (SetLibThreshRequest) returns (SetLibThreshReply) {}                   // 设置布防阈值
+  rpc SetLibProp(SetLibPropRequest) returns (SetLibPropReply) {}                          // 设置库的信息
+}
+
+// 告警类型
+enum AlarmType {
+    AlarmType_Black = 0;
+    AlarmType_White = 1;
+}
+
+// 布控记录增加记录
+message DefensePic{
+  bytes picid = 1;
+  bytes fea = 2;     // 特征值字段
+  PersonAnaPicSrcType type = 3;//图片类型
+}
+
+message DefenseAddRequest{ 
+  repeated DefensePic pics = 1;  
+}
+// 布控
+message DefenseRequest {
+  bytes fea = 1;
+  LibParam libid = 2;
+  int32 topn = 3;
+  AlarmType alarmtype = 4;
+}
+message DefenseSelfRequest {
+  DefenseRequest param = 1;
+  repeated int32 shard_list = 2;
+}
+
+message DefenseResult
+{
+  int32 thresh = 1;
+  repeated MatchItem results = 2;
+}
+
+message DefenseReply {
+  repeated DefenseResult res = 1;
+}
+message MatchBatchRequest {
+  repeated bytes fea = 1;
+  repeated LibParam libids = 2;
+  int32 topn = 3;
+  AlarmType alarmtype = 4;
+}
+message MatchBatchReply {
+  repeated DefenseReply replys = 1;
+}
+
+message GetDefenseLibRequest{
+  repeated bytes libid = 1;//名单库为空则表示查询所有库，否则只查询指定库
+}
+
+message DefenseLib{
+  bytes libid = 1;
+  int32 libsize = 2;
+  bool  defenseset = 3;  //是否布防
+}
+
+message GetDefenseLibReply{
+  repeated DefenseLib defenselib = 1;
+}
+
+// 布防阈值
+message SetLibThreshRequest {
+    // 包含整个阈值信息的字符串
+    bytes thresh = 1;
+}
+message SetLibThreshReply {
+
+}
+
+message LibProp{
+    bytes libid = 1;       // 库id
+    int32 lib_size = 2;     // 库大小
+}
+
+// 设置库的属性信息
+message SetLibPropRequest{
+    repeated LibProp props = 1;
+}
+message SetLibPropReply {
+
+}
+///////////////////////////////////////////////////////////////////////
+service ServicePersonEnrolMatch {
+  rpc Match(PersonEnrolMatchRequest) returns (MatchReply) {}
+  rpc MatchSelf(PersonEnrolSelfMatchRequest) returns (MatchReply) {}
+}
+message PersonEnrolMatchRequest {
+  repeated bytes fea = 1;
+  repeated bytes  libids = 2;  //搜索的人员库id
+  int32 topn = 3;
+  float thresh = 4;
+
+  bytes name = 5;//姓名
+  int32 gender = 6; //性别
+  
+  bytes allno = 7; //号码
+  int32 allno_type = 8;//号码类型 1:身份证 2:电话号 4:qq 8:wechat
+
+  int32 age_start = 9; //年龄起始
+  int32 age_end = 10; //年龄结束
+  int32 nation_no = 11; //民族代码
+
+  int64 addtime_start = 12; //入库开始时间
+  int64 addtime_end = 13; //入库结束时间
+  // 搜索优先级
+  Priority priority = 14;
+  
+  bool face_feas_valid = 15;    //1表示face
+  
+  bool name_valid = 16;
+  bool gender_valid = 17;
+  bool allno_valid = 18;
+  bool age_start_valid = 19;
+  bool age_end_valid = 20;
+  bool nation_no_valid = 21;
+  bool addtime_start_valid = 22;
+  bool addtime_end_valid = 23;
+}
+message MatchReply {
+  repeated MatchItem results = 1;
+}
+
+message PersonEnrolSelfMatchRequest {
+	PersonEnrolMatchRequest param = 1;
+	repeated int32 shard_list = 2;
+}
+//人员属性 
+message PersonEnrolProp {
+	bytes name = 1; //姓名
+	int64  birth = 2; //出生年月
+	int32  gender = 3; //性别
+	int32 id_type = 4; //证件类型
+	bytes id_no = 5; //证件号码
+    int32 nation_no = 6; //民族代码
+	bytes native_addr = 7; //户籍地址
+	bytes current_addr = 8; //现住地址
+	int32  marriage = 9; //婚姻状态
+	bytes native_place = 10; //籍贯
+	bytes qq = 11; //QQ号
+	bytes wechat = 12; //微信号
+	bytes telephone = 13; //电话号
+	int64  add_time = 14; //入库时间
+
+	bytes libid = 15; //库id
+	bytes objid = 16;
+}
+
+message PersonEnrolAddRequest {
+   // 属性字段
+  PersonEnrolProp prop = 1;
+  // 人脸特征值字段
+  repeated bytes face_feas = 2;
+  // 人员特征值字段
+  repeated bytes person_feas = 3;
+}
+
+message PersonEnrolRecord {
+  // 属性字段
+  PersonEnrolProp prop = 1;
+  // 人脸特征值字段
+  repeated int64 face_offsets = 2;
+  // 人员特征值字段
+  repeated int64 person_offsets = 3;//暂不使用
+}
+
+
+////////////////////////////////////////////////////////////////////////
+// 人员抓拍以图搜图服务
+service ServicePersonSnapMatch {
+  rpc Match(PersonSnapMatchRequest) returns (PersonSnapMatchReply) {}
+  rpc MatchSelf(PersonSnapMatchSelfRequest) returns (PersonSnapMatchReply) {}
+}
+// 人员抓拍属性
+message PersonSnapProp{
+  int64 perstarttime = 1;//update时不可修改
+  int32 ageseg = 2;
+  int32 gender = 3;
+  int32 nation = 4;
+  int32 upcolor = 5;
+  int32 lowcolor = 6;
+  int32 uptexttype = 7;
+  int32 lowtexttype = 8;
+  int32 isglass = 9;
+  int32 ismask = 10;
+  int32 ishat = 11;
+  int32 isriding = 12;
+  int32 isbag = 13;
+  int32 perdirtype = 14;
+  int32 perspdtype = 15;
+  int32 bagcolor = 16;
+  int32 hairstyle = 17;
+  int32 haircolor = 18;
+  int32 hatcolor = 19;
+  bool ageseg_valid = 20;
+  bool gender_valid = 21;
+  bool nation_valid = 22;
+  bool upcolor_valid = 23;
+  bool lowcolor_valid = 24;
+  bool uptexttype_valid = 25;
+  bool lowtexttype_valid = 26;
+  bool isglass_valid = 27;
+  bool ismask_valid = 28;
+  bool ishat_valid = 29;
+  bool isriding_valid = 30;
+  bool isbag_valid = 31;
+  bool perdirtype_valid = 32;
+  bool perspdtype_valid = 33;
+
+  bool bagcolor_valid = 34;
+  bool hairstyle_valid = 35;
+  bool haircolor_valid = 36;
+  bool hatcolor_valid = 37;
+  bytes dev_id = 38;
+  bytes obj_id = 39;
+  int32 algtype = 40;   //必填
+  int32 devtype = 41;
+  bool devtype_valid = 101;
+}
+// 人员抓拍增加记录
+message PersonSnapAddRequest{
+  // 属性字段
+  PersonSnapProp prop = 1;
+  // 特征值字段
+  bytes person_fea = 2;
+  repeated bytes face_feas = 3;
+}
+
+// 人员抓拍存储记录
+message PersonSnapRecord{
+  // 属性字段
+  PersonSnapProp prop = 1;
+  // 特征偏移
+  repeated int64 face_offsets = 2;
+  int64 person_offset = 3;
+}
+
+// 人员抓拍以图搜图请求
+message PersonSnapMatchRequest{
+  // 特征值
+  bytes fea = 1;
+  // 待匹配属性，该结构中：perstarttime，dev_id无效，将被忽略
+  PersonSnapProp prop = 2;
+  // 搜索设备列表
+  repeated Dev_list dev_list = 3;
+  // 搜索开始结束时间
+  int64 start_time = 4;
+  int64 end_time = 5;
+  int32 topn = 6;
+  float thresh = 7;
+  // 人脸搜索：1，人员搜索：2;
+  int32 search_fea = 8;
+  // 搜索优先级
+  Priority priority = 9;
+}
+message PersonSnapMatchSelfRequest{
+  PersonSnapMatchRequest param = 1;
+  repeated int32 shard_list = 2;
+}
+message PersonSnapMatchReply {
+  repeated MatchItem results = 1;
+}
+
+////////////////////////////////////////////////////////////////////////
+// 车辆抓拍以图搜图服务
+service ServiceVehicleSnapMatch {
+  rpc Match(VehicleSnapMatchRequest) returns (VehicleSnapMatchReply) {}
+  rpc MatchSelf(VehicleSnapMatchSelfRequest) returns (VehicleSnapMatchReply) {}
+}
+
+// 车辆抓拍属性
+message VehicleSnapProp{
+  int64 snaptime = 1;//update时不可修改
+  int32 objdir = 2;
+  int32 objspeed = 3;
+  int32 objtype = 4;
+  bytes vehbrand = 5;
+  bytes vehsubbrand = 6;
+  bytes vehlogoyear = 7;
+  bytes vehfactory = 8;
+  int32 vehtype = 9;
+  int32 vehsize = 10;
+  int32 vehcolor = 11;
+  int32 vehcolordepth = 12;
+  bytes lp_num = 13;
+  int32 lp_color = 14;
+  int32 withbelt = 15;
+  int32 withsunvisor = 16;
+  int32 isphonecalling = 17;
+  bool objdir_valid = 18;
+  bool objspeed_valid = 19;
+  bool objtype_valid = 20;
+  bool vehbrand_valid = 21;
+  bool vehsubbrand_valid = 22;
+  bool vehlogoyear_valid = 23;
+  bool vehfactory_valid = 24;
+  bool vehtype_valid = 25;
+  bool vehsize_valid = 26;
+  bool vehcolor_valid = 27;
+  bool vehcolordepth_valid = 28;
+  bool lp_num_valid = 29;
+  bool lp_color_valid = 30;
+  bool withbelt_valid = 31;
+  bool withsunvisor_valid = 32;
+  bool isphonecalling_valid = 33;
+  bytes dev_id = 34;
+  bytes obj_id = 35;
+  int32 algtype = 36;   //必填
+  int32 devtype = 37;
+  bool devtype_valid = 101;
+}
+
+// 车辆抓拍增加记录
+message VehicleSnapAddRequest{
+  // 属性字段
+  VehicleSnapProp prop = 1;
+  bytes vehicle_fea = 2;
+}
+
+// 车辆抓拍存储记录
+message VehicleSnapRecord{
+  // 属性字段
+  VehicleSnapProp prop = 1;
+  // 特征偏移
+  int64 vehicle_offset = 2;
+}
+
+// 车辆抓拍以图搜图请求
+message VehicleSnapMatchRequest{
+  // 特征值
+  bytes fea = 1;
+  // 待匹配属性，
+  VehicleSnapProp prop = 2;
+  // 搜索设备列表
+  repeated Dev_list dev_list = 3;
+  // 搜索开始结束时间
+  int64 start_time = 4;
+  int64 end_time = 5;
+  int32 topn = 6;
+  float thresh = 7;
+  // 车辆搜索：1
+  int32 search_fea = 8;
+  // 搜索优先级
+  Priority priority = 9;
+}
+message VehicleSnapMatchSelfRequest{
+  VehicleSnapMatchRequest param = 1;
+  repeated int32 shard_list = 2;
+}
+message VehicleSnapMatchReply {
+  repeated MatchItem results = 1;
+}
+
+
+

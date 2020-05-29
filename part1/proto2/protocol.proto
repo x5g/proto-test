@@ -1,0 +1,131 @@
+package mygame_protocol;
+
+enum MessageType {
+    playerUpdate = 0;
+    newPlayer = 1;
+    disconnect = 2;
+    chat = 3;
+    mapUpdate = 4;
+    projectile = 5;
+    stateUpdate = 6;
+    ackResponse = 9;
+    input = 7;
+    mapChange = 8;
+    connectResponse = 10;
+}
+
+enum ProjectileType {
+    no_switch = 0;
+    melee = 1;
+    blaster = 4;
+    explBlaster = 11;
+    lg = 3;
+    sg = 2;
+    gl = 5;
+    explNade = 12;
+}
+
+enum GameState {
+    warmUp = 0;
+    inProgress = 1;
+    isDead = 2;
+    spawns = 3;
+    isReady = 4;
+    goesSpec = 5;
+    wantsJoin = 6;
+    countDown = 7;
+    gameOver = 8;
+    overTime = 9;
+}
+
+enum Direction {
+    down = 0;
+    up = 1;
+    left = 2;
+    right = 3;
+}
+
+//main message
+message Message {
+    required MessageType type = 1;
+    optional Player player = 2;
+    optional Input input = 3;
+    optional Projectile projectile = 4;
+    optional GameState gameState = 7;
+    optional int32 ack = 5;
+    optional float gameTime = 6;
+}
+
+message Player {
+    optional int32 id = 6;
+    optional float posx = 2;
+    optional float posy = 3;
+    optional float velx = 4;
+    optional float vely = 5;
+    optional MState mState = 7;
+    optional int32 hp = 8;
+    optional int32 armor = 9;
+    optional uint64 time = 10;
+    optional string chat = 11;
+    optional int32 ammo = 12;
+    optional ProjectileType weapon = 13;
+}
+
+message Input {
+    optional uint64 time = 1;
+    optional int32 id = 7;
+    optional bool right = 2;
+    optional bool left = 3;
+    optional bool up = 4;
+    optional string name = 6;
+    optional float mx = 8;
+    optional float my = 9;
+    optional bool att = 10;
+    optional bool down = 11;
+    optional ProjectileType switch = 12;
+}
+
+message MState {
+    optional bool onGround = 1;
+    optional bool ascending = 2;
+    optional bool landing = 3;
+    optional bool canJump = 4;
+    optional bool descending = 5;
+    optional bool isFiring = 6;
+    optional bool onRightWall = 7;
+    optional bool onLeftWall = 8;
+    optional bool isDead = 9;
+    optional bool hold = 10;
+    optional Direction direction = 11;
+}
+
+message Projectile {
+    required ProjectileType type = 1;
+    optional int32 playerId = 2;
+    optional int32 projId = 3;
+    optional float posx = 4;
+    optional float posy = 5;
+    optional float velx = 6;
+    optional float vely = 7;
+    optional bool toDelete = 8;
+    optional float angle = 9;
+    optional bool playerHit = 10;
+}
+
+message WeaponStat {
+    optional int32 playerId = 1;
+    optional ProjectileType wType = 2;
+    optional int32 fired = 3;
+    optional int32 hit = 4;
+    optional int32 dmg = 5;
+}
+
+message ScoreStat {
+    optional int32 playerId = 1;
+    optional int32 score = 2;
+}
+
+message Stats {
+    repeated ScoreStat sStat = 1;
+    repeated WeaponStat wStat = 2;
+}

@@ -1,0 +1,53 @@
+option java_package = "net.demo.proto";
+option java_outer_classname = "KVCommand";
+
+message KVMessage{
+    required uint32 id = 1;
+    required uint32 len = 2;
+    optional KVRequest request = 3;
+    optional KVResponse response = 4;
+}
+
+message KVResponse{
+    required uint32 status = 1;
+    optional string message = 2;
+}
+
+message KVRequest{
+    enum RequestType {
+        ITEM = 0;
+        LOGIN = 1;
+    }
+
+    required RequestType type = 1 [default = ITEM];
+    optional KVItem item = 2;
+    optional KVLogin login = 3;
+}
+
+message KVItem {
+    required string command = 1;
+}
+
+message KVLogin{
+	required string username = 1;
+	required string password = 2;
+}
+
+// message RequestCommand {
+//   required string command = 1;
+//   optional string auth = 3;
+//   optional bytes payload = 4;
+//   repeated KVItem items = 2;
+// }
+//
+// message KVItem {
+//    required string key = 1;
+//     optional bytes value = 2;
+// }
+//
+// message ResponseCommand {
+//     required bool success = 1;
+//     optional string message = 2;
+//     optional string error = 3;
+//     repeated KVItem items = 5;
+// }

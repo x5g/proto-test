@@ -1,0 +1,98 @@
+
+package everyhappy;
+import "PB_error_code.proto";
+
+enum CardType {
+	Card_AAA            = 1;    //AAA
+	Card_FullHouse      = 2;    //豹子 
+	Card_StraightFlush  = 3;    //同花顺
+	Card_SameColor      = 4;    //同花
+	Card_Straight       = 5;    //顺子
+	Card_Pair           = 6;    //对子
+	Card_Normal         = 7;    //散牌
+}
+
+enum TaskState {
+    State_None  =  0;
+    XiazhuIng   =  1;   // 下注期
+    Awarding    =  2;   // 开奖期
+    Finish      =  3;   // 完成
+}
+
+message XiazhuData {
+	optional int64 playerid = 1;
+	optional CardType type = 2; // 下注类型
+	optional int32 gold = 3;	// 下注金额
+	optional string xiazhu_time = 4;
+}
+
+message LastMaxAwardInfo {
+	optional string name 	= 1;			// 上轮大奖昵称
+	optional string icon_url = 2;			// 上轮大奖头像url
+	optional int32	vip  = 3;				// 上轮大奖vip
+}
+
+// 获取时时乐数据
+message PB_EveryhappyData {
+}
+
+message PB_EveryhappyDataReturn {
+	required int64 gold_pool = 1; 			// 奖金池
+	required TaskState state = 2; 			// 本期状态
+	repeated XiazhuData datas = 3;			// 个人下注信息
+	repeated XiazhuData all_datas = 4;		// 当前每种牌型下注总数
+	optional int32 countdown = 5;			// 下注/开奖倒计时
+	optional LastMaxAwardInfo last_max_award = 6; // 上轮大奖信息
+}
+
+// 玩家下注
+message PB_Xiazhu {
+	required XiazhuData xiazhu = 1;
+}
+
+message PB_XiazhuReturn {
+	required PB_ErrorCode code = 1;
+	optional TaskState state = 2;
+	optional int32 countdown = 3;
+}
+
+message AwardRecordData {
+	optional int64		playerid		 = 1;	
+	optional int64		id 				 = 2;	// 时时乐id
+	optional string     xiazhu_time 	 = 3;	// 下注时间
+	optional int32		xiazhu_gold 	 = 4;	// 下注总额
+	optional int32 		aaa              = 5;   // AAA(该牌型对应的下注金额)
+	optional int32      fullhouse      	 = 6;   // 豹子 
+	optional int32 		straight_flush   = 7;   // 同花顺
+	optional int32 		samecolor      	 = 8;   // 同花
+	optional int32 		straight         = 9;   // 顺子
+	optional int32 		pair			 = 10;  // 对子
+	optional int32 		normal         	 = 11;  // 散牌
+	optional int32		award_type		 = 12;  // 开奖牌型
+	optional int32	    award_gold		 = 13;	// 中奖金额	
+}
+
+// 玩家获取中奖记录
+message PB_AwardRecord {
+	required int64 playerid = 1;
+	required int64 last_id = 2;			// 最后一条时时乐id
+}
+
+message PB_AwardRecordReturn {
+	repeated AwardRecordData records = 1;	// 20 条
+}
+
+message AwardData {
+	optional int64 playerid = 1;
+	optional int32 gold = 2;
+}
+
+// 用户中奖金额超过N后
+message PB_BigAwardNotify {
+	repeated AwardData awards = 1;
+}
+
+// 当期中奖最高用户通知
+message PB_MaxAwardNotify {
+	required AwardData award = 1;
+}

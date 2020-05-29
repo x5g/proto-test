@@ -1,0 +1,768 @@
+package google.protobuf;
+// package abm.protobuf;
+option java_package = "com.asiainfo.billing.db.natsclient.pbcodes";
+option java_outer_classname = "PbAbmInterface";
+
+// descriptor.proto must be optimized for speed because reflection-based
+// algorithms don't work during bootstrapping.
+option optimize_for = SPEED;
+
+/*****************************************************************************
+**                              余额接口                                  **
+*****************************************************************************/
+
+// 云化实时扣费接口
+message PbRealDeductCmd{
+    required int64 lEventID                  = 1;
+    required int64 lAcctID                   = 2;
+    required int32 iBillingCycleID           = 3;
+    required int32 iDeductType               = 4;   // 1.普通扣费 2.租费套餐费扣费 3.调账扣费  4.账期末优惠扣费 10.智能公话11.历史帐单上载
+    optional int64 lVersionID                = 5;   // 账期末扣费赋值，稽核版本号
+    optional int64 lBatchID                  = 6;
+    repeated PbRealDeductR oPbRealDeductCond = 7;
+}
+
+message PbRealDeductR {
+    required int64 lServID                   = 1;
+    required int32 iBillingMode              = 2;   // 1.后付费 2.预付费
+    repeated pbDeductItem oPbDeductAcctItem  = 3;
+}
+
+message pbDeductItem{
+    required int32 iAcctItemTypeID           = 1;   // 账目类型
+    required int32 iItemSourceID             = 2;   // 账目来源
+    required int64 lCharge                   = 3;   // 账目金额
+    required int64 lOfferInstID              = 4;   // 商品实例id
+    required int64 lOfferID                  = 5;   // 商品id
+}
+
+message PbRealDeductResult{
+    required int64  lRltTime         = 1 ;
+    repeated PbRealDeductA oPbRealDeductA    = 2;
+}
+
+message PbRealDeductA{
+    required int64 lAcctID                   = 1;
+    required int64 lServID                   = 2;
+    required int64 lUniversalBalance         = 3;
+    required int64 lAcctSpecialBalance       = 4;
+    required int64 lServSpecialBalance       = 5;
+    required int64 lServOweCharge            = 6;
+    required int64 lOldOweCharge             = 7;
+    required int32 iCreditNum                = 8;
+    repeated PbAcctCredit oPbAcctCredit      = 9;
+    repeated PbBalDeductInfo oPbBalDeductInfo= 10;
+}
+
+message PbAcctCredit {
+    required int32 iPeriodDays               = 1;
+    required bytes sCreditType               = 2;
+    required int64 lCreditAmount             = 3;
+}
+
+message PbBalDeductInfo{
+    required int64 lAcctBalanceID           = 1;   // 帐本ID
+    required int64 lBalance                 = 2;   // 帐本余额
+    required int64 lBeforeCharge            = 3;   //  初始使用金额
+    required int64 lCurCharge               = 4;   //  当前使用金额
+    required int64 lCurUse                  = 5;   // 本次使用金额
+}
+
+
+//总账查询接口
+message pbQryAggrCmd
+{
+    required int32 iQueryType                = 1;   // 查询类型 1 实时总账  2 实时+历史 10 智能公话 11 历史帐单
+    required int32 iQueryFlag                = 2;   // 查询方式 1 账户级 2 用户级
+    required int64 lAcctID                   = 3;   // 账户ID
+    required int64 lServID                   = 4;   // 用户ID
+    required int32 iBillingCycleID           = 5;   // 查询账期
+    repeated int32 iOldBillingCycleID        = 6;
+}
+
+message PbQryAcctItemInfo{
+    required int64 lAggrID                   = 1;
+    required int64 lAcctID                   = 2;   // 账户ID
+    required int64 lServID                   = 3;   // 用户ID
+    required int64 lAmount                   = 4;   // 本金额
+    required int64 lOfferInstID              = 5;      
+    required int32 iBillingCycleID           = 6;   // 账期ID
+    required int32 iAcctItemTypeID           = 7;   // 账目类型
+    required int32 iItemSourceID             = 8;   // 帐目来源规则标识
+    required int64 lOfferID                  = 9;   // 产品标识
+    required int32 iBillingMode              = 10;  // 付费类型 1.后付费 2预付费
+    required int32 iAggrType                 = 11;
+    required int64 lOrgID                    = 12;
+}
+message pbQryAggrResult{
+    required int64 lCharge                   = 1;
+    required int64 lVersionID                = 2;
+    repeated PbQryAcctItemInfo oPbQryItemInfo= 3;
+}
+// 云化获取下账账户接口
+message PbGetVireAcctCmd{
+    required int32 iFlag                   = 1;     //请求类型：iFlag=1 请求批次，iFlag=2，请求批次数据
+    required int64 lTransID                = 2;     //批次ID，iFlag=1时传-1，iFlag=2时，传入具体的批次号
+}
+message PbVireAcctInfo
+{
+    required int64 lAcctID = 1;
+}
+message PbGetVireAcctResult
+{
+    repeated PbVireAcctInfo oPbVireAcct      = 1;
+    required int64 lBeginTransid             = 2;    //开始批次
+    required int64 lEndTransid               = 3;    //结束批次
+}
+//信用度新增更新接口
+message PbDepositCreditCmd
+{
+	required int64 lAcctcreditId  = 1;
+	required int64 lServID        = 2;
+	required int64 lAcctID        = 3;
+	required int32 lCreditGrade   = 4;
+	required int64 lCreditAmount  = 5;
+	required bytes sCreditLevel   = 6;
+	required string sEffDate      = 7; //生效时间
+	required string sExpDate      = 8; //失效时间
+	required string sCreditType   = 9;
+	required string sCreditDate   = 10;
+	optional int32  iPeriodDays   = 11; //云南要求加入信用度周期天数
+	optional string sCredEffDate  = 12; //策略要求加入信用度初始生效时间
+	optional string sCredExpDate  = 13; //策略要求加入信用度初始失效时间
+}
+
+
+//云化备份表服务接口
+message PbBackTableCmd{
+	required int32 iBackType = 1;       //1 总账 2 智能公话 3 历史总账
+	required int32 iBillingCycleID = 2; //备份的账期 -1 代表全部
+	required bytes sDstTable = 3;  //备份到Dst表
+	required int32 iOrgID    = 4;  //备份哪个节点 可能苏州想去下载南京的
+}
+
+//云化备份查询进度
+message PbQryBackPercentInfo{
+	required int32 iBackType = 1;  //1 总账 2 智能公话 3 历史总账
+	required int32 iBillingCycleID = 2; //备份的账期 -1 代表全部
+	required int32 iOrgID    = 3;  //查询具体哪个节点的备份进度 工单表里面的 
+	required bytes sDstTable = 4; //查询备份到哪张表的进度 
+}
+
+message PbQryBackPercnetRltInfo{
+    required string sState    = 1;  //'RDY' 初始化 'NUT’ 失败 'RUN' 正在备份 'END'结束
+	required int32 iPerCent   = 2;  //返回备份的进度  100 代表备份结束
+	required int64 lTTCount   = 3;  //需要备份的TT总条数
+	required int64 lOraCount  = 4;  //已经备份到oracle的
+	required int32 iNodeId    = 5;  //全局注册的id g_iNodeId
+}
+
+message PbQryBackPercnetRlt{
+	repeated PbQryBackPercnetRltInfo oPbQryBackInfo = 1;
+}
+
+//检查接口
+message PbHbCheckCmd{
+	//1 检查acct表 2 检查总账表 3检查下个账期的是否清理干净(总账和抵扣关系) 4 检查acct_balance 下个账期charge
+	//5 检查总账表中是否存在同一个serv_id多个billing_mode情况 6 检查本账期总账表中是否存在同一个serv_id多个acct_id
+	//7 检查负账单表和负账单关系表是否存在本账期之前的账期话单
+	//8 检查下账中间表ACCT_VIRE是否清理干净
+	required int32 iFlag = 1; 
+}
+message PbHbCheckRltInfo{
+	required int32 iRltCode = 1;  //具体的节点错误码 没有错误则 0 
+	required int32 iNodeId  = 2;  //具体的节点号 在路由层注册得到 路由层配置文件可知
+	required bytes sDetail  = 3;  //具体的错误详细描述 aj:账户表有上上个账期数据
+}
+//返回的检查包体
+message PbHbCheckRlt{
+	repeated PbHbCheckRltInfo oPbCheckRltInfo = 1;
+}
+
+//云化调账结果查询
+message PbQryAdjAcctCmd{
+    required int64 lBatchID = 1;        //批次号
+}
+
+message PbQryAdjAcctData{
+    required int32 iAdjAcctCnt      = 1;  //调账记录数
+    required int64 lAdjAcctAmount   = 2;  //调账总金额
+}
+
+message PbQryAdjAcctResult{
+    required int64 lBatchID = 1;        //批次号
+    repeated PbQryAdjAcctData oData = 2;
+}
+
+//DEDUCT是否成功查询
+message PbQryDeductRltCmd{
+    required int64 lEventID = 1;
+}
+
+
+//ocs的pb----------
+
+message  PbHoldBalanceR {
+    required int64  lAcctID         =1;
+    required int64  lServID         =2;
+    required int32  iBillingCycleID =3;
+    required uint32 uiItemNum       =4;  
+    required int64  lTempCredit     =5; //标识是否是临时信用度，0代表标准信用度，有值代表用户临时信用度额度
+    required int32  iBillingMode    =6;
+    required int32  iRevs           =7;
+    optional int32  iSourceEvtType  =8; //云南特有 区分预留的信用度级别 0 适用所有信用度 1 仅用户级信用度都可以预留
+}
+
+message PbRequestAcctItem01 {
+    required uint32  uiAcctItemTypeID =1; //账目类型
+    required int64   lRG=2;
+    required int64   lCharge=3 ; //账目金额
+}
+
+message PbHoldBalanceCmd02 {
+     required PbHoldBalanceR      m_SHoldBalR =1;
+     repeated PbRequestAcctItem01 m_SReAcctItem01=2;
+
+}
+
+message PbGrantedAcctBalance01 {
+    required int32  iAcctItemNum=1; //账目项数
+    repeated uint32 uiAcctItemType=2; //账目类型
+    required int64  lCharge=3; //账目金额
+    required int32  iGrantType=4 ; //0 账本 1 信用度
+}
+
+message PbRGGrantedAcctBal01
+{
+    required int64    lRG=1;
+    required int32    iResult=2;
+    required uint32   uiNum=3;
+    repeated PbGrantedAcctBalance01 m_aoGrantedAcctBal=4;
+
+}
+message PbHoldBalanceResult02
+{
+    required PbHoldBalV1 m_SHoldbalV1=1;
+    repeated PbRGGrantedAcctBal01 m_SRGGranAcctBal=2;
+
+}
+
+message PbHoldBalV1
+{
+    required int64 lAcctID             =1;
+    required int64 lUniversalBalance   =2;
+    required int64 lAcctSpecialBalance =3;
+    required int64 lServSpecialBalance =4;
+    required int64 lServOweCharge      =5;
+    required int64 lOldOweCharge       =6;
+    required int64 lItemNum            =7;
+    required int64 lAvailBal           =8;
+}
+message PbDeductFeeR {
+    required int64  lAcctID            =1;
+    required int64  lServID            =2;
+    required int32  iBillingCycleID    =3;
+    required int32  iDebitType         =4;
+    required int64  lTempCredit        =5;
+    required uint32 uiItemNum         =6;
+    required int32  iBillingMode      =7;
+}
+message  PbUsedAcctItem01 {
+    required uint32 uiAcctItemTypeID  =1; //账目项数
+    required int32  iItemSourceID      =2; //账目来源
+    required int64  lCharge            =3; //账目金额
+    required int64  lOfferInstID       =4; //商品实例id
+    required int64  lOfferID           =5; //商品id   
+}
+
+message  PbDebitAcctItem01 {
+    required uint32 uiAcctItemTypeID  =1; //账目项数
+    required int32  iItemSourceID      =2; //账目来源
+    required int64  lCharge            =3; //账目金额
+    required int64  lOfferInstID       =4; //商品实例id
+    required int64  lOfferID           =5; //商品id   
+}
+
+message  PbSupplyAcctItem01 {
+    required uint32 uiAcctItemTypeID  =1; //账目项数
+    required int32  iItemSourceID      =2; //账目来源
+    required int64  lCharge            =3; //账目金额
+    required int64  lOfferInstID       =4; //商品实例id
+    required int64  lOfferID           =5; //商品id   
+}
+
+//typedef PbUsedAcctItem01 PbDebitAcctItem01;
+//typedef PbUsedAcctItem01 PbSupplyAcctItem01;
+
+message  PbUsedAcctItemB01 {
+    required uint32 uiAcctItemTypeID  =1; //账目项数
+    required int32  iItemSourceID      =2; //账目来源
+    required int64  lCharge            =3; //账目金额
+    required int64  lOfferInstID       =4; //商品实例id
+    required int64  lOfferID           =5; //商品id  
+    required int32  iBillingCycleID    = 6;
+}
+//终止使用
+message PbStopServiceCmd01 {
+    required PbHoldBalanceR     m_SHoldBalR=1;
+    repeated PbUsedAcctItemB01   m_SUseAcctItem =2;
+
+}
+message PbStopServiceA {
+    required int64 lAcctID=1;
+    required int64 lUniversalBalance=2;
+    required int64 lAcctSpecialBalance=3;
+    required int64 lServSpecialBalance=4;
+    required int64 lServOweCharge=5;
+    required int64 lOldOweCharge=6;
+    repeated PbBalDeductInfo oPbBalDeductInfo   = 7;
+} 
+
+message PbDeductFeeA {
+    required int64 lAcctID=1;
+    required int64 lUniversalBalance=2;
+    required int64 lAcctSpecialBalance=3;
+    required int64 lServSpecialBalance=4;
+    required int64 lServOweCharge=5;
+    required int64 lOldOweCharge=6;
+    repeated PbBalDeductInfo oPbBalDeductInfo   = 7;
+} 
+
+message PbSupplyFeeA {
+    required int64 lAcctID=1;
+    required int64 lUniversalBalance=2;
+    required int64 lAcctSpecialBalance=3;
+    required int64 lServSpecialBalance=4;
+    required int64 lServOweCharge=5;
+    required int64 lOldOweCharge=6;
+    repeated PbBalDeductInfo oPbBalDeductInfo   = 7;
+} 
+
+message PbPayBalanceA {
+    required int64 lAcctID=1;
+    required int64 lUniversalBalance=2;
+    required int64 lAcctSpecialBalance=3;
+    required int64 lServSpecialBalance=4;
+    required int64 lServOweCharge=5;
+    required int64 lOldOweCharge=6;
+    repeated PbBalDeductInfo oPbBalDeductInfo   = 7;
+} 
+
+//typedef PbStopServiceA PbDeductFeeA;
+//typedef PbStopServiceA PbSupplyFeeA;
+//typedef PbStopServiceA PbPayBalanceA;
+
+//扣费
+message PbDeductFeeCmd01 {
+   repeated PbDeductFeeR      m_SDeductFeeR= 1;
+   repeated PbDebitAcctItem01 m_SDebitAcctItem =2;
+
+}
+
+message PbDeductFeeResult01
+{
+	required PbDeductFeeA      m_SDeductFeeA=1;
+}
+
+message PbReDeductFeeResult01
+{
+	required PbDeductFeeA      m_SDeductFeeA=1;
+}
+
+//typedef PbDeductFeeResult01 PbReDeductFeeResult01;
+
+//补款
+//message PbSupplyFeeA {
+//    required int64 lAcctID=1;
+//    required int64 lUniversalBalance=2;
+//    required int64 lAcctSpecialBalance=3;
+//    required int64 lServSpecialBalance=4;
+//    required int64 lServOweCharge=5;
+//    required int64 lOldOweCharge=6;
+//} 
+
+//message  PbSupplyAcctItem01 {
+//    required uint32 uiAcctItemTypeID  =1; //账目项数
+//    required int32  iItemSourceID      =2; //账目来源
+//    required int64  lCharge            =3; //账目金额
+//    required int64  lOfferInstID       =4; //商品实例id
+//    required int64  lOfferID           =5; //商品id   
+//}
+//message PbPayBalanceA {
+//    required int64 lAcctID=1;
+//    required int64 lUniversalBalance=2;
+//    required int64 lAcctSpecialBalance=3;
+//    required int64 lServSpecialBalance=4;
+//    required int64 lServOweCharge=5;
+//    required int64 lOldOweCharge=6;  
+//}
+
+message PbSupplyFeeCmd01 {
+    required PbHoldBalanceR     m_SHoldBalR =1;
+    repeated PbSupplyAcctItem01 m_SupplyAcctItem01=2;
+}
+//预留回退
+message PbRollHoldBack {
+    required int64  lAcctID =1;
+    required int64  lRG  =2;
+}
+message  PbRefreshBalR
+{
+    required int64  lAcctID=1;
+    required int64  lServID=2;
+    required int32  iBillingCycleID=3;
+    required int32  iNum1=4;
+    required int32  iNum2=5;
+    
+}
+message PbRefreshBalanceResult02
+{
+    required PbHoldBalV1  m_SHoldbalV1=1;
+    repeated PbRGGrantedAcctBal01 m_SRGGranAcctBal=2;
+}
+message PbRefreshBalanceCmd03
+{
+    required PbRefreshBalR       m_SRefreBalR=1;
+    repeated PbRequestAcctItem01 m_SReqAcctItem=2;
+    repeated PbUsedAcctItem01    m_SUsedAcctItem=3;
+}
+message PbRefreshBalanceResult03
+{
+    required PbHoldBalV1  m_SHoldbalV1=1;
+    repeated PbRGGrantedAcctBal01 m_SRGGranAcctBal=2;
+}
+
+/*****************************************************************************
+**                              累积量接口                                  **
+*****************************************************************************/
+//1.1.1 纯量本
+message PbFlowQryCond {
+    required int64  lServID     = 1;    //用户标识
+    required int64  lQueryDate  = 2;    //查询时间
+    required int64  lRouteID    = 3;    //路由标识
+    required int32  iOrgID      = 4;    //地市区号
+}
+
+//1.1.2 流量池
+message PbFlowPoolQryCond { 
+    required int64 lPoolServID      = 1;     //流量池用户
+    required int64 lServID          = 2;     //真实用户标识
+    required int64 lQueryDate       = 3;     //查询时间
+    required int64 lRouteID         = 4;     //路由标识
+    required int32 iOrgID           = 5;     //地市区号
+}
+
+//1.1.3 套餐量本
+message PbOfferInstQryCond {
+    required int64 lOfferInstID  = 1;      //商品实例标识
+    required int32 iAccuTypeID   = 2;      //累积量类型
+    required int64 lQueryDate    = 3;      //查询时间
+    required int64 lRouteID      = 4;      //商品实例标识对应的客户ID
+    required int32 iOrgID        = 5;      //地市区号
+}
+
+//1.1.4 事件累积量
+message PbEventQryCond {
+    enum QryTypeDef {
+        ALL_MONTH   =  0;    //查询返回所有月份数据
+        CUR_MONTH    =  1;    //查询返回当前月份(查询月份)数据
+    }
+    required int64 lOfferInstID  = 1;      //商品实例标识
+    required int32 iAccuTypeID   = 2;      //累积量类型
+    required int64 lQueryDate    = 3;      //查询时间
+    required int64 lRouteID      = 4;      //商品实例标识对应的客户ID
+    required int32 iOrgID        = 5;      //地市区号
+    optional QryTypeDef QryFlag   = 6[default = ALL_MONTH];  
+}
+
+//1.1.5 优惠累积量
+message PbDisctQryCond {
+    required int64 lOfferInstID    = 1;    //商品实例标识
+    required int32 iQueryCycleID   = 2;    //查询账期
+    required int64 lRouteID        = 3;    //商品实例标识对应的客户ID
+    required int32 iOrgID          = 4;    //地市区号
+    optional int64 lServID         = 5;    //优惠累积量查询若传入servid ownertype=2 联合判断 若不传入则全部返回
+}
+
+//#define ABMCMD_OCS_AUDIT_QRY 39  //在线批价查询
+//#define ABMCMD_AUDIT_QRY 40  //离线批价查询
+//1.1.6 查询请求PB接口定义
+message PbAccuQryCmd {
+    enum QryTypeDef {
+        TYPE_OFFLINE   =  0;    //离线查询（不考虑预留）
+        TYPE_ONLINE    =  1;    //在线查询（考虑预留）
+        TYPE_PLCA    =  2;    //策略查询（需查询累积量总量）
+    }
+    optional QryTypeDef QryFlag                      = 1[default = TYPE_OFFLINE];     //离线查询（不考虑预留）: 0，在线查询（考虑预留）
+    repeated PbEventQryCond      EventQryCond        = 2 ;
+    repeated PbDisctQryCond      DisctQryCond        = 3 ;
+    repeated PbFlowQryCond       FlowQryCond         = 4 ;
+    repeated PbFlowPoolQryCond   PoolQryCond         = 5 ;
+    repeated PbOfferInstQryCond  OfferInstQryCond    = 6 ;
+}
+
+//量本使用明细
+message PbUsageUseDetailData {
+    required int64   lUsageBalDetailID  = 1 ;          //量本明细序列
+    required int64   lUsageAggrDetailID = 2 ;          //量本使用明细主键
+    required int64   lServID            = 3 ;          //用户标识
+    required int32   iBillingCycleID    = 4 ;          //账期
+    required int32   iUseTypeID         = 5 ;          //使用类型
+    required string  sEffDate           = 6 ;          //量本生效时间
+    required string  sExpDate           = 7 ;          //量本失效时间
+    required int64   lValue             = 8 ;          //使用量
+    required int64   lVersionID         = 9 ;          //量本明细版本号
+    required int32   iMeasureUnit       = 10;          //度量单位
+}
+
+//量本
+message PbAuditUsageData {
+    required int64   lUsageBalanceID             = 1 ;       //量本流水号，唯一主健
+    required int64   lUsageBalDetailID           = 2 ;       //量本明细序列
+    required int64   lServID                     = 3 ;       //用户标识，可空，不为空为单产品使用
+    required int64   lAcctID                     = 4 ;       //帐户标识，用于共享
+    required int64   lOfferInstID                = 5 ;       //商品实例标识
+    required int32   iUsageTypeID                = 6 ;       //量本类型 pricing_netcard net_card_type
+    required int32   iSourceTypeID               = 7 ;       //【纯量本100，套餐量本200、置换量本110、转赠量本120、赠送量本130】计费和ABM共有
+    required int32   iAccuTypeID                 = 8 ;       //量本类型 【忙闲时、定向、省内、国内、度量单位、事件组】同累积量类型
+    required string  sEffDate                    = 9 ;       //量本生效时间
+    required string  sExpDate                    = 10;       //量本失效时间
+    required int64   lInBalance1                 = 11;       //量本充入值
+    required int64   lInBalance2                 = 12;       //量本充入值
+    required int64   lUseValue1                  = 13;       //单月使用量累积 更新
+    required int64   lUseValue2                  = 14;       //双月使用量累积 更新
+    required int64   lBalance                    = 15;       //量值，可用量，以量的最小单位来表达，不再放单位的字段 更新
+    required int32   iOrgID                      = 16;       //200级本地网级
+    required int64   lVersionID                  = 17;       //量本明细版本号
+    required string  sCycleExpDate               = 18;       //量本明细版本号
+    repeated PbUsageUseDetailData UsageUseDetail = 19;       //量本使用明细
+    required int64   lCustID                      = 20;       //客户标识
+}
+
+//1.2.4 事件累积量
+message PbAuditEventQryData {
+    required int64   lAccuInstID            = 1 ;         //主键
+    required int32   iAccuTypeID            = 2 ;         //累积量类型
+    required int64   lOfferInstID           = 3 ;         //商品实例标识
+    required int64   lValue                 = 4 ;         //值
+    required string  sSplitby               = 5 ;         //拆分标识[32]
+    required int64   lMemberID              = 6 ;         //成员ID
+    required int64   lServID                = 7 ;         //用户标识
+    required int32   iBillingCycleID        = 8 ;         //账期
+    required int64   lVersionID             = 9 ;         //从1开始计数
+    required int64   lStartData             = 10;         //开始时间
+    required int64   lEndDate               = 11;         //结束时间
+    required int32   iCycleTypeID           = 12;         //周期类型
+    required int32   iOrgID                 = 13;       //200级本地网级
+    required int64   lCustID                = 14;       //客户标识
+    optional int64   lSumValue              = 15;       //总使用量(含历史)
+    optional int64   lTotalValue            = 16;       //累积量总量
+}
+
+//1.2.5 优惠累积量
+//优惠明细
+message PbDisctDetailData {
+    required int64   lServID            = 1 ;       //用户ID
+    required int32   iBillingCycleID    = 2 ;       //帐期ID
+    required int32   iAcctItemTypeID    = 3 ;       //帐目类型ID
+    required int64   lValue             = 4 ;       //原输入值
+    required int64   lDisctValue        = 5 ;       //原优惠值
+    required int64   lVersionID         = 6 ;       //版本ID
+    required int64   lItemDetailSeq     = 7 ;      //明细主键，新增为-1
+}
+
+//优惠
+message PbAuditDisctQryData {
+    required int64   lOfferInstID              = 1 ;            //商品实例ID
+    required int32   iBillingCycleID           = 2 ;            //帐期ID
+    required int32   iOrgBillingCycleID        = 3 ;            //原帐期ID
+    required int32   iCombineID                = 4 ;            //定价组合ID
+    required int32   iMeasureID                = 5 ;            //定价度量ID
+    required int32   iItemGroupID              = 6 ;            //计费帐目组ID
+    required int32   iInType                   = 7 ;            //输入对象类型
+    required int64   lInValue                  = 8 ;            //输入对象值
+    required int64   lValue                    = 9 ;            //原输入值
+    required int64   lDisctValue               = 10;            //原优惠值
+    required int64   lABMKeyID                 = 11;            //ABM主键
+    required int64   lVersionID                = 12;            //版本ID
+    repeated PbDisctDetailData DisctDetail     = 13;            //优惠明细
+    required int32   iOrgID                    = 14;       //200级本地网级
+    required int64   lCustID                   = 15;       //客户标识
+}
+
+//#define ABMCMD_OCS_AUDIT_QRY 39  //在线批价查询
+//#define ABMCMD_AUDIT_QRY 40  //离线批价查询
+//1.2.6 量本查询应答PB接口定义
+message PbAccuQryRlt {
+    repeated PbAuditEventQryData EventQryData       = 1 ;
+    repeated PbAuditDisctQryData DisctQryData       = 2 ;
+    repeated PbAuditUsageData    FlowQryData        = 3 ;
+    repeated PbAuditUsageData    PoolQryData        = 4 ;
+    repeated PbAuditUsageData    OfferQryData       = 5 ;
+}
+
+message PbEventHoldInfo {
+    optional int64  lOfferInstID            = 1 ;         //商品实例ID
+    optional int64  lMemberID               = 2 ;         //成员明细ID
+    required int64  lServID                 = 3 ;         //用户ID
+    optional int64  lCycleTypeID            = 4 ;         //周期类型ID
+    optional int64  lCycleBeginTime         = 5 ;         //开始时间，格式：20100813153848
+    optional int64  lCycleEndTime           = 6 ;         //结束时间，格式：20100813153848
+    required int64  lValue                  = 7 ;         //预留值
+    required int64  lABMKeyID               = 8 ;         //ABM主键 -1, ABM不存在，可选字段都必填
+    optional int64  lTotalValue             = 9 ;         //累积量总量值
+    required int64  lCustID                 = 10;         //路由字段，生成数据时采用的CustID
+    required int64  lRealServID             = 11;         //用户ID
+    optional string sSplitBy                = 12;         //[32]    拆分依据('ALL' 所有Where中不进行判断；其他精确匹配)
+    optional int32  iAccuTypeID             = 13;         //累积量类型ID
+    optional int32  iBillingCycleID         = 14;         //账期
+    required int32  iOrgID                  = 15;         //商品实例ID 订购对应的客户ID，在销售品订购表中
+}
+
+message PbDisctHoldInfo {
+    optional int64  lOfferInstID             = 1 ;         //商品实例ID 　  　
+    optional int64  lInValue                 = 2 ;         //输入对象值 　  　
+    required int64  lValue                   = 3 ;         //预留值 　  　
+    required int64  lDisctValue              = 4 ;         //优惠预留值 　  　
+    required int64  lABMKeyID                = 5 ;         //ABM主键    　  -1批价查询abm不存在, 传-1时其它字段必传　
+    optional int64  lTotalDisctValue         = 6 ;         //优惠总值   　  　保留字段
+    required int64  lRealServID              = 7 ;         //用户ID 　  
+    required int64  lCustID                  = 8 ;         //商品实例ID      订购对应的客户ID，在销售品订购表中 　  路由增加
+    optional int32  iBillingCycleID          = 9 ;         //帐期ID	　	　
+    optional int32  iOrgBillingCycleID       = 10;         //原帐期ID   　  　
+    optional int32  iCombineID               = 11;         //定价组合ID 　  　
+    optional int32  iMeasureID               = 12;         //定价度量ID 　  　
+    optional int32  iItemGroupID             = 13;         //计费帐目组ID   　  　
+    optional int32  iInType                  = 14;         //输入对象类型   　  　
+    required int32  iOrgID                   = 15;         //地区编码   　  路由增加
+}
+
+message PbUsageHoldInfo {
+    required int64  lUsageBalDetailID      = 1 ;         //优惠主键
+    required int64  lValue                 = 2 ;         //预留值
+    required int64  lCustID                = 3 ;         //路由字段，生成数据时采用的CustID
+    required int64  lRealServID            = 4 ;         //用户ID
+    required int32  iOrgID                 = 5 ;         //商品实例ID,订购对应的客户ID，在销售品订购表中
+    required bool   bIsPool                = 6 ;
+    required int32  iBillingCycleID        = 7 ;
+    required int32  iUseTypeID             = 8 ;
+}
+//历史欠费上载到ABM222
+message PbHisArrDetail{
+        required int64 lArrearsAmount  = 1;        //欠费金额
+        required int32 iBillingCycleId = 2;        //欠费账期
+        optional int64 lServId = 3;                //欠费用户，云南特性主要为账户级的 所以可选字段
+        optional uint32 uiAcctItemTypeID = 4;      //账目类型
+}
+message PbHistArrearsUp{
+        required int64 lAcctId = 1;                //账户ID
+        repeated PbHisArrDetail opbHistArrDel = 2;
+}
+//新增历史欠费查询接口 223
+//查询历史欠费请求接口
+message PbHisArrQryReq{
+	required int32 iDetailFlag = 1; // 1包含明细(账期、AcctItemTypeId) 2 不包含明细 只需返回总的历史欠费金额
+	required int64 lAcctID = 2;
+	optional int64 lServID = 3; //用户级输入serv_id
+}
+//明细
+message PbHisQryDetailRlt{
+	required int32 iBillingCycleId = 1;
+	required uint32 uiAcctItemTypeID = 2;
+	required int64 lHistArrAmt = 3;
+	optional int64 lServID = 4;
+}
+message PbHisArrQryRlt{
+	required int64 lHisArrAllAmt = 1;  //总的历史欠费金额
+	repeated PbHisQryDetailRlt opbHisDetail = 2; // 包含用户账期加acctitemtypeid
+}
+
+message PbAccuHoldInfo {
+//#define ABMCMD_AUDIT_HOLD 41  //累积量预留
+    repeated PbEventHoldInfo EventHoldInfo  = 1 ;
+    repeated PbDisctHoldInfo DisctHoldInfo  = 2 ;
+    repeated PbUsageHoldInfo UsageHoldInfo  = 3 ;
+}
+//云化累积量检查接口 
+message PbAccuCheckCmd{
+	required int32 iFlag = 1; //1 检查下个月用的量本s_balance字段是否清理干净  2 检查优惠累计是否清理干净 3 累积量失效超过2个月
+}
+
+message PbXlaInfoReqCmd{
+    required int32 iNodeGrpID               = 1;
+}
+
+message PbXlaInfo{
+    required string sBookMark               = 1;
+    required int32  iHoldLFN                = 2;
+    required string sBolInfo                = 3;      //格式："DBolName|DProgramID|DInstanceID"
+}
+
+message PbXlaInfoRlt{
+    repeated PbXlaInfo oPbXlaInfo           = 1;
+}
+
+message PbXlaInfoDelCmd{
+    required int32 iNodeGrpID               = 1;
+    repeated string sBookMark               = 2;
+}
+
+//余额简单处理的接口
+//入参
+message PbDeleteAcctItemHisIn {
+	required int32 iOrgID = 1;			//本地网标识
+}
+
+message PbHBSimpleInterfaceCmd {
+	required int32 iFlag = 1;	//操作类型：1.删除历史总账数据
+	repeated PbDeleteAcctItemHisIn oDeleteAcctItemHisIn = 2;
+}
+
+message PbDeleteAcctItemHisOut {
+	required int32 iOrgID = 1;			//本地网标识
+	required int32 iDelNumber = 2;			//删除条数
+}
+
+message PbHBSimpleInterfaceRlt {
+	required int32 iFlag = 1;	//操作类型
+	repeated PbDeleteAcctItemHisOut oDeleteAcctItemHisOut = 2;
+}
+
+message PbMgrCtrlTaskCmd {
+    required int32 iType  = 1; //操作类型
+    required string sBody = 2; //包体
+}
+
+message PbMgrCtrlTaskRlt {
+    required string sBody = 2;//包体
+}
+
+//性能测试
+message pbPropertyTestCmd {
+	repeated string sTestr =1;
+	required int32 iSizer =2 ;
+}
+
+message pbPropertyTestRlt {
+	repeated string sTesta =1;
+}
+
+message PBSpecialHBDeductCmd {
+        required int64 lAcctID = 1;
+        required int64 lServID = 2;
+        required int32 iBillingCycleID = 3;
+}
+
+message PBGetNumberNoDeductCmd {
+    required int32 iOrgID = 1;
+    required int32 iBillingCycleID = 2;
+}	
+
+message PBGetNumberNoDeduct {
+    required int32 iNoDeductNum = 1; 
+}
+
+message PBGetNumberNoDeductRlt {
+    repeated PBGetNumberNoDeduct NoDeductInfo = 1; 
+}
+

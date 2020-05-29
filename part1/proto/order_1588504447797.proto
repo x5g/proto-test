@@ -1,0 +1,276 @@
+syntax = "proto2";
+package pb;
+
+//beego orm 中使用orm:"-" 来去除字段
+//操作记录
+message operationRecord{
+    required int64 Id=1;
+    required int64 Time=2;
+    required int64 OperatorID=3;
+    required int64 TraderID=4;
+    required int64 TradingAccountID=5;
+    required int64 OrderDirection=6;
+    required int64 OrderQty=7;
+    required double OrderPrice=8;
+    required string Code=9;
+    required int64 BatchNo=10;
+    required int64 OrderNo=11;
+    required int64 FundAccountID=12;
+    required int64 ExternalNo=13;
+    required int64 OperateType=14;
+}
+
+message Order{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //更新时间
+   required  int64 UpdateTime=3;
+     //订单批号
+   required  int64 BatchNo=4;
+     //订单编号
+   required int64 OrderNo=5;
+     //外部编号
+   required  int64 ExternalNo=6;
+     //交易用户编码
+   required  int64 TraderID=7;
+     //交易账户编号
+   required  int64 TradingAccountID=8;
+     //代码
+   required  string Code=9;
+     //订单方向
+   required  int64 OrderDirection=10;
+     //订单价格
+   required  double OrderPrice=11;
+     //申报数量
+   required  int64 OrderReportQty=12;
+     //订单数量
+   required  int64 OrderQty=13;
+     //成交价格
+   required  double ExecutionPrice=14;
+     //成交数量
+   required  int64 ExecutionQty=15;
+     //撤单数量
+   required  int64 CancelQty=16;
+     //订单状态
+   required  int64 OrderStatus=17;
+     //全部费用
+   required  double AllFare=18;
+     //错误代码
+   required  int64 ErrorCode =19;
+
+}
+
+
+
+message SubOrderReturn{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //更新时间
+   required  int64 UpdateTime=3;
+     //订单批号
+   required  int64 BatchNo=4;
+     //真实订单委托号
+   required  int64 OrderNo=5;
+     //父订单号
+   required  int64 ParentOrderNo=6;
+     //交易用户编码
+   required  int64 TraderID=7;
+     //交易账户编号
+   required  int64 TradingAccountID=8;
+     //产品账户编码
+   required  int64 FundAccountID=9;
+     //代码
+   required string Code=10;
+     //订单方向
+   required  int64 OrderDirection=11;
+     //订单价格
+   required  double OrderPrice=12;
+     //订单数量
+   required  int64 OrderQty=13;
+     //成交价格
+   required  double ExecutionPrice=14;
+     //成交数量
+   required  int64 ExecutionQty=15;
+     //撤单数量
+   required  int64 CancelQty=16;
+     //订单状态
+   required  int64 OrderStatus=17;
+     //全部费用
+   required  double AllFare=18;
+     //错误代码
+   required  int64 ErrorCode =19;
+      //错误信息
+   required string ErrorMsg =20;
+}
+
+
+message OrderReturn{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //更新时间
+   required  int64 UpdateTime=3;
+     //订单批号
+   required  int64 BatchNo=4;
+     //订单编号
+   required int64 OrderNo=5;
+     //外部编号
+   required  int64 ExternalNo=6;
+     //交易用户编码
+   required  int64 TraderID=7;
+     //交易账户编号
+   required  int64 TradingAccountID=8;
+     //代码
+   required  string Code=9;
+     //订单方向
+   required  int64 OrderDirection=10;
+     //订单价格
+   required  double OrderPrice=11;
+     //申报数量
+   required  int64 OrderReportQty=12;
+     //订单数量
+   required  int64 OrderQty=13;
+     //成交价格
+   required  double ExecutionPrice=14;
+     //成交数量
+   required  int64 ExecutionQty=15;
+     //撤单数量
+   required  int64 CancelQty=16;
+     //订单状态
+   required  int64 OrderStatus=17;
+     //全部费用
+   required  double AllFare=18;
+     //错误代码
+   required  int64 ErrorCode =19;
+
+}
+
+
+
+message SubOrderReturn{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //更新时间
+   required  int64 UpdateTime=3;
+     //订单批号
+   required  int64 BatchNo=4;
+     //真实订单委托号
+   required  int64 OrderNo=5;
+     //父订单号
+   required  int64 ParentOrderNo=6;
+     //交易用户编码
+   required  int64 TraderID=7;
+     //交易账户编号
+   required  int64 TradingAccountID=8;
+     //产品账户编码
+   required  int64 FundAccountID=9;
+     //代码
+   required string Code=10;
+     //订单方向
+   required  int64 OrderDirection=11;
+     //订单价格
+   required  double OrderPrice=12;
+     //订单数量
+   required  int64 OrderQty=13;
+     //成交价格
+   required  double ExecutionPrice=14;
+     //成交数量
+   required  int64 ExecutionQty=15;
+     //撤单数量
+   required  int64 CancelQty=16;
+     //订单状态
+   required  int64 OrderStatus=17;
+     //错误代码
+   required  int64 ErrorCode =19;
+      //错误信息
+   required string ErrorMsg =20;
+}
+
+
+
+
+
+message OrderRequest{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //订单批号
+   required  int64 BatchNo=3;
+     //外部编号
+   required  int64 ExternalNo=4;
+     //交易用户编码
+   required  int64 TraderID=5;
+     //交易账户编号
+   required  int64 TradingAccountID=6;
+
+     //代码
+   required  string Code=7;
+     //订单方向
+   required  int64 OrderDirection=8;
+     //订单价格
+   required  double OrderPrice=9;
+     //订单数量
+   required  int64 OrderQty=10;
+   required int64 OperateType=11;
+    //产品账户编号
+    required int64 FundAccountID=12;
+    //操作者编号
+    required int64 OperatorID=13;
+
+}
+
+
+
+
+message SubOrderRequest{
+   required  int64 Id=1;
+     //申报时间
+   required  int64 ReportTime=2;
+     //订单批号
+   required  int64 BatchNo=3;
+     //父订单号
+   required  int64 ParentOrderNo=4;
+     //交易用户编码
+   required  int64 TraderID=5;
+     //交易账户编号
+   required  int64 TradingAccountID=6;
+     //产品账户编码
+   required  int64 FundAccountID=7;
+     //代码
+   required string Code=8;
+     //订单方向
+   required  int64 OrderDirection=9;
+     //订单价格
+   required  double OrderPrice=10;
+     //订单数量
+   required  int64 OrderQty=11;
+
+   required int64 OperateType=12;
+}
+
+
+message FundAccount{
+   required  int64 Id=1;
+   required  string Name=2;
+   required  string Desc=3; //描述
+   required  bool Enable=4; //是否启用
+}
+
+
+message TradingAccount{
+   required  int64 Id=1;
+   required  string Name=2;
+   required  bool Enable=3;
+}
+
+message TraderInfo{
+   required  int64 Id=1;
+   required  string Name=2;
+   required  double MaxLoss=3;//最大亏损
+   required  int64 MaxFunds=4; //最大单笔资金
+   required  int64 MaxQty=5; //最大单笔股数
+   required  bool Enable=6;
+}

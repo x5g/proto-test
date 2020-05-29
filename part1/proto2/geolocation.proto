@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package geo;
+
+message GeoLocation {
+  required int32 device = 1;
+  required float lat = 2;
+  required float lng = 3;
+}

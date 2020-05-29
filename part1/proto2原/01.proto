@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message M {
+    /*
+     * 可以使用 enum 定义枚举类型
+     */
+    enum E01 {
+        // 在 proto3 版本中，枚举的第一个成员的值必须是 0
+        // A = 1; // The first enum value must be zero in proto3.
+        A = 0;
+        B = 1;
+    }
+
+    E01 e01 = 1;
+}

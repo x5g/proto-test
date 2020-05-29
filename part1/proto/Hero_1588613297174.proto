@@ -1,0 +1,62 @@
+package com.gzyouai.mango.ro.cmd;
+
+//数组需要使用repeated前缀
+
+//获取英雄列表
+message heroGetAllReq {
+    
+}
+//已拥有英雄的数据
+message hDI {
+    required sint32 hid = 1;//英雄ID
+    optional sint32 hl = 2; //英雄等级
+    optional sint32 hs = 3;//星数
+	optional sint32 hf = 4; //英雄碎片数量
+    optional sint32 hst = 5;//英雄强化等级
+}
+//未拥有英雄的数据
+message hNHDI {
+    required sint32 hf = 1; //玩家当前英雄碎片
+    required sint32 hid = 2;//英雄种类ID
+}
+
+//更新英雄数据列表
+message heroDataList{
+    repeated hDI hd=1; //单个或数组
+}
+
+//获取英雄列表
+message heroGetAllResp{
+    repeated hDI hd=1;//已获取英雄数据数组
+    repeated hNHDI hnhd=2;//未获取英雄数据数组
+}
+
+//招募英雄
+message heroGetHeroReq{
+    required sint32 hid=1;//英雄ID
+}
+
+message heroGetHeroResp{
+
+}
+//强化
+message heroPlusReq{
+    required sint32 hid=1;//英雄ID
+}
+message heroPlusResp{
+}
+//升星
+message heroStarlevelUpReq{
+    required sint32 hid=1;//英雄ID
+}
+message heroStarlevelUpResp{
+}
+
+//英雄升级
+message heroLevelUpReq{
+    required sint32 hid=1;//英雄ID
+    required sint32 lut=2;//升级类型  0为普通升级 ，1为一键升级
+}
+message heroLevelUpResp{
+
+}

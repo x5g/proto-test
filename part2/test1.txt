@@ -1,0 +1,1272 @@
+0 /Users/chenzixuan/Desktop/proto/data2.proto
+------
+网页转换内容
+------
+message Room {  required string channel = 1;  required uint32 count = 2;}message Message {  enum Command {    None = 0;    Connect = 1;    Connected = 2;    Join = 3;    Joined = 4;    Leave = 5;    Talk = 6;    Talking = 7;    Talked = 8;    Voice = 9;  }  required Command cmd = 1 [default = None];  optional string channel = 2;  optional uint32 errno = 3;  optional uint32 count = 4;  optional bytes data = 5;  repeated Room room = 6;}
+------
+原定义文件内容
+------
+message Room {  required string channel = 1;  required uint32 count = 2;}message Message {  enum Command {    None = 0;    Connect = 1;    Connected = 2;    Join = 3;    Joined = 4;    Leave = 5;    Talk = 6;    Talking = 7;    Talked = 8;    Voice = 9;  }  required Command cmd = 1 [default = None];  optional string channel = 2;  optional uint32 errno = 3;  optional uint32 count = 4;  optional bytes data = 5;  repeated Room room = 6;}
+------
+√
+======
+1 /Users/chenzixuan/Desktop/proto/storage_messages.proto
+------
+网页转换内容
+------
+message StoreChunk {    string fileName = 1;    int32 chunkId = 2;    bytes data = 3;}message RetrieveFile {    string fileName = 4;}message StorageMessageWrapper {    oneof msg {        StoreChunk storeChunkMsg = 5;        RetrieveFile retrieveFileMsg = 6;    }}
+------
+原定义文件内容
+------
+message StoreChunk {    string fileName = 1;    int32 chunkId = 2;    bytes data = 3;}message RetrieveFile {    string fileName = 4;}message StorageMessageWrapper {    oneof msg {        StoreChunk storeChunkMsg = 5;        RetrieveFile retrieveFileMsg = 6;    }}
+------
+√
+======
+2 /Users/chenzixuan/Desktop/proto/tallMessage.proto
+------
+网页转换内容
+------
+message TestTallMessage {    required int32 count = 1;    required string data0 = 2;    required string data1 = 3;    required string data2 = 4;    required string data3 = 5;    required string data4 = 6;    required string data5 = 7;    required string data6 = 8;    required string data7 = 9;    required string data8 = 10;    required string data9 = 11;    required string data10 = 12;    required string data11 = 13;    required string data12 = 14;    required string data13 = 15;    required string data14 = 16;    required string data15 = 17;    required string data16 = 18;    required string data17 = 19;    required string data18 = 20;    required string data19 = 21;    required string data20 = 22;    required string data21 = 23;    required string data22 = 24;    required string data23 = 25;    required string data24 = 26;    required bool isFinal = 27;};
+------
+原定义文件内容
+------
+message TestTallMessage {    required int32 count = 1;    required string data0 = 2;    required string data1 = 3;    required string data2 = 4;    required string data3 = 5;    required string data4 = 6;    required string data5 = 7;    required string data6 = 8;    required string data7 = 9;    required string data8 = 10;    required string data9 = 11;    required string data10 = 12;    required string data11 = 13;    required string data12 = 14;    required string data13 = 15;    required string data14 = 16;    required string data15 = 17;    required string data16 = 18;    required string data17 = 19;    required string data18 = 20;    required string data19 = 21;    required string data20 = 22;    required string data21 = 23;    required string data22 = 24;    required string data23 = 25;    required string data24 = 26;    required bool isFinal = 27;};
+------
+√
+======
+3 /Users/chenzixuan/Desktop/proto/test6.proto
+------
+网页转换内容
+------
+enum FOO{    x = 0;};message UserInfo{    optional string message = 1;    optional int32 length = 2;    optional int32 cnt = 3;}
+------
+原定义文件内容
+------
+enum FOO{    x = 0;};message UserInfo{    optional string message = 1;    optional int32 length = 2;    optional int32 cnt = 3;}
+------
+√
+======
+4 /Users/chenzixuan/Desktop/proto/http.proto
+------
+网页转换内容
+------
+message HttpRequest {    uint32 major_version = 1;    uint32 minor_version = 2;    string url = 3;    string query_string = 4;    repeated StringStringPair headers = 5;    bytes body = 6;    reserved 7;    reserved "urlencoded_form";    reserved 8;    reserved "multipart_form";}message StringStringPair {    string first = 1;    string second = 2;}
+------
+原定义文件内容
+------
+message HttpRequest {    uint32 major_version = 1;    uint32 minor_version = 2;    string url = 3;    string query_string = 4;    repeated StringStringPair headers = 5;    bytes body = 6;    reserved 7;    reserved "urlencoded_form";    reserved 8;    reserved "multipart_form";}message StringStringPair {    string first = 1;    string second = 2;}
+------
+√
+======
+5 /Users/chenzixuan/Desktop/proto/demo2.proto
+------
+网页转换内容
+------
+message PersonMsg {  string firstName = 1;  string lastName = 2;  int32 id = 3;  string email = 4;  enum Employee {    DEVELOPER  = 0;    QA = 1;    MANAGER = 2;  }  message Department {    string departmentName =1;  }   Employee emp = 5;  Department department = 6;}
+------
+原定义文件内容
+------
+message PersonMsg {  string firstName = 1;  string lastName = 2;  int32 id = 3;  string email = 4;  enum Employee {    DEVELOPER  = 0;    QA = 1;    MANAGER = 2;  }  message Department {    string departmentName =1;  }   Employee emp = 5;  Department department = 6;}
+------
+√
+======
+6 /Users/chenzixuan/Desktop/proto/complex.proto
+------
+网页转换内容
+------
+message ComplexMessage {    DummyMessage one_dummy = 2;    repeated DummyMessage multiple_dummy = 3;}message DummyMessage {    int32 id = 1;    string name = 2;}
+------
+原定义文件内容
+------
+message ComplexMessage {    DummyMessage one_dummy = 2;    repeated DummyMessage multiple_dummy = 3;}message DummyMessage {    int32 id = 1;    string name = 2;}
+------
+√
+======
+7 /Users/chenzixuan/Desktop/proto/oneoftest.proto
+------
+网页转换内容
+------
+message OneKind {  string value = 1;}message AnotherKind {  string value = 2;}message DemoBrokenCbor {    oneof payload {      OneKind one_kind = 1;      AnotherKind another_kind = 2;    }}
+------
+原定义文件内容
+------
+message OneKind {  string value = 1;}message AnotherKind {  string value = 2;}message DemoBrokenCbor {    oneof payload {      OneKind one_kind = 1;      AnotherKind another_kind = 2;    }}
+------
+√
+======
+8 /Users/chenzixuan/Desktop/proto/PersonProto.proto
+------
+网页转换内容
+------
+message PersonProto {    string firstName = 1;    string lastName = 2;    string emailAddress = 3;    string homeAddress = 4;    repeated PhoneNumber phoneNumbers = 5;    message PhoneNumber {        int32 areaCode = 1;        int32 phoneNumber = 2;    }}
+------
+原定义文件内容
+------
+message PersonProto {    string firstName = 1;    string lastName = 2;    string emailAddress = 3;    string homeAddress = 4;    repeated PhoneNumber phoneNumbers = 5;    message PhoneNumber {        int32 areaCode = 1;        int32 phoneNumber = 2;    }}
+------
+√
+======
+9 /Users/chenzixuan/Desktop/proto/testP.proto
+------
+网页转换内容
+------
+message TestMessage {	required uint64 id = 1;	optional string name = 2;	optional uint32 sex = 3 [default = 10];   //为optional 字段指定默认值	enum Corpus {    UNIVERSAL = 0;    WEB = 1;    IMAGES = 2;    LOCAL = 3;    NEWS = 4;    PRODUCTS = 5;    VIDEO = 6;  }   optional Corpus corpus = 4 [default = UNIVERSAL];	optional a1 tt = 5;}enum a1 {	a = 1;	b = 2;	c = 3;}message SearchRequest {  required string query = 1;  optional int32 page_number = 2;  optional int32 result_per_page = 3;  optional SearchResponse sr = 4;}message SearchResponse {}
+------
+原定义文件内容
+------
+message TestMessage {	required uint64 id = 1;	optional string name = 2;	optional uint32 sex = 3 [default = 10];   //为optional 字段指定默认值	enum Corpus {    UNIVERSAL = 0;    WEB = 1;    IMAGES = 2;    LOCAL = 3;    NEWS = 4;    PRODUCTS = 5;    VIDEO = 6;  }   optional Corpus corpus = 4 [default = UNIVERSAL];	optional a1 tt = 5;}enum a1 {	a = 1;	b = 2;	c = 3;}message SearchRequest {  required string query = 1;  optional int32 page_number = 2;  optional int32 result_per_page = 3;  optional SearchResponse sr = 4;}message SearchResponse {}
+------
+√
+======
+10 /Users/chenzixuan/Desktop/proto/test4.proto
+------
+网页转换内容
+------
+enum FOO {  BAR = 1;}message Test {  required float num  = 1;  required string payload = 2;  optional string payloads = 3;}message AnotherOne {  repeated FOO list = 1;}
+------
+原定义文件内容
+------
+enum FOO {  BAR = 1;}message Test {  required float num  = 1;  required string payload = 2;  optional string payloads = 3;}message AnotherOne {  repeated FOO list = 1;}
+------
+√
+======
+11 /Users/chenzixuan/Desktop/proto/twist.proto
+------
+网页转换内容
+------
+message Vector3{  double x = 1;  double y = 2;  double z = 3;}message Twist{  Vector3 linear = 1;  Vector3 angular = 2;}
+------
+原定义文件内容
+------
+message Vector3{  double x = 1;  double y = 2;  double z = 3;}message Twist{  Vector3 linear = 1;  Vector3 angular = 2;}
+------
+√
+======
+12 /Users/chenzixuan/Desktop/proto/HotMessage.proto
+------
+网页转换内容
+------
+message Message {	int32 msgType = 1;	bytes msg = 2;	bool agree = 3;}
+------
+原定义文件内容
+------
+message Message {	int32 msgType = 1;	bytes msg = 2;	bool agree = 3;}
+------
+√
+======
+13 /Users/chenzixuan/Desktop/proto/demo.proto
+------
+网页转换内容
+------
+message Peticion {    int32 id = 1;    string user = 2;    string password = 3;    string product = 4;    float amount = 5;    string account = 6;    int64 date = 7;}message Respuesta {    int32 id = 1;    int32 rcode = 2;    oneof resultado {        string error = 3;        int32 confirmacion = 4;    }}
+------
+原定义文件内容
+------
+message Peticion {    int32 id = 1;    string user = 2;    string password = 3;    string product = 4;    float amount = 5;    string account = 6;    int64 date = 7;}message Respuesta {    int32 id = 1;    int32 rcode = 2;    oneof resultado {        string error = 3;        int32 confirmacion = 4;    }}
+------
+√
+======
+14 /Users/chenzixuan/Desktop/proto/simple.proto
+------
+网页转换内容
+------
+message SimpleMessage {  int32 id = 1;  bool is_simple = 2;  string name = 3;  repeated int32 sample_list = 4;}
+------
+原定义文件内容
+------
+message SimpleMessage {  int32 id = 1;  bool is_simple = 2;  string name = 3;  repeated int32 sample_list = 4;}
+------
+√
+======
+15 /Users/chenzixuan/Desktop/proto/TimeSchema.proto
+------
+网页转换内容
+------
+message TimeStamp {    required string Time = 1;    required uint64 Tick = 2;}message HeartMsg {    required uint32 Tick = 1;    optional uint64 UID = 2 [default = 0];}message BroadMsg {    required string Title = 1;    required string Message = 2;    optional uint64 TimeStamp = 3 [default = 0];}message PkgHead {    required CmdActions Cmd = 1 [default = CMD_HEART];    required uint32 CmdType = 2;    required uint32 CmdSeq = 3;    required uint32 SrcID = 4;    required uint32 DstID = 5;    required uint64 UID = 6;}message PkgBody {    oneof Body {        TimeStamp Time = 1;        HeartMsg Heart = 2;        BroadMsg Info = 3;    };}enum CmdActions {  CMD_UNKNOWN = 0;  CMD_TIME = 1;  CMD_HEART = 2;  CMD_BROAD = 3;}message CltSvrPkg {    required PkgHead Head = 1;    required PkgBody Data = 2;}
+------
+原定义文件内容
+------
+message TimeStamp {    required string Time = 1;    required uint64 Tick = 2;}message HeartMsg {    required uint32 Tick = 1;    optional uint64 UID = 2 [default = 0];}message BroadMsg {    required string Title = 1;    required string Message = 2;    optional uint64 TimeStamp = 3 [default = 0];}message PkgHead {    required CmdActions Cmd = 1 [default = CMD_HEART];    required uint32 CmdType = 2;    required uint32 CmdSeq = 3;    required uint32 SrcID = 4;    required uint32 DstID = 5;    required uint64 UID = 6;}message PkgBody {    oneof Body {        TimeStamp Time = 1;        HeartMsg Heart = 2;        BroadMsg Info = 3;    };}enum CmdActions {  CMD_UNKNOWN = 0;  CMD_TIME = 1;  CMD_HEART = 2;  CMD_BROAD = 3;}message CltSvrPkg {    required PkgHead Head = 1;    required PkgBody Data = 2;}
+------
+√
+======
+16 /Users/chenzixuan/Desktop/proto/anthor.proto
+------
+网页转换内容
+------
+message Author{	int32 id = 1;	string Name = 2;    repeated Book books = 3;}enum BookType{    EBOOK = 0;    PAPER = 1;}message Book{    reserved 2;    int32 id = 1;    BookType type = 3;    string name = 5;}
+------
+原定义文件内容
+------
+message Author{	int32 id = 1;	string Name = 2;    repeated Book books = 3;}enum BookType{    EBOOK = 0;    PAPER = 1;}message Book{    reserved 2;    int32 id = 1;    BookType type = 3;    string name = 5;}
+------
+√
+======
+17 /Users/chenzixuan/Desktop/proto/OrderInfo.proto
+------
+网页转换内容
+------
+message OrderInfo {	string orderId = 1;	string userId = 2;	double orderPrice = 3;	double deliveryPrice = 4;	double discountPrice = 5;	string orderDatetime = 6;	string payMethod = 7;	string payDatetime = 8;	string deliveryMethod = 9;	string receiverName = 10;	string receiverAddress = 11;	string receiverPhone = 12;	string remark = 99;}
+------
+原定义文件内容
+------
+message OrderInfo {	string orderId = 1;	string userId = 2;	double orderPrice = 3;	double deliveryPrice = 4;	double discountPrice = 5;	string orderDatetime = 6;	string payMethod = 7;	string payDatetime = 8;	string deliveryMethod = 9;	string receiverName = 10;	string receiverAddress = 11;	string receiverPhone = 12;	string remark = 99;}
+------
+√
+======
+18 /Users/chenzixuan/Desktop/proto/people.proto
+------
+网页转换内容
+------
+message People {    required string name = 1;    required int32 id = 2;    required string email = 3;}
+------
+原定义文件内容
+------
+message People {    required string name = 1;    required int32 id = 2;    required string email = 3;}
+------
+√
+======
+19 /Users/chenzixuan/Desktop/proto/employee.proto
+------
+网页转换内容
+------
+service Employee {  rpc getDetails (EmployeeRequest) returns (EmployeeResponse) {}}message EmployeeRequest {  int32 id = 1;}message EmployeeResponse{  EmployeeDetails message = 1;}message EmployeeDetails {  int32 id = 1;  string email = 2;  string firstName = 3;  string lastName = 4;}
+------
+原定义文件内容
+------
+service Employee {  rpc getDetails (EmployeeRequest) returns (EmployeeResponse) {}}message EmployeeRequest {  int32 id = 1;}message EmployeeResponse{  EmployeeDetails message = 1;}message EmployeeDetails {  int32 id = 1;  string email = 2;  string firstName = 3;  string lastName = 4;}
+------
+√
+======
+20 /Users/chenzixuan/Desktop/proto/product.proto
+------
+网页转换内容
+------
+message Product {    string ID = 1;    string Name = 2;    uint64 Quantity = 3;    repeated string Images = 4;}message ProductList {    repeated Product Products = 1;}
+------
+原定义文件内容
+------
+message Product {    string ID = 1;    string Name = 2;    uint64 Quantity = 3;    repeated string Images = 4;}message ProductList {    repeated Product Products = 1;}
+------
+√
+======
+21 /Users/chenzixuan/Desktop/proto/demo4.proto
+------
+网页转换内容
+------
+message Student   {      required int32 age = 1; //ID　required 表示必要字段      required string name = 2; //str　必要字段      optional int32 grade = 3 ; //optional field　可选字段，可以有无，最多ｂ   }message WorkDay{    required bool isworker =1;    required bool isjiaban =2; //是否算加班}message Teacher{    required string name = 1 ;    required WorkDay work = 2;  //是否工作    optional int32  age = 3;}message Class{       required string name = 1;   //班级名称       repeated Student stu = 2;    //班级成员 数组       repeated Teacher teacher=3;}
+------
+原定义文件内容
+------
+message Student   {      required int32 age = 1; //ID　required 表示必要字段      required string name = 2; //str　必要字段      optional int32 grade = 3 ; //optional field　可选字段，可以有无，最多ｂ   }message WorkDay{    required bool isworker =1;    required bool isjiaban =2; //是否算加班}message Teacher{    required string name = 1 ;    required WorkDay work = 2;  //是否工作    optional int32  age = 3;}//班级message Class{       required string name = 1;   //班级名称       repeated Student stu = 2;    //班级成员 数组       repeated Teacher teacher=3;}
+------
+×
+======
+22 /Users/chenzixuan/Desktop/proto/transaction.proto
+------
+网页转换内容
+------
+message CompletedTransaction {    string transaction_reference = 1;    Money amount = 2;    Account debit_account = 3;    Account credit_account = 4;    string description = 5;    TransactionStatus status = 6;}message Money {    Currency currency_code = 1;    sint64 value = 2;}message Account {    AccountType accountType = 1;    string account_identifier = 2;}enum AccountType {    ACCOUNT_TYPE_UNKNOWN = 0;    PAYTM_WALLET = 1;    UPI_ID = 2;    CREDIT_CARD = 3;    INTERNAL_ACCOUNT = 4;}enum Currency {    CURRENCY_UNKNOWN = 0;    CURRENCY_USD = 1;    CURRENCY_INR = 2;}enum TransactionStatus {    STATUS_UNKNOWN = 0;    INITIATED = 1;    BANK_FAILURE = 2;    SUCCESS = 3;    SUSPECT = 4;}
+------
+原定义文件内容
+------
+message CompletedTransaction {    string transaction_reference = 1;    Money amount = 2;    Account debit_account = 3;    Account credit_account = 4;    string description = 5;    TransactionStatus status = 6;}message Money {    Currency currency_code = 1;    sint64 value = 2;}message Account {    AccountType accountType = 1;    string account_identifier = 2;}enum AccountType {    ACCOUNT_TYPE_UNKNOWN = 0;    PAYTM_WALLET = 1;    UPI_ID = 2;    CREDIT_CARD = 3;    INTERNAL_ACCOUNT = 4;}enum Currency {    CURRENCY_UNKNOWN = 0;    CURRENCY_USD = 1;    CURRENCY_INR = 2;}enum TransactionStatus {    STATUS_UNKNOWN = 0;    INITIATED = 1;    BANK_FAILURE = 2;    SUCCESS = 3;    SUSPECT = 4;}
+------
+√
+======
+23 /Users/chenzixuan/Desktop/proto/book.proto
+------
+网页转换内容
+------
+message Publisher {    string name = 1;}message Book {    string name = 1;    message Author {        string name = 1;        string address = 2;    }    Author author = 2;    enum BookType {        SCIENCE = 0;        LITERATURE = 1;    }    BookType type = 3;    Publisher publisher = 4;}
+------
+原定义文件内容
+------
+message Publisher {    string name = 1;}message Book {    string name = 1;    message Author {        string name = 1;        string address = 2;    }    Author author = 2;    enum BookType {        SCIENCE = 0;        LITERATURE = 1;    }    BookType type = 3;    Publisher publisher = 4;}
+------
+√
+======
+24 /Users/chenzixuan/Desktop/proto/demo6.proto
+------
+网页转换内容
+------
+enum Status {  UNKNOWN = 0;  SUCCESS = 200;  REQUEST_INVALID = 400;  UNAUTHORIZED = 401;  FORBBIDEN = 403;  SERVER_ERROR = 500;}enum RequestType {  NORMAL = 0;  ASYNC = 1;  BATCH = 2;  ASYNC_BATCH = 3;}message Request {  string endpoint = 1;  RequestType requestType = 2;  string token = 3;  map<string, string> params = 4;  string body = 5;}message Response {  Status status = 101;  string body = 103;}
+------
+原定义文件内容
+------
+enum Status {  UNKNOWN = 0;  SUCCESS = 200;  REQUEST_INVALID = 400;  UNAUTHORIZED = 401;  FORBBIDEN = 403;  SERVER_ERROR = 500;}enum RequestType {  NORMAL = 0;  ASYNC = 1;  BATCH = 2;  ASYNC_BATCH = 3;}message Request {  string endpoint = 1;  RequestType requestType = 2;  string token = 3;  map<string, string> params = 4;  string body = 5;}message Response {  Status status = 101;  string body = 103;}
+------
+√
+======
+25 /Users/chenzixuan/Desktop/proto/test2.proto
+------
+网页转换内容
+------
+message Test {    int32 x = 1;	int32 y = 2;}
+------
+原定义文件内容
+------
+message Test {    int32 x = 1;	int32 y = 2;}
+------
+√
+======
+26 /Users/chenzixuan/Desktop/proto/notification.proto
+------
+网页转换内容
+------
+message NotificationDTO {    string message = 1;    string sentAt = 2;}
+------
+原定义文件内容
+------
+message NotificationDTO {    string message = 1;    string sentAt = 2;}
+------
+√
+======
+27 /Users/chenzixuan/Desktop/proto/Rule.proto
+------
+网页转换内容
+------
+message Rule {    string name = 1;    string description = 2;    int32 priority = 3;    string condition = 4;    string action = 5;}
+------
+原定义文件内容
+------
+message Rule {    string name = 1;    string description = 2;    int32 priority = 3;    string condition = 4;    string action = 5;}
+------
+√
+======
+28 /Users/chenzixuan/Desktop/proto/awesome.proto
+------
+网页转换内容
+------
+message AwesomeMessage {    string awesome_field = 1; // becomes awesomeField}
+------
+原定义文件内容
+------
+message AwesomeMessage {    string awesome_field = 1; // becomes awesomeField}
+------
+√
+======
+29 /Users/chenzixuan/Desktop/proto/test5.proto
+------
+网页转换内容
+------
+message HelloRequest {  string username = 1;}message HelloResponse {  string message = 1;}service HelloService {  rpc SayHello(HelloRequest) returns (HelloResponse){}  rpc SayBye(HelloRequest) returns (HelloResponse){}}
+------
+原定义文件内容
+------
+message HelloRequest {  string username = 1;}message HelloResponse {  string message = 1;}service HelloService {  rpc SayHello(HelloRequest) returns (HelloResponse){}  rpc SayBye(HelloRequest) returns (HelloResponse){}}
+------
+√
+======
+30 /Users/chenzixuan/Desktop/proto/echo.proto
+------
+网页转换内容
+------
+message EchoRequest {    string name = 1;}message EchoResponse {    string message = 1;}
+------
+原定义文件内容
+------
+message EchoRequest {    string name = 1;}message EchoResponse {    string message = 1;}
+------
+√
+======
+31 /Users/chenzixuan/Desktop/proto/player.proto
+------
+网页转换内容
+------
+message Player {  string id = 1;  string name = 2;  repeated int32 scores = 3;}message Players {  repeated Player players = 1;}
+------
+原定义文件内容
+------
+message Player {  string id = 1;  string name = 2;  repeated int32 scores = 3;}message Players {  repeated Player players = 1;}
+------
+√
+======
+32 /Users/chenzixuan/Desktop/proto/Account.proto
+------
+网页转换内容
+------
+service AccountService {  rpc GetEmployeeName (EmployeeNameRequest) returns (EmployeeName);}message EmployeeNameRequest {  string emp_id = 1;}message EmployeeName {  string first_name = 1;  string last_name = 2;}
+------
+原定义文件内容
+------
+service AccountService {  rpc GetEmployeeName (EmployeeNameRequest) returns (EmployeeName);}message EmployeeNameRequest {  string emp_id = 1;}message EmployeeName {  string first_name = 1;  string last_name = 2;}
+------
+√
+======
+33 /Users/chenzixuan/Desktop/proto/MessageData.proto
+------
+网页转换内容
+------
+message MessageData {	SysHeader sysHeader = 1;//定义第1个属性，SysHeader类型	bytes content = 2;//定义第2个属性，字节数组类型}message SysHeader {	string bizSeqNo = 1;	string sysSeqNo = 2;	string ip = 3;	string userId = 4;	int32 version = 5;	string channelId = 6;	string origSysId = 7;	string prevSysId = 8;}
+------
+原定义文件内容
+------
+message MessageData {	SysHeader sysHeader = 1;//定义第1个属性，SysHeader类型	bytes content = 2;//定义第2个属性，字节数组类型}message SysHeader {	string bizSeqNo = 1;	string sysSeqNo = 2;	string ip = 3;	string userId = 4;	int32 version = 5;	string channelId = 6;	string origSysId = 7;	string prevSysId = 8;}
+------
+√
+======
+34 /Users/chenzixuan/Desktop/proto/yages-schema.proto
+------
+网页转换内容
+------
+message Empty {}message Content {  string text = 1;}service Echo {  rpc Ping(Empty) returns (Content) {}  rpc Reverse(Content) returns (Content) {}}
+------
+原定义文件内容
+------
+syntax = "proto3";package yages;// Empty is the null value for parameters.message Empty {}// Content is the payload used in YAGES services.message Content {  string text = 1;}// The echo YAGES service replies with the message it received.service Echo {  rpc Ping(Empty) returns (Content) {}  rpc Reverse(Content) returns (Content) {}}
+------
+×
+======
+35 /Users/chenzixuan/Desktop/proto/CompanyProto.proto
+------
+网页转换内容
+------
+message Compay{//公司    int32 id=1;//ID    string name=2;//公司名    string address=3;//公司地址    string website=4;//公司网址    repeated string contact=5;//公司联系电话    enum TYPE{//公司类型，枚举编号必需从0开始        PRIVATE = 0;//私企        STATE = 1;//国营        LISTED = 2;//上市        STARTUP = 3;//创业        FOREIGN = 4;//外资        JOINT = 5;//合资    }    TYPE type=6;    repeated Staff staffs=7;}message Staff{//员工    int32 id=1;//ID    string userName=2;//姓名    enum SEX{        OTHER=0;        MALE=1;        FEMALE=2;    }    SEX sex=3;//性别    int32 age=4;//年龄    string job=5;//职位    string department=6;//部门    repeated string phoneNums=7;//联系电话}
+------
+原定义文件内容
+------
+message Compay{//公司    int32 id=1;//ID    string name=2;//公司名    string address=3;//公司地址    string website=4;//公司网址    repeated string contact=5;//公司联系电话    enum TYPE{//公司类型，枚举编号必需从0开始        PRIVATE = 0;//私企        STATE = 1;//国营        LISTED = 2;//上市        STARTUP = 3;//创业        FOREIGN = 4;//外资        JOINT = 5;//合资    }    TYPE type=6;    repeated Staff staffs=7;}message Staff{//员工    int32 id=1;//ID    string userName=2;//姓名    enum SEX{        OTHER=0;        MALE=1;        FEMALE=2;    }    SEX sex=3;//性别    int32 age=4;//年龄    string job=5;//职位    string department=6;//部门    repeated string phoneNums=7;//联系电话}
+------
+√
+======
+36 /Users/chenzixuan/Desktop/proto/demo3.proto
+------
+网页转换内容
+------
+message Demo{    int32 id = 1;    string value = 2;    repeated string likes = 3;    enum Color{        reserved "BLACK","WHITE";        reserved 3,4,5;        RED = 0;        BLUE = 7;    }    message DemoMessage{        Color color = 1;        int32 messageData = 2;    }}
+------
+原定义文件内容
+------
+syntax = "proto3";// 生成的包名option java_package = "com.demo.protobuf";// 生成的类名option java_outer_classname = "DemoProtoBuf";message Demo{    // 每个字段必须要有编号，并且不允许重复    /*      字段修饰符(proto2)      1 required 该字段必须设置(即初始化一条消息的时候，该字段必须赋值，不设置会报错)      2 optional 该字段是可选设置(可以设置默认值[default = xxx设置])，如果没有显示的设置默认值      并且该字段没有设置值，则会使用该默认值      3 repeate  表示该字段可以 有多个值，一般会被编译为集合类或者数组     字段修饰符(proto3)proto3 里面取消了 required 修饰符，并且将optional 改名为singular      1 singular  字段可以出现0 次或者1次。最多不能超过1 次      2 repeated 可以重复任意次数包括0    */    // 默认就是singular  最多出现1次    int32 id = 1;    string value = 2;    // 可以 出现 0 次 1 次 多次    repeated string likes = 3;    // 枚举类字段编号必须以0开头    //    enum Sex  {    //    MAN = 0;    //    WOMAN = 1;    //    }    // 枚举的 allow_alias（允许别名）    // 即允许两个不同枚举的名字，表示同一个东西。他们只是名字不同，实际代表的是用一个东西。    //    enum Animal{    //       option allow_alias = true;    //        PIG = 0;    //        DOG = 1;    //        BIGDOG = 1;    //    }    // 保留值    // 功能:设置一些不可以被定义的值，即保留不允许被使用 （reserved）    // 1 指定 保留字段编号    // 2 指定 保留字段名    enum Color{        // 保留字段 BLACK  WHITE 不允许被再定义        reserved "BLACK","WHITE";        // 保留编号  3 4 5 不允许再被定义        reserved 3,4,5;        RED = 0;        // 字段编号4 和 BLACK 已经被reserved 不能再被定义，编译报错(reserved 的作用)        // BLUE = 4;        // BLACK = 8;        BLUE = 7;    }    // 枚举类一般配合其它消息类型使用    //  message 里面的字段不能从0开始,    //并且proto3 里面舍弃了default，即不能设置default    message DemoMessage{        Color color = 1;        int32 messageData = 2;    }}
+------
+×
+======
+37 /Users/chenzixuan/Desktop/proto/protobuf.proto
+------
+网页转换内容
+------
+message TheMsg {  string name = 1;  int32 num = 2;}
+------
+原定义文件内容
+------
+message TheMsg {  string name = 1;  int32 num = 2;}
+------
+√
+======
+38 /Users/chenzixuan/Desktop/proto/calendar.proto
+------
+网页转换内容
+------
+service Calendar {  rpc AddEvent(Event) returns (EventAdded) {}  rpc ShowEvents(EventRange) returns (stream Event) {}}message Event {  string name = 1;  string date = 2;  bool recurring = 3;}message EventAdded {  bool added = 1;}message EventRange {  string from = 1;  string to = 2;}
+------
+原定义文件内容
+------
+service Calendar {  rpc AddEvent(Event) returns (EventAdded) {}  rpc ShowEvents(EventRange) returns (stream Event) {}}message Event {  string name = 1;  string date = 2;  bool recurring = 3;}message EventAdded {  bool added = 1;}message EventRange {  string from = 1;  string to = 2;}
+------
+√
+======
+39 /Users/chenzixuan/Desktop/proto/test3.proto
+------
+网页转换内容
+------
+message Message {	int32 ID   = 1;      // 消息ID	bytes MSG  = 2;	  // 消息内容Bytes(Protobuff)}message Login {	  string SID 		= 1;			//  SessionID	  int32 RID 		= 2;			//	  float GPS_LNG   	= 3;			//  经度	  float GPS_LAT   	= 4;			//  纬度	  string openid 	= 5;	  string token      = 6;}
+------
+原定义文件内容
+------
+syntax = "proto3";package Test;message Message {	int32 ID   = 1;      // 消息ID	bytes MSG  = 2;	  // 消息内容Bytes(Protobuff)}//登录信息  MsgID : 100message Login {	  string SID 		= 1;			//  SessionID	  int32 RID 		= 2;			//	  float GPS_LNG   	= 3;			//  经度	  float GPS_LAT   	= 4;			//  纬度	  string openid 	= 5;	  string token      = 6;}
+------
+×
+======
+40 /Users/chenzixuan/Desktop/proto/demo7.proto
+------
+网页转换内容
+------
+message B {  optional string b2 = 2;}message A {  repeated B b = 1;  optional string id = 2;}
+------
+原定义文件内容
+------
+syntax = "proto2";message B {  optional string b2 = 2;}message A {  repeated B b = 1;  optional string id = 2;}
+------
+√
+======
+41 /Users/chenzixuan/Desktop/proto/socket.proto
+------
+网页转换内容
+------
+message Socket {    string request_field = 1; // becomes requestField    string receive_field = 2; // becomes receiveField}
+------
+原定义文件内容
+------
+message Socket {    string request_field = 1; // becomes requestField    string receive_field = 2; // becomes receiveField}
+------
+√
+======
+42 /Users/chenzixuan/Desktop/proto/fight.proto
+------
+网页转换内容
+------
+message StartFight{	  int32 errorCode = 1;	  float version = 2;}message FightResult{	  string name = 1;	  string content = 2;}message EnterFight{	  string name = 1;	  string content = 2;}
+------
+原定义文件内容
+------
+message StartFight{	  int32 errorCode = 1;	  float version = 2;}message FightResult{	  string name = 1;	  string content = 2;}message EnterFight{	  string name = 1;	  string content = 2;}
+------
+√
+======
+43 /Users/chenzixuan/Desktop/proto/spirits.proto
+------
+网页转换内容
+------
+service SpiritService {    rpc CreateSpirit (SpiritCreationRequest) returns (SpiritCreationResponse) {}    rpc UpdateSpirit (SpiritUpdateRequest) returns (SpiritUpdateResponse) {}    rpc DeleteSpirit (SpiritDeleteRequest) returns (SpiritDeleteResponse) {}    rpc SearchSpirit (SpiritSearchRequest) returns (stream SpiritSearchResponse) {}}message Spirit {    enum SpiritType {        TypeUnspecified = 0;        TypeRhum = 1;        TypeWine = 2;        TypeWhisky = 3;        TypeChampagne = 4;        TypeGin = 5;        TypeBeer = 6;    }    string Id = 1;    string Name = 2;    string Distiller = 3;    string Bottler = 4;    string Country = 5;    string Region = 6;    string Composition = 7;    SpiritType type = 8;    int32 Age = 9;    int64 BottlingDate = 10;    float Score = 11;    string Comment = 12;}message SpiritCreationRequest {    Spirit spirit = 1;}message SpiritUpdateRequest {    Spirit spirit = 1;}message SpiritDeleteRequest {    Spirit spirit = 1;}message SpiritSearchRequest {    Spirit spirit = 1;}message SpiritCreationResponse {    Spirit spirit = 1;}message SpiritUpdateResponse {    Spirit spirit = 1;}message SpiritDeleteResponse {    bool deleted = 1;}message SpiritSearchResponse {    repeated Spirit spirit = 1;}
+------
+原定义文件内容
+------
+service SpiritService {     rpc CreateSpirit (SpiritCreationRequest) returns (SpiritCreationResponse) {}    rpc UpdateSpirit (SpiritUpdateRequest) returns (SpiritUpdateResponse) {}    rpc DeleteSpirit (SpiritDeleteRequest) returns (SpiritDeleteResponse) {}    rpc SearchSpirit (SpiritSearchRequest) returns (stream SpiritSearchResponse) {}}message Spirit {    enum SpiritType {        TypeUnspecified = 0;        TypeRhum = 1;        TypeWine = 2;        TypeWhisky = 3;        TypeChampagne = 4;        TypeGin = 5;        TypeBeer = 6;    }    string Id = 1;    string Name = 2;    string Distiller = 3;    string Bottler = 4;    string Country = 5;    string Region = 6;    string Composition = 7;    SpiritType type = 8;    int32 Age = 9;    int64 BottlingDate = 10;    float Score = 11;    string Comment = 12;}message SpiritCreationRequest {    Spirit spirit = 1;}message SpiritUpdateRequest {    Spirit spirit = 1;}message SpiritDeleteRequest {    Spirit spirit = 1;}message SpiritSearchRequest {    Spirit spirit = 1;}message SpiritCreationResponse {    Spirit spirit = 1;}message SpiritUpdateResponse {    Spirit spirit = 1;}message SpiritDeleteResponse {    bool deleted = 1;}message SpiritSearchResponse {    repeated Spirit spirit = 1;}
+------
+×
+======
+44 /Users/chenzixuan/Desktop/proto/UDP.proto
+------
+网页转换内容
+------
+message Update {    int32 id = 1;    string text = 2;}
+------
+原定义文件内容
+------
+message Update {    int32 id = 1;    string text = 2;}
+------
+√
+======
+45 /Users/chenzixuan/Desktop/proto/demo5.proto
+------
+网页转换内容
+------
+message Demo {  string query = 1;  int32 number = 2;}
+------
+原定义文件内容
+------
+syntax = "proto3";message Demo {  string query = 1;  int32 number = 2;}
+------
+√
+======
+46 /Users/chenzixuan/Desktop/proto/product2.proto
+------
+网页转换内容
+------
+message Product {    string ID = 1;    string Name = 2;    uint64 Quantity = 3;    repeated string Images = 4;}message ProductList {    repeated Product Products = 1;}
+------
+原定义文件内容
+------
+message Product {    string ID = 1;    string Name = 2;    uint64 Quantity = 3;    repeated string Images = 4;}message ProductList {    repeated Product Products = 1;}
+------
+√
+======
+47 /Users/chenzixuan/Desktop/proto/student.proto
+------
+网页转换内容
+------
+message MyMessage{enum DataType{    StudentType = 1;    DogType = 2;    CatType = 3;}required DataType data_type = 1;oneof dataBody{    Student student = 2;    Dog dog = 3;    Cat cat = 4;}}message Student{    optional string name = 1;    optional int32 age = 2;    optional string address = 3;}message Dog{    optional string name = 1;    optional int32 age =2;}message Cat{    optional string name = 1;    optional string city = 2;}
+------
+原定义文件内容
+------
+message MyMessage{enum DataType{    StudentType = 1;    DogType = 2;    CatType = 3;}required DataType data_type = 1;oneof dataBody{    Student student = 2;    Dog dog = 3;    Cat cat = 4;}}message Student{    optional string name = 1;    optional int32 age = 2;    optional string address = 3;}message Dog{    optional string name = 1;    optional int32 age =2;}message Cat{    optional string name = 1;    optional string city = 2;}
+------
+×
+======
+48 /Users/chenzixuan/Desktop/proto/protocolbufTest.proto
+------
+网页转换内容
+------
+message HeartInfo{    required int32 curtime = 1;    required string hostip = 2 ;};
+------
+原定义文件内容
+------
+message HeartInfo{    required int32 curtime = 1;    required string hostip = 2 ;};
+------
+√
+======
+49 /Users/chenzixuan/Desktop/proto/GpsLocation.proto
+------
+网页转换内容
+------
+message GpsLocation {    sint32 latitude = 1;    sint32 longitude = 2;}
+------
+原定义文件内容
+------
+message GpsLocation {    sint32 latitude = 1;    sint32 longitude = 2;}
+------
+√
+======
+50 /Users/chenzixuan/Desktop/proto/cover_helloworld.proto
+------
+网页转换内容
+------
+message helloworld {    message helloCoverReq {        required string name = 1;    }    message helloCoverRsp {        required int32 retcode = 1;        optional string reply = 2;    }}
+------
+原定义文件内容
+------
+message helloworld {    message helloCoverReq {        required string name = 1;    }    message helloCoverRsp {        required int32 retcode = 1;        optional string reply = 2;    }}
+------
+√
+======
+51 /Users/chenzixuan/Desktop/proto/dog.proto
+------
+网页转换内容
+------
+message Dog {    bool barks = 1;    int32 yearsold = 2;    message Parent {        string name = 1;        string email = 2;    }    repeated Parent parents = 4;}
+------
+原定义文件内容
+------
+message Dog {    bool barks = 1;    int32 yearsold = 2;    message Parent {        string name = 1;        string email = 2;    }    repeated Parent parents = 4;}
+------
+√
+======
+52 /Users/chenzixuan/Desktop/proto/KVCommand.proto
+------
+网页转换内容
+------
+message KVMessage{    required uint32 id = 1;    required uint32 len = 2;    optional KVRequest request = 3;    optional KVResponse response = 4;}message KVResponse{    required uint32 status = 1;    optional string message = 2;}message KVRequest{    enum RequestType {        ITEM = 0;        LOGIN = 1;    }    required RequestType type = 1 [default = ITEM];    optional KVItem item = 2;    optional KVLogin login = 3;}message KVItem {    required string command = 1;}message KVLogin{	required string username = 1;	required string password = 2;}
+------
+原定义文件内容
+------
+message KVMessage{    required uint32 id = 1;    required uint32 len = 2;    optional KVRequest request = 3;    optional KVResponse response = 4;}message KVResponse{    required uint32 status = 1;    optional string message = 2;}message KVRequest{    enum RequestType {        ITEM = 0;        LOGIN = 1;    }    required RequestType type = 1 [default = ITEM];    optional KVItem item = 2;    optional KVLogin login = 3;}message KVItem {    required string command = 1;}message KVLogin{	required string username = 1;	required string password = 2;}// message RequestCommand {//   required string command = 1;//   optional string auth = 3;//   optional bytes payload = 4;//   repeated KVItem items = 2;// }//// message KVItem {//    required string key = 1;//     optional bytes value = 2;// }//// message ResponseCommand {//     required bool success = 1;//     optional string message = 2;//     optional string error = 3;//     repeated KVItem items = 5;// }
+------
+√
+======
+53 /Users/chenzixuan/Desktop/proto/innerMap.proto
+------
+网页转换内容
+------
+message Map {    repeated Floor floor = 1;    repeated Fill fill = 2;    repeated Label label = 3;}message Floor {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Fill {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Label {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Geometry {    string type = 1;    repeated double coordinates = 2;}message Properties{    string id = 1;    string name = 2;    string icon = 3;    double x = 4;    double y = 5;    int64 floor = 6;    int64 height = 7;    string base = 8;    string color = 9;    float opacity = 10;    string borderColor = 11;    float layer = 12;}
+------
+原定义文件内容
+------
+message Map {    repeated Floor floor = 1;    repeated Fill fill = 2;    repeated Label label = 3;}message Floor {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Fill {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Label {    repeated Geometry geometry = 1;    repeated Properties properties = 2;}message Geometry {    string type = 1;    repeated double coordinates = 2;}message Properties{    string id = 1;    string name = 2;    string icon = 3;    double x = 4;    double y = 5;    int64 floor = 6;    int64 height = 7;    string base = 8;    string color = 9;    float opacity = 10;    string borderColor = 11;    float layer = 12;}
+------
+√
+======
+54 /Users/chenzixuan/Desktop/proto/addressbook.proto
+------
+网页转换内容
+------
+import "google/protobuf/timestamp.proto";message Person {  string name = 1;  int32 id = 2;  // Unique ID number for this person.  string email = 3;  enum PhoneType {    MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    string number = 1;    PhoneType type = 2;  }  repeated PhoneNumber phones = 4;  google.protobuf.Timestamp last_updated = 5;}message AddressBook {  repeated Person people = 1;}
+------
+原定义文件内容
+------
+// See README.txt for information and build instructions.//// Note: START and END tags are used in comments to define sections used in// tutorials.  They are not part of the syntax for Protocol Buffers.//// To get an in-depth walkthrough of this file and the related examples, see:// https://developers.google.com/protocol-buffers/docs/tutorials// [START declaration]syntax = "proto3";package tutorial;import "google/protobuf/timestamp.proto";// [END declaration]// [START java_declaration]option java_package = "com.example.tutorial";option java_outer_classname = "AddressBookProtos";// [END java_declaration]// [START csharp_declaration]option csharp_namespace = "Google.Protobuf.Examples.AddressBook";// [END csharp_declaration]// [START messages]message Person {  string name = 1;  int32 id = 2;  // Unique ID number for this person.  string email = 3;  enum PhoneType {    MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    string number = 1;    PhoneType type = 2;  }  repeated PhoneNumber phones = 4;  google.protobuf.Timestamp last_updated = 5;}// Our address book file is just one of these.message AddressBook {  repeated Person people = 1;}// [END messages]
+------
+×
+======
+55 /Users/chenzixuan/Desktop/proto/SensorData.proto
+------
+网页转换内容
+------
+message SensorData {    SensorType sensorType = 1;    sint32 value = 2;    string additionalInfos = 3;    enum SensorType {        HUMIDITY = 0;        TEMPERATURE = 1;        COMPACTION  = 2;        SALINITY = 3;    }}
+------
+原定义文件内容
+------
+message SensorData {    SensorType sensorType = 1;    sint32 value = 2;    string additionalInfos = 3;    enum SensorType {        HUMIDITY = 0;        TEMPERATURE = 1;        COMPACTION  = 2;        SALINITY = 3;    }}
+------
+√
+======
+56 /Users/chenzixuan/Desktop/proto/qwe.proto
+------
+网页转换内容
+------
+message Qwe {    int64 age = 1;    string name = 2;}
+------
+原定义文件内容
+------
+message Qwe {    int64 age = 1;    string name = 2;}
+------
+√
+======
+57 /Users/chenzixuan/Desktop/proto/UserInfo.proto
+------
+网页转换内容
+------
+message User {    string account = 1;    string password = 2;}message ListOfUsers {    repeated User users = 1;}
+------
+原定义文件内容
+------
+message User {    string account = 1;    string password = 2;}message ListOfUsers {    repeated User users = 1;}
+------
+√
+======
+58 /Users/chenzixuan/Desktop/proto/game_service.proto
+------
+网页转换内容
+------
+message Void {}message RequestMessage{    required string msg = 1;}message ResponseMessage{    required string msg = 1;}service IEchoService{    rpc echo(RequestMessage) returns(Void);}service IEchoClient{    rpc echo_reply(ResponseMessage) returns(Void);}
+------
+原定义文件内容
+------
+message Void {}message RequestMessage{    required string msg = 1;}message ResponseMessage{    required string msg = 1;}//客户端发给服务器service IEchoService{    rpc echo(RequestMessage) returns(Void);}//服务器发给客户端service IEchoClient{    rpc echo_reply(ResponseMessage) returns(Void);}
+------
+×
+======
+59 /Users/chenzixuan/Desktop/proto/my-message.proto
+------
+网页转换内容
+------
+message MyMessage {  required int64 id = 1;  required string email = 2;  required string userExternalReference = 3;  enum UserRole {      MASTER = 1;      SERVANT = 2;  }  optional UserRole role = 4;  optional string correlationId = 5;}
+------
+原定义文件内容
+------
+message MyMessage {  required int64 id = 1;  required string email = 2;  required string userExternalReference = 3;  enum UserRole {      MASTER = 1;      SERVANT = 2;  }  optional UserRole role = 4;  optional string correlationId = 5;}
+------
+√
+======
+60 /Users/chenzixuan/Desktop/proto/wind.proto
+------
+网页转换内容
+------
+message Wind {    repeated Gps gps = 1;    message Gps {        double longitude = 1;        double dimension = 2;        double coordinate = 3;    }}
+------
+原定义文件内容
+------
+message Wind {    repeated Gps gps = 1;    message Gps {        double longitude = 1;        double dimension = 2;        double coordinate = 3;    }}
+------
+√
+======
+61 /Users/chenzixuan/Desktop/proto/Messages.proto
+------
+网页转换内容
+------
+enum msgType {	USER=0;	HOME=1;	WORK=2;}message Message {	msgType type = 1;	string msgBody = 2;}
+------
+原定义文件内容
+------
+enum msgType {	USER=0;	HOME=1;	WORK=2;}message Message {	msgType type = 1;	string msgBody = 2;}
+------
+√
+======
+62 /Users/chenzixuan/Desktop/proto/data.proto
+------
+网页转换内容
+------
+message Demo {	 required uint32  A = 1;	 required uint32 B = 2;	 required uint32 C = 3;}
+------
+原定义文件内容
+------
+message Demo {	 required uint32  A = 1;	 required uint32 B = 2;	 required uint32 C = 3;}
+------
+×
+======
+63 /Users/chenzixuan/Desktop/proto/addressbook3.proto
+------
+网页转换内容
+------
+message Person {  required int32 id = 1;  required string name = 2;  required string email = 3;  repeated PhoneNumber phones = 4;  message PhoneNumber {    required string number = 1;    required Type type = 2;    enum Type {      MOBILE = 0;      HOME = 1;      WORK = 2;    }  }}message AddressBook {  repeated Person people = 1;}
+------
+原定义文件内容
+------
+message Person {  required int32 id = 1;  required string name = 2;  required string email = 3;  repeated PhoneNumber phones = 4;  message PhoneNumber {    required string number = 1;    required Type type = 2;    enum Type {      MOBILE = 0;      HOME = 1;      WORK = 2;    }  }  // oneof employment { //TODO what is Union, Void, Group, Data  //   bool unemployed = 5;  //   string employer = 6;  //   string school = 7;  //   bool selfEmployed = 8;  // }}message AddressBook {  repeated Person people = 1;}
+------
+×
+======
+64 /Users/chenzixuan/Desktop/proto/message3.proto
+------
+网页转换内容
+------
+message Test {	required string label = 1;	optional int32 type = 2 [default=77];	repeated int64 reps = 3;	required group Somebutton = 4 {		required string button = 5;	}}
+------
+原定义文件内容
+------
+message Test {	required string label = 1;	optional int32 type = 2 [default=77];	repeated int64 reps = 3;	required group Somebutton = 4 {		required string button = 5;	}}
+------
+√
+======
+65 /Users/chenzixuan/Desktop/proto/chat.proto
+------
+网页转换内容
+------
+message TosChat{	  string name = 1;	  string content = 2;}message TocChat{	  string name = 1;	  string content = 2;}
+------
+原定义文件内容
+------
+message TosChat{	  string name = 1;	  string content = 2;}message TocChat{	  string name = 1;	  string content = 2;}
+------
+√
+======
+66 /Users/chenzixuan/Desktop/proto/attendee.proto
+------
+网页转换内容
+------
+message Attendee {  required string first_name = 1;  required string last_name = 2;  message Address {    required string city = 1;    required string street = 2;    required int32 number = 3;  }  optional Address address = 3;}
+------
+原定义文件内容
+------
+message Attendee {  required string first_name = 1;  required string last_name = 2;  message Address {    required string city = 1;    required string street = 2;    required int32 number = 3;  }  optional Address address = 3;}
+------
+√
+======
+67 /Users/chenzixuan/Desktop/proto/example2.proto
+------
+网页转换内容
+------
+message LD{    required uint32 ip = 1; //LD de ip}message Set{    required uint32 id                                     = 1;     // SET的id    required string name                                   = 2;     // SET名字    repeated LD ld_list                                    = 3;     // LD列表}
+------
+原定义文件内容
+------
+message LD{    required uint32 ip = 1; //LD de ip}message Set{    required uint32 id                                     = 1;     // SET的id    required string name                                   = 2;     // SET名字    repeated LD ld_list                                    = 3;     // LD列表}
+------
+√
+======
+68 /Users/chenzixuan/Desktop/proto/service.proto
+------
+网页转换内容
+------
+message GetWeatherRequest {	string city = 1;	int32 days = 2;}message WeatherInfo {	string city = 1;	string date = 2;	int32 temperature_low = 3; // in degree Fahrenheit	int32 temperature_high = 4;	int32 wind = 5;     // in mph	int32 humidity = 6; // in percentage, 50% will have value 50.}message GetWeatherResponse {	repeated WeatherInfo weatherinfo = 1;}
+------
+原定义文件内容
+------
+message GetWeatherRequest {	string city = 1;	int32 days = 2;}message WeatherInfo {	string city = 1;	string date = 2;	int32 temperature_low = 3; // in degree Fahrenheit	int32 temperature_high = 4;	int32 wind = 5;     // in mph	int32 humidity = 6; // in percentage, 50% will have value 50.}message GetWeatherResponse {	repeated WeatherInfo weatherinfo = 1;}
+------
+√
+======
+69 /Users/chenzixuan/Desktop/proto/person3.proto
+------
+网页转换内容
+------
+message Person {    string name = 1;    string nickname = 2;    enum Gender {        FEMALE = 0;        MALE = 1;        OTHER = 2;    };    Gender gender = 3;    repeated string friends = 4;}
+------
+原定义文件内容
+------
+message Person {    string name = 1;    string nickname = 2;    enum Gender {        FEMALE = 0;        MALE = 1;        OTHER = 2;    };    Gender gender = 3;    repeated string friends = 4;}
+------
+√
+======
+70 /Users/chenzixuan/Desktop/proto/test.proto
+------
+网页转换内容
+------
+message student{    required string name = 1;   //姓名    required int32  age = 2;    //年龄    optional string sex = 3;    //性别}message person{    repeated student member = 1;    //成员}
+------
+原定义文件内容
+------
+message student{    required string name = 1;   //姓名    required int32  age = 2;    //年龄    optional string sex = 3;    //性别}//类message person{    repeated student member = 1;    //成员}
+------
+×
+======
+71 /Users/chenzixuan/Desktop/proto/lona.proto
+------
+网页转换内容
+------
+message LonaEvent {    optional string name = 1;    optional int32 gps_lat = 2;    optional int32 gps_lon = 3;    optional double server_timestamp = 4;}
+------
+原定义文件内容
+------
+message LonaEvent {    optional string name = 1;    optional int32 gps_lat = 2;    optional int32 gps_lon = 3;    optional double server_timestamp = 4;}
+------
+√
+======
+72 /Users/chenzixuan/Desktop/proto/PersonTest.proto
+------
+网页转换内容
+------
+message PersonTest {    required string name=1;    required int32 id=2;    optional string email=3 ;	required string size=4;	required bytes buf=5;	required bool isimg=6;}
+------
+原定义文件内容
+------
+message PersonTest {    required string name=1;    required int32 id=2;    optional string email=3 ;	required string size=4;	required bytes buf=5;	required bool isimg=6;}
+------
+×
+======
+73 /Users/chenzixuan/Desktop/proto/user3.proto
+------
+网页转换内容
+------
+message User {   string id = 1;   string name = 2;   repeated string role = 3;   string user_type = 4;   string user_status = 5;}
+------
+原定义文件内容
+------
+message User {   string id = 1;   string name = 2;   repeated string role = 3;   string user_type = 4;   string user_status = 5;}
+------
+√
+======
+74 /Users/chenzixuan/Desktop/proto/msginfo.proto
+------
+网页转换内容
+------
+message CMsg{    required string msghead = 1;    required string msgbody = 2;}message CMsgHead{    required int32 msglen = 1;    required int32 msgtype = 2;    required int32 msgseq = 3;    required int32 termversion = 4;    required int32 msgres = 5;    required string termid = 6;}message CMsgReg{    optional int32 area = 1;    optional int32 region = 2;    optional int32 shop = 3;    optional int32 ret = 4;    optional string termid = 5[default="12345"];}message CMsgLogin{    optional int32 ret = 1;}message CMsgLogout{    optional int32 ret = 1;}
+------
+原定义文件内容
+------
+message CMsg{    required string msghead = 1;    required string msgbody = 2;}message CMsgHead{    required int32 msglen = 1;    required int32 msgtype = 2;    required int32 msgseq = 3;    required int32 termversion = 4;    required int32 msgres = 5;    required string termid = 6;}message CMsgReg{    optional int32 area = 1;    optional int32 region = 2;    optional int32 shop = 3;    optional int32 ret = 4;    optional string termid = 5[default="12345"];}message CMsgLogin{    optional int32 ret = 1;}message CMsgLogout{    optional int32 ret = 1;}
+------
+√
+======
+75 /Users/chenzixuan/Desktop/proto/GroundData.proto
+------
+网页转换内容
+------
+message GroundData {    int32 id = 1;    int32 timestamp = 2; // time in second since 1st january 1970    GpsLocation gpsLocation = 3;    repeated SensorData sensorDatas = 4;}
+------
+原定义文件内容
+------
+message GroundData {    int32 id = 1;    int32 timestamp = 2; // time in second since 1st january 1970    GpsLocation gpsLocation = 3;    repeated SensorData sensorDatas = 4;}
+------
+√
+======
+76 /Users/chenzixuan/Desktop/proto/Login.proto
+------
+网页转换内容
+------
+message PBLoginField{	required uint32  userid        	= 1;   //登录者Id	optional string  szusername    	= 2;   //登录者名字	optional string  szaccount     	= 3;   //登录者帐号	optional string  szpassword    	= 4;   //登录这密码	optional bool    remember      	= 5;   //记住密码	optional bool    autologin     	= 6;   //自动登录	optional bool    startup       	= 7;   //开机自启动	optional uint32  updatetime 	= 8;   //登录更新时间}message PBLoginList{	repeated PBLoginField loginlist  = 1;}
+------
+原定义文件内容
+------
+message PBLoginField{	required uint32  userid        	= 1;   //登录者Id	optional string  szusername    	= 2;   //登录者名字	optional string  szaccount     	= 3;   //登录者帐号	optional string  szpassword    	= 4;   //登录这密码	optional bool    remember      	= 5;   //记住密码	optional bool    autologin     	= 6;   //自动登录	optional bool    startup       	= 7;   //开机自启动	optional uint32  updatetime 	= 8;   //登录更新时间}message PBLoginList{	repeated PBLoginField loginlist  = 1;}
+------
+√
+======
+77 /Users/chenzixuan/Desktop/proto/nested.proto
+------
+网页转换内容
+------
+message Building {  string name = 1;  string buildingNumber = 2;  Street street = 3;  message Street {    string name = 1;    City city = 2;  }  message City {    string name = 1;    string zipCode = 2;    string countryName = 3;  }}
+------
+原定义文件内容
+------
+message Building {  string name = 1;  string buildingNumber = 2;  Street street = 3;  message Street {    string name = 1;    City city = 2;  }  message City {    string name = 1;    string zipCode = 2;    string countryName = 3;  }}
+------
+√
+======
+78 /Users/chenzixuan/Desktop/proto/ProtocolModule.proto
+------
+网页转换内容
+------
+message CommonProtocol {    message CommonHeader {		required uint32 CommandId = 1;		required uint32 SeqId = 2;		required uint32 Version = 3;		optional string FromUid = 4;	}	required CommonHeader CommHeader = 1;	message LiveCommonHeader {		required uint32 LiveType = 1;		required uint32 LiveId = 2;		required uint32 DemandType = 3;		required uint32 DemandId = 4;		optional uint32 ToDemandId= 5;		optional uint32 ToDemandType= 6;	}	required LiveCommonHeader LiveHeader = 2;	optional bytes Data = 3;}
+------
+原定义文件内容
+------
+message CommonProtocol {    message CommonHeader {		required uint32 CommandId = 1;		required uint32 SeqId = 2;		required uint32 Version = 3;		optional string FromUid = 4;	}	required CommonHeader CommHeader = 1;	message LiveCommonHeader {		required uint32 LiveType = 1;		required uint32 LiveId = 2;		required uint32 DemandType = 3;		required uint32 DemandId = 4;		optional uint32 ToDemandId= 5;		optional uint32 ToDemandType= 6;	}	required LiveCommonHeader LiveHeader = 2;	optional bytes Data = 3;}
+------
+√
+======
+79 /Users/chenzixuan/Desktop/proto/customer.proto
+------
+网页转换内容
+------
+message Customer {  required int32 id = 1;  required string firstName = 2;  required string lastName = 3;  enum EmailType {    PRIVATE = 1;    PROFESSIONAL = 2;  }  message EmailAddress {    required string email = 1;    optional EmailType type = 2 [default = PROFESSIONAL];  }  repeated EmailAddress email = 5;}message Organization {  required string name = 1;  repeated Customer customer = 2;}
+------
+原定义文件内容
+------
+message Customer {  required int32 id = 1;  required string firstName = 2;  required string lastName = 3;  enum EmailType {    PRIVATE = 1;    PROFESSIONAL = 2;  }  message EmailAddress {    required string email = 1;    optional EmailType type = 2 [default = PROFESSIONAL];  }  repeated EmailAddress email = 5;}message Organization {  required string name = 1;  repeated Customer customer = 2;}
+------
+√
+======
+80 /Users/chenzixuan/Desktop/proto/Message.proto
+------
+网页转换内容
+------
+message Request {    enum RequestType {        GET = 0;        PUT = 1;        POST = 2;        DELETE = 3;    }    RequestType type = 1;    string table = 2;    string key = 3;    string value = 4;}message Response {    enum ResponseType {        ERROR = 0;        DATA = 1;        OK = 2;        LIST = 3;    }    ResponseType type = 1;    string error_message = 2;    repeated Table data = 3;    repeated string value = 4;}message Table {    string name = 1;    map<string, string> values = 2;}
+------
+原定义文件内容
+------
+message Request {    enum RequestType {        GET = 0;        PUT = 1;        POST = 2;        DELETE = 3;    }    RequestType type = 1;    string table = 2;    string key = 3;    string value = 4;}message Response {    enum ResponseType {        ERROR = 0;        DATA = 1;        OK = 2;        LIST = 3;    }    ResponseType type = 1;    string error_message = 2;    repeated Table data = 3;    repeated string value = 4;}message Table {    string name = 1;    map<string, string> values = 2;}
+------
+√
+======
+81 /Users/chenzixuan/Desktop/proto/item.proto
+------
+网页转换内容
+------
+service Service {  rpc Find(Query) returns (Collection) {}}message Query {  string name = 1;}message Item {  string id = 1;  string name = 2;}message Collection {  repeated Item items = 1;}
+------
+原定义文件内容
+------
+service Service {  rpc Find(Query) returns (Collection) {}}message Query {  string name = 1;}message Item {  string id = 1;  string name = 2;}message Collection {  repeated Item items = 1;}
+------
+√
+======
+82 /Users/chenzixuan/Desktop/proto/employee2.proto
+------
+网页转换内容
+------
+message Employee {    int32 EmployeeId = 1;    string FirstName = 2;    string LastName = 3;    int32 Age = 4;}
+------
+原定义文件内容
+------
+message Employee {    int32 EmployeeId = 1;    string FirstName = 2;    string LastName = 3;    int32 Age = 4;}
+------
+√
+======
+83 /Users/chenzixuan/Desktop/proto/example.proto
+------
+网页转换内容
+------
+message Programming {    required string language = 1;}message Event {    optional string message = 1;    repeated Programming language = 2;    optional uint64 timestamp = 3;}
+------
+原定义文件内容
+------
+message Programming {    required string language = 1;}message Event {    optional string message = 1;    repeated Programming language = 2;    optional uint64 timestamp = 3;}
+------
+√
+======
+84 /Users/chenzixuan/Desktop/proto/person.proto
+------
+网页转换内容
+------
+message Person {    int32 id = 1;    string name = 2;    string email = 3;}
+------
+原定义文件内容
+------
+message Person {    int32 id = 1;    string name = 2;    string email = 3;}
+------
+√
+======
+85 /Users/chenzixuan/Desktop/proto/allow_alias.proto
+------
+网页转换内容
+------
+message Book {    int64 isbn = 1;    string title = 2;    string author = 3;    Status status = 4;}message GetBookRequest {    int64 isbn = 1;}service BookService {    rpc GetBook (GetBookRequest) returns (Book) {}}enum Status {    UNKNOWN = 0;    STARTED = 1;    RUNNING = 1;}
+------
+原定义文件内容
+------
+message Book {    int64 isbn = 1;    string title = 2;    string author = 3;    Status status = 4;}message GetBookRequest {    int64 isbn = 1;}service BookService {    rpc GetBook (GetBookRequest) returns (Book) {}}enum Status {    option allow_alias = true;    UNKNOWN = 0;    STARTED = 1;    RUNNING = 1;}
+------
+×
+======
+86 /Users/chenzixuan/Desktop/proto/hello.proto
+------
+网页转换内容
+------
+message HelloWorld{	required int32 x = 1;	required int32 y = 2;	optional int32 valid = 3;}message HelloArray{    repeated HelloWorld helloWorld = 1;}
+------
+原定义文件内容
+------
+message HelloWorld{	required int32 x = 1;	required int32 y = 2;	optional int32 valid = 3;}message HelloArray{    repeated HelloWorld helloWorld = 1;}
+------
+√
+======
+87 /Users/chenzixuan/Desktop/proto/person4.proto
+------
+网页转换内容
+------
+message Person{    string name = 1;    int32 age = 2;    SocialMediaProfile socialMediaProfiles = 3; //Nested fields example}message SocialMediaProfile{    string linkedin = 1;    string twitter = 2;}
+------
+原定义文件内容
+------
+message Person{    string name = 1;    int32 age = 2;    SocialMediaProfile socialMediaProfiles = 3; //Nested fields example}message SocialMediaProfile{    string linkedin = 1;    string twitter = 2;}
+------
+√
+======
+88 /Users/chenzixuan/Desktop/proto/user2.proto
+------
+网页转换内容
+------
+service UserInfoService {    rpc GetUserInfo (UserRequest) returns (UserResponse) {    }}message UserRequest {    string name = 1;}message UserResponse {    int32 id = 1;    string name = 2;    int32 age = 3;    repeated string title = 4;	// repeated 修饰符表示字段是可变数组，即 slice 类型}
+------
+原定义文件内容
+------
+service UserInfoService {    rpc GetUserInfo (UserRequest) returns (UserResponse) {    }}message UserRequest {    string name = 1;}message UserResponse {    int32 id = 1;    string name = 2;    int32 age = 3;    repeated string title = 4;	// repeated 修饰符表示字段是可变数组，即 slice 类型}
+------
+×
+======
+89 /Users/chenzixuan/Desktop/proto/geolocation.proto
+------
+网页转换内容
+------
+message GeoLocation {  required int32 device = 1;  required float lat = 2;  required float lng = 3;}
+------
+原定义文件内容
+------
+message GeoLocation {  required int32 device = 1;  required float lat = 2;  required float lng = 3;}
+------
+√
+======
+90 /Users/chenzixuan/Desktop/proto/ProtoMsg.proto
+------
+网页转换内容
+------
+message Message {  string content = 1;}
+------
+原定义文件内容
+------
+message Message {  string content = 1;}
+------
+√
+======
+91 /Users/chenzixuan/Desktop/proto/cat.proto
+------
+网页转换内容
+------
+message Cat {    string name = 1;    int32 age = 2;    message Parent {        string name = 1;        string email = 2;    }    repeated Parent parents = 4;}
+------
+原定义文件内容
+------
+message Cat {    string name = 1;    int32 age = 2;    message Parent {        string name = 1;        string email = 2;    }    repeated Parent parents = 4;}
+------
+√
+======
+92 /Users/chenzixuan/Desktop/proto/common2.proto
+------
+网页转换内容
+------
+message m_1101_toc {  required uint32 cmd         = 1; // 错误协议号  required uint32 error_code  = 2; // 错误信息编号  optional string description = 3; // 描述信息}
+------
+原定义文件内容
+------
+message m_1101_toc {  required uint32 cmd         = 1; // 错误协议号  required uint32 error_code  = 2; // 错误信息编号  optional string description = 3; // 描述信息}
+------
+√
+======
+93 /Users/chenzixuan/Desktop/proto/msg.proto
+------
+网页转换内容
+------
+message Msg1 {    string field1 = 1;    int32 field2 = 2;    string field3 = 3;}message Msg2 {    int32 field4 = 1;    string field5 = 2;    string field6 = 3;}
+------
+原定义文件内容
+------
+message Msg1 {    string field1 = 1;    int32 field2 = 2;    string field3 = 3;}message Msg2 {    int32 field4 = 1;    string field5 = 2;    string field6 = 3;}
+------
+√
+======
+94 /Users/chenzixuan/Desktop/proto/message2.proto
+------
+网页转换内容
+------
+message Command {  enum CommandType {    START_TEST = 0;    RESULTS = 1;    SHUTDOWN = 2;  }  required CommandType type = 1;  required string name = 2;  optional string data = 3;}
+------
+原定义文件内容
+------
+message Command {  enum CommandType {    START_TEST = 0;    RESULTS = 1;    SHUTDOWN = 2;  }  required CommandType type = 1;  required string name = 2;  optional string data = 3;}
+------
+√
+======
+95 /Users/chenzixuan/Desktop/proto/addressbook2.proto
+------
+网页转换内容
+------
+message Person {  required string name = 1;  required int32 id = 2;  optional string email = 3;  enum PhoneType {    MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    required string number = 1;    optional PhoneType type = 2 [default = HOME];  }  repeated PhoneNumber phone = 4;}message AddressBook {  repeated Person person = 1;}
+------
+原定义文件内容
+------
+message Person {  required string name = 1;  required int32 id = 2;  optional string email = 3;  enum PhoneType {    MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    required string number = 1;    optional PhoneType type = 2 [default = HOME];  }  repeated PhoneNumber phone = 4;}message AddressBook {  repeated Person person = 1;}
+------
+√
+======
+96 /Users/chenzixuan/Desktop/proto/protodemo.proto
+------
+网页转换内容
+------
+message Student {  required int32 id = 1;  required string name = 2;  optional string email = 3;  enum Sex {    MAN = 0;    WOMAN = 1;  }  optional Sex sex = 4 [default = MAN];  enum PhoneType{   	MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    required string number = 1;    optional PhoneType type = 2 [default = HOME];  }  repeated PhoneNumber phone = 5;}
+------
+原定义文件内容
+------
+message Student {  required int32 id = 1;  required string name = 2;  optional string email = 3;  enum Sex {    MAN = 0;    WOMAN = 1;  }  optional Sex sex = 4 [default = MAN];  enum PhoneType{   	MOBILE = 0;    HOME = 1;    WORK = 2;  }  message PhoneNumber {    required string number = 1;    optional PhoneType type = 2 [default = HOME];  }  repeated PhoneNumber phone = 5;}
+------
+√
+======
+97 /Users/chenzixuan/Desktop/proto/maps.proto
+------
+网页转换内容
+------
+service Maps {    rpc GetDistance(GetDistanceRequest) returns (GetDistanceResponse);}message GetDistanceRequest {    string origin = 1;    string dest = 2;}message GetDistanceResponse {    int64 distance = 1;}
+------
+原定义文件内容
+------
+service Maps {    rpc GetDistance(GetDistanceRequest) returns (GetDistanceResponse);}message GetDistanceRequest {    string origin = 1;    string dest = 2;}message GetDistanceResponse {    int64 distance = 1;}
+------
+√
+======
+98 /Users/chenzixuan/Desktop/proto/person2.proto
+------
+网页转换内容
+------
+enum Sex{	male = 0;	female = 1;}message LoveGame{	string name = 1;	string type = 2;}message UserInfo{	string name = 1;	int32 age = 2;	repeated LoveGame game = 3;	Sex sex = 4;}
+------
+原定义文件内容
+------
+enum Sex{	male = 0;	female = 1;}message LoveGame{	string name = 1;	string type = 2;}message UserInfo{	string name = 1;	int32 age = 2;	repeated LoveGame game = 3;	Sex sex = 4;}
+------
+√
+======
+99 /Users/chenzixuan/Desktop/proto/user.proto
+------
+网页转换内容
+------
+message Users {	int32  id 	 = 1;	string username = 2;	string mobile 	 = 3;	string email	 = 4;}
+------
+原定义文件内容
+------
+message Users {	int32  id 	 = 1;	string username = 2;	string mobile 	 = 3;	string email	 = 4;}
+------
+√
+======
+100 /Users/chenzixuan/Desktop/proto/Common.proto
+------
+网页转换内容
+------
+enum Role {    ADMIN  = 0;    EDITOR = 1;    USER   = 2;}message UserInfo {    int32  user_id = 1;    string name    = 2;    Role   role    = 3;}message ChatPacket {    int32    user_id   = 1;    string   content   = 2;    UserInfo user_info = 3;}
+------
+原定义文件内容
+------
+enum Role {    ADMIN  = 0;    EDITOR = 1;    USER   = 2;}message UserInfo {    int32  user_id = 1;    string name    = 2;    Role   role    = 3;}message ChatPacket {    int32    user_id   = 1;    string   content   = 2;    UserInfo user_info = 3;}
+------
+√
+======
+101 /Users/chenzixuan/Desktop/proto/extend/main.proto
+------
+网页转换内容
+------
+message base {    optional uint64 timestamp = 1;    repeated string owner = 2;    extensions 100 to 10000;}
+------
+原定义文件内容
+------
+message base {    optional uint64 timestamp = 1;    repeated string owner = 2;    extensions 100 to 10000;}
+------
+√
+======
+102 /Users/chenzixuan/Desktop/proto/extend/extend.proto
+------
+网页转换内容
+------
+message base {    optional uint64 timestamp = 1;    repeated string owner = 2;    extensions 100 to 10000;}extend base {    optional string name = 100;    repeated string res = 101;}
+------
+原定义文件内容
+------
+message base {    optional uint64 timestamp = 1;    repeated string owner = 2;    extensions 100 to 10000;}extend base {    optional string name = 100;    repeated string res = 101;}
+------
+√
+======
+103 /Users/chenzixuan/Desktop/proto/extend/person.proto
+------
+网页转换内容
+------
+extend base {    optional string name = 100;    repeated string res= 101;}
+------
+原定义文件内容
+------
+extend base {    optional string name = 100;    repeated string res= 101;}
+------
+√
+======
+104 /Users/chenzixuan/Desktop/proto/extend/msg.proto
+------
+网页转换内容
+------
+enum CmdID {	CID_MOD = 1;}message MsgHead {    optional int32 cid = 1;}message Msg {    optional MsgHead head = 1;    optional int32 ret = 2;    extensions 100 to 10000;}message ModReq {	optional bool b = 1;}extend Msg {  optional int32 id = 126;  optional ModReq mod_req = 127;}
+------
+原定义文件内容
+------
+enum CmdID {	CID_MOD = 1;}message MsgHead {    optional int32 cid = 1;}message Msg {    optional MsgHead head = 1;    optional int32 ret = 2;    extensions 100 to 10000;}message ModReq {	optional bool b = 1;}extend Msg {  optional int32 id = 126;  optional ModReq mod_req = 127;}
+------
+√
+======
+105 /Users/chenzixuan/Desktop/proto/.idea/.gitignore
+------
+网页转换内容
+------
+
+------
+原定义文件内容
+------
+# Default ignored files/shelf//workspace.xml# Datasource local storage ignored files/dataSources//dataSources.local.xml# Editor-based HTTP Client requests/httpRequests/
+------
+√
+======

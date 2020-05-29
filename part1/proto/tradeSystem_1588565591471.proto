@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.tradesystem.service";
+option java_outer_classname = "TradeSystemService";
+option objc_class_prefix = "HLW";
+
+package tradeService;
+
+//柜台service
+service TradeSystem {
+    // 下单接口
+    rpc takeOrder (UserOrderRequest) returns (UserOrderReply) {}
+
+    //撤单接口
+    rpc cancelOrder (CancelOrderRequest) returns (CancelOrderReply) {
+    }
+
+    //撮合系统成交回报
+    rpc stepOrder (MatchOrderRequest) returns (MatchOrderReply) {
+    }
+    //撮合系统剩余单撤销
+    rpc stepOrderCancel (MatchOrderCancelRequest) returns (MatchOrderCancelReply) {
+    }
+    //钱包系统转入通知
+    rpc transferIn (TransferInRequest) returns (TransferInReply) {
+    }
+    //提现接口
+    rpc transferOut (TransferOutRequest) returns (TransferOutReply) {
+    }
+    rpc getAddr (GetTransferInAddrRequest) returns (GetTransferInAddrReply) {
+    }
+    //提币失败
+    rpc transferOutError (TransferOutErrorRequest) returns (TransferOutErrorReply) {
+    }
+}
+
+// The request message containing the user's name.
+message UserOrderRequest {
+  string account = 1;
+  string orderType=2;
+  string orderSide=3;
+  string amount=4;
+  string assetPair = 5;
+  string price = 6;
+  string assertLimit = 7;
+  string feeRate = 8;
+  string source = 9;
+  string discd = 10;
+}
+
+//撮合剩余单撤销
+message MatchOrderCancelRequest {
+    string asset = 1;
+    string account = 2;
+    string orderId = 3;
+    string cancelAmount = 4;
+    OrderSide orderSide = 5;
+}
+
+//撮合剩余单撤消回复
+message MatchOrderCancelReply {
+    bool state = 1;
+}
+
+// The response message containing the greetings
+message UserOrderReply {
+  bool state = 1;
+  string orderId=2;
+  string errorCode = 3;
+  string errorMessage = 4;
+
+
+}
+
+message CancelOrderRequest {
+  string orderId=1;
+  string account = 2;
+}
+
+message CancelOrderReply {
+  bool state =1;
+  string errorCode = 2;
+  string errorMessage = 3;
+}
+
+message MatchOrderRequest {
+    string buySideOrderId = 1;
+    string buySideAccount = 2;
+    string sellSideOrderId = 3;
+    string sellSideAccount = 4;
+    string matchAmount = 5;
+    string matchPrice = 6;
+    string matchOrderWaterflow = 7;
+    string asset = 8;
+    string buySideOrderLeft = 9;
+    string sellSideOrderLeft = 10;
+}
+
+message MatchOrderReply {
+    bool state = 1;
+}
+//撮合系统service
+
+
+
+// The request message.
+message TransferInRequest {
+  string asset = 1;
+  string addr = 2;
+  string amount = 4;
+  string notes=5;
+  string time=6;
+}
+
+// The response message
+message TransferInReply {
+  bool state = 1;
+  string errorCode = 2;
+  string errorMessage = 3;
+}
+
+
+// The request message.
+message TransferOutRequest {
+  string asset = 1;
+  string feeRate = 2;
+  string pubKey=3;
+  string sign=4;
+  string account = 5;
+  string amount = 6;
+  string toAddr = 7;
+  string fee = 8;
+}
+
+// The response message
+message TransferOutReply {
+    bool state = 1;
+    string errorMessage = 2;
+    string errorCode = 3;
+}
+
+// The request message.
+message GetTransferInAddrRequest {
+  string asset = 1;
+  string account=2;
+}
+
+// The response message
+message GetTransferInAddrReply {
+    bool state = 1;
+    string addr = 2;
+    string errorCode = 3;
+    string errorMessage = 4;
+}
+
+// The request message.
+message TransferOutErrorRequest {
+  string id = 1;
+}
+
+// The response message
+message TransferOutErrorReply {
+    bool state = 1;
+    string errorMessage = 2;
+    string errorCode = 3;
+}
+
+enum OrderSide {
+    SIDEUNKNOW = 0;
+    ASK = 1;
+    BID = 2;
+}

@@ -1,0 +1,29 @@
+package bgs.protocol.channel.v1;
+import "bgs/low/pb/client/channel_types.proto";
+import "bgs/low/pb/client/account_types.proto";
+import "bgs/low/pb/client/voice_types.proto";
+import "bgs/low/pb/client/rpc_types.proto";
+
+
+message GetLoginTokenRequest {
+	optional .bgs.protocol.account.v1.GameAccountHandle member_id = 3;
+}
+
+message GetLoginTokenResponse {
+	optional .bgs.protocol.VoiceCredentials credentials = 1;
+}
+
+message GetJoinTokenRequest {
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 2;
+	optional .bgs.protocol.account.v1.GameAccountHandle member_id = 4;
+}
+
+message GetJoinTokenResponse {
+	optional string channel_uri = 1;
+	optional .bgs.protocol.VoiceCredentials credentials = 2;
+}
+
+service ChannelVoiceService {
+	rpc GetLoginToken (.bgs.protocol.channel.v1.GetLoginTokenRequest) returns (.bgs.protocol.channel.v1.GetLoginTokenResponse);
+	rpc GetJoinToken (.bgs.protocol.channel.v1.GetJoinTokenRequest) returns (.bgs.protocol.channel.v1.GetJoinTokenResponse);
+}

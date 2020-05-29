@@ -1,0 +1,43 @@
+/// base file  : SensorNearData\MFC\CameraInterface.h
+syntax = "proto2";
+
+package pb.SensorNearData.MFC;
+
+import "header.proto";
+
+message CameraImage
+{
+  optional  pb.Header header                  =   1;                    ///  common message header
+  optional  uint32    image_counter           =   2 [default = 0];      ///  Image Counter
+  optional  sint32    image_width             =   3 [default = 1176];   ///  Image Width
+  optional  sint32    image_height            =   4 [default = 640];    ///  Image Height
+  optional  sint32    image_shift_u           =   5 [default = 0];      ///  partial Image shift to Original Image
+  optional  sint32    image_shift_v           =   6 [default = 0];      ///  partial Image shift to Original Image
+  optional  sint32    o_image_width           =   7 [default = 1176];   ///  Original Image Size (Width)
+  optional  sint32    o_image_height          =   8 [default = 640];    ///  Original Image Size (Height)
+  optional  sint32    imager_size_u           =   9 [default = 1280];   ///  Imager Size U(Width) --> Could be moved in Calibration data
+  optional  sint32    imager_size_v           =  10 [default = 960];    ///  Imager Size V(Height) --> Could be moved in Calibration data
+  optional  uint32    o_image_pattern         =  11 [default = 3];      ///  0 = Gray
+                                                                        ///  1 = BGGR
+                                                                        ///  2 = RGGB
+                                                                        ///  3 = GRBG (MFC [Status 02.02.2011])
+                                                                        ///  4 = GBRG
+                                                                        ///  5 = RCCC
+                                                                        ///  6 = CRCC
+                                                                        ///  7 = CCRC
+                                                                        ///  8 = CCCR
+  optional  bool      image_compressed        =  12 [default = true];   ///  False = Not Compressed,
+                                                                        ///  True = Compressed
+  optional  uint32    image_compression_type  =  13 [default = 2];      ///  0 = No Compression,
+                                                                        ///  1 = BIT-Shift without any lost bits
+  optional  uint32    image_type              =  14 [default = 3];      ///  0 = 12-Bit RAW-Image,
+                                                                        ///  1 = 11 Bit Disparity Overview Map ( DDDDDDD|PPP|V ),
+                                                                        ///  2 = 11 Bit Disparity Lupe Map ( DDDDDD|PPPP|V )
+                                                                        ///  3 =  8 Bit MSB RAW Image
+  optional  uint32    byte_per_pixel          =  15 [default = 1];      ///  Number of Byte per Pixel
+  optional  uint32    bit_per_pixel           =  16 [default = 8];      ///  Number of Bit per Pixel (CSF = 10 Bit, MFC = 12)
+  optional  bytes     image_payload           =  17;                    ///  Payload
+                                                                        ///  default = m_ImageWidth*m_ImageHeight*m_BytePerPixel
+  // optional  bytes     bmp_image               =  18;                 ///  this is only from analysing
+  optional  uint64    image_ecu_timestamp        =  19;                 ///  this is only from analysing
+}

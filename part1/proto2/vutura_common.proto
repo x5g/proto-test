@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+message GPSMessage {
+  required uint64 timestamp = 1;
+  required sint32 lat = 2; // [degE7]
+  required sint32 lon = 3; // [degE7]
+  required sint32 alt_msl = 4; // [mm]
+  required sint32 alt_agl = 5; // [mm]
+  optional sint32 vn = 6; // [mm/s]
+  optional sint32 ve = 7; // [mm/s]
+  optional sint32 vd = 8; // [mm/s]
+  optional uint32 target_wp = 9; // index of active wp
+  optional sint32 wind_north = 10; //[mm/s]
+  optional sint32 wind_east = 11; //[mm/s]
+}
+
+message TrafficInfo {
+  required string unique_id = 1;
+  required string aircraft_id = 2;
+  required uint64 timestamp = 3; // [ms]
+  required uint64 recorded_time = 4; // [ms]
+  required sint32 lat = 5; // [degE7]
+  required sint32 lon = 6; // [degE7]
+  required sint32 alt = 7; // [ftE3]
+  required uint32 groundspeed = 8; // [m/sE3]
+  required uint32 heading = 9; // [deg]
+}
+
+message AvoidanceVelocity {
+  required bool avoid = 1;
+  required sint32 vn = 2; // [m/sE3]
+  required sint32 ve = 3; // [m/sE3]
+  required sint32 vd = 4; // [m/sE3]
+  required sint32 lat = 5; // [degE7]
+  required sint32 lon = 6; // [degE7]
+  required bool skip_wp = 7;
+  required uint32 skip_to_wp = 8;
+}
+
+message UavHeartbeat {
+  optional bool armed = 1;
+  optional bool aborted = 2;
+}
+
+enum MavCommands {
+  START_MISSION = 1;
+  PAUSE_MISSION = 2;
+  CONTINUE_MISSION = 3;
+}
+
+message MavCommand {
+  required MavCommands command = 1;
+}
+
+message Flightplan {
+  message Waypoint {
+    required sint32 lat = 1;
+    required sint32 lon = 2;
+    optional sint32 alt = 3;
+  }
+  repeated Waypoint waypoint = 1;
+}

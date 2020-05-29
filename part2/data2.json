@@ -1,0 +1,9 @@
+{
+  "cmd": "Connect",
+  "room": [
+    {
+      "channel": "1",
+      "count": 1
+    }
+  ]
+}

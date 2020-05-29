@@ -1,0 +1,23 @@
+/*
+* This line specifies that proto3 syntax is being used while defining the
+* structure of the information. If this line is not used the compiler assumes
+* proto2 syntax is being used.
+*/
+syntax = "proto3";
+
+// The package specifier is used to prevent clashes between protocol buffer messages of same name.
+package com.data.model;
+
+// Used to define the package in which the java classes will be generated.
+option java_package = "com.data.model.address";
+// Used to define the outer java class name.
+option java_outer_classname = "AddressDetailsMessage";
+
+message Address {
+    string address_line_1 = 1;
+    string address_line_2 = 2;
+    string city = 3;
+    string country = 4;
+    int32 zip_code = 5;
+}
+

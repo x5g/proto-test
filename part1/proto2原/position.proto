@@ -1,0 +1,449 @@
+// V1.1.19
+
+//option optimize_for = LITE_RUNTIME;
+
+// 货币类型
+enum CurrencyType
+{
+  COIN                           = 1;      // 金币
+  DIAMOND                        = 2;      // 钻石
+  SILVER                         = 3;      // 银币
+  TICKET                         = 4;      // 门票
+  MEMBER                         = 5;      // 会员
+  BEAN                           = 6;      // 万能豆
+  GIFT                           = 61;     // 礼包
+}
+
+// 货币
+message Currency
+{
+  required int32  type           = 1;      // 货币类型
+  required int64  number         = 2;      // 货币数量
+}
+
+// 本地玩家信息
+message UserInfo
+{
+  required string role_name      = 1;      // 角色名
+  required string nick_name      = 2;      // 昵称
+  repeated Currency coins        = 3;      // 货币（金币，钻石等）
+  required int32  gender         = 4;      // 性别（0为女，1为男）
+  required int32  level          = 5;      // 等级
+  required int32  experience     = 6;      // 经验
+  required int32  win_count      = 7;      // 胜利场数
+  required int32  lose_count     = 8;      // 失败场数
+  required int64  member_time    = 9;      // 会员剩余时间（以秒为单位）
+  required int32  image_id       = 10;     // 用户头像的ID, image_id <= 0则使用image_url获得头像
+  optional string image_url      = 11;     // 头像URL
+  optional int32 draw_count      = 12;	   // 平的场数
+  optional bytes custom_data     = 13;	   // 各游戏特有的数据
+  optional string mobilenumber   = 14;     // 绑定的手机号
+  optional string province       = 15;	   // 手机号所属的省
+  optional string city           = 16;	   // 手机号所属的市
+  optional string carrieroperator= 17;	   // 手机号所属的运营商
+}
+
+enum AccountType
+{
+  GUEST                          = 0;
+  OURGAME                        = 1;
+  SINA                           = 104;
+  RENREN                         = 105;
+  BAIDU                          = 200;
+  ND91                           = 260;
+  M360                           = 296;
+}
+
+// 登录connector服务器
+message LoginReq
+{
+  required string role_name      = 1;      // 角色名
+  required string device_id      = 2;      // 设备唯一标志(非注册用户用)
+  required string cert           = 3;      // 证书（短证书），字符串
+  required string session_id     = 4;      // Session ID
+  required int32  account_type   = 5;      // 帐号类型
+  required string checksum       = 6;      // 用于验证用户的合法性。计算方式：device_id + role_name + secrect key（"thran"）, 然后MD5，使用MD5码的字符串格式而不是二进制格式
+  required string package_name   = 7;      // 包名
+  required string channel        = 8;      // 渠道号
+  required int32  version        = 9;      // 客户端版本号。计算方式：版本的最高字段 * 10000 + 第二字段 * 100 + 第三字段 * 1， 如：5.1.2版为50102
+                                           // 如果版本有四个以上字段，只取前三个；如果版本只有两个以下的字段，则以0补齐。如：5.1版与5.1.0版等同，为50100
+  optional string imsi           = 10;     // SIM卡的IMSI
+  optional int32 gender          = 11;     // 性别（0为女，1为男）
+  optional string mobile_number  = 12;	   // 玩家绑定的手机号
+  optional string magic_code     = 13;     // 客户端和服务端自己的约定，用于检查客户端是否合法的
+}
+
+message LoginAck
+{
+  required int32  result         = 1;      // 登录结果
+  optional int32  version        = 2;      // 当前最新版本
+  optional string download_url   = 3;      // 新版本下载地址
+  optional UserInfo user_info    = 4;      // 玩家信息
+  
+  enum Result
+  {
+    OK                           = 0;      // 正常登录
+    RESUME                       = 1;      // 断线续玩
+    FAILED                       = 2;      // 验证失败（证书错误等）
+    LOW_VERSION                  = 3;      // 版本过低，不能进行游戏
+    MAINTENANCE                  = 4;      // 服务器维护
+  }
+}
+
+// 修改玩家头像
+message ChangeUserImageReq
+{
+  required int32  image_id       = 1;      // 用户头像的ID, image_id <= 0则使用image_data上传头像数据
+  optional bytes  image_data     = 2;      // 头像数据
+}
+
+message ChangeUserImageAck
+{
+  required int32  result         = 1;      // 结果(0为成功)
+  required int32  image_id       = 2;      // 用户头像的ID, image_id <= 0则使用image_url获得头像
+  optional string image_url      = 3;      // 头像URL
+}
+
+// 客户端请求刷新玩家信息
+message RefreshUserInfoReq
+{
+  required string role_name      = 1;      // 角色名
+}
+
+message RefreshUserInfoAck
+{
+  required int32  result         = 1;      // 结果(0为成功)
+  required UserInfo user_info    = 2;      // 玩家信息
+}
+
+// 服务器通知客户端玩家信息改变
+message UpdateUserInfoNtf
+{
+  required UserInfo user_info    = 1;      // 玩家信息
+  optional string message        = 2;      // 描述信息
+}
+
+// 充值到账提示
+message PurchaseNtf
+{
+  required int32  result         = 1;      // 0为购买成功，其它为失败
+  required int32  type           = 2;      // 货币种类(参考CurrencyType)
+  required int64  buy_number     = 3;      // 购买的数量
+  required int64  total_number   = 4;      // 充值后货币总数量
+  required int32  fee            = 5;      // 充值花费的人民币（单位：分）
+}
+
+// 房间信息
+message RoomInfo
+{
+  required int32  room_level     = 1;      // 房间级别（如：初级房间，中级房间，高级房间）
+  required string room_name      = 2;      // 房间名称
+  required string description    = 3;      // 房间描述
+  required int32  room_type      = 4;      // 房间类型(如：普通场，经典场，疯狂场)
+  required int64  min_coins      = 5;      // 最小金币准入
+  required int64  max_coins      = 6;      // 最大金币准入
+  required int32  base_score     = 7;      // 基础分
+  required int32  player_count   = 8;      // 房间中的人数
+  repeated string tag            = 9;      // 房间标记(如：火爆，爆满，推荐，会员专区等)
+  optional int32  service_fee    = 10;     // 服务费
+}
+
+// 获取房间列表
+message GetRoomListReq
+{
+  required int32  room_type      = 1;      // 房间类型(如：普通场，疯狂场), room_type = 0 则获取所有列表
+}
+
+message GetRoomListAck
+{
+  required int32  result         = 1;      // 结果
+  repeated RoomInfo room_list    = 2;      // 房间列表
+  required int32  room_type      = 3;      // 房间类型(如：普通场，疯狂场)
+}
+
+// 筛选出玩家可进入的房间列表
+message GetAvailableRoomReq
+{
+  repeated int32  room_levels    = 1;      // 待选房间列表
+}
+
+message GetAvailableRoomAck
+{
+  required int32  result         = 1;      // 判断结果（0为成功）
+  repeated int32  room_levels    = 2;      // 玩家可进入的房间列表
+}
+
+// 房间动态信息(包括CCU等)
+message RoomRunInfo
+{
+  required int32  room_level     = 1;      // 房间级别（如：初级房间，中级房间，高级房间）
+  required int32  player_count   = 2;      // 玩家人数
+}
+
+// 刷新房间的动态信息
+message GetRoomRunInfoReq
+{
+  required int32  room_type      = 1;      // 房间类型(如：普通场，疯狂场)
+}
+
+message GetRoomRunInfoAck
+{
+  required int32  room_type      = 1;      // 房间类型(如：普通场，疯狂场)
+  repeated RoomRunInfo room_info = 2;      // 房间人数信息
+}
+
+// 请求进入房间
+message EnterRoomReq
+{
+  required int32  room_type      = 1;     // 房间类型（如：普通场，疯狂场）
+  required int32  room_level     = 2;     // 房间级别（如：初级房间，中级房间，高级房间）。为0表示快速开始
+}
+
+message EnterRoomAck
+{
+  required int32  result         = 1;    // 请求结果
+  optional RoomInfo room_info    = 2;    // 进入成功则返回房间信息
+  optional int64  lack_coins     = 3;    // 当金币不够时提示缺少的金币数
+  
+  enum Result
+  {
+    OK                           = 0;    // 进入房间成功
+    RESUME                       = 1;    // 断线续玩
+    FAILED                       = 2;    // 进入失败
+    ROOM_NOT_EXISTS              = 3;    // 房间不存在
+    NOT_ENOUGH_COINS             = 4;    // 金币不够
+    TOO_MANY_COINS               = 5;    // 金币过多
+    MEMBER_ONLY                  = 6;    // 会员专区
+    LEVEL_TOO_LOW                = 7;    // 等级过低
+  }
+}
+
+// 请求离开房间
+message LeaveRoomReq
+{
+}
+
+message LeaveRoomAck
+{
+  required int32  result         = 1;    // 0成功
+}
+
+message LeaveRoomNtf
+{
+  required int32  reason         = 1;    // 踢出房间原因
+  optional int64  lack_coins     = 2;    // 当金币不够时提示缺少的金币数
+  
+  enum Reason
+  {
+    NORMAL                       = 0;	 // 正常离开房间
+    UNKNOWN                      = 1;    // 未知原因
+    NOT_ENOUGH_COINS             = 2;    // 金币不够
+    TOO_MANY_COINS               = 3;    // 金币过多
+    TRUST_PLAY                   = 4;    // 玩家非主动托管游戏，游戏结束后被踢出
+  }
+}
+
+// 通知玩家被踢出(只有被踢出者能收到)
+message KickOutNtf
+{
+  required int32 reason          = 1;    // 被踢出的原因
+    
+  enum Reason
+  {
+    UNKNOWN                      = 0;    // 未知原因
+    REPEAT_LOGIN                 = 1;    // 同名账号重复登录
+  }
+}
+
+// 请求免充
+message FreeCoinsReq
+{
+  required int32  room_level     = 1;    // 房间级别（如：初级房间，中级房间，高级房间）。为0表示快速开始
+}
+
+message FreeCoinsAck
+{
+  required int32  result         = 1;    // 0成功
+  
+  enum Result
+  {
+  	OK                       = 0 ;	    // 成功
+  	FAILED                   = 1 ;	    // 失败，原因不明
+  	ROOM_NOT_EXIST           = 2 ;	    // 失败，不存在的房间级别
+  	ROOM_NO_FREE_COINS       = 3 ;	    // 失败，该房间不允许免冲
+  	NO_MORE_FREE_TIMES       = 4 ;	    // 失败，今天已经用光了所有免冲次数了
+  	TOO_MANY_COINS           = 5 ;	    // 失败，玩家身上的金币太多，还不满足免冲条件
+  	NEED_WAIT_MORE_TIME      = 6 ;		// 失败，要等待更多的时间，才能领取免冲
+  	NOT_ENOUGH_COINS_IN_POOL = 7 ;		// 失败，这个时段的免冲池中剩余的金币不够了
+  }
+}
+
+// 免充通知
+message FreeCoinsNtf
+{
+  required int64  add_coins      = 1;    // 免充货币的数量
+  required int64  total_coins    = 2;    // 玩家总金币数
+  required int32  left_times     = 3;	 // 免充剩余次数
+  required int32  total_times    = 4;    // 当天可领取免充的总次数
+}
+
+// 心跳消息
+message HeartBeat
+{
+}
+
+
+// 玩家的成就信息
+message UserAchievement
+{
+	required int32 id           = 1 ;	// 成就id号，唯一标识不同的成就
+	required string name        = 2 ;	// 成就名
+	required string desc        = 3 ;	// 成就描述
+	
+	repeated int64 stage_values = 4 ;	// 该成就的各个阶段达成所需的数值
+	required int32 reach_stage  = 5 ;	// 已经达成的成就阶段，0表示还没有达成任何的阶段
+	required int32 take_stage   = 6 ;	// 已经领取的成就阶段奖励（获得了几颗星），如果这个值比reach_stage小，说明自己还有成就奖励没有领取
+	
+	required int64 cur_value    = 7 ;	// 该玩家当前的成就相关数值
+	required int64 stage_value  = 8 ;	// 要达成该阶段成就所需的数值
+}
+
+// 获取玩家的成就信息
+/// user->gate
+message UserAchievementReq
+{
+	required string nick_name = 1 ;		// 要查询这个昵称的玩家成就，如果为""，表示要获取自己的成就信息；否则这里是同桌的其他玩家的昵称
+}
+
+// 获取玩家的成就信息的返回消息
+/// gate->user
+message UserAchievementAck
+{
+	enum Result
+	{
+		RESULT_OK                = 0 ;	// 成功
+		RESULT_FAILED            = 1 ;	// 失败，未知原因
+		RESULT_CANNOT_FOUND_USER = 2 ;	// 失败，找不到这个昵称的玩家
+	}
+	
+	required string nick_name             = 1 ;	// 查询的玩家昵称，同上发消息中的nick_name值
+	required int32 result                 = 2 ;	// 查询结果，取值为Result枚举值
+	repeated UserAchievement achievements = 3 ;	// 该玩家的成就信息，如果是查询其他玩家的成就，那么有效的字段只有 id/name/stage_count/take_stage
+												// 如果是查询自己的成就，这里返回的是所有成就的信息，就算自己根本没有该成就的数据；
+												// 如果是查询其他玩家的成就，这里只返回该玩家领取过成就奖励的那些成就数据
+}
+
+// 领取成就奖励
+/// user->gate
+message TakeAchievementAwardReq
+{
+	required int32 id    = 1 ;	// 领取这个id号的成就
+	required int32 stage = 2 ;	// 领取该成就的这个阶段的奖励
+}
+
+// 领取成就奖励的返回消息
+/// gate->user
+message TakeAchievementAwardAck
+{
+	enum Result
+	{
+		RESULT_OK           = 0 ;	// 成功
+		RESULT_FAILED       = 1 ;	// 失败，未知原因
+		RESULT_ALREADY_TAKE = 2 ;	// 失败，已经领取了该阶段的奖励了
+		RESULT_NOT_REACH    = 3 ;	// 失败，还没有达成该阶段的成就
+	}
+	
+	required int32 result                = 1 ;	// 结果，取值为 Result 枚举值
+	optional int64 awardcoins            = 2 ;	// 如果领取成功，这里是奖励的金币值
+	optional int64 awardexps             = 3 ;	// 如果领取成功，这里是奖励的经验值
+	optional UserAchievement achievement = 4 ;	// 如果领取成功，这里是该成就的新的信息
+}
+
+// 通知达成成就的某个阶段
+/// gate->user
+message ReachAchievementNtf
+{
+	// 一条达成的成就数据
+	message Achievement
+	{
+		required int32 id          = 1 ;	// 成就id
+		required string name       = 2 ;	// 成就的名字
+		required int32 stage_count = 3 ;	// 这个成就总共有几个阶段
+		required int32 reach_stage = 4 ;	// 达成的成就阶段
+	}
+	
+	repeated Achievement achievements = 1 ;	// 达成的成就
+}
+
+// 普通奖励的id号
+enum NormalAwardID
+{
+	NORMAL_AWARD_ID_NEWBIE_TUTORIAL = 1 ;	// 新手教程
+	NORMAL_AWARD_ID_BIND_MOBILE     = 2 ;	// 绑定手机号
+}
+ 
+// 领取某种普通奖励
+/// user->gate
+message TakeNormalAwardReq
+{
+	required int32 awardid = 1 ;	// 奖励的id号
+}
+
+// 普通奖励的奖品
+message NormalAward
+{
+	// 奖品的类型
+	enum Type
+	{
+		TYPE_COIN = 1 ;	// 金币
+		TYPE_ITEM = 2 ;	// 道具
+		TYPE_EXP  = 3 ;	// 经验值
+	}
+	
+	required int32 type   = 1 ;		// 奖品的类型
+	required int64 count  = 2 ;		// 奖品的数量
+}
+
+// 领取普通奖励的返回值
+/// gate->user
+message TakeNormalAwardAck
+{
+	enum Result
+	{
+		RESULT_OK           = 0 ;	// 领取奖励成功
+		RESULT_FAILED       = 1 ;	// 领取奖励失败，未知原因
+		RESULT_INVALID_ID   = 2 ;	// 领取奖励失败，无效的奖励id号
+		RESULT_ALREADY_TAKE = 3 ;	// 领取奖励失败，已经领取了这个奖励了
+	}
+	
+	required int32 awardid      = 1 ;	// 奖励的id号
+	required int32 result       = 2 ;	// 领取奖励的结果
+	repeated NormalAward awards = 3 ;	// 获得的奖品
+}
+
+// 签到提示
+message CheckInNtf
+{
+	required int64 awardcoins = 1 ;	// 奖励的金币值
+	required int64 totalcoins = 2 ;	// 奖励后，玩家总共的金币值（如果为0，说明是pos服务直接转发的，那么就是用gate服务本地的金币值）
+}
+
+// 购买会员提示
+message MembershipNtf
+{
+	required int32 result        = 1 ;	// 购买结果
+	required int32 itemid        = 2 ;	// 购买的会员产品
+	required int64 membertime    = 3 ;	// 购买后剩下的会员时间（单位：秒）
+	required string notification = 4 ;	// 客户端显示的提示文字
+}
+
+// 广播的系统播报消息
+message SystemBroadcastNtf
+{
+    required int32 type      =    1;    // 消息种类   1：公告消息（手动） 2：运维消息（手动） 3：游戏通知消息 
+    optional int32 kind      =    2;    // 消息类型   暂时未使用，以后留用需要具体划分消息种类下消息类型
+    optional int32 level     =    3;    // 消息级别   相同type下，level越高越先发送
+    required int32 occur     =    4;    // 消息来源   1：WEB 2：比赛场 3：普通场 
+    required string content  =    5;    // 消息内容
+    required int32 repeat    =    6;    // 消息重复次数 
+}

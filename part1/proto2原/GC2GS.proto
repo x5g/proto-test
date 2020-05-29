@@ -1,0 +1,20 @@
+syntax="proto3";
+
+package GC2GS;
+
+enum MsgId
+{
+	First = 0;//Proto3 开始必须是 0 
+
+	Begin = 11000;
+
+    //GC2GS_AskEnterGameServer = 11001;//目前不用
+
+
+    End = 11100;
+}
+
+message AskEnterGameServer
+{
+	
+}

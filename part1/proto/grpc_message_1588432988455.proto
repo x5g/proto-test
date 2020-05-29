@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.pactera.rb.proto";
+option java_outer_classname = "RobotProto";
+
+package Robot;
+
+// The greeting service definition.
+service Robot {
+  // Sends a question
+  rpc getResponse (RbRequest) returns (RbResponse) {}
+}
+
+message RbRequest {
+  string userId =1;
+  string query =2;
+}
+
+// 机器人反馈接口对象，修改日期20181116
+// 完成后 在grpc_message_pb2_grpc.py 修改 from protos import grpc_message_pb2 as grpc__message__pb2
+message RbResponse {
+  // 成员变量都有一个唯一的数字标志(Assigning Tags like =1,2,3)
+  string key =1;                   //新增字段,节点唯一标识
+  string tts = 2;
+  string screenShow = 3;
+  repeated string recommendList = 4;
+  string responseType = 5;
+  string recommendVagueMsg= 6;
+  repeated RbCallBack events = 7;  //等同 List<RbCallBack>, k函数名，v参数 json封装
+  repeated RbCallBack actions = 8; //等同 List<RbCallBack>, k函数名，v参数 json封装
+  string path=9;                   //新增字段,节点搜索路径
+  string context=10;               ////新增字段,上下文
+
+  reserved 11 to 15;                // 预留的Assigning Tags,
+}
+
+// 定义Inner Class回调函数对象
+message RbCallBack {
+  string func = 1;                 //函数名
+  map<string, string> params = 2;  //参数Map,k=paramName,v=paramValue
+}
+
+

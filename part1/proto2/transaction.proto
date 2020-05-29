@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package com.thoughtworks.zpay;
+
+option java_package = "com.thoughtworks.zpay";
+
+message CompletedTransaction {
+    string transaction_reference = 1;
+    Money amount = 2;
+    Account debit_account = 3;
+    Account credit_account = 4;
+    string description = 5;
+    TransactionStatus status = 6;
+}
+
+message Money {
+    Currency currency_code = 1;
+    sint64 value = 2;
+}
+
+message Account {
+    AccountType accountType = 1;
+    string account_identifier = 2;
+}
+
+enum AccountType {
+    ACCOUNT_TYPE_UNKNOWN = 0;
+    PAYTM_WALLET = 1;
+    UPI_ID = 2;
+    CREDIT_CARD = 3;
+    INTERNAL_ACCOUNT = 4;
+}
+
+enum Currency {
+    CURRENCY_UNKNOWN = 0;
+    CURRENCY_USD = 1;
+    CURRENCY_INR = 2;
+}
+
+enum TransactionStatus {
+    STATUS_UNKNOWN = 0;
+    INITIATED = 1;
+    BANK_FAILURE = 2;
+    SUCCESS = 3;
+    SUSPECT = 4;
+}

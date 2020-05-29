@@ -1,0 +1,20 @@
+{
+  "weatherinfo": [
+    {
+      "city": "Austin",
+      "date": "2017-04-08",
+      "temperatureLow": 57,
+      "temperatureHigh": 67,
+      "wind": 10,
+      "humidity": 72
+    },
+    {
+      "city": "Austin",
+      "date": "2017-04-09",
+      "temperatureLow": 58,
+      "temperatureHigh": 68,
+      "wind": 12,
+      "humidity": 80
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+package google.protobuf;
+// package abm.protobuf;
+option java_package = "com.asiainfo.billing.db.natsclient.pbcodes";
+option java_outer_classname = "PbHead";
+
+// descriptor.proto must be optimized for speed because reflection-based
+// algorithms don't work during bootstrapping.
+option optimize_for = SPEED;
+
+//OpenApi 新增的头部信息
+message PbOpenInfo {
+    optional string sResultCode          = 1;       // 集团检查返回结果码
+    optional string sResultMsg           = 2;       // 集团检查返回结果串
+    required string sTraceId             = 3;       // 端到端调用标识
+    required string ssPanId              = 4;       // 调用端标识
+    required string sParentSpanId        = 5;       // 父调用端标识
+    optional string sSampledFlag         = 6;       // 采样标志 字段值为0，表示不采集;字段值为1，表示采集;不填，表示由服务端决定是否采集
+    required string sDebugFlag           = 7;       // Debug标志 字段值为0，表示不Debug;字段值为1，表示Debug。设置为1时，覆盖了sampledFlag，使之值为1。
+    optional string sLogCode             = 8;       // 日志格式需求，统一日志编码
+    optional int32  iLogSeq              = 9;       // 日志格式需求，日志序列
+    optional string sSrvName             = 10;      // 日志格式需求，模块名/服务名
+    optional string sBusiId              = 11;      // 日志格式需求，应用标识
+    optional string sAbId                = 12;      // 日志格式需求，能力标识
+    optional int32  iNetConnectFlag      = 13;      // 入网测试标志，注册需要，置1
+}
+
+message PbTimeInfo {
+    required int32     nodeid            = 1;       // 机器ID
+    required int32     pid               = 2;       // 进程PROCESS_ID
+    required int64     InSec             = 3;       // 进入进程的时间，秒级时间
+    required int64     InUSec            = 4;       // 进入进程的时间，微妙级时间
+    required int64     OutSec            = 5;       // 出进程的时间，秒级时间
+    required int64     OutUSec           = 6;       // 出进程的时间，微妙级时间
+}
+
+message PbFtpInfo {
+    required string user                 = 1;
+    required string pwd                  = 2;
+    required string ip                   = 3;
+    required int32  port                 = 4;
+    required string filename             = 5;
+}
+
+
+message PbRouteInfo {															//需要按照offerinstId进行排序和排重
+    required int64 routeid                = 1;		//accu---custid;bal----acctid
+    required int32 orgid                  = 2;
+    optional int64 offerinstid            = 3;		//acctid 设置成acct_id；纯量本是-serv_id；套餐是offerinstid;1,cust;2 acct;3 serv,4 other
+    optional int32 nodeid                 = 4;		//ddal or dubbo 设置
+}
+
+message PbPckHead {
+    enum ReqTypeDef {
+        REQ_TYPE_REQ        = 1;                //请求
+        REQ_TYPE_ANS        = 2;                //回复
+        REQ_TYPE_REC        = 3;                //恢复，请求不需要服务端响应
+    }
+    enum PckTypeDef {
+        PACK_TYPE_INI    = 1;                  //多包传输
+        PACK_TYPE_UPD    = 2;                  //多包续传
+        PACK_TYPE_FIN    = 3;                  //多包结束
+        PACK_TYPE_EVENT  = 4;                  //单包
+    }
+    enum MsgTypeDef {
+        MSG_TYPE_MSG    = 1;                   //业务包以消息方式传输
+        MSG_TYPE_FILE   = 2;                   //业务包以文件方式传输
+    }
+    enum ClntTypeDef {
+        CLNT_TYPE_HB    = 1;                   //离线计费
+        CLNT_TYPE_OCS   = 2;                   //在线计费
+        CLNT_TYPE_ACCT  = 3;                   //账务系统
+        CLNT_TYPE_SGW   = 4;                   //SGW
+        CLNT_TYPE_CREDIT_CONTROL = 5;          //信控
+        CLNT_TYPE_OCM = 6;
+    }
+    enum LogLevelDef {
+        LEVEL_DEBUG       = 5;                //初始化日志
+        LEVEL_INFO        = 4;                //文件普通日志打开
+        LEVEL_WARN        = 3;                //ddal消息日志时间戳打开
+        LEVEL_ERROR       = 2;								//edsc消息日志时间戳打
+        LEVEL_FATAL       = 1;								//api消息日志时间戳打开
+        LEVEL_ALL        	= 6;								//消息日志和文件轨迹日志打开
+    }
+
+    required int32  Version           = 2;                              //版本
+    required int32  CmdID             = 3;                              //命令标识          *************
+    required int64  TransId           = 4;                              //事物唯一标识,多包时保持一致 **************
+    required int32  TransTime         = 5;                              //事物的发生时间，排重时用确定在哪张表中 **************
+    
+    optional string TypeName          = 6;                              //记录业务包体的名称，用于解析业务包
+    optional ReqTypeDef ReqType       = 7[default = REQ_TYPE_REQ];     //请求类型，1请求，2回复, 3恢复，请求不需要服务端响应 
+    optional int32 TransSeq           = 8;                              //预留，如需分包时用,包序列
+
+    optional MsgTypeDef MsgType       = 9[default = MSG_TYPE_MSG];      //业务包传输方式
+    required int32 ClntID             = 10;                             //客户端节点ID, 跟业务里的transID组合 ,唯一确定一个事务(在socket客户端中赋值)
+
+    optional PckTypeDef PckType       = 11[default = PACK_TYPE_EVENT];  //预留，如需分包时用，包类型
+    optional int64 InTm               = 12;                             //进入客户端系统时间
+    optional int64 OutTm              = 13;                             //进入服务端系统时间
+    optional int32 RltCode            = 14;                             //协议级编码
+
+    optional int32 MqType             = 16;                             //返回时的消息队列优先级,API中赋值
+    optional int64 ServId             = 17;                             //真实用户标识
+    optional int64 AcctId            = 18;                             //账户标识
+    optional int32  OrgId             = 19;                             //省份ORGID
+    optional int64 MvnoId            = 20;                             //转售商编码
+
+    repeated PbRouteInfo RouteInfo    =	21;							//路由信息，ddal根据此路由进行分发   *****************
+    required ClntTypeDef ClntType     = 22;                             //客户端类型
+    optional LogLevelDef  LogLevel    = 23[default = LEVEL_FATAL];      //消息日志等级
+    optional int32  SrvNodeId         = 24;                             //服务端NodeId，服务端自己设置，统计用
+    optional PbFtpInfo FtpInfo        = 25;                             //ftp信息
+    repeated PbTimeInfo TmLog          = 26;                             //耗时日志
+
+    optional string AppSubject        = 27;             								//app发送时设置
+    optional string AppReply          = 28;             								//app接收时设置
+    optional string DDALSubject       = 29;             								//DDAL发送时设置
+    optional string DDALReply         = 30;             								//DDAL接收时设置
+    optional int64  DBSequence        = 31;    //集团使用，OpenApi流量控制借用，0-首次连接；1-非首次连接
+
+    optional int32  FieldNum          = 32;                              //记录业务包体的名称，用于解析业务包    
+	optional int32 	NodeGroupid       =	33;														//业务节点配置的nodeGroupid，需要和DDALSubject中的NODEID进行匹配
+	optional int32 	vipflag           =	34;														//大账户或大池标志，走特殊通道或走离线
+	optional bool 	timeflag          =	35;														//是否添加时间戳
+
+    optional PbOpenInfo OpenInfo      = 36;    // OpenApi新增头部信息
+    optional bytes RltString          = 37;    // 错误码描述信息
+}
+
+message PbTReturnFile {
+    required string sUser                            = 1;
+    required string sPwd                             = 2;
+    required string sIp                              = 3;
+    required int32  iPort                            = 4;
+    required int32  iKeyID                           = 5;
+    required string sUpPath                          = 6;
+    required string sDownPath                        = 7;
+    required string sFileName                        = 8;
+    optional int64  lItemNum                         = 9;
+    optional int64  lValueSum                        = 10;
+    optional int64  lDisctValueSum                   = 11;
+}
+
+message PbABMFileV2 {
+    repeated PbTReturnFile AbmFileV2 = 1;
+}
+
+
+

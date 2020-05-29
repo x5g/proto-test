@@ -1,0 +1,94 @@
+// protoc --proto_path=$GOPATH/src --go_out=$GOPATH/src $GOPATH/src/github.com/lizebang/learning-proto3/base/demo/demo.proto
+syntax = "proto3";
+package demo;
+option go_package = "github.com/lizebang/learning-proto3/base/demo";
+
+// ----------------------------
+// msg1 base
+message msg1 {
+  int32 field1 = 1;
+  int32 field2 = 2;
+  repeated int32 field3 = 3;
+}
+// ----------------------------
+
+// ----------------------------
+// msg2 reserved
+message msg2 {
+  reserved 1, 2, 11 to max;
+  reserved "field2", "field3";
+
+  int32 field1 = 3;
+  int32 field4 = 4;
+}
+// ----------------------------
+
+// ----------------------------
+// msg3 allow_alias
+message msg3 {
+  enum enum1 {
+    option allow_alias = true;
+
+    a = 0;
+    b = 1;
+    c = 1;
+  }
+
+  enum1 field1 = 1;
+  enum2 field2 = 2;
+}
+// ----------------------------
+
+// ----------------------------
+// enum2 reserved
+enum enum2 {
+  // It can't contain zero.
+  reserved 1, 11 to max;
+  reserved "a";
+
+  b = 0;
+  c = 2;
+}
+// ----------------------------
+
+// ----------------------------
+// msg4 msg3.enum1
+message msg4 {
+  msg3.enum1 field1 = 1;
+}
+
+// ----------------------------
+// msg5 msg6
+message msg5 {
+  message msg6 {
+    int32 field1 = 1;
+  }
+
+  msg6 field1 = 1;
+}
+// ----------------------------
+
+// ----------------------------
+// msg7 msg5.msg6
+message msg7 {
+  msg5.msg6 field1 = 1;
+}
+// ----------------------------
+
+// ----------------------------
+import "github.com/lizebang/learning-proto3/base/new/new.proto";
+
+// msg8 old.msg1
+message msg8 {
+  old.msg1 field1 = 1;
+}
+// ----------------------------
+
+// ----------------------------
+import "github.com/lizebang/learning-proto3/base/old/old.proto";
+
+// msg9 old.msg1
+message msg9 {
+  old.msg1 field1 = 1;
+}
+// ----------------------------

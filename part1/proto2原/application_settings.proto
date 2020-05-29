@@ -1,0 +1,38 @@
+package BNET.BI;
+
+
+message ApplicationSettings {
+	enum WindowExitBehavior {
+		EXITBEHAVIOR_UNSPECIFIED = 0;
+		EXITBEHAVIOR_MINIMIZE = 1;
+		EXITBEHAVIOR_EXIT = 2;
+	}
+	enum GameLaunchWindowBehavior {
+		GAMELAUNCH_DONOTHING = 0;
+		GAMELAUNCH_MINIMIZE = 1;
+		GAMELAUNCH_EXIT = 2;
+		GAMELAUNCH_CLOSE = 3;
+	}
+	optional uint64 session_id = 1;
+	optional uint64 bnet_id = 2;
+	optional uint64 timestamp = 3;
+	optional bool keep_me_logged_in = 4;
+	optional bool remember_email = 5;
+	optional string locale = 6;
+	optional bool launch_on_startup = 7;
+	optional bool allow_multiple_instances = 8;
+	optional bool toasts_enabled = 9;
+	optional .BNET.BI.ApplicationSettings.WindowExitBehavior window_exit_behavior = 10 [default = EXITBEHAVIOR_UNSPECIFIED];
+	optional .BNET.BI.ApplicationSettings.GameLaunchWindowBehavior game_launch_window_behavior = 18 [default = GAMELAUNCH_DONOTHING];
+	optional bool hide_toasts_when_playing = 19;
+	optional bool create_desktop_icon_auto = 11;
+	optional bool create_desktop_icon_all_users = 12;
+	optional bool pause_updates_on_game_launch = 13;
+	optional bool notify_on_auto_update = 14;
+	optional bool peer_to_peer_enabled = 15;
+	optional bool flash_taskbar_on_message_received = 16;
+	optional bool language_filter_enabled = 17;
+	optional bool duplicate_ingame_whispers = 20;
+	optional bool analytics_enabled = 21;
+	optional bool use_browser_hardware_acceleration = 22;
+}

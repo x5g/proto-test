@@ -1,0 +1,5 @@
+syntax = "proto3";
+message Demo {
+  string query = 1;
+  int32 number = 2;
+}

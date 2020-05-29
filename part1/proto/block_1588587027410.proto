@@ -1,0 +1,40 @@
+syntax = "proto3";
+package block;
+option go_package = "github.com/eliothedeman/heath/block";
+
+// metadat about a block signature
+message Signature {
+  int64 timestamp = 1;
+  bytes hash = 2;
+  bytes signatureA = 3;
+  bytes signatureB = 4;
+}
+
+message Transaction {
+  Signature signature = 1;
+  enum Type {
+    Raw = 0;
+    PublicKey = 1;
+  };
+  Type type = 2;
+  bytes payload = 3;
+}
+
+// Metadata about a block
+message Block {
+  int64 timestamp = 1;
+  bytes parent = 2;
+  bytes hash = 3;
+  repeated Transaction transactions = 4;
+}
+
+message PublicKey {
+  bytes x = 1;
+  bytes y = 2;
+  string hint = 3; // hex encoded sha512 of x then y
+}
+
+message PrivateKey {
+  PublicKey public = 1;
+  bytes d = 2;
+}

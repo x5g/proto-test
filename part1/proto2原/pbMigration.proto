@@ -1,0 +1,318 @@
+package google.protobuf;
+// package abm.protobuf;
+option java_package = "com.asiainfo.billing.db.natsclient.pbcodes";
+option java_outer_classname = "PbMigration";
+
+// descriptor.proto must be optimized for speed because reflection-based
+// algorithms don't work during bootstrapping.
+option optimize_for = SPEED;
+
+message PbMigAcctBal{
+	required int64 lAcctBalanceID=1; //账本标识
+	required int32 iBalanceTypeID=2; //余额类型标识
+	required string sEffDate=3; //生效时间
+    required string sExpDate=4; //失效时间
+    required int64 lBalance=5; //余额
+    required int64 lCharege1 = 6;
+    required int64 lCharege2 = 7;
+    required int64 lCycleUpper=8; //余额上限
+    required int64 lCycleLower=9; //余额下限
+    required string sCycleUpperType=10; //余额上限类型
+    required string sCycleLowerType=11; //余额下限类型
+    required string sState=12; //状态
+    required string sStateDate=13; //状态时间 
+    required int64 lAcctID=14; //账户标识
+    required int64 lServID=15; //用户标识
+    required int32 iItemGroupID=16; //账目组标识
+    required int32 iObjectTypeID=17; //对象类型标识
+    required int32 iPriority    = 18;
+    required int32 ilowerbillingcycleid = 19;
+    required int32 iupperbillingcycleid = 20;
+}
+message PbMigAcctBalTrack{
+	required int64 lTrackId  = 1;
+	required int64 lRecordId = 2;
+	required int32 iOperType = 3;
+	required int64 lAcctBalanceID= 4;
+	required int64 lBalance = 5;
+	required int64 lBalanceB = 6;
+	required string sState= 7; //状态
+	required string sStateB= 8; //状态
+	required string sEffDate= 9; //生效时间
+	required string sEffDateB = 10; //生效时间
+	required string sExpDate= 11; //失效时间
+	required string sExpDateB = 12; //失效时间
+ 	required string sStateDate= 13; //状态时间 	
+ 	required int64 lAcctID=14;
+}
+message PbMigABalTrackT{
+	required int64 lTrackId  = 1;
+	required int64 lRecordId = 2;
+	required int32 iOperId = 3;
+	required int64 lAcctBalanceID= 4;
+	required int32 iBalanceTypeID= 5;
+	required string sEffDate= 6; //生效时间
+    required string sExpDate= 7; //失效时间
+    required int64 lBalance = 8;
+    required int64 lCycleUpper=9; //余额上限
+    required int64 lCycleLower=10; //余额下限
+    required string sCycleUpperType=11; //余额上限类型
+    required string sCycleLowerType=12; //余额下限类型
+    required string sState= 13; //状态
+    required string sStateDate= 14; //状态时间 
+    required int64 lAcctID=15; //账户标识
+    required int64 lServID=16; //用户标识
+    required int32 iItemGroupID=17; //账目组标识
+    required int32 iObjectTypeID=18; //对象类型标识
+}
+
+message PbMigAcctCredit{
+	required int64 lAcctcreditId  = 1;
+	required int64 lServID        = 2;
+	required int64 lAcctID        = 3;
+	required int32 lCreditGrade   = 4;
+	required int64 lCreditAmount  = 5;
+	required bytes sCreditLevel   = 6;
+	required string sEffDate      = 7; //生效时间
+    required string sExpDate      = 8; //失效时间
+	required string sCreditType   = 9;
+	required string sCreditDate   = 10;
+	optional string sOperDate     = 11;
+	optional int32  iOrgId        = 12;
+}
+message PbMigTransRecord{
+    required int64 lRecordId  = 1;
+    required int64 lTransId   = 2;
+    required int64 lAcctid    = 3;
+    required int64 lSeqId     = 4;
+    required int32 iOperType  = 5;
+    required string sStateDate = 6;
+    required int32  iState     = 7;
+}
+message PbTrsPreAfterLog{
+    required int64 lTransFerId   = 1;
+    required int64 lAcctID       = 2;
+    required int64 lServID       = 3;
+    required int32 iTransType    = 4;
+    required string sinputDate   = 5;
+    required string sProcessDate = 6;
+    required int32  iProcessState = 7;
+}
+message PbMigMdfAcct{
+	required int64 lTransId    = 1;
+	required int32 iOperId     = 2;
+	required int64 lAcctId     = 3;
+	required int64 lServId     = 4;
+	required string sStateDate = 6;
+}
+message PbMigrationBal{
+	optional  int32  		   iMigBalType        = 1;
+	repeated PbMigAcctBal      opbMigAcctBal      = 2;
+	repeated PbMigAcctBalTrack opbMigAcctBalTrack = 3;
+	repeated PbMigABalTrackT   opbMigABalTrackT   = 4;
+	repeated PbMigAcctCredit   opbMigAcctCredit   = 5;
+	repeated PbMigTransRecord  opbMigTransRecord  = 6;
+	repeated PbTrsPreAfterLog  opbMigTrsPreAfter  = 7;
+	repeated PbMigMdfAcct      opbMigMdfAcct      = 8;
+}
+
+
+//累积量割接PB
+
+message PbMigEventAggr{
+    required int64 lEventAggrId = 1;         //查询的主键
+    required int32 iVersionId   = 2;        //商品实例ID
+    required int32 iAccuTypeId  = 3;       //成员明细ID
+    required int64 lOfferInstID = 4;             //用户ID
+    required int64 lCycleTypeID = 5;        //周期类型ID
+    required int64 lCycleBeginTime = 6;     //开始时间，格式：20100813153848
+    required int64 lCycleEndTime   = 7;       //结束时间，格式：20100813153848
+    required int64 lValue  = 8;
+    required int64 lInstMemberId = 9;
+    required int64 lCycleInstId = 10;
+    required int64 lServId = 11;
+    required string sSplitBy = 12; 
+    required int32 iBillingCycleID = 13;
+    required int64 lGroupNodeId = 14;
+    required int64 lCustId = 15;
+    required int32 iOrgId = 16;
+}
+message PbMigDisct{
+	required int64 lItemDisctSeq       = 1;
+	required int32 iVersionId          = 2; 
+	required int64 lOfferInstID        = 3;        
+	required int32 iBillingCycleID     = 4; 
+    required int32 iOrgBillingCycleID  = 5; 
+    required int32 iPringCombineId 	   = 6;
+    required int32 iMeasureSeq 		   = 7;
+	required int32 iItemGroupID        = 8;  
+	required int32 iOwnerType          = 9; 	
+	required int64 iOwnerId			   = 10;
+	required int64 lValue 			   = 11;
+	required int64 lDisctValue  	   = 12;
+	required int64 lGroupNodeId        = 13;
+    required int64 lCustID             = 14;    
+	required int32 iOrgID		       = 15;
+}
+message PbMigMusageBal{
+	required int64  lUsageBalanceID       = 1;//量本标识
+	required int64  lServId               = 2;//用户标识 key
+    required int64  lAcctId               = 3;//账户标识，填-1
+    required int64  lOfferInstId          = 4; //套餐实例标识，VC填-1 key
+    required int32  iUsageTypeId          = 5;//量本类型 key
+    required int32  iSourceTypeId         = 6;//量本来源 key
+    required int32  iAccuTypeId           = 7;//使用量类型 key 
+    required int32  iMeasureUnit          = 8;//度量单位   
+    required int32  iOrgID		          = 9;
+    required string sOptDate              = 10;
+    required int64  lCustId               = 11;
+}
+message PbMigMUBalDetail{
+	 	required int64 lUsageBalDeID  = 1;
+        required int64 lUsageBalId    = 2;
+        required string sEffDate      = 3;
+        required string sCycleExpDate = 4;
+		required string sExpDate      = 5;
+		required int64  lSBalance     = 6;
+		required int64  lDBalance     = 7;
+		required int64  lValue1       = 8;
+		required int64  lValue2       = 9;
+		required int64  lBalance      = 10;
+		required int64  lVersionId    = 11;
+		required int32  iOrgId        = 12;
+		required string sOptDate      = 13;
+required int64 lCustId        = 14;
+}
+message PbMUAggrDetail{ 
+        required int64 lAggrDetailId  = 1;
+        required int64 lUsageBalDeID  = 2;
+        required int64 lServID        = 3;
+        required int32 iBillCycleId   = 4;
+        required int64 lOfferInstId   = 5;
+        required int64 lValue         = 6;
+        required int32 iAggrType      = 7;
+        required string sEffDate      = 8;
+        required string sExpDate      = 9;
+        required int64 lVersionId     = 10;
+        required int32 iMeaSureUnit   = 11;
+        required int32 iSourceTypeId  = 12;
+        required int32 iOrgId         = 13;
+        required int64 lCustId        = 14; 
+}
+
+
+message PbVCDepositDetail{   
+       required int64 lVcUsageId       = 1;
+       required bytes sVcUsageSerialID = 2;
+       required string sCardId         = 3;
+       required int32  iRemoteAreaCode = 4;
+       required string sRemoteAccNbr   = 5;
+       required int32  iObjAreaCode    = 6;
+       required string sAccNbr         = 7;
+       required string sUsageCardType  = 8;
+       required int32  iAccessType     = 9;
+       required int64  lCardAmount     = 10;
+       required int64  lBalance        = 11;
+       required int32  iMeasureUnit    = 12;
+       required string sEffDate        = 13;
+       required string sExpDate        = 14;
+       required int32  iAddTypeId      = 15;
+	   required int32  iFamilyId       = 16;
+	   required int64  lServId         = 17;
+	   required int64  lAcctId         = 18;
+	   required int32  iOrgId          = 19;
+	   required int32  iShareId        = 20;
+	   required int64  lUsageBalanceId = 21;
+	   required int64  lUsageBalDetaiD = 22;
+	   required string sState          = 23;       
+       required string sStateDate      = 24;
+       required string sCreateDate     = 25;
+       required string sPreExpDate     = 26;
+       required string sFolExpDate     = 27;
+       required int64  lChargeAmount   = 28;
+       required int64  lChargeValue    = 29;
+       required string sPayoweStatus   = 30;
+       required int64  lCustId         = 31;
+}
+
+message PbMUTransRecord{
+	required int64 lTransRecordId  = 1;
+	required int64 lTransId        = 2;
+	required int64 lUsageBalDetId  = 3;
+	required int32 iCmdID          = 4;
+	required int32 iOperType       = 5;
+	required int64 lBalance        = 6;
+	required int64 lServId         = 7;
+	required int64 lOfferInstId    = 8;
+	required int64 lRollTransID    = 9;
+	required int32 iBilingCycleId  = 10;
+	required string sCardId        = 11;
+	required string sVcUsageSerialID = 12;
+	required string sstate           = 13;
+	required string sOptDate         = 14;
+	required int64  lCustID          = 15;
+}
+message PbMUAggrDetlBatch{
+    required int64  lAggrDetailID = 1;
+    required int64  lChargeAmount = 2;
+    required int64  lChargeValue  = 3;
+    required int64  lCustID       = 4;
+    required string sBatchDate    = 5;    
+}
+message PbMChangeUsageDel{
+	required int64 lChangeDetailID = 1;
+	required int64 lSouServID      = 2;
+	required int64 lSouAcctId      = 3;
+	required int64 lSouUsageBalId  = 4;
+	required int64 lSouUSBalDetaID = 5;
+	required int64 lTransBalanceOut = 6;
+	required int64 lDstServId       = 7;
+	required int64 lDstAcctId       = 8;
+	required int32 iDstUsageTypeId  = 9;
+	required int32 iDstSourceTypeId = 10;
+	required int32 iDstAccuTypeID   = 11;
+	required int32 iDstMeasureUnit  = 12;
+	required string sEffDate        = 13;
+	required string sCycleExpDate   = 14;
+	required string sExpDate        = 15;
+	required int64  lTransBalanceIn = 16;
+	required string sState          = 17;
+	required string sOptDate        = 18;
+	required int64 lCustId          = 19;	
+}
+message PbMigDisctDetail{
+	required int64 lItemDetailSeq      = 1;
+	required int32 iVersionId          = 2; 
+	required int64 lItemDisctSeq       = 3;
+	required int64 lServID             = 4;        
+	required int32 iAcctItemTypeId     = 5; 
+	required int32 iBillingCycleID     = 6; 
+	required int64 lValue 		   = 7;
+	required int64 lDisctValue  	   = 8;
+	required int32 iOrgID		   = 9;
+	required int64 lCustID             = 10;    
+}
+message PbMigrationAccu{
+        repeated PbMigEventAggr         opbEventAggr    = 1;
+        repeated PbMigDisct             opbMigDisctA    = 2;
+        repeated PbMigDisct                 opbMigDisctB    = 3;
+        repeated PbMigDisct                 opbMigDisctC    = 4;
+        repeated PbMigMusageBal     oPbMigMusageBal = 5;
+        repeated PbMigMUBalDetail   opbMigBalDetail = 6;
+        repeated PbMUAggrDetail  	opbMigMAggrDetD = 7;
+        repeated PbMUAggrDetail  	opbMigMAggrDetS = 8;
+        repeated PbVCDepositDetail  opbVCDepositDe  = 9;
+        repeated PbMUTransRecord    opbMUTransRecord = 10;
+        repeated PbMUAggrDetlBatch  opbMAggrDetBatch = 11;
+        repeated PbMChangeUsageDel  opbMChangeUDel   = 12;
+        repeated PbMigDisctDetail   opbMigDetailC    = 13;
+}
+
+
+//割接表 回包 包体
+message PbMigrationRlt{
+	required int32 iTableFlag   = 1;
+	required int64 lMigKeyId    = 2;
+	optional int64 lMigMapKeyId = 3;  //对于 需要第二次映射的 如 a_balance_track 这些表的 acct_balance_id
+	required int64 lRltTableCnt      = 4; //服务端接收处理的条数
+}

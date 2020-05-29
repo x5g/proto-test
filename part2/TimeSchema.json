@@ -1,0 +1,16 @@
+{
+  "Head": {
+    "Cmd": "CMD_HEART",
+    "CmdType": 0,
+    "CmdSeq": 0,
+    "SrcID": 1,
+    "DstID": 2,
+    "UID": "0"
+  },
+  "Data": {
+    "Time": {
+      "Time": "123456",
+      "Tick": "0"
+    }
+  }
+}

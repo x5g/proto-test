@@ -1,0 +1,375 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option java_outer_classname = "EmbeddedView";
+option go_package = "gosuproto";
+
+import "wrappers.proto";
+import "profile.proto";
+
+// rpc
+
+service ViewsService {
+    rpc CreateView (RPCViewsCreateViewRequest) returns (RPCViewsCreateViewResponse);
+    rpc EditView (RPCViewsEditViewRequest) returns (RPCViewsEditViewResponse);
+    rpc DeleteView (RPCViewsDeleteViewRequest) returns (RPCViewsDeleteViewResponse);
+
+    rpc GetView (RPCViewsGetViewRequest) returns (RPCViewsGetViewResponse);
+    rpc GetViews (RPCViewsGetViewsRequest) returns (RPCViewsGetViewsResponse);
+
+    rpc SetViewProperties (RPCViewsSetViewPropertiesRequest) returns (RPCViewsSetViewPropertiesResponse);
+    rpc DeleteViewProperties (RPCViewsDeleteViewPropertiesRequest) returns (RPCViewsDeleteViewPropertiesResponse);
+
+    rpc PopulateViewFromURL (RPCViewsPopulateViewFromURLRequest) returns (RPCViewsPopulateViewFromURLResponse);
+
+    rpc TransferOwnership (RPCViewsTransferOwnershipRequest) returns (RPCViewsTransferOwnershipResponse);
+
+    rpc GetEditorInviteCode (RPCViewsGetEditorInviteCodeRequest) returns (RPCViewsGetEditorInviteCodeResponse);
+    rpc GetEditorInviteInfo (RPCViewsGetEditorInviteInfoRequest) returns (RPCViewsGetEditorInviteInfoResponse);
+    rpc AcceptEditorInvite (RPCViewsAcceptEditorInviteRequest) returns (RPCViewsAcceptEditorInviteResponse);
+    rpc RemoveEditor (RPCViewsRemoveEditorRequest) returns (RPCViewsRemoveEditorResponse);
+}
+
+message RPCViewsCreateViewRequest {
+    string user_id = 1;
+    string name = 2;
+    repeated ViewProperty properties = 3;
+}
+
+message RPCViewsCreateViewResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+    View view = 2;
+}
+
+message RPCViewsEditViewRequest {
+    string user_id = 1;
+    string view_id = 2;
+    google.protobuf.StringValue name = 3;
+    repeated ViewProperty properties = 4;
+}
+
+message RPCViewsEditViewResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+    View view = 2;
+}
+
+message RPCViewsDeleteViewRequest {
+    string user_id = 1;
+    string view_id = 2;
+}
+
+message RPCViewsDeleteViewResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+}
+
+message RPCViewsGetViewRequest {
+    string view_id = 1;
+}
+
+message RPCViewsGetViewResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        NOT_FOUND = 4;
+    }
+
+    ErrorType error = 1;
+    View view = 2;
+}
+
+message RPCViewsGetViewsRequest {
+    string user_id = 1;
+}
+
+message RPCViewsGetViewsResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+    repeated View views = 2;
+    repeated ViewWithMeta views_with_meta = 3;
+}
+
+message RPCViewsSetViewPropertiesRequest {
+    string user_id = 1;
+    string view_id = 2;
+    repeated ViewProperty properties = 3;
+}
+
+message RPCViewsSetViewPropertiesResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+}
+
+message RPCViewsDeleteViewPropertiesRequest {
+    string user_id = 1;
+    string view_id = 2;
+    repeated string keys = 3;
+}
+
+message RPCViewsDeleteViewPropertiesResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+
+    ErrorType error = 1;
+}
+
+message RPCViewsPopulateViewFromURLRequest {
+    string user_id = 1;
+    string view_id = 2;
+    string url = 3;
+}
+
+message RPCViewsPopulateViewFromURLResponse {
+    ViewsPopulateViewFromURLResponse.ErrorType error = 1;
+    View view = 2;
+}
+
+message RPCViewsTransferOwnershipRequest {
+    string user_id = 1;
+    string view_id = 2;
+    string target_user_id = 3;
+}
+
+message RPCViewsTransferOwnershipResponse {
+    ViewsTransferOwnershipResponse.ErrorType error = 1;
+}
+
+message RPCViewsGetEditorInviteCodeRequest {
+    string user_id = 1;
+    string view_id = 2;
+}
+
+message RPCViewsGetEditorInviteCodeResponse {
+    ViewsGetEditorInviteCodeResponse.ErrorType error = 1;
+    ViewEditorInvite invite = 2;
+}
+
+message RPCViewsGetEditorInviteInfoRequest {
+    string user_id = 1;
+    string code = 2;
+}
+
+message RPCViewsGetEditorInviteInfoResponse {
+    ViewsGetEditorInviteInfoResponse.ErrorType error = 1;
+    ViewEditorInvite invite = 2;
+    View view = 3;
+}
+
+message RPCViewsAcceptEditorInviteRequest {
+    string user_id = 1;
+    string code = 2;
+}
+
+message RPCViewsAcceptEditorInviteResponse {
+    ViewsAcceptEditorInviteResponse.ErrorType error = 1;
+    View view = 2;
+}
+
+message RPCViewsRemoveEditorRequest {
+    string user_id = 1;
+    string view_id = 2;
+    string target_user_id = 3;
+}
+
+message RPCViewsRemoveEditorResponse {
+    ViewsRemoveEditorResponse.ErrorType error = 1;
+}
+
+// api
+
+message ViewsCreateViewRequest {
+    string name = 1;
+    repeated ViewProperty properties = 2;
+}
+
+message ViewsCreateViewResponse {
+    RPCViewsCreateViewResponse.ErrorType error = 1;
+    View view = 2;
+}
+
+message ViewsEditViewRequest {
+    google.protobuf.StringValue name = 1;
+    repeated ViewProperty properties = 2;
+}
+
+message ViewsEditViewResponse {
+    RPCViewsEditViewResponse.ErrorType error = 1;
+    View view = 2;
+}
+
+message ViewsDeleteViewResponse {
+    RPCViewsDeleteViewResponse.ErrorType error = 1;
+}
+
+message ViewsGetViewResponse {
+    RPCViewsGetViewResponse.ErrorType error = 1;
+    View view = 2;
+}
+
+message ViewsGetViewsResponse {
+    RPCViewsGetViewsResponse.ErrorType error = 1;
+    repeated View views = 2;
+    repeated ViewWithMeta views_with_meta = 3;
+}
+
+message ViewsSetViewPropertiesRequest {
+    repeated ViewProperty properties = 1;
+}
+
+message ViewsSetViewPropertiesResponse {
+    RPCViewsSetViewPropertiesResponse.ErrorType error = 1;
+}
+
+message ViewsDeleteViewPropertiesRequest {
+    repeated string keys = 1;
+}
+
+message ViewsDeleteViewPropertiesResponse {
+    RPCViewsDeleteViewPropertiesResponse.ErrorType error = 1;
+}
+
+message ViewsPopulateViewFromURLRequest {
+    string url = 1;
+}
+
+message ViewsPopulateViewFromURLResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        PAGE_NOT_FOUND = 4;
+        INVALID_URL = 5;
+        COULD_NOT_CRAWL = 6;
+    }
+
+    ErrorType error = 1;
+    View view = 2;
+}
+
+message ViewsTransferOwnershipResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+}
+
+message ViewsGetEditorInviteCodeResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+    ViewEditorInvite invite = 2;
+}
+
+message ViewsGetEditorInviteInfoResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        INVALID_CODE = 4;
+    }
+    ErrorType error = 1;
+    ViewEditorInvite invite = 2;
+    View view = 3;
+}
+
+message ViewsAcceptEditorInviteResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        INVALID_CODE = 4;
+    }
+    ErrorType error = 1;
+    View view = 2;
+}
+
+message ViewsRemoveEditorResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+}
+
+// model
+
+message View {
+    string id = 1;
+    string name = 2;
+    repeated ViewProperty properties = 3;
+}
+
+message ViewProperty {
+    string key = 1;
+    oneof kind {
+        google.protobuf.StringValue string_value = 2;
+        google.protobuf.FloatValue float_value = 3;
+        google.protobuf.Int64Value int_value = 4;
+        google.protobuf.BoolValue bool_value = 5;
+    }
+}
+
+message ViewWithMeta {
+    View view = 1;
+    ChatUser owner = 2;
+    repeated ChatUser editors = 3;
+}
+
+message ViewEditorInvite {
+    int32 created_at = 1;
+    int32 updated_at = 2;
+    string code = 3;
+    string view_id = 4;
+    string inviter_id = 5;
+}

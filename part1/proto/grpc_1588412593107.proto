@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ml.combust.mleap.pb;
+
+import "mleap.proto";
+
+service Mleap {
+  rpc LoadModel (ml.combust.mleap.pb.LoadModelRequest) returns (ml.combust.mleap.pb.Model) { }
+  rpc UnloadModel (ml.combust.mleap.pb.UnloadModelRequest) returns (ml.combust.mleap.pb.Model) { }
+  rpc GetModel (ml.combust.mleap.pb.GetModelRequest) returns (ml.combust.mleap.pb.Model) { }
+
+  rpc CreateFrameStream (ml.combust.mleap.pb.CreateFrameStreamRequest) returns (ml.combust.mleap.pb.FrameStream) { }
+  rpc GetFrameStream (ml.combust.mleap.pb.GetFrameStreamRequest) returns (ml.combust.mleap.pb.FrameStream) { }
+
+  rpc CreateRowStream (ml.combust.mleap.pb.CreateRowStreamRequest) returns (ml.combust.mleap.pb.RowStream) { }
+  rpc GetRowStream (ml.combust.mleap.pb.GetRowStreamRequest) returns (ml.combust.mleap.pb.RowStream) { }
+
+  rpc GetBundleMeta (ml.combust.mleap.pb.GetBundleMetaRequest) returns (ml.combust.mleap.pb.BundleMeta) { }
+
+  rpc Transform (ml.combust.mleap.pb.TransformFrameRequest) returns (ml.combust.mleap.pb.TransformFrameResponse) { }
+  rpc TransformFrameStream (stream ml.combust.mleap.pb.TransformFrameRequest) returns (stream ml.combust.mleap.pb.TransformFrameResponse) { }
+  rpc TransformRowStream (stream ml.combust.mleap.pb.TransformRowRequest) returns (stream ml.combust.mleap.pb.TransformRowResponse) { }
+}
+

@@ -1,0 +1,262 @@
+
+syntax = "proto3";
+
+
+message Activity_PB {
+    int64 Id = 1;
+    int32 ActorUserId = 3;
+    int32 ActionTypeId = 5;
+    int32 RowId = 7;
+    int32 RootId = 9;
+    int64 RefId = 11;
+    int32 CreatedAt = 13;
+}
+message Bucket_PB {
+    int32 BucketId = 1;
+    string BucketName = 3;
+    int32 Server1Id = 5;
+    int32 Server2Id = 7;
+    int32 BackupServerId = 9;
+    int32 ContentObjectTypeId = 11;
+    int32 ContentObjectCount = 13;
+    int32 CreatedTime = 15;
+}
+message Comment_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 PostId = 5;
+    string Text = 7;
+    int32 CreatedTime = 9;
+}
+message FollowingList_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 ListType = 5;
+    string Name = 7;
+    int32 Count = 9;
+    int32 IsAuto = 11;
+    int32 IsPimiry = 13;
+    int32 CreatedTime = 15;
+}
+message FollowingListMember_PB {
+    int64 Id = 1;
+    int32 ListId = 3;
+    int32 UserId = 5;
+    int32 FollowedUserId = 7;
+    int32 FollowType = 9;
+    int64 UpdatedTimeMs = 11;
+}
+message FollowingListMemberHistory_PB {
+    int64 Id = 1;
+    int32 ListId = 3;
+    int32 UserId = 5;
+    int32 FollowedUserId = 7;
+    int32 FollowType = 9;
+    int64 UpdatedTimeMs = 11;
+    int32 FollowId = 13;
+}
+message Like_PB {
+    int32 Id = 1;
+    int32 PostId = 3;
+    int32 PostTypeId = 5;
+    int32 UserId = 7;
+    int32 TypeId = 9;
+    int32 CreatedTime = 11;
+}
+message Media_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 PostId = 5;
+    int32 AlbumId = 7;
+    int32 TypeId = 9;
+    int32 CreatedTime = 11;
+    string Src = 13;
+}
+message Message_PB {
+    int64 Id = 1;
+    int32 ToUserId = 3;
+    string RoomKey = 5;
+    string MessageKey = 7;
+    int32 FromUserID = 9;
+    string Data = 11;
+    int64 TimeMs = 13;
+}
+message MsgDeletedFromServer_PB {
+    int64 Id = 1;
+    int32 ToUserId = 3;
+    string MsgKey = 5;
+    int32 PeerUserId = 7;
+    string RoomKey = 9;
+    int32 AtTime = 11;
+}
+message MsgReceivedToPeer_PB {
+    int64 Id = 1;
+    int32 ToUserId = 3;
+    string MsgKey = 5;
+    string RoomKey = 7;
+    int32 PeerUserId = 9;
+    int32 AtTime = 11;
+}
+message MsgSeenByPeer_PB {
+    int64 Id = 1;
+    int32 ToUserId = 3;
+    string MsgKey = 5;
+    string RoomKey = 7;
+    int32 PeerUserId = 9;
+    int32 AtTime = 11;
+}
+message Notification_PB {
+    int64 Id = 1;
+    int32 ForUserId = 3;
+    int32 ActorUserId = 5;
+    int32 ActionTypeId = 7;
+    int32 ObjectTypeId = 9;
+    int32 RowId = 11;
+    int32 RootId = 13;
+    int32 RefId = 15;
+    int32 SeenStatus = 17;
+    int32 CreatedTime = 19;
+}
+message NotificationRemoved_PB {
+    int32 NotificationId = 1;
+    int32 ForUserId = 3;
+}
+message PhoneContact_PB {
+    int32 Id = 1;
+    string PhoneDisplayName = 3;
+    string PhoneFamilyName = 5;
+    string PhoneNumber = 7;
+    string PhoneNormalizedNumber = 9;
+    int32 PhoneContactRowId = 11;
+    int32 UserId = 13;
+    int32 DeviceUuidId = 15;
+    int32 CreatedTime = 17;
+    int32 UpdatedTime = 19;
+}
+message Photo_PB {
+    int32 PhotoId = 1;
+    int32 UserId = 3;
+    int32 PostId = 5;
+    int32 AlbumId = 7;
+    int32 ImageTypeId = 9;
+    string Title = 11;
+    string Src = 13;
+    string PathSrc = 15;
+    int32 BucketId = 17;
+    int32 Width = 19;
+    int32 Height = 21;
+    float Ratio = 23;
+    string HashMd5 = 25;
+    int32 CreatedTime = 27;
+    int32 W1080 = 29;
+    int32 W720 = 31;
+    int32 W480 = 33;
+    int32 W320 = 35;
+    int32 W160 = 37;
+    int32 W80 = 39;
+}
+message Post_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 TypeId = 5;
+    string Text = 7;
+    string FormatedText = 9;
+    int32 MediaCount = 11;
+    int32 SharedTo = 13;
+    int32 DisableComment = 15;
+    int32 HasTag = 17;
+    int32 LikesCount = 19;
+    int32 CommentsCount = 21;
+    int32 EditedTime = 23;
+    int32 CreatedTime = 25;
+}
+message RecommendUser_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 TargetId = 5;
+    float Weight = 7;
+    int32 CreatedTime = 9;
+}
+message SearchClicked_PB {
+    int64 Id = 1;
+    string Query = 3;
+    int32 ClickType = 5;
+    int32 TargetId = 7;
+    int32 UserId = 9;
+    int32 CreatedAt = 11;
+}
+message Session_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    string SessionUuid = 5;
+    string ClientUuid = 7;
+    string DeviceUuid = 9;
+    int32 LastActivityTime = 11;
+    string LastIpAddress = 13;
+    string LastWifiMacAddress = 15;
+    string LastNetworkType = 17;
+    int32 LastNetworkTypeId = 19;
+    int32 AppVersion = 21;
+    int32 UpdatedTime = 23;
+    int32 CreatedTime = 25;
+}
+message Tag_PB {
+    int32 Id = 1;
+    string Name = 3;
+    int32 Count = 5;
+    int32 IsBlocked = 7;
+    int32 CreatedTime = 9;
+}
+message TagsPost_PB {
+    int32 Id = 1;
+    int32 TagId = 3;
+    int32 PostId = 5;
+    int32 TypeId = 7;
+    int32 CreatedTime = 9;
+}
+message User_PB {
+    int32 Id = 1;
+    string UserName = 3;
+    string UserNameLower = 5;
+    string FirstName = 7;
+    string LastName = 9;
+    string About = 11;
+    string FullName = 13;
+    string AvatarUrl = 15;
+    int32 PrivacyProfile = 17;
+    string Phone = 19;
+    string Email = 21;
+    int32 IsDeleted = 23;
+    string PasswordHash = 25;
+    string PasswordSalt = 27;
+    int32 FollowersCount = 29;
+    int32 FollowingCount = 31;
+    int32 PostsCount = 33;
+    int32 MediaCount = 35;
+    int32 LikesCount = 37;
+    int32 ResharedCount = 39;
+    int32 LastActionTime = 41;
+    int32 LastPostTime = 43;
+    int32 PrimaryFollowingList = 45;
+    int32 CreatedTime = 47;
+    int32 UpdatedTime = 49;
+    string SessionUuid = 51;
+    string DeviceUuid = 53;
+    string LastWifiMacAddress = 55;
+    string LastNetworkType = 57;
+    int32 AppVersion = 59;
+    int32 LastActivityTime = 61;
+    int32 LastLoginTime = 63;
+    string LastIpAddress = 65;
+}
+message UserMetaInfo_PB {
+    int32 Id = 1;
+    int32 UserId = 3;
+    int32 IsNotificationDirty = 5;
+    int32 LastUserRecGen = 7;
+}
+message UserPassword_PB {
+    int32 UserId = 1;
+    string Password = 3;
+    int32 CreatedTime = 5;
+}

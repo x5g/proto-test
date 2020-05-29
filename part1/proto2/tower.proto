@@ -1,0 +1,164 @@
+package Dianjing.protocol;
+
+import "common.proto";
+import "package.proto";
+import "match.proto";
+import "formation.proto";
+
+
+enum TowerLevelStatus {
+    TOWER_LEVEL_PASSED = 1;     // 已经通过
+    TOWER_LEVEL_CURRENT = 2;    // 当前要打的
+    TOWER_LEVEL_FAILURE = 3;    // 失败
+    TOWER_LEVEL_NOT_OPEN = 4;   // 没有开启
+}
+
+
+message TowerNotify {
+    message Level {
+        required int32 level = 1;
+        required TowerLevelStatus status = 2;
+        optional int32 star = 3;
+    }
+    
+    required bytes session = 1;
+    required Action act = 2;
+    repeated Level levels = 3;
+    required int32 current_star = 4;
+    required int32 today_max_star = 5;
+    required int32 history_max_star = 6;
+    required int32 today_rank = 7;
+    repeated int32 talent_ids = 8;  // 购买的天赋列表   对应的 talent_skill 表
+    required int32 reset_times = 9; //　可以重置的次数
+    required int32 max_star_level = 10;  // 最大连续三星关卡
+    required int64 sweep_end_at = 11;
+    required int32 reset_cost = 12; // 重置花费
+}
+
+message TowerGoodsNotify {
+    message Goods {
+        required int32 id = 1;
+        required bool has_bought = 2;
+    }
+
+    required bytes session = 1;
+    repeated Goods goods = 2;
+}
+
+message TowerGoodsBuyRequest {
+    required bytes session = 1;
+    required int32 goods_index = 2;
+}
+
+message TowerGoodsBuyResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Drop drop = 3;
+}
+
+
+message TowerMatchStartRequest {
+    required bytes session = 1;
+    repeated SyncFormationSlot slots = 2;
+}
+
+
+message TowerMatchStartResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional ClubMatch match = 3;
+}
+
+message TowerMatchReportReqeust {
+    required bytes session = 1;
+    required string key = 2;
+    required int32 star = 3;
+}
+
+message TowerMatchReportResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Drop drop = 3;
+    optional int32 star = 4;
+    repeated int32 turntable_talent_ids = 5;
+    optional bool sale_goods = 6;
+}
+
+message TowerResetRequest {
+    required bytes session = 1;
+}
+
+message TowerResetResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 扫荡
+message TowerSweepRequest {
+    required bytes session = 1;
+}
+
+message TowerSweepResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+}
+
+// 扫荡立即完成
+message TowerSweepFinishRequest {
+    required bytes session = 1;
+}
+
+message TowerSweepFinishResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Drop drop = 3;
+}
+
+
+// 转盘抽奖
+message TowerTurnTableRequest {
+    required bytes session = 1;
+    required int32 star = 2;    //  要消耗的star数
+}
+
+message TowerTurnTableResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional int32 got_index = 3;   // 抽中的
+}
+
+
+// 排行榜
+message TowerLeaderBoardRequest {
+    required bytes session = 1;
+}
+
+message TowerLeaderBoardResponse {
+    message Leader {
+        required string id = 1;
+        required string name = 2;
+        required int32 star = 3;
+    }
+
+    required int32 ret = 1;
+    required bytes session = 2;
+    repeated Leader leaders = 3;
+}
+
+// 星级奖励
+message TowerStarRewardNotify {
+    required bytes session = 1;
+    repeated int32 rewarded = 2; // 已经领奖的星数
+}
+
+message TowerStarGetRewardReqeust {
+    required bytes session = 1;
+    required int32 star = 2;
+}
+
+message TowerStarGetRewardResponse {
+    required int32 ret = 1;
+    required bytes session = 2;
+    optional Drop drop = 3;
+}
+

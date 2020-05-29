@@ -1,0 +1,32 @@
+package blackhole;
+
+option java_package = "com.dp.blackhole.protocol.control";
+option java_outer_classname = "ConfResPB";
+
+message ConfRes{
+    message AppConfRes {
+        required string topic = 1;
+        required string watch_file = 2;
+        required string rotate_period = 3;
+        optional string max_line_size = 4 [default = "512000"];
+        optional string read_interval = 5 [default = "1L"];
+        optional string min_msg_sent = 6 [default = "30"];
+        optional string msg_buf_size = 7 [default = "512000"];
+        optional string roll_period = 8;
+        optional string bandwidth_per_sec = 9 [default = "0"];
+    }
+    message LxcConfRes {
+        required string topic = 1;
+        optional string watch_file = 2;
+        required string rotate_period = 3;
+        optional string max_line_size = 4 [default = "512000"];
+        optional string read_interval = 5 [default = "1L"];
+        repeated string instance_ids = 6;
+        optional string min_msg_sent = 7 [default = "30"];
+        optional string msg_buf_size = 8 [default = "512000"];
+        optional string roll_period = 9;
+        optional string bandwidth_per_sec = 10 [default = "0"];
+    }
+    repeated AppConfRes appConfRes = 1;
+    repeated LxcConfRes lxcConfRes = 2;
+}

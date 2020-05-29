@@ -1,0 +1,121 @@
+syntax = "proto3";
+package proto;
+
+option java_package = "com.blastedstudios.freeboot.network";
+option java_outer_classname = "Messages";
+// e.g. protoc --proto_path=%userprofile%\workspace\freeboot\data\network --java_out=%userprofile%\workspace\freeboot\src\main\java %userprofile%\workspace\freeboot\data\network\network.proto
+// @SuppressWarnings({ "unchecked", "unused" })
+
+message WorldHashRequest {}
+message WorldHashResponse {
+  string md5 = 1;
+  int32 size_bytes = 2;
+}
+
+message WorldFileRequest {}
+message WorldFileResponse {
+  string md5 = 1;
+  bytes file = 2;
+}
+
+message UUID {
+  sint64 least_significant_bits = 1;
+  sint64 most_significant_bits = 2;
+}
+
+message NetBeing {
+  UUID uuid = 1;
+  string name = 2;
+  float pos_x = 3;
+  float pos_y = 4;
+  float vel_x = 5;
+  float vel_y = 6;
+  float hp = 8;
+  int32 current_weapon = 9;
+  repeated NetWeapon weapons = 10;
+  string resource = 11;
+  string ragdoll_resource = 12;
+  FactionEnum faction = 13;
+  float aim = 14;
+  ClassEnum player_class = 15;
+  bool dead = 16;
+  NetStats stats = 17;
+  string behavior = 18;
+
+  enum FactionEnum {
+  	Briton = 0;
+  	Pirate = 1;
+  	Undead = 2;
+  	Spanish = 3;
+  	//Mayan = 4;
+  	//Gator = 5;
+  }
+
+  enum ClassEnum {
+  	Brawler = 0;
+  	Soldier = 1;
+  	Medic = 2;
+  	Demo = 3;
+  	Sniper = 4;
+  }
+}
+
+message NetStats {
+	float hp = 1;
+	float attack = 2;
+	float defense = 3;
+	float hpPerLevel = 4;
+	float hpRegen = 5;
+	float hpRegenPerLevel = 6;
+	float attackPerLevel = 7;
+	float defensePerLevel = 8;
+}
+
+message NetWeapon {
+  string id = 1;
+}
+
+message Attack {
+  UUID uuid = 1;
+  float pos_x = 2;
+  float pos_y = 3;
+}
+
+message Dead {
+  UUID uuid = 1;
+}
+
+message Logout {
+  UUID uuid = 1;
+}
+
+message NPCState {
+  repeated NetBeing npcs = 1;
+}
+
+message NameUpdate {
+  string name = 1;
+}
+
+message PlayerState {
+  repeated NetBeing players = 1;
+}
+
+message Reload {
+  UUID uuid = 1;
+}
+
+message Respawn {
+  UUID uuid = 1;
+  float pos_x = 2;
+  float pos_y = 3;
+}
+
+message Text {
+  string content = 1;
+  string origin = 2;
+}
+
+message TextRequest {
+  string content = 1;
+}

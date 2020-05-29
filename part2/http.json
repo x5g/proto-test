@@ -1,0 +1,11 @@
+{
+  "majorVersion": 1,
+  "minorVersion": 2,
+  "url": "/index.html",
+  "headers": [
+    {
+      "first": "Host",
+      "second": "www.example.com"
+    }
+  ]
+}

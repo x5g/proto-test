@@ -1,0 +1,13 @@
+syntax = "proto3";
+package Messages;
+
+enum msgType {
+	USER=0;
+	HOME=1;
+	WORK=2;
+}
+
+message Message {
+	msgType type = 1;
+	string msgBody = 2;
+}

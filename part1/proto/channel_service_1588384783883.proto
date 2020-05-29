@@ -1,0 +1,105 @@
+package bgs.protocol.channel.v1;
+import "bgs/low/pb/client/account_types.proto";
+import "bgs/low/pb/client/entity_types.proto";
+import "bgs/low/pb/client/channel_types.proto";
+import "bgs/low/pb/client/rpc_types.proto";
+
+
+message RemoveMemberRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+}
+
+message SendMessageRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.channel.v1.Message message = 2;
+	optional uint64 required_privileges = 3 [default = 0];
+}
+
+message UpdateChannelStateRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.channel.v1.ChannelState state_change = 2;
+}
+
+message UpdateMemberStateRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	repeated .bgs.protocol.channel.v1.Member state_change = 2;
+	repeated uint32 removed_role = 3;
+}
+
+message DissolveRequest {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	optional uint32 reason = 2;
+}
+
+message JoinNotification {
+	optional .bgs.protocol.channel.v1.Member self = 1;
+	repeated .bgs.protocol.channel.v1.Member member = 2;
+	required .bgs.protocol.channel.v1.ChannelState channel_state = 3;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 4;
+	optional .bgs.protocol.account.v1.Identity subscriber = 5;
+}
+
+message MemberAddedNotification {
+	required .bgs.protocol.channel.v1.Member member = 1;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 2;
+	optional .bgs.protocol.account.v1.Identity subscriber = 3;
+}
+
+message LeaveNotification {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 4;
+	optional .bgs.protocol.account.v1.Identity subscriber = 5;
+}
+
+message MemberRemovedNotification {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.EntityId member_id = 2;
+	optional uint32 reason = 3;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 4;
+	optional .bgs.protocol.account.v1.Identity subscriber = 5;
+}
+
+message SendMessageNotification {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.channel.v1.Message message = 2;
+	optional uint64 required_privileges = 3 [default = 0];
+	optional string battle_tag = 4;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 5;
+	optional .bgs.protocol.account.v1.Identity subscriber = 6;
+}
+
+message UpdateChannelStateNotification {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	required .bgs.protocol.channel.v1.ChannelState state_change = 2;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 3;
+	optional .bgs.protocol.account.v1.Identity subscriber = 4;
+}
+
+message UpdateMemberStateNotification {
+	optional .bgs.protocol.EntityId agent_id = 1;
+	repeated .bgs.protocol.channel.v1.Member state_change = 2;
+	optional .bgs.protocol.channel.v1.ChannelId channel_id = 4;
+	optional .bgs.protocol.account.v1.Identity subscriber = 5;
+}
+
+service ChannelService {
+	rpc RemoveMember (.bgs.protocol.channel.v1.RemoveMemberRequest) returns (.bgs.protocol.NoData);
+	rpc SendMessage (.bgs.protocol.channel.v1.SendMessageRequest) returns (.bgs.protocol.NoData);
+	rpc UpdateChannelState (.bgs.protocol.channel.v1.UpdateChannelStateRequest) returns (.bgs.protocol.NoData);
+	rpc UpdateMemberState (.bgs.protocol.channel.v1.UpdateMemberStateRequest) returns (.bgs.protocol.NoData);
+	rpc Dissolve (.bgs.protocol.channel.v1.DissolveRequest) returns (.bgs.protocol.NoData);
+}
+
+service ChannelListener {
+	rpc OnJoin (.bgs.protocol.channel.v1.JoinNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnMemberAdded (.bgs.protocol.channel.v1.MemberAddedNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnLeave (.bgs.protocol.channel.v1.LeaveNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnMemberRemoved (.bgs.protocol.channel.v1.MemberRemovedNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnSendMessage (.bgs.protocol.channel.v1.SendMessageNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnUpdateChannelState (.bgs.protocol.channel.v1.UpdateChannelStateNotification) returns (.bgs.protocol.NO_RESPONSE);
+	rpc OnUpdateMemberState (.bgs.protocol.channel.v1.UpdateMemberStateNotification) returns (.bgs.protocol.NO_RESPONSE);
+}

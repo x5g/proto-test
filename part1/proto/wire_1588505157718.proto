@@ -1,0 +1,131 @@
+enum MessageType {
+  Envelope = 1;
+  ScanTaskInfo = 11;
+  CreateScanTask = 12;
+  DomainTaskReady = 14;
+  MixTaskReady = 15;
+  IPv4Infomation = 20;
+  IPv4Infomations = 21;
+  ServiceInformation = 22;
+  
+  
+  ScanResultDNSRecordA = 30;
+  ScanResultDNSRecordCName = 31;
+  WhoisInformationBlock = 32;
+  ScanResultWhois = 33;
+  ScanResultService = 34;
+  ScanResultServiceBanner = 35;
+  ScanResultDNS = 36;
+  
+
+  SSLHost = 40;
+  NonSSLHost = 41;
+  
+  RuntimeError = 100;
+
+  Debugging = 1000;
+  
+}
+message Debugging{
+  required string message = 1;
+}
+
+message Envelope {
+  required MessageType type = 1;
+  required bytes message = 2;
+  optional string channel = 3;
+}
+
+message ScanTaskInfo {
+  required string id = 1;
+  //required double create_date = 2;
+}
+
+message CreateScanTask {
+  required string email = 1;
+  required string description = 2;
+}
+
+message DomainTaskReady {
+  required string id = 1;
+  required string targetDomain = 2;
+  required string dict = 3;
+  repeated string customNameservers = 4;
+}
+
+message MixTaskReady {
+  required string id = 1;
+  repeated string domains = 2;
+  repeated string hosts = 3;
+}
+
+message IPv4Infomation {
+  required string ip = 1;
+}
+
+message IPv4Infomations {
+  repeated IPv4Infomation infos = 1;
+}
+
+message ServiceInformation {
+  required string ip = 1;
+  repeated int32 tcpPorts = 2;
+  repeated int32 udpPorts = 3;
+  required string taskId = 4;
+}
+
+message ScanResultDNSRecordA{
+  required string domain = 1;
+  repeated string data = 2;
+}
+
+message ScanResultDNSRecordCName{
+  required string domain = 1;
+  repeated string data = 2;
+}
+
+message WhoisInformationBlock{
+  required string netname = 1;
+  required string netblock = 2;
+}
+
+message ScanResultWhois{
+  required string ip = 1;
+  repeated WhoisInformationBlock details = 2;
+}
+
+message ScanResultService{
+  required string ip = 1;
+  repeated string tcp = 2;
+  repeated string udp = 3; 
+}
+
+message ScanResultServiceBanner{
+  required string ip = 1;
+  required int32 port = 2;
+  required string type = 3;
+  required string service = 4;
+  required string version = 5;
+  required bool sslSupport = 6;
+  required string scannedBy = 7;
+  required bytes raw = 8;
+}
+
+
+message ScanResultDNS{
+  
+}
+
+message SSLHost{
+  required string ip = 1;
+  required int32 port = 2;
+}
+
+message NonSSLHost{
+  required string ip = 1;
+  required int32 port = 2;
+}
+
+message RuntimeError{
+  required string error = 1;
+}

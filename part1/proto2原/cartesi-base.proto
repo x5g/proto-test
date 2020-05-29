@@ -1,0 +1,325 @@
+// Copyright 2019 Cartesi Pte. Ltd.
+
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+// this file except in compliance with the License. You may obtain a copy of the
+// License at http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software distributed
+// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the
+// specific language governing permissions and limitations under the License.
+
+
+syntax = "proto3";
+
+package CartesiCore;
+
+message Void { }
+
+message Hash {
+    bytes content = 1;
+}
+
+message ProcessorConfig {
+    oneof x1_oneof {
+        uint64 x1 = 1;
+    }
+    oneof x2_oneof {
+        uint64 x2 = 2;
+    }
+    oneof x3_oneof {
+        uint64 x3 = 3;
+    }
+    oneof x4_oneof {
+        uint64 x4 = 4;
+    }
+    oneof x5_oneof {
+        uint64 x5 = 5;
+    }
+    oneof x6_oneof {
+        uint64 x6 = 6;
+    }
+    oneof x7_oneof {
+        uint64 x7 = 7;
+    }
+    oneof x8_oneof {
+        uint64 x8 = 8;
+    }
+    oneof x9_oneof {
+        uint64 x9 = 9;
+    }
+    oneof x10_oneof {
+        uint64 x10 = 10;
+    }
+    oneof x11_oneof {
+        uint64 x11 = 11;
+    }
+    oneof x12_oneof {
+        uint64 x12 = 12;
+    }
+    oneof x13_oneof {
+        uint64 x13 = 13;
+    }
+    oneof x14_oneof {
+        uint64 x14 = 14;
+    }
+    oneof x15_oneof {
+        uint64 x15 = 15;
+    }
+    oneof x16_oneof {
+        uint64 x16 = 16;
+    }
+    oneof x17_oneof {
+        uint64 x17 = 17;
+    }
+    oneof x18_oneof {
+        uint64 x18 = 18;
+    }
+    oneof x19_oneof {
+        uint64 x19 = 19;
+    }
+    oneof x20_oneof {
+        uint64 x20 = 20;
+    }
+    oneof x21_oneof {
+        uint64 x21 = 21;
+    }
+    oneof x22_oneof {
+        uint64 x22 = 22;
+    }
+    oneof x23_oneof {
+        uint64 x23 = 23;
+    }
+    oneof x24_oneof {
+        uint64 x24 = 24;
+    }
+    oneof x25_oneof {
+        uint64 x25 = 25;
+    }
+    oneof x26_oneof {
+        uint64 x26 = 26;
+    }
+    oneof x27_oneof {
+        uint64 x27 = 27;
+    }
+    oneof x28_oneof {
+        uint64 x28 = 28;
+    }
+    oneof x29_oneof {
+        uint64 x29 = 29;
+    }
+    oneof x30_oneof {
+        uint64 x30 = 30;
+    }
+    oneof x31_oneof {
+        uint64 x31 = 31;
+    }
+    oneof pc_oneof {
+        uint64 pc = 32;
+    }
+    oneof mvendorid_oneof {
+        uint64 mvendorid = 33;
+    }
+    oneof marchid_oneof {
+        uint64 marchid = 34;
+    }
+    oneof mimpid_oneof {
+        uint64 mimpid = 35;
+    }
+    oneof mcycle_oneof {
+        uint64 mcycle = 36;
+    }
+    oneof minstret_oneof {
+        uint64 minstret = 37;
+    }
+    oneof mstatus_oneof {
+        uint64 mstatus = 38;
+    }
+    oneof mtvec_oneof {
+        uint64 mtvec = 39;
+    }
+    oneof mscratch_oneof {
+        uint64 mscratch = 40;
+    }
+    oneof mepc_oneof {
+        uint64 mepc = 41;
+    }
+    oneof mcause_oneof {
+        uint64 mcause = 42;
+    }
+    oneof mtval_oneof {
+        uint64 mtval = 43;
+    }
+    oneof misa_oneof {
+        uint64 misa = 44;
+    }
+    oneof mie_oneof {
+        uint64 mie = 45;
+    }
+    oneof mip_oneof {
+        uint64 mip = 46;
+    }
+    oneof medeleg_oneof {
+        uint64 medeleg = 47;
+    }
+    oneof mideleg_oneof {
+        uint64 mideleg = 48;
+    }
+    oneof mcounteren_oneof {
+        uint64 mcounteren = 49;
+    }
+    oneof stvec_oneof {
+        uint64 stvec = 50;
+    }
+    oneof sscratch_oneof {
+        uint64 sscratch = 51;
+    }
+    oneof sepc_oneof {
+        uint64 sepc = 52;
+    }
+    oneof scause_oneof {
+        uint64 scause = 53;
+    }
+    oneof stval_oneof {
+        uint64 stval = 54;
+    }
+    oneof satp_oneof {
+        uint64 satp = 55;
+    }
+    oneof scounteren_oneof {
+        uint64 scounteren = 56;
+    }
+    oneof ilrsc_oneof {
+        uint64 ilrsc = 57;
+    }
+    oneof iflags_oneof {
+        uint64 iflags = 58;
+    }
+}
+
+message ROMConfig {
+    string bootargs = 1;
+    string backing = 2;
+}
+
+message RAMConfig {
+    uint64 length = 1;
+    string backing = 2;
+}
+
+message FlashConfig {
+    uint64 start = 1;
+    uint64 length = 2;
+    string backing = 3;
+    bool shared = 4;
+    string label = 5;
+}
+
+message CLINTConfig {
+    oneof mtimecmp_oneof {
+        uint64 mtimecmp = 1;
+    }
+}
+
+message HTIFConfig {
+    oneof fromhost_oneof {
+        uint64 fromhost = 1;
+    }
+    oneof tohost_oneof {
+        uint64 tohost = 2;
+    }
+    bool interact = 3;
+    bool yield = 4;
+}
+
+message MachineConfig {
+    ProcessorConfig processor = 1;
+    ROMConfig rom = 2;
+    RAMConfig ram = 3;
+    repeated FlashConfig flash = 4;
+    CLINTConfig clint = 5;
+    HTIFConfig htif = 6;
+}
+
+message StoreRequest {
+    string directory = 1;
+}
+
+message MachineRequest {
+    oneof machine_oneof {
+        MachineConfig config = 1;
+        string directory = 2;
+    }
+}
+
+message RunRequest {
+    uint64 limit = 1;
+}
+
+message RunResponse {
+    uint64 mcycle = 1;
+    uint64 tohost = 2;
+    bool iflags_h = 3;
+    bool iflags_y = 4;
+}
+
+message Proof {
+    uint64 address = 1;
+    uint32 log2_size = 2;
+    Hash target_hash = 3;
+    repeated Hash sibling_hashes = 4;
+    Hash root_hash = 5;
+}
+
+enum AccessOperation {
+    READ = 0;
+    WRITE = 1;
+}
+
+message Word {
+    bytes content = 1;
+}
+
+message Access {
+    AccessOperation operation = 1;
+    Word read = 2;
+    Word written = 3;
+    Proof proof = 4;
+}
+
+message BracketNote {
+    enum BracketNoteType {
+        DUMMY = 0;
+        BEGIN = 1;
+        END = 2;
+        INVALID = 3;
+    }
+    BracketNoteType type = 1;
+    uint64 where = 2;
+    string text = 3;
+}
+
+message ReadMemoryRequest {
+    uint64 address = 1;
+    uint64 length = 2;
+}
+
+message ReadMemoryResponse {
+    bytes data = 1;
+}
+
+message GetProofRequest {
+    uint64 address = 1;
+    uint64 log2_size = 2;
+}
+
+message WriteMemoryRequest {
+    uint64 address = 1;
+    bytes data = 2;
+}
+
+message AccessLog {
+    repeated Access accesses = 1;
+    repeated BracketNote brackets = 2;
+    repeated string notes = 3;
+}

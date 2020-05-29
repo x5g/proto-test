@@ -1,0 +1,60 @@
+message CacheMsg {
+  required string msg_type = 1;
+  required bytes msg = 2;
+  optional uint32 client_id = 3;
+  optional bytes mac = 4;
+  optional uint64 time = 5;
+}
+
+message ErrorMsg {
+  required string description = 1;
+}
+
+message DhaSessionRequest {
+}
+
+message DhaMsg1 {
+  required bytes ga = 1;
+  required bytes targetinfo = 2;
+}
+
+message Report {
+  required bytes report_data = 1;
+  required bytes misc = 2;
+}
+
+message DhaMsg2 {
+  required bytes gb = 1;
+  required Report report = 2;
+  required bytes report_mac = 3;
+}
+
+message DhaMsg3 {
+  required Report report = 1;
+  required bytes report_mac = 2;
+}
+
+message BoolMsg {
+  required bool val = 1;
+}
+
+message U8Msg {
+  required uint32 val = 1;
+}
+
+message U32Msg {
+  required uint32 val = 1;
+}
+
+message BytesMsg {
+  required bytes val = 1;
+}
+
+message BytesVecMsg {
+  repeated bytes val = 1;
+}
+
+message SubCacheMsg {
+  optional uint32 number = 1;
+  repeated bytes filters = 2;
+}

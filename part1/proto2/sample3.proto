@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package="jbr.proto";
+option java_outer_classname="Proto3Example";
+
+package com.clv.proto3;
+
+message sample3 {
+	string phone = 1;
+}

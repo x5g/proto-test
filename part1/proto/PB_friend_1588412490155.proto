@@ -1,0 +1,67 @@
+
+package friends;
+import "PB_error_code.proto";
+import "PB_game_config.proto";
+
+message Friend 
+{
+	optional int64 			playerid 	= 1;
+	optional int32 			vip 		= 2;
+	optional string 		name 		= 3;
+	optional int64 			charm 		= 4;	// 魅力值
+	optional string 		ps 			= 5;	// 个人宣言
+	optional int32			status		= 6;	// 游戏状态（1离线，2在线，3玩牌）
+	optional PB_GameType 	gameid 		= 7; 	// 所在游戏类型
+	optional PB_LevelType 	level 		= 8; 	// 所在场次等级
+	optional int32			msg_num		= 9;	// 未读消息总数
+}
+
+// 好友列表请求
+message PB_Friend 
+{
+	required int64 uid 			= 1;
+	required int64 last_uid 	= 2;			// 最后一个playerid(从0开始) 
+}
+
+message PB_FriendReturn 
+{
+	required PB_ErrorCode 	code 	= 1;
+	repeated Friend 		friends = 2;		// 好友列表
+}
+
+// 好友未读消息请求
+message PB_FriendMessage
+{
+	required int64 uid  	  = 1;
+	required int64 target_uid = 2;
+}
+
+message PB_FriendMessageReturn
+{
+	repeated string msgs = 1;
+}
+
+// 删除好友
+message PB_DelFriend 
+{
+	required int64 uid 			= 1;
+	required int64 target_uid 	= 2;
+}
+
+message PB_DelFriendReturn 
+{
+	required PB_ErrorCode code = 1;
+}
+
+// 好友聊天
+message PB_ChatFriend 
+{
+	required int64 	sender_uid 		= 1;	// 发送方id
+	required int64 	target_uid 		= 2;	// 目标id
+	required string data 			= 3;
+}
+
+message PB_ChatFriendReturn 
+{
+	required PB_ErrorCode code = 1;
+}

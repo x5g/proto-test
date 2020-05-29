@@ -1,0 +1,18 @@
+// protoc --proto_path=$GOPATH/src --go_out=$GOPATH/src $GOPATH/src/github.com/lizebang/learning-proto3/any/any.proto
+syntax = "proto3";
+package any;
+option go_package = "github.com/lizebang/learning-proto3/any";
+
+import "github.com/golang/protobuf/ptypes/any/any.proto";
+
+message source {
+  repeated string data = 1;
+}
+
+message transport {
+  google.protobuf.Any data = 1;
+}
+
+message destination {
+  repeated string data = 1;
+}

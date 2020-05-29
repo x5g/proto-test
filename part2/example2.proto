@@ -1,0 +1,16 @@
+syntax = "proto2";
+//example.proto
+package example;
+
+// LD
+message LD
+{
+    required uint32 ip = 1; //LD de ip
+}
+
+message Set
+{
+    required uint32 id                                     = 1;     // SET的id
+    required string name                                   = 2;     // SET名字
+    repeated LD ld_list                                    = 3;     // LD列表
+}
